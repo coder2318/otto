@@ -1,5 +1,6 @@
 import daisyui from 'daisyui';
 import typography from '@tailwindcss/typography';
+import { fontFamily } from 'tailwindcss/defaultTheme'
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -10,8 +11,27 @@ export default {
         "./resources/**/*.ts",
         "./resources/**/*.svelte",
     ],
+    theme: {
+        fontFamily: {
+            'serif': ['Libre Baskerville', ...fontFamily.serif],
+            'sans': ['Cabin', ...fontFamily.sans],
+        }
+    },
     plugins: [
         typography,
         daisyui,
     ],
+    daisyui: {
+        themes: [{
+            light: {
+                'primary': '#0C345C',
+                'secondary': '#FFD886',
+                'accent': '#66B75C',
+                'neutral': '#000000',
+                'base-100': '#F1EDE7',
+                'base-200': '#ECE6DF',
+                'base-300': '#D9CEBF',
+            }
+        }]
+    }
 }

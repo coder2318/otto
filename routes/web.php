@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::inertia('/', 'Home', [
+    'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
+    'phpVersion' => PHP_VERSION,
+]);
 
-Route::inertia('/app', 'Home');
+Route::inertia('/preview', 'Preview');
