@@ -1,0 +1,11 @@
+{
+    "recommendations": [
+        "ms-vscode-remote.remote-containers",
+        "ms-azuretools.vscode-docker",
+        "bmewburn.vscode-intelephense-client",
+        "xdebug.php-debug",
+        "svelte.svelte-vscode",
+        "bradlc.vscode-tailwindcss",
+        "editorconfig.editorconfig"
+    ]
+}
