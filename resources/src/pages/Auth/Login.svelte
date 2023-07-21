@@ -10,10 +10,14 @@
         password: '',
         remember: false,
     })
+
+    function submit() {
+        $form.post('/login');
+    }
 </script>
 
 <div class="card bg-base-200 w-full max-w-[500px] shadow">
-    <form on:submit|preventDefault={$form.post('/login')} class="card-body flex felx-col items-center">
+    <form on:submit|preventDefault={submit} class="card-body flex felx-col items-center">
         <div class="form-control w-full">
             <label class="label" for="email">
                 <span class="label-text">Email</span>

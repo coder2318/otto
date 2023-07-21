@@ -1,5 +1,7 @@
 <script lang="ts">
-    export let textClass: string, logoClass: string, logoBgClass: string;
+    export let textClass: string = 'fill-current'
+    export let logoClass: string = 'fill-primary'
+    export let logoBgClass: string = 'fill-secondary'
 </script>
 
 <svg viewBox="0 0 191 52" fill="none" xmlns="http://www.w3.org/2000/svg" {...$$restProps}>

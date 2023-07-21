@@ -28,7 +28,7 @@ class RolePermissionSeeder extends Seeder
             'name' => $permission,
             'created_at' => $date,
             'updated_at' => $date,
-            'guard' => 'web',
+            'guard_name' => 'web',
         ];
 
         Role::upsert($roles->map($map)->all(), ['name', 'guard_name']);
