@@ -1,13 +1,13 @@
 <script context="module" lang="ts">
-    import Base from '@/components/layouts/Base.svelte';
-    import Auth from '@/components/layouts/Auth.svelte';
+    import Base from '@/components/Layouts/Base.svelte';
+    import Auth from '@/components/Layouts/Auth.svelte';
     export const layout = [Base, Auth];
 </script>
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { useForm, inertia } from '@inertiajs/svelte';
-    import Logo from '@/components/svg/logo.svg.svelte';
+    import Logo from '@/components/SVG/logo.svg.svelte';
 
     const form = useForm({
         email: '',

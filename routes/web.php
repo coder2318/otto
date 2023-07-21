@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\SocialAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,9 +14,18 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::controller(SocialAuthController::class)
+    ->middleware('guest')
+    ->prefix('/login/{provider}')
+    ->group(function () {
+        Route::get('/', 'login')->where('provider', 'facebook|google')->name('login.socialite');
+        Route::get('/redirect', 'redirect')->where('provider', 'facebook|google')->name('login.socialite.redirect');
+    });
+
 Route::inertia('/', 'Home', [
     'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
     'phpVersion' => PHP_VERSION,
 ]);
+
 
 Route::inertia('/preview', 'Preview')->middleware(['auth', 'verified', 'password.confirm']);

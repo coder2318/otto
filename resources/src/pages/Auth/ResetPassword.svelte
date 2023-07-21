@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
-    import Base from '@/components/layouts/Base.svelte';
-    import Auth from '@/components/layouts/Auth.svelte';
+    import Base from '@/components/Layouts/Base.svelte';
+    import Auth from '@/components/Layouts/Auth.svelte';
     export const layout = [Base, Auth];
 </script>
 
@@ -10,8 +10,8 @@
 
 <script lang="ts">
     import { useForm, inertia } from '@inertiajs/svelte';
-    import Logo from '@/components/svg/logo.svg.svelte';
-    import InputPassword from '@/components/InputPassword.svelte';
+    import Logo from '@/components/SVG/logo.svg.svelte';
+    import InputPassword from '@/components/Auth/InputPassword.svelte';
 
     let url = new URL(document.location.toString());
 

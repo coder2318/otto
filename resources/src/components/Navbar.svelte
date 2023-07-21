@@ -1,7 +1,7 @@
 <script lang="ts">
     import { inertia, router, page } from '@inertiajs/svelte';
-    import Logo from "./svg/logo.svg.svelte";
-    import User from './svg/user.svg.svelte';
+    import Logo from "./SVG/logo.svg.svelte";
+    import User from './SVG/user.svg.svelte';
 
     $: user = $page.props.auth.user;
 </script>

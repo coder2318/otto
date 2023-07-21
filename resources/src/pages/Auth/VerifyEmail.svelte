@@ -1,12 +1,12 @@
 <script context="module" lang="ts">
-    import Base from '@/components/layouts/Base.svelte';
-    import Auth from '@/components/layouts/Auth.svelte';
+    import Base from '@/components/Layouts/Base.svelte';
+    import Auth from '@/components/Layouts/Auth.svelte';
     export const layout = [Base, Auth];
 </script>
 
 <script lang="ts">
     import { inertia, router } from '@inertiajs/svelte';
-    import Logo from '@/components/svg/logo.svg.svelte';
+    import Logo from '@/components/SVG/logo.svg.svelte';
 
     function submit() {
         router.post('/email/verification-notification');
