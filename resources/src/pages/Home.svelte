@@ -4,7 +4,7 @@
 </script>
 
 <svelte:head>
-    <title>Welcome - {import.meta.env.VITE_APP_NAME}</title>
+    <title>{import.meta.env.VITE_APP_NAME} - Welcome</title>
 </svelte:head>
 
 <main class="flex flex-col justify-center items-center min-h-screen">

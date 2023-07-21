@@ -2,6 +2,10 @@
     import Lorem from '@/assets/md/lorem.md';
 </script>
 
+<svelte:head>
+    <title>{import.meta.env.VITE_APP_NAME} - Preview</title>
+</svelte:head>
+
 <div class="bg-transparent p-4">
     <div
         class="rounded-box bg-base-200 border-base-content/20 text-base-content not-prose grid gap-3 border p-8"

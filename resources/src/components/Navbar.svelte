@@ -25,7 +25,7 @@
                         {/if}
                     </div>
                 </label>
-                <ul tabindex="-1" id="dropdown" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 text-base-content rounded-box w-48">
+                <ul tabindex="-1" id="dropdown" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 text-base-content rounded-box w-48 border border-base-300">
                     <li>
                         <button type="button" on:click|preventDefault={() => router.post('/logout')}>
                             Logout

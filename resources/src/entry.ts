@@ -12,4 +12,7 @@ export const setup = ({ el, App, props }) => {
     return app
 }
 
-export const progress = {}
+// See: https://inertiajs.com/progress-indicators
+export const progress = {
+    color: 'hsl(var(--s))', // secondary
+}

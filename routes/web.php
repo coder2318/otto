@@ -18,4 +18,4 @@ Route::inertia('/', 'Home', [
     'phpVersion' => PHP_VERSION,
 ]);
 
-Route::inertia('/preview', 'Preview');
+Route::inertia('/preview', 'Preview')->middleware(['auth', 'verified', 'password.confirm']);
