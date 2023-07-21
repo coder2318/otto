@@ -4,11 +4,12 @@
 
 <div class="bg-transparent p-4">
     <div
-        class="rounded-box bg-base-100 border-base-content/20 text-base-content not-prose grid gap-3 border p-8"
+        class="rounded-box bg-base-200 border-base-content/20 text-base-content not-prose grid gap-3 border p-8"
     >
         <!-- button -->
-        <div class="grid grid-cols-2 gap-2 md:grid-cols-4">
+        <div class="grid grid-cols-3 gap-2">
             <button class="btn">Default</button>
+            <button class="btn btn-neutral">Neutral</button>
             <button class="btn btn-primary">Primary</button>
             <button class="btn btn-secondary">Secondary</button>
             <button class="btn btn-accent">Accent</button>
@@ -18,8 +19,9 @@
             <button class="btn btn-error">Error</button>
         </div>
         <!-- badge -->
-        <div class="grid grid-cols-2 place-items-center gap-2 md:grid-cols-4">
+        <div class="grid grid-cols-3 place-items-center gap-2">
             <span class="badge">Default</span>
+            <span class="badge badge-neutral">Neutral</span>
             <span class="badge badge-primary">Primary</span>
             <span class="badge badge-secondary">Secondary</span>
             <span class="badge badge-accent">Accent</span>
@@ -390,7 +392,6 @@
         <!-- alert -->
         <div class="flex flex-col gap-3">
             <div class="alert">
-                <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -405,10 +406,8 @@
                         />
                     </svg>
                     <span>12 unread messages. Tap to see.</span>
-                </div>
             </div>
             <div class="alert alert-info">
-                <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
@@ -423,10 +422,8 @@
                         />
                     </svg>
                     <span>New software update available.</span>
-                </div>
             </div>
             <div class="alert alert-success">
-                <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-6 w-6 flex-shrink-0 stroke-current"
@@ -441,10 +438,8 @@
                         />
                     </svg>
                     <span>Your purchase has been confirmed!</span>
-                </div>
             </div>
             <div class="alert alert-warning">
-                <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-6 w-6 flex-shrink-0 stroke-current"
@@ -459,10 +454,8 @@
                         />
                     </svg>
                     <span>Warning: Invalid email address!</span>
-                </div>
             </div>
             <div class="alert alert-error">
-                <div>
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="h-6 w-6 flex-shrink-0 stroke-current"
@@ -477,7 +470,6 @@
                         />
                     </svg>
                     <span>Error! Task failed successfully.</span>
-                </div>
             </div>
         </div>
         <!-- table-->

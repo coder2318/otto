@@ -23,11 +23,11 @@ export default {
     ],
     daisyui: {
         themes: [{
-            light: {
+            otto: {
                 'primary': '#0C345C',
                 'secondary': '#FFD886',
-                'accent': '#66B75C',
-                'neutral': '#000000',
+                'accent': '#F8AD9D',
+                'neutral': '#FFFFFF',
                 'base-100': '#F1EDE7',
                 'base-200': '#ECE6DF',
                 'base-300': '#D9CEBF',
