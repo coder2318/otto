@@ -16,13 +16,13 @@
     export let details;
 
     const form = useForm({
-        first_name: details.first_name as string,
-        last_name: details.last_name as string,
-        birth_date: details.birth_date ? new Date(details.birth_date) : null,
-        motivation: details.motivation as string,
-        writing_style: details.writing_style as string,
-        goals: details.goals as string,
-        timeline: details.timeline as string,
+        first_name: details?.first_name as string,
+        last_name: details?.last_name as string,
+        birth_date: details?.birth_date ? new Date(details.birth_date) : null,
+        motivation: details?.motivation as string,
+        writing_style: details?.writing_style as string,
+        goals: details?.goals as string,
+        timeline: details?.timeline as string,
     })
 
     let step = getStep();

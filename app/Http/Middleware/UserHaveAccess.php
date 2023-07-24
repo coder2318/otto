@@ -16,7 +16,7 @@ class UserHaveAccess
      */
     public function handle(Request $request, Closure $next, string $redirect, bool $inverse = false): Response
     {
-        $configured = $request->user()?->details->configured;
+        $configured = $request->user()?->details?->configured;
         $plan = $request->user()->can('free-access') || true; // TODO: check if user subscribed
 
         if (($configured && $plan) xor $inverse) {

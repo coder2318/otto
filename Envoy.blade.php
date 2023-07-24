@@ -30,13 +30,9 @@
 @endtask
 
 @task('publish', ['on' => $on, 'confirm' => !$force])
-    cd "{{ $path }}"
-
     php artisan down
 
-    # TODO: Checkout branch
-
-    composer intall --optimize-autoloader --no-dev
+    composer intall --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
     php artisan optimize
     php artisan storage:link
