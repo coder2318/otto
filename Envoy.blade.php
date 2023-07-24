@@ -26,7 +26,9 @@
 
 @task('build', ['on' => 'local'])
     echo "Building..."
-    npm ci && npm run build
+    npm ci
+    npm run build
+    npm run build -- --ssr
 @endtask
 
 @task('publish', ['on' => $on, 'confirm' => !$force])
