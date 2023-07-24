@@ -66,8 +66,8 @@
     </div>
 
     <ul class="steps">
-        {#each Array(6) as _, index (index)}
-            <li class="step {index <= step ? 'step-primary' : ''}"/>
+        {#each Array(6).keys() as i}
+            <li class="step {i <= step ? 'step-primary' : ''}"/>
         {/each}
     </ul>
 </div>

@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import eslint from 'vite-plugin-eslint'
 import markdown from 'vite-plugin-svelte-md'
 import sveltePreprocess from 'svelte-preprocess';
 import path from 'path';
@@ -27,6 +28,12 @@ export default defineConfig({
                 }
             },
         }),
+        eslint({
+            fix: true,
+            include: [
+                path.resolve(__dirname, 'resources/src/**/*.{ts,js,svelte}'),
+            ],
+        })
     ],
     server: {
         hmr: {
