@@ -32,7 +32,7 @@ return [
     ],
 
     'stripe' => [
-        'plans' => explode(',', env('STRIPE_PLANS')),
+        'plans' => env('STRIPE_PLANS') ? explode(',', env('STRIPE_PLANS')) : [],
     ],
 
     'google' => [
