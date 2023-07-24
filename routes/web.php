@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -28,7 +29,9 @@ Route::inertia('/', 'Home', [
 ])->name('home');
 
 Route::group(['middleware' => ['auth']], function () {
-    Route::inertia('/quickstart', 'Quickstart')->name('quickstart')->middleware('user-access:home,true');
+    Route::get('/quickstart', [UserController::class, 'quickstart'])
+        ->name('quickstart')
+        ->middleware('user-access:home,true');
 
     Route::group(['middleware' => ['user-access:quickstart']], function () {
         Route::inertia('/preview', 'Preview')->name('preview');
