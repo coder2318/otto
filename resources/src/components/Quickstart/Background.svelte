@@ -1,6 +1,6 @@
 <main class="min-h-screen lg:p-16 md:p-8 p-4 flex flex-col">
     <div class="background-particles bg-base-200 h-full w-full flex-1 p-4 rounded-xl relative">
-        <div class="absolute lg:-inset-10 md:-inset-6 background-people lg:p-14 md:p-10 p-4">
+        <div class="absolute inset-0 lg:-inset-10 md:-inset-6 background-people lg:p-14 md:p-10 p-4">
             <slot />
         </div>
     </div>

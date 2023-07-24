@@ -33,6 +33,9 @@ Route::group(['middleware' => ['auth']], function () {
         ->name('quickstart')
         ->middleware('user-access:home,true');
 
+    Route::post('/quickstart', [UserController::class, 'saveProfileDetails'])
+        ->middleware('user-access:home,true');
+
     Route::group(['middleware' => ['user-access:quickstart']], function () {
         Route::inertia('/preview', 'Preview')->name('preview');
     });

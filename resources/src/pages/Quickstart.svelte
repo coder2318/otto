@@ -25,7 +25,8 @@
         timeline: details.timeline as string,
     })
 
-    let step = 0;
+    let step = getStep();
+
     const steps = [
         NameScreen,
         MotivationScreen,
@@ -37,13 +38,30 @@
 
     $: current = steps[step];
 
+    function getStep(): number {
+        let last = true;
+        let result = 0;
+
+        switch (true) {
+            default: result = 0; break;
+            case (last = last && $form.first_name && $form.last_name && $form.birth_date): result = 1; break;
+            case (last = last && $form.motivation): result = 2; break;
+            case (last = last && $form.writing_style): result = 3; break;
+            case (last = last && $form.goals): result = 4; break;
+            case (last = last && $form.timeline): result = 5; break;
+        }
+
+        return result;
+    }
+
     function nextStep() {
+        $form.post('/quickstart')
         step++;
     }
 </script>
 
 <div class="flex flex-col h-full w-full items-center justify-center">
-    <div class="flex-1">
+    <div class="flex-1 w-full h-full flex">
         <svelte:component this={current} on:next={nextStep} {form} />
     </div>
 
