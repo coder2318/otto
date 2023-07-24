@@ -9,18 +9,20 @@ use Spatie\LaravelData\Data;
 
 class Details extends Data
 {
-    public string $first_name;
+    public ?string $first_name;
 
-    public string $last_name;
+    public ?string $last_name;
 
     #[WithCast(DateTimeInterfaceCast::class)]
-    public Carbon $birth_date;
+    public ?Carbon $birth_date;
 
-    public string $motivation;
+    public ?string $motivation;
 
-    public string $writing_style;
+    public ?string $writing_style;
 
-    public string $goals;
+    public ?string $goals;
 
-    public string $timeline;
+    public ?string $timeline;
+
+    public bool $configured = false;
 }

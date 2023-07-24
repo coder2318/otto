@@ -25,7 +25,14 @@ Route::controller(SocialAuthController::class)
 Route::inertia('/', 'Home', [
     'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
     'phpVersion' => PHP_VERSION,
-]);
+])->name('home');
+
+Route::group(['middleware' => ['auth']], function () {
+    Route::inertia('/quickstart', 'Quickstart')->name('quickstart')->middleware('user-access:home,true');
+
+    Route::group(['middleware' => ['user-access:quickstart']], function () {
+        Route::inertia('/preview', 'Preview')->name('preview');
+    });
+});
 
 
-Route::inertia('/preview', 'Preview')->middleware(['auth', 'verified', 'password.confirm']);
