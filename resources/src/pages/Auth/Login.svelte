@@ -55,11 +55,13 @@
             {/if}
         </div>
         <div class="form-control w-full">
-            <label class="label cursor-pointer justify-start gap-2 px-0 my-2" for="remember">
-                <input bind:checked={$form.remember} type="checkbox" class="checkbox {$form.errors.remember ? 'checkbox-error' : ''}" name="remember" />
-                <span class="label-text">Remember me</span>
+            <div class="flex items-center justify-around">
+                <label class="label cursor-pointer justify-start gap-2 px-0 my-2">
+                    <input bind:checked={$form.remember} type="checkbox" class="checkbox {$form.errors.remember ? 'checkbox-error' : 'checkbox-primary'}" name="remember" />
+                    <span class="label-text">Remember me</span>
+                </label>
                 <a href="/forgot-password" use:inertia class="link link-primary ml-auto">Forgot password?</a>
-            </label>
+            </div>
             {#if $form.errors.remember}
                 <span class="label-text-alt text-error text-left mt-1">{$form.errors.remember}</span>
             {/if}

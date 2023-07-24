@@ -14,7 +14,7 @@
     </div>
     {#if user}
         <div class="flex-none gap-2">
-            <span>{user.name}</span>
+            <span>{user.email}</span>
             <div class="dropdown dropdown-end">
                 <label tabindex="-1" class="btn btn-ghost btn-circle avatar" for="dropdown">
                     <div class="w-10 rounded-full">

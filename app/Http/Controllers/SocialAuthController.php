@@ -12,14 +12,15 @@ use Laravel\Socialite\Facades\Socialite;
 
 class SocialAuthController extends Controller
 {
+    protected array $providers = [
+        'facebook',
+        'google',
+    ];
+
     public function __construct()
     {
         $this->middleware(function (Request $request, $next) {
-            abort_unless(in_array($request->route('provider'), [
-                'facebook',
-                'google',
-            ]), 404);
-
+            abort_unless(in_array($request->route('provider'), $this->providers), 404);
             return $next($request);
         });
     }

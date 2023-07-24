@@ -21,11 +21,9 @@ class DatabaseSeeder extends Seeder
 
         if (App::isProduction()) return;
 
-        $user = User::factory()->create([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
+        $this->call([
+            UserSeeder::class,
+            PlanSeeder::class,
         ]);
-
-        $user->assignRole('super-admin');
     }
 }

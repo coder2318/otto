@@ -12,7 +12,6 @@
     import SocialLogin from '@/components/Auth/SocialLogin.svelte';
 
     const form = useForm({
-        name: '',
         email: '',
         password: '',
         password_confirmation: '',
@@ -37,15 +36,6 @@
     </div>
 
     <form on:submit|preventDefault={submit} class="flex flex-col items-center w-full" autocomplete="on">
-        <div class="form-control w-full">
-            <label class="label" for="name">
-                <span class="label-text">Name</span>
-            </label>
-            <input bind:value={$form.name} type="text" name="name" placeholder="Name" class="input input-bordered {$form.errors.name ? 'input-error' : ''}" required autocomplete="name" />
-            {#if $form.errors.name}
-                <span class="label-text-alt text-error text-left mt-1">{$form.errors.name}</span>
-            {/if}
-        </div>
         <div class="form-control w-full">
             <label class="label" for="email">
                 <span class="label-text">Email</span>
@@ -79,7 +69,7 @@
         </div>
 
         <div class="mt-4 text-center">
-            Already have an account? <a href="/register" use:inertia class="link link-primary">Log In</a>
+            Already have an account? <a href="/login" use:inertia class="link link-primary">Log In</a>
         </div>
     </form>
 
