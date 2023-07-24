@@ -21,6 +21,7 @@ class SocialAuthController extends Controller
     {
         $this->middleware(function (Request $request, $next) {
             abort_unless(in_array($request->route('provider'), $this->providers), 404);
+
             return $next($request);
         });
     }

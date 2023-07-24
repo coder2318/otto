@@ -40,5 +40,3 @@ Route::group(['middleware' => ['auth']], function () {
         Route::inertia('/preview', 'Preview')->name('preview');
     });
 });
-
-
