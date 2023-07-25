@@ -34,7 +34,7 @@
 @task('publish', ['on' => $on, 'confirm' => !$force])
     php artisan down
 
-    composer intall --no-dev --no-interaction --prefer-dist --optimize-autoloader
+    composer install --no-dev --no-interaction --prefer-dist --optimize-autoloader
 
     php artisan optimize
     php artisan storage:link
