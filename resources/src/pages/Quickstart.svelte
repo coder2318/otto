@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { range } from '@/service';
     import { useForm } from '@inertiajs/svelte';
     import NameScreen from '@/components/Quickstart/NameScreen.svelte';
     import MotivationScreen from '@/components/Quickstart/MotivationScreen.svelte';
@@ -66,7 +67,7 @@
     </div>
 
     <ul class="steps">
-        {#each Array(6) as _, index (index)}
+        {#each range(0, 6) as index}
             <li class="step {index <= step ? 'step-primary' : ''}"/>
         {/each}
     </ul>
