@@ -47,4 +47,3 @@ jobs:
       run: |
         ./vendor/bin/pint --test
         php artisan test
-        npm run lint

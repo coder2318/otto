@@ -7,7 +7,7 @@
     let input : HTMLInputElement;
     let type = $$restProps.type === 'password' ? 'text' : 'password';
 
-    function toggle () {
+    function toggle (event: MouseEvent) {
         hidden = !hidden;
         input.type = hidden ? 'password' : type;
     }

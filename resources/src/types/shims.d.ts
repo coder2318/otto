@@ -1,5 +1,5 @@
 declare module '*.md' {
     import { SvelteComponent } from 'svelte'
-    export const frontmatter : object
+    export const frontmatter : Object
     export default SvelteComponent
 }

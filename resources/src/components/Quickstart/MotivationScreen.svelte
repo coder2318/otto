@@ -3,8 +3,6 @@
     import { createEventDispatcher } from 'svelte'
     const dispatch = createEventDispatcher()
     export let form
-
-    console.log($form)
 </script>
 
 <div class="flex flex-col h-full w-full items-center justify-center" in:fade>
