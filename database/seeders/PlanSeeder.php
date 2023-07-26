@@ -12,7 +12,8 @@ class PlanSeeder extends Seeder
 {
     public function __construct(
         protected StripeClient $stripe
-    ) { }
+    ) {
+    }
 
     /**
      * Run the database seeds.
@@ -41,7 +42,7 @@ class PlanSeeder extends Seeder
                     'interval_count' => $price?->recurring?->interval_count,
                     'value' => $price?->unit_amount / 100,
                     'currency' => $price?->currency,
-                ]
+                ],
             ])->sortBy('value')->all(),
             'features' => $product?->metadata->toArray() ?? [],
         ];

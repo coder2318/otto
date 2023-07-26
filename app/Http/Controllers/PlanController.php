@@ -39,7 +39,7 @@ class PlanController extends Controller
             $user->newSubscription($plan->slug, $request->validated('price_id'))->create($paymentMethod->id);
 
             return redirect()->route('home')->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
-        }, function (Exception $exception) use ($plan) {
+        }, function (Exception $exception) {
             return redirect()->back()->with('error', $exception->getMessage());
         });
     }

@@ -35,6 +35,7 @@ class SocialAuthController extends Controller
     {
         $user = Socialite::driver($provider)->user();
 
+        /** @var User */
         $user = User::firstOrCreate([
             'email' => $user->email,
         ], [
@@ -43,6 +44,10 @@ class SocialAuthController extends Controller
             'avatar' => $user->getAvatar(),
             'password' => Hash::make(Str::random()),
         ]);
+
+        if (! $user->hasVerifiedEmail()) {
+            $user->markEmailAsVerified();
+        }
 
         Auth::login($user, true);
 
