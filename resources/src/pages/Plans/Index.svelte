@@ -12,7 +12,7 @@
     export let plans : Array<App.Plan> = [];
 
     let checked = false;
-    $: period = checked ? 'month' : 'year';
+    $: period = checked ? 'year' : 'month';
 </script>
 
 <svelte:head>

@@ -19,7 +19,7 @@ class HaveSubscriptions
         /** @var User */
         $user = $request->user();
 
-        if ($subsctibed === $user->subscriptions()->count() > 0) {
+        if ($subsctibed === $user->subscriptions()->active()->count() > 0) {
             return $next($request);
         }
 
