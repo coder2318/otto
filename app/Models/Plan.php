@@ -12,9 +12,14 @@ class Plan extends Model
     protected $fillable = [
         'name',
         'slug',
-        'price',
         'description',
-        'stripe_plan',
+        'prices',
+        'features',
+    ];
+
+    protected $casts = [
+        'prices' => 'collection',
+        'features' => 'array',
     ];
 
     public function getRouteKeyName()

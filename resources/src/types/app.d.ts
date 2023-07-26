@@ -12,9 +12,17 @@ declare namespace App {
 
     interface Plan {
         id: number
-        name: string
-        price: number
-        description: string
         slug: string
+        name: string
+        description: string
+        prices: {
+            [price_id: string]: {
+                interval: string
+                interval_count: number
+                value: number
+                currency: string
+            }
+        }
+        features: string[]
     }
 }

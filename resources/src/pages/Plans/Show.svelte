@@ -15,6 +15,7 @@
     export let plan : App.Plan;
     export let intent;
 
+    let period = 'month';
     let error = null
     let processing = false
     let elements: StripeElements
@@ -22,6 +23,7 @@
 
     onMount(async () => {
         stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY)
+        period = new URLSearchParams(window.location.search).get('period') || 'month'
     })
 
     async function submit() {
@@ -35,8 +37,13 @@
             return error = result.error
         }
 
-        return router.put(window.location.href, {payment_method: result.setupIntent.payment_method})
+        return router.put(window.location.href, {
+            payment_method: result.setupIntent.payment_method,
+            price_id,
+        })
     }
+
+    $: [price_id, price] = Object.entries(plan.prices).find(([,price]) => price.interval === period)
 </script>
 
 <svelte:head>
@@ -49,8 +56,8 @@
         <div class="card-body md:w-1/2">
             <h2 class="card-title text-primary text-2xl">{plan.name}</h2>
             <p>
-                <span class="font-bold text-4xl text-primary">{usd(plan.price, {maximumFractionDigits: 0})}</span>
-                <span class="text-base-content">/month</span>
+                <span class="font-bold text-4xl text-primary">{usd(price.value, {maximumFractionDigits: 0, currency: price.currency})}</span>
+                <span class="text-base-content">/{price.interval_count} {price.interval}</span>
             </p>
             <p class="prose max-w-none">{@html plan.description}</p>
         </div>

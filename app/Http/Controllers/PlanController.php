@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\SubscriptionRequest;
 use App\Models\Plan;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -27,16 +29,18 @@ class PlanController extends Controller
         ]);
     }
 
-    public function update(Plan $plan, Request $request)
+    public function update(Plan $plan, SubscriptionRequest $request)
     {
-        /** @var User */
-        $user = $request->user();
-        $user->createOrGetStripeCustomer();
+        return rescue(function () use ($plan, $request) {
+            /** @var User */
+            $user = $request->user();
+            $user->createOrGetStripeCustomer();
+            $paymentMethod = $user->addPaymentMethod($request->validated('payment_method'));
+            $user->newSubscription($plan->slug, $request->validated('price_id'))->create($paymentMethod->id);
 
-        $paymentMethod = $user->addPaymentMethod($request->payment_method);
-
-        $user->newSubscription($plan->name, $plan->stripe_plan)->create($paymentMethod?->id);
-
-        return redirect()->route('home')->with('success', 'You are now subscribed to the '.$plan->name.' plan!');
+            return redirect()->route('home')->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
+        }, function (Exception $exception) use ($plan) {
+            return redirect()->back()->with('error', $exception->getMessage());
+        });
     }
 }

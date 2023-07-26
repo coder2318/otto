@@ -14,5 +14,5 @@ export const setup = ({ el, App, props }) => {
 
 // See: https://inertiajs.com/progress-indicators
 export const progress = {
-    color: 'hsl(var(--s))', // secondary
+    color: 'hsl(var(--a))', // accent
 }

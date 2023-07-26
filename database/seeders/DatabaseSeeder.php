@@ -16,6 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $this->call([
             RolePermissionSeeder::class,
+            PlanSeeder::class,
         ]);
 
         if (App::isProduction()) {
@@ -24,7 +25,6 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            PlanSeeder::class,
         ]);
     }
 }

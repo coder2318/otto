@@ -15,9 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('slug');
-            $table->float('price');
+            $table->json('prices');
+            $table->json('features');
             $table->string('description');
-            $table->string('stripe_plan');
             $table->timestamps();
         });
     }
