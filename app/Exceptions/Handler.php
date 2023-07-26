@@ -39,7 +39,7 @@ class Handler extends ExceptionHandler
             return Redirect::back()->withErrors($e->getMessage());
         }
 
-        if (App::isProduction()) {
+        if (App::isProduction() && in_array($response->getStatusCode(), [500, 503, 404, 403])) {
             $status = $response->getStatusCode();
             $error = trans("http-statuses.$status");
 
