@@ -9,4 +9,12 @@ declare namespace App {
         email: string
         avatar: string
     }
+
+    interface Plan {
+        id: number
+        name: string
+        price: number
+        description: string
+        slug: string
+    }
 }

@@ -1,3 +1,8 @@
+<script context="module" lang="ts">
+    import Base from '@/components/Layouts/Base.svelte';
+    export const layout = [Base];
+</script>
+
 <script lang="ts">
     import Navbar from "@/components/Navbar.svelte";
     export let laravelVersion : string = '--', phpVersion : string = '--';

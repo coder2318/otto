@@ -13,6 +13,7 @@
         </a>
     </div>
     {#if user}
+        <a class="btn btn-ghost rounded-full" href="/preview" use:inertia>Preview</a>
         <div class="flex-none gap-2">
             <span>{user.email}</span>
             <div class="dropdown dropdown-end">

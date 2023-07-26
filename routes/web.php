@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -28,15 +29,12 @@ Route::inertia('/', 'Home', [
     'phpVersion' => PHP_VERSION,
 ])->name('home');
 
-Route::group(['middleware' => ['auth']], function () {
-    Route::get('/quickstart', [UserController::class, 'quickstart'])
-        ->name('quickstart')
-        ->middleware('user-access:home,true');
+// Subscription Plans
+Route::resource('plans', PlanController::class)
+    ->only(['index', 'show', 'update'])
+    ->names('plans')
+    ->middleware(['auth', 'subscribed:0']);
 
-    Route::post('/quickstart', [UserController::class, 'saveProfileDetails'])
-        ->middleware('user-access:home,true');
-
-    Route::group(['middleware' => ['user-access:quickstart']], function () {
-        Route::inertia('/preview', 'Preview')->name('preview');
-    });
-});
+Route::inertia('/preview', 'Preview')
+    ->name('preview')
+    ->middleware(['auth', 'verified', 'password.confirm', 'subscribed']);

@@ -1,6 +1,6 @@
 <script context="module" lang="ts">
     import Base from '@/components/Layouts/Base.svelte';
-    import Background from '@/components/Quickstart/Background.svelte';
+    import Background from '@/components/Layouts/Focus.svelte';
     export const layout = [Base, Background];
 </script>
 
