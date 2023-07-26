@@ -37,6 +37,6 @@ class PlanController extends Controller
 
         $user->newSubscription($plan->name, $plan->stripe_plan)->create($paymentMethod?->id);
 
-        return redirect()->route('home')->with('success', 'You are now subscribed to the ' . $plan->name . ' plan!');
+        return redirect()->route('home')->with('success', 'You are now subscribed to the '.$plan->name.' plan!');
     }
 }

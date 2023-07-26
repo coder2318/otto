@@ -2,7 +2,6 @@
 
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SocialAuthController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
