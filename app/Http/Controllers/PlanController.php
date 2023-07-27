@@ -36,7 +36,7 @@ class PlanController extends Controller
             $user = $request->user();
             $user->createOrGetStripeCustomer();
             $paymentMethod = $user->addPaymentMethod($request->validated('payment_method'));
-            $user->newSubscription($plan->slug, $request->validated('price_id'))->create($paymentMethod->id);
+            $user->newSubscription('default', $request->validated('price_id'))->create($paymentMethod->id);
 
             return redirect()->route('home')->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
         }, function (Exception $exception) {
