@@ -21,7 +21,7 @@ return new class extends Migration
 
             $table->foreignIdFor(User::class)
                 ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
-            $table->foreignIdFor(Timeline::class)
+            $table->foreignIdFor(Timeline::class)->nullable()
                 ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();

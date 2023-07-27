@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -17,7 +18,9 @@ class StoryFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'title' => $this->faker->sentence(),
+            'cover' => $this->faker->imageUrl(),
+            'status' => $this->faker->randomElement([Status::PUBLISHED, Status::DRAFT]),
         ];
     }
 }

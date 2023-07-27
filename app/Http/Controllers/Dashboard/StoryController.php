@@ -19,7 +19,7 @@ class StoryController extends Controller
     {
         return Inertia::render('Dashboard/Stories/Index', [
             'stories' => StoryResource::collection(
-                $request->user()->stories()->paginate()
+                $request->user()->stories()->paginate(4)
             ),
         ]);
     }
@@ -45,7 +45,9 @@ class StoryController extends Controller
      */
     public function show(Story $story)
     {
-        //
+        return Inertia::render('Dashboard/Stories/Show', [
+            'story' => StoryResource::make($story),
+        ]);
     }
 
     /**

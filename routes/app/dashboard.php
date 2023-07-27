@@ -4,8 +4,8 @@ use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\StoryController;
 use Illuminate\Support\Facades\Route;
 
-// Home
-Route::inertia('/home', 'Dashboard/Home')->name('home');
+// // Home
+// Route::inertia('/stories', 'Dashboard/stories')->name('home');
 
 // Stories
 Route::resource('stories', StoryController::class);

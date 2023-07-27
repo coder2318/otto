@@ -14,7 +14,7 @@
     </div>
     {#if user}
         <div class="flex-none gap-2">
-            <a class="btn btn-secondary btn-outline rounded-full" href="/home" use:inertia>Start Writing</a>
+            <a class="btn btn-secondary btn-outline rounded-full" href="/stories" use:inertia>Start Writing</a>
             <div class="dropdown dropdown-end leading-none">
                 <label tabindex="-1" class="btn btn-ghost btn-circle avatar" for="dropdown">
                     <div class="h-full rounded-full">

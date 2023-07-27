@@ -14,8 +14,8 @@ Route::controller(SocialAuthController::class)
     ->middleware('guest')
     ->prefix('/login/{provider}')
     ->group(function () {
-        Route::get('/', 'login')->where('provider', 'facebook|google')->name('login.socialite');
-        Route::get('/redirect', 'redirect')->where('provider', 'facebook|google')->name('login.socialite.redirect');
+        Route::get('/', 'login')->name('login.socialite');
+        Route::get('/redirect', 'redirect')->name('login.socialite.redirect');
     });
 
 // User Dashboard
