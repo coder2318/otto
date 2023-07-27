@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Route;
 
 // Stories
 Route::resource('stories', StoryController::class);
+Route::get('stories/{story}/write', [StoryController::class, 'write'])->name('stories.write');
 
 // Test
 Route::inertia('/preview', 'Dashboard/Preview')
