@@ -1,23 +1,36 @@
 <script lang="ts">
-    import { inertia, router, page } from '@inertiajs/svelte';
+    import { inertia, page } from '@inertiajs/svelte';
     import Logo from "../SVG/logo.svg.svelte";
+    import LogoIcon from "../SVG/logo-icon.svg.svelte";
     import User from '../SVG/user.svg.svelte';
+    import Fa from 'svelte-fa';
+    import { faSearch, faCog, faBell } from '@fortawesome/free-solid-svg-icons';
 
-    $: user = $page.props.auth.user;
+    $: user = $page.props.auth.user as App.User | null;
 </script>
 
 <nav class="navbar bg-primary text-primary-content sticky top-0 z-20">
-    <div class="flex-1">
+    <div class="navbar-start">
         <a class="btn btn-ghost normal-case text-xl" href="/home" use:inertia>
-            <Logo class="h-full" />
+            <Logo class="hidden md:block h-full" />
+            <LogoIcon class="md:hidden h-full" />
         </a>
     </div>
-    {#if user}
-        <a class="btn btn-ghost rounded-full" href="/preview" use:inertia>Preview</a>
-        <div class="flex-none gap-2">
-            <div class="dropdown dropdown-end">
+    <div class="navbar-end flex gap-1 md:gap-2">
+        <div class="form-control relative">
+            <Fa icon={faSearch} class="absolute top-1/2 -translate-y-1/2 left-4"/>
+            <input type="text" placeholder="Search" class="search input input-ghost rounded-full border-neutral pl-10" />
+        </div>
+        <button class="btn btn-ghost btn-circle border-neutral hover:border-neutral-focus">
+            <Fa icon={faBell} class="h-full"/>
+        </button>
+        <a class="btn btn-ghost btn-circle border-neutral hover:border-neutral-focus" href="/settrings" use:inertia>
+            <Fa icon={faCog} class="h-full"/>
+        </a>
+        {#if user}
+            <div class="dropdown dropdown-end leading-none">
                 <label tabindex="-1" class="btn btn-ghost btn-circle avatar" for="dropdown">
-                    <div class="w-10 rounded-full">
+                    <div class="w-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar"/>
                         {:else}
@@ -25,17 +38,16 @@
                         {/if}
                     </div>
                 </label>
-                <ul tabindex="-1" id="dropdown" class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 text-base-content rounded-box w-48 border border-base-300">
+                <ul tabindex="-1" id="dropdown" class="mt-3 z-[1] p-2 shadow menu dropdown-content bg-base-200 text-base-content rounded-box w-48 border border-base-300">
                     <li>
-                        <button type="button" on:click|preventDefault={() => router.post('/logout')}>
+                        <a href="/profile" use:inertia>Profile</a>
+                        <a href="/guest-chapters" use:inertia>Guest Chapters</a>
+                        <button href="/logout" use:inertia={{href: "/logout", method: 'POST'}}>
                             Logout
                         </button>
                     </li>
                 </ul>
             </div>
-        </div>
-    {:else}
-        <a class="btn btn-ghost rounded-full" href="/login" use:inertia>Login</a>
-        <a class="btn btn-secondary btn-outline rounded-full" href="/register" use:inertia>Start Writing</a>
-    {/if}
+        {/if}
+    </div>
 </nav>

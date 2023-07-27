@@ -2,10 +2,9 @@
 
 use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SocialAuthController;
-use App\Http\Controllers\StoryController;
 use Illuminate\Support\Facades\Route;
 
-// Index
+// Static Pages
 Route::inertia('/', 'Index', [
     'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
     'phpVersion' => PHP_VERSION,
@@ -20,21 +19,12 @@ Route::controller(SocialAuthController::class)
         Route::get('/redirect', 'redirect')->where('provider', 'facebook|google')->name('login.socialite.redirect');
     });
 
-// Subscription Plans
-Route::resource('plans', PlanController::class)
-    ->only(['index', 'show', 'update'])
-    ->middleware(['auth', 'subscribed:0']);
+// User Dashboard
+Route::group(['middleware' => ['auth', 'verified'], 'name' => 'dashboard.'], function () {
+    require_once __DIR__.'/app/dashboard.php';
+});
 
-// Home
-Route::inertia('/home', 'Home')
-    ->name('home')
-    ->middleware(['auth', 'verified']);
-
-// Stories
-Route::resource('stories', StoryController::class)
-    ->middleware(['auth', 'verified']);
-
-// Test
-Route::inertia('/preview', 'Preview')
-    ->name('preview')
-    ->middleware(['auth', 'verified', 'password.confirm', 'subscribed']);
+// Admin Panel
+Route::group(['middleware' => ['auth', 'verified'], 'name' => 'admin.'], function () {
+    require_once __DIR__.'/app/admin.php';
+});

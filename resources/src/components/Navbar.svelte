@@ -13,11 +13,11 @@
         </a>
     </div>
     {#if user}
-        <a class="btn btn-ghost rounded-full" href="/preview" use:inertia>Preview</a>
         <div class="flex-none gap-2">
-            <div class="dropdown dropdown-end">
+            <a class="btn btn-secondary btn-outline rounded-full" href="/home" use:inertia>Start Writing</a>
+            <div class="dropdown dropdown-end leading-none">
                 <label tabindex="-1" class="btn btn-ghost btn-circle avatar" for="dropdown">
-                    <div class="w-10 rounded-full">
+                    <div class="h-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar"/>
                         {:else}
@@ -35,7 +35,6 @@
             </div>
         </div>
     {:else}
-        <a class="btn btn-ghost rounded-full" href="/login" use:inertia>Login</a>
-        <a class="btn btn-secondary btn-outline rounded-full" href="/register" use:inertia>Start Writing</a>
+        <a class="btn btn-ghost rounded-full" href="/login" use:inertia>Sign In</a>
     {/if}
 </nav>

@@ -5,11 +5,18 @@
 </script>
 
 <script lang="ts">
-    import { inertia } from '@inertiajs/svelte';
-    import { fade, blur } from 'svelte/transition';
+    import { inertia, router } from '@inertiajs/svelte';
+    import { fade } from 'svelte/transition';
     import stripe from '@/assets/img/stripe.svg';
     import { usd } from '@/service';
+    import { start, done } from '@/components/Loading.svelte';
     export let plans : Array<App.Plan> = [];
+
+    const options = {
+        onStart: start,
+        onFinish: done,
+        hideProgress: true,
+    }
 
     let checked = false;
     $: period = checked ? 'year' : 'month';
@@ -39,7 +46,7 @@
                         {/each}
                     </div>
                     <p class="prose max-w-none">{@html plan.description}</p>
-                    <a href="/plans/{plan.slug}?period={period}" use:inertia class="btn btn-secondary rounded-full w-full">Chose Plan</a>
+                    <a href="/plans/{plan.slug}?period={period}" use:inertia={options} class="btn btn-secondary rounded-full w-full">Chose Plan</a>
                 </div>
             </div>
         </div>

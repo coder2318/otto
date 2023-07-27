@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Plan;
 use App\Models\User;
@@ -16,14 +17,14 @@ class PlanController extends Controller
      */
     public function index()
     {
-        return Inertia::render('Plans/Index', [
+        return Inertia::render('Dashboard/Plans/Index', [
             'plans' => Plan::all(),
         ]);
     }
 
     public function show(Plan $plan, Request $request)
     {
-        return Inertia::render('Plans/Show', [
+        return Inertia::render('Dashboard/Plans/Show', [
             'plan' => $plan,
             'intent' => $request->user()->createSetupIntent(),
         ]);

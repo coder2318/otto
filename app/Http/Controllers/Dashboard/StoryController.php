@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\UpdateStoryRequest;
 use App\Http\Resources\StoryResource;
@@ -16,7 +17,7 @@ class StoryController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Stories/Index', [
+        return Inertia::render('Dashboard/Stories/Index', [
             'stories' => StoryResource::collection(
                 $request->user()->stories()->paginate()
             ),
@@ -28,7 +29,7 @@ class StoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Stories/Create');
+        return Inertia::render('Dashboard/Stories/Create');
     }
 
     /**
