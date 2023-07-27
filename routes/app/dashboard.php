@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\Dashboard\PlanController;
+use App\Http\Controllers\Dashboard\StoryController;
 use Illuminate\Support\Facades\Route;
-
 
 // Home
 Route::inertia('/home', 'Dashboard/Home')->name('home');

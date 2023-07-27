@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\PlanController;
 use App\Http\Controllers\SocialAuthController;
 use Illuminate\Support\Facades\Route;
 
