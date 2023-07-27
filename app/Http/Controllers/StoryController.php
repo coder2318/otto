@@ -16,7 +16,7 @@ class StoryController extends Controller
      */
     public function index(Request $request)
     {
-        return Inertia::render('Story/Index', [
+        return Inertia::render('Stories/Index', [
             'stories' => StoryResource::collection(
                 $request->user()->stories()->paginate()
             ),
@@ -28,7 +28,7 @@ class StoryController extends Controller
      */
     public function create()
     {
-        return Inertia::render('Story/Create');
+        return Inertia::render('Stories/Create');
     }
 
     /**

@@ -1,14 +1,14 @@
 <script lang="ts">
     import { inertia, router, page } from '@inertiajs/svelte';
-    import Logo from "./SVG/logo.svg.svelte";
-    import User from './SVG/user.svg.svelte';
+    import Logo from "../SVG/logo.svg.svelte";
+    import User from '../SVG/user.svg.svelte';
 
     $: user = $page.props.auth.user;
 </script>
 
 <nav class="navbar bg-primary text-primary-content sticky top-0 z-20">
     <div class="flex-1">
-        <a class="btn btn-ghost normal-case text-xl" href="/" use:inertia>
+        <a class="btn btn-ghost normal-case text-xl" href="/home" use:inertia>
             <Logo class="h-full" />
         </a>
     </div>

@@ -5,11 +5,11 @@ use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StoryController;
 use Illuminate\Support\Facades\Route;
 
-// Homepage
-Route::inertia('/', 'Home', [
+// Index
+Route::inertia('/', 'Index', [
     'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
     'phpVersion' => PHP_VERSION,
-])->name('home');
+])->name('index');
 
 // Auth
 Route::controller(SocialAuthController::class)
@@ -24,6 +24,11 @@ Route::controller(SocialAuthController::class)
 Route::resource('plans', PlanController::class)
     ->only(['index', 'show', 'update'])
     ->middleware(['auth', 'subscribed:0']);
+
+// Home
+Route::inertia('/home', 'Home')
+    ->name('home')
+    ->middleware(['auth', 'verified']);
 
 // Stories
 Route::resource('stories', StoryController::class)

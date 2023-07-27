@@ -1,13 +1,16 @@
+<script context="module" lang="ts">
+    import Base from '@/components/Layouts/Base.svelte';
+    import Dashboard from '@/components/Layouts/Dashboard.svelte';
+    export const layout = [Base, Dashboard];
+</script>
+
 <script lang="ts">
-    import Navbar from '@/components/Navbar.svelte';
     import Lorem from '@/assets/md/lorem.md';
 </script>
 
 <svelte:head>
     <title>{import.meta.env.VITE_APP_NAME} - Preview</title>
 </svelte:head>
-
-<Navbar />
 
 <div class="bg-transparent p-4">
     <div
