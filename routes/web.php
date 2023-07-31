@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\SocialAuthController;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 // Static Pages
@@ -13,9 +14,9 @@ Route::inertia('/', 'Index', [
 Route::controller(SocialAuthController::class)
     ->middleware('guest')
     ->prefix('/login/{provider}')
-    ->group(function () {
-        Route::get('/', 'login')->name('login.socialite');
-        Route::get('/redirect', 'redirect')->name('login.socialite.redirect');
+    ->group(function (Router $router) {
+        $router->get('/', 'login')->name('login.socialite');
+        $router->get('/redirect', 'redirect')->name('login.socialite.redirect');
     });
 
 // User Dashboard

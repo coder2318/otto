@@ -19,7 +19,10 @@
     vendor/bin/pint --test --format=txt || ret=$?
 
     echo "Runnunt tests..."
-    php artisan test || ret=$?
+    vendor/bin/phpunit --no-progress || ret=$?
+
+    echo "Runnunt static analysis..."
+    vendor/bin/phpstan --memory-limit=512M --no-progress || ret=$?
 
     return $ret || 0
 @endtask
