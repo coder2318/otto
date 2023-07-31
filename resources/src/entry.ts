@@ -5,7 +5,7 @@ export const resolve = (name: string) => resolvePageComponent(
     import.meta.glob(`./pages/**/*.svelte`)
 )
 
-export const setup = ({ el, App, props }) => {
+export const setup = ({ App, el, props }) => {
     const app = new App({ target: el, props, hydrate: true })
     delete el.dataset.page
 

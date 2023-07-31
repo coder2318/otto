@@ -1,11 +1,13 @@
 <?php
 
 use App\Http\Controllers\Dashboard\PlanController;
+use App\Http\Controllers\Dashboard\QuickstartController;
 use App\Http\Controllers\Dashboard\StoryController;
 use Illuminate\Support\Facades\Route;
 
-// // Home
-// Route::inertia('/stories', 'Dashboard/stories')->name('home');
+// Quickstart Quiz
+Route::resource('quickstart', QuickstartController::class)
+    ->only(['index', 'store']);
 
 // Stories
 Route::resource('stories', StoryController::class);

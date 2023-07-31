@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { fade } from 'svelte/transition';
+    import { fade, blur } from 'svelte/transition';
     import Fa from 'svelte-fa';
     import Paginator from '@/components/Paginator.svelte';
     import { inertia } from '@inertiajs/svelte';
@@ -27,11 +27,10 @@
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 flex-1 justify-center">
-            {#each stories.data as story}
-                {#key story.id}
-                    <a class="card bg-neutral hover:scale-105 transition-transform" href="/stories/{story.id}" use:inertia>
+            {#each stories.data as story (story.id)}
+                    <a class="card bg-neutral hover:scale-105 transition-transform" href="/stories/{story.id}" use:inertia in:fade>
                         <figure>
-                            <img src="{story.cover}" alt="writing room" />
+                            <img src="{story.cover}" alt="{story.title}" />
                         </figure>
                         <div class="card-body">
                             <h2 class="card-title">{story.title}</h2>
@@ -42,7 +41,6 @@
                             </div>
                         </div>
                     </a>
-                {/key}
             {:else}
             <a href="/stories/create" use:inertia class="card hover:scale-105 transition-transform border-neutral border-dashed border-4">
                 <div class="card-body items-center justify-center text-neutral-content">

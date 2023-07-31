@@ -3,11 +3,14 @@
     import { createEventDispatcher } from 'svelte'
     const dispatch = createEventDispatcher()
     export let form
+    export let question
 </script>
 
 <div class="flex flex-col h-full w-full items-center justify-center" in:fade>
-    3
+    4
     <div class="form-control">
+        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}>Back</button>
         <button class="btn btn-primary w-40" on:click={() => dispatch('next')}>Continue</button>
     </div>
+    <slot />
 </div>
