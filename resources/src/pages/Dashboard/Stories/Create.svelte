@@ -5,9 +5,24 @@
 </script>
 
 <script lang="ts">
-
+    import { fade } from 'svelte/transition';
+    import { useForm, inertia } from '@inertiajs/svelte';
+    const form = useForm<Partial<App.Story>>({
+        title: '',
+        cover: '',
+        status: '',
+        timeline_id: '',
+    })
 </script>
 
 <svelte:head>
     <title>{import.meta.env.VITE_APP_NAME} - Create New Story</title>
 </svelte:head>
+
+<main class="container mx-auto flex-1 flex flex-col gap-8 p-4 py-8" in:fade>
+    <div class="flex justify-between">
+        <h1 class="text-3xl italic text-primary font-bold">Create New Story</h1>
+    </div>
+
+
+</main>

@@ -5,9 +5,12 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition';
+    import Fa from 'svelte-fa';
     import Paginator from '@/components/Paginator.svelte';
     import { inertia } from '@inertiajs/svelte';
     import { dayjs } from '@/service';
+    import { faPlus } from '@fortawesome/free-solid-svg-icons';
     export let stories : { data: Array<App.Story>, links: App.PaginationLinks, meta: App.PaginationMeta };
 </script>
 
@@ -15,10 +18,15 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<main class="container mx-auto flex-1 flex flex-col gap-8 p-4 py-8">
-    <h1 class="text-3xl italic text-primary font-bold">My Stories</h1>
+<main class="container mx-auto flex-1 flex flex-col gap-8 p-4 py-8" in:fade>
+    <div class="flex justify-between">
+        <h1 class="text-3xl italic text-primary font-bold">My Stories</h1>
+        <a href="/stories/create" use:inertia class="btn btn-secondary">
+            <Fa icon={faPlus} /> Create a Story
+        </a>
+    </div>
 
-    <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 flex-1">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 flex-1 justify-center">
             {#each stories.data as story}
                 {#key story.id}
                     <a class="card bg-neutral hover:scale-105 transition-transform" href="/stories/{story.id}" use:inertia>
@@ -37,7 +45,8 @@
                 {/key}
             {:else}
             <a href="/stories/create" use:inertia class="card hover:scale-105 transition-transform border-neutral border-dashed border-4">
-                <div class="card-body items-center">
+                <div class="card-body items-center justify-center text-neutral-content">
+                    <Fa icon={faPlus} class="text-6xl" />
                     <h2 class="card-title">Create your first story</h2>
                 </div>
             </a>
