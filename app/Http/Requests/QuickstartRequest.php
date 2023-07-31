@@ -19,7 +19,7 @@ class QuickstartRequest extends FormRequest
 
     public function details(?Details $details): Details
     {
-        if (!$details) {
+        if (! $details) {
             $details = new Details();
         }
 

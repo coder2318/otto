@@ -3,7 +3,6 @@
 namespace App\Data\User;
 
 use Illuminate\Support\Carbon;
-use Spatie\LaravelData\Attributes\DataCollectionOf;
 use Spatie\LaravelData\Attributes\Validation\Date;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Sometimes;
@@ -36,6 +35,5 @@ class Details extends Data
     /**
      * Quiz answers
      */
-    #[DataCollectionOf(StringType::class)]
     public DataCollection $quiz;
 }
