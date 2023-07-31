@@ -20,10 +20,10 @@ Route::controller(SocialAuthController::class)
 
 // User Dashboard
 Route::group(['middleware' => ['auth', 'verified'], 'name' => 'dashboard.'], function () {
-    require_once __DIR__.'/app/dashboard.php';
+    require_once __DIR__.'/web/dashboard.php';
 });
 
 // Admin Panel
 Route::group(['middleware' => ['auth', 'verified'], 'name' => 'admin.'], function () {
-    require_once __DIR__.'/app/admin.php';
+    require_once __DIR__.'/web/admin.php';
 });
