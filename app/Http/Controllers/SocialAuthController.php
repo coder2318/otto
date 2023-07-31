@@ -37,7 +37,7 @@ class SocialAuthController extends Controller
 
         /** @var User */
         $user = User::firstOrCreate([
-            'email' => $user->email,
+            'email' => $user->getEmail(),
         ], [
             'email' => $user->getEmail(),
             'name' => $user->getName(),

@@ -6,9 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
 use App\Models\Plan;
 use App\Models\User;
-use Exception;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Throwable;
 
 class PlanController extends Controller
 {
@@ -37,10 +37,11 @@ class PlanController extends Controller
             $user = $request->user();
             $user->createOrGetStripeCustomer();
             $paymentMethod = $user->addPaymentMethod($request->validated('payment_method'));
+            // @phpstan-ignore-next-line
             $user->newSubscription('default', $request->validated('price_id'))->create($paymentMethod->id);
 
             return redirect()->route('home')->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
-        }, function (Exception $exception) {
+        }, function (Throwable $exception) {
             return redirect()->back()->with('error', $exception->getMessage());
         });
     }

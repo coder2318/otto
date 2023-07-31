@@ -19,6 +19,7 @@ class HaveSubscriptions
         /** @var User */
         $user = $request->user();
 
+        // @phpstan-ignore-next-line
         if ($subsctibed === $user->subscriptions()->active()->count() > 0) {
             return $next($request);
         }

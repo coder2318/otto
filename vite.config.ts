@@ -21,11 +21,6 @@ export default defineConfig({
             compilerOptions: {
                 hydratable: true,
             },
-            onwarn(warning, defaultHandler) {
-                if (!warning.filename.startsWith('/node_modules')) {
-                    defaultHandler(warning)
-                }
-            },
         }),
     ],
     server: {
