@@ -15,6 +15,8 @@ class StorySeeder extends Seeder
     {
         Story::factory()->count(10)->create([
             'user_id' => User::value('id'),
-        ]);
+        ])->each(function (Story $story) {
+            $story->addMediaFromUrl(fake()->imageUrl())->toMediaCollection('cover');
+        });
     }
 }

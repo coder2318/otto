@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('stories', function (Blueprint $table) {
             $table->id();
             $table->string('title');
-            $table->string('cover');
             $table->string('status');
 
             $table->foreignIdFor(User::class)

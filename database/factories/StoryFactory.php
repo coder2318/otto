@@ -19,7 +19,6 @@ class StoryFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'cover' => $this->faker->imageUrl(),
             'status' => $this->faker->randomElement([Status::PUBLISHED, Status::DRAFT]),
         ];
     }

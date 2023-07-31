@@ -16,7 +16,7 @@ class StoryController extends Controller
     {
         return Inertia::render('Dashboard/Stories/Index', [
             'stories' => StoryResource::collection(
-                $request->user()->stories()->paginate(4)
+                $request->user()->stories()->with('cover')->paginate(4)
             ),
         ]);
     }

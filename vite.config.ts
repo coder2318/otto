@@ -1,6 +1,7 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import { svelte } from '@sveltejs/vite-plugin-svelte'
+import { viteStaticCopy as copy } from 'vite-plugin-static-copy'
 import markdown from 'vite-plugin-svelte-md'
 import sveltePreprocess from 'svelte-preprocess';
 import path from 'path';
@@ -22,6 +23,14 @@ export default defineConfig({
                 hydratable: true,
             },
         }),
+        copy({
+            targets: [
+                {
+                    src: path.resolve(__dirname, 'resources/assets'),
+                    dest: path.resolve(__dirname, 'public'),
+                },
+            ],
+        })
     ],
     server: {
         hmr: {
