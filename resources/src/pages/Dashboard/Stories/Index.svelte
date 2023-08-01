@@ -8,13 +8,24 @@
     import { fade } from 'svelte/transition'
     import Fa from 'svelte-fa'
     import Paginator from '@/components/Paginator.svelte'
-    import { inertia } from '@inertiajs/svelte'
+    import { inertia, page } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
+    import background from '@/assets/img/stories-bg.jpg'
+    export let query: any
     export let stories: {
         data: Array<App.Story>
         links: App.PaginationLinks
         meta: App.PaginationMeta
+    }
+
+    function filters(parameters = {}) {
+        return (
+            window.location.origin +
+            window.location.pathname +
+            '?' +
+            new URLSearchParams(parameters).toString()
+        )
     }
 </script>
 
@@ -22,16 +33,53 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<main class="container mx-auto flex-1 flex flex-col gap-8 p-4 py-8" in:fade>
-    <div class="flex justify-between">
-        <h1 class="text-3xl italic text-primary font-bold">My Stories</h1>
+<header class="hero bg-top" style="background-image: url({background})" in:fade>
+    <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/60" />
+    <div
+        class="container hero-content justify-between text-primary-content my-8 md:my-12 lg:my-16"
+    >
+        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold italic">
+            My Stories
+        </h1>
         <a href="/stories/create" use:inertia class="btn btn-secondary">
-            <Fa icon={faPlus} /> Create a Story
+            <Fa icon={faPlus} />
+            Create Story
         </a>
     </div>
+</header>
 
+<section class="container mx-auto flex p-4 lg:py-8" in:fade>
+    <div class="tabs border-b-2 border-base-content/20 flex-1">
+        <a
+            class="tab -mb-0.5 {!query?.filter?.status
+                ? 'tab-bordered tab-active'
+                : ''}"
+            href={filters()}
+            use:inertia>All</a
+        >
+        <a
+            class="tab -mb-0.5 {query?.filter?.status == 'pending'
+                ? 'tab-bordered tab-active'
+                : ''}"
+            href={filters({ 'filter[status]': 'pending' })}
+            use:inertia>Pending</a
+        >
+        <a
+            class="tab -mb-0.5 {query?.filter?.status == 'published'
+                ? 'tab-bordered tab-active'
+                : ''}"
+            href={filters({ 'filter[status]': 'published' })}
+            use:inertia>Published</a
+        >
+    </div>
+</section>
+
+<main
+    class="container mx-auto p-4 lg:py-8 flex flex-col items-center justify-center gap-8"
+    in:fade
+>
     <div
-        class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 flex-1 justify-center"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
     >
         {#each stories.data as story (story.id)}
             <a
@@ -48,32 +96,16 @@
                     <p />
                     <div class="card-actions justify-between">
                         <div>
-                            {dayjs(story.created_at).format('MMM DD, YYYY')}
+                            Started: {dayjs(story.created_at).format(
+                                'MMM DD, YYYY'
+                            )}
                         </div>
                         <div class="badge badge-outline">{story.status}</div>
                     </div>
                 </div>
             </a>
-        {:else}
-            <a
-                href="/stories/create"
-                use:inertia
-                class="card hover:scale-105 transition-transform border-neutral border-dashed border-4"
-            >
-                <div
-                    class="card-body items-center justify-center text-neutral-content"
-                >
-                    <Fa icon={faPlus} class="text-6xl" />
-                    <h2 class="card-title">Create your first story</h2>
-                </div>
-            </a>
         {/each}
     </div>
 
-    <Paginator
-        meta={stories.meta}
-        class="mx-auto"
-        buttonClass="btn-secondary"
-        activeClass="btn-secondary btn-active"
-    />
+    <Paginator meta={stories.meta} />
 </main>

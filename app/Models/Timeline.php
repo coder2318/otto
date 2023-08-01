@@ -12,11 +12,6 @@ class Timeline extends Model
     protected $fillable = [
         'title',
         'description',
-        'questions',
-    ];
-
-    protected $casts = [
-        'questions' => 'array',
     ];
 
     public function user()

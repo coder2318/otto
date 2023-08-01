@@ -2,7 +2,6 @@
 
 namespace App\Http\Middleware;
 
-use App\Models\User;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -14,16 +13,12 @@ class HaveSubscriptions
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, bool $subsctibed = true): Response
+    public function handle(Request $request, Closure $next, bool $subscribed = true): Response
     {
-        /** @var User */
-        $user = $request->user();
-
-        // @phpstan-ignore-next-line
-        if ($subsctibed === $user->subscriptions()->active()->count() > 0) {
+        if ($subscribed === $request->user()->subscribed()) {
             return $next($request);
         }
 
-        return redirect()->route($subsctibed ? 'plans.index' : 'home');
+        return redirect()->route($subscribed ? 'plans.index' : 'home');
     }
 }

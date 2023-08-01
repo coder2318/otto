@@ -19,7 +19,7 @@ class StoryFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'status' => $this->faker->randomElement([Status::PUBLISHED, Status::DRAFT]),
+            'status' => $this->faker->randomElement([Status::PUBLISHED, Status::PENDING]),
         ];
     }
 }

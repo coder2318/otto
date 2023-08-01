@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Story;
+use App\Models\Timeline;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -19,6 +20,8 @@ class StorySeeder extends Seeder
             $story->addMediaFromUrl('https://picsum.photos/640/480')
                 ->withResponsiveImages()
                 ->toMediaCollection('cover');
+
+            $story->timeline()->associate(Timeline::inRandomOrder()->value('id'));
         });
     }
 }
