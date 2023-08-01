@@ -11,7 +11,8 @@ class QuickstartRequest extends FormRequest
     public function prepareForValidation(): void
     {
         $this->merge([
-            'birth_date' => Carbon::createFromFormat('d/m/Y', $this->birth_date)?->startOfDay() ?? null,
+            'birth_date' => ($date = Carbon::createFromFormat('d/m/Y', $this->birth_date)) ?
+                $date->startOfDay() : null,
         ]);
     }
 
