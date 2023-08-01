@@ -16,7 +16,7 @@
     import { usd } from '@/service/helpers'
     import { Elements, PaymentElement } from 'svelte-stripe'
 
-    export let plan: App.Plan
+    export let plan: { data: App.Plan }
     export let intent
 
     let period = 'month'
@@ -51,25 +51,27 @@
         })
     }
 
-    $: [price_id, price] = Object.entries(plan.prices).find(
+    $: [price_id, price] = Object.entries(plan.data.prices).find(
         ([, price]) => price.interval === period
     )
 </script>
 
 <svelte:head>
-    <title>{import.meta.env.VITE_APP_NAME} - Subscribe to {plan.name}</title>
+    <title>
+        {import.meta.env.VITE_APP_NAME} - Subscribe to {plan.data.name}
+    </title>
 </svelte:head>
 
 <div
-    class="flex flex-col h-full w-full items-center justify-center gap-10 py-16"
+    class="z-10 flex flex-col flex-1 items-center justify-center gap-8"
     in:fade
 >
     <h1 class="text-2xl md:text-4xl lg:text-6xl text-primary">
-        Subscribe to <span class="italic">{plan.name}</span>
+        Subscribe to <span class="italic">{plan.data.name}</span>
     </h1>
-    <div class="card bg-neutral text-neutral-content flex-1 md:flex-row">
+    <div class="card bg-neutral text-neutral-content md:flex-row">
         <div class="card-body md:w-1/2">
-            <h2 class="card-title text-primary text-2xl">{plan.name}</h2>
+            <h2 class="card-title text-primary text-2xl">{plan.data.name}</h2>
             <p>
                 <span class="font-bold text-4xl text-primary"
                     >{usd(price.value, {
@@ -81,7 +83,7 @@
                     >/{price.interval_count} {price.interval}</span
                 >
             </p>
-            <p class="prose max-w-none">{@html plan.description}</p>
+            <p class="prose max-w-none">{@html plan.data.description}</p>
         </div>
         <div class="divider md:divider-horizontal" />
         <div class="card-body md:w-1/2 justify-center">

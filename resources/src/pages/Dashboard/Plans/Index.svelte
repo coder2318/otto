@@ -10,7 +10,7 @@
     import stripe from '@/assets/img/stripe.svg'
     import { usd } from '@/service/helpers'
     import { start, done } from '@/components/Loading.svelte'
-    export let plans: Array<App.Plan> = []
+    export let plans: { data: App.Plan[] }
 
     const options = {
         onStart: start,
@@ -26,16 +26,13 @@
     <title>{import.meta.env.VITE_APP_NAME} - Subscription Plans</title>
 </svelte:head>
 
-<div
-    class="flex flex-col h-full w-full items-center justify-center gap-10 py-16 z-[1]"
-    in:fade
->
+<div class="z-10 flex flex-col flex-1 items-center gap-8" in:fade>
     <h1 class="text-6xl text-primary">
         Chose a <span class="italic">Otto Story Plan</span>
     </h1>
     <img src={stripe} alt="stripe" class="w-[200px]" />
     <div class="carousel rounded-box max-w-full flex-1">
-        {#each plans as plan}
+        {#each plans.data as plan}
             <div class="carousel-item w-1/3">
                 <div class="card bg-neutral text-neutral-content m-5">
                     <div class="card-body">
@@ -43,7 +40,7 @@
                             {plan.name}
                         </h2>
                         <div class="flex">
-                            {#each Object.entries(plan.prices) as [price]}
+                            {#each Object.entries(plan.prices) as [key, price] (key)}
                                 {#if price.interval === period}
                                     <span>
                                         <span

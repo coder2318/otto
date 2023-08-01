@@ -23,6 +23,7 @@ export default {
         daisyui,
     ],
     daisyui: {
+        logs: false,
         themes: [{
             otto: {
                 'primary': '#0C345C',

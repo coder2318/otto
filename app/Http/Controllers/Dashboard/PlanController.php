@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SubscriptionRequest;
+use App\Http\Resources\PlanResource;
 use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -18,14 +19,14 @@ class PlanController extends Controller
     public function index()
     {
         return Inertia::render('Dashboard/Plans/Index', [
-            'plans' => Plan::all(),
+            'plans' => PlanResource::collection(Plan::all()),
         ]);
     }
 
     public function show(Plan $plan, Request $request)
     {
         return Inertia::render('Dashboard/Plans/Show', [
-            'plan' => $plan,
+            'plan' => PlanResource::make($plan),
             'intent' => $request->user()->createSetupIntent(),
         ]);
     }
