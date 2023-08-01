@@ -1,85 +1,110 @@
 <script lang="ts" context="module">
-    import { writable } from 'svelte/store';
+    import { writable } from 'svelte/store'
     export type Toast = {
-        message: string;
-        type: 'alert-success' | 'alert-error' | 'alert-info' | 'alert-warning';
-        timestamp?: Date;
-        autohide?: boolean;
+        message: string
+        type: 'alert-success' | 'alert-error' | 'alert-info' | 'alert-warning'
+        timestamp?: Date
+        autohide?: boolean
     }
 
-    const messages = writable([] as Toast[]);
+    const messages = writable([] as Toast[])
 
     export function flash(notification: Toast) {
         if (!notification.timestamp) {
-            notification.timestamp = new Date();
+            notification.timestamp = new Date()
         }
         if (typeof notification.autohide === 'undefined') {
-            notification.autohide = true;
+            notification.autohide = true
         }
-        messages.update(messages => {
-            messages.push(notification);
+        messages.update((messages) => {
+            messages.push(notification)
             return messages
         })
     }
 </script>
 
 <script lang="ts">
-    import { onMount } from 'svelte';
-	import { fly } from "svelte/transition"
-    import { page } from '@inertiajs/svelte';
-    import Fa from 'svelte-fa';
-    import { faWarning, faInfoCircle, faCheckCircle, faCircleXmark, faClose } from '@fortawesome/free-solid-svg-icons';
+    import { onMount } from 'svelte'
+    import { fly } from 'svelte/transition'
+    import { page } from '@inertiajs/svelte'
+    import Fa from 'svelte-fa'
+    import {
+        faWarning,
+        faInfoCircle,
+        faCheckCircle,
+        faCircleXmark,
+        faClose,
+    } from '@fortawesome/free-solid-svg-icons'
 
     function icon(type: Toast['type']) {
-        return {
-            'alert-success': faCheckCircle,
-            'alert-error': faCircleXmark,
-            'alert-info': faInfoCircle,
-            'alert-warning': faWarning
-        }[type] ?? faCircleXmark;
+        return (
+            {
+                'alert-success': faCheckCircle,
+                'alert-error': faCircleXmark,
+                'alert-info': faInfoCircle,
+                'alert-warning': faWarning,
+            }[type] ?? faCircleXmark
+        )
     }
 
     function status(status: string) {
-        return {
-            'verification-link-sent': 'A new verification link has been sent to the email address you provided during registration.',
-        }[status] ?? status;
+        return (
+            {
+                'verification-link-sent':
+                    'A new verification link has been sent to the email address you provided during registration.',
+            }[status] ?? status
+        )
     }
 
     onMount(() => {
         let interval = setInterval(() => {
-            $messages = $messages.filter(message => {
-                return !message.autohide || (new Date().getTime() - message.timestamp.getTime()) < 5000
+            $messages = $messages.filter((message) => {
+                return (
+                    !message.autohide ||
+                    new Date().getTime() - message.timestamp.getTime() < 5000
+                )
             })
         }, 1000)
-        return () => clearInterval(interval);
-    });
+        return () => clearInterval(interval)
+    })
 
-    page.subscribe(page => {
-        const message = page.props?.flash?.status ?? page.props?.flash?.error ?? page.props?.flash?.success;
-        const type = page.props?.flash?.status && 'alert-info' ||
-                page.props?.flash?.error && 'alert-warning' ||
-                page.props?.flash?.success && 'alert-success';
+    page.subscribe((page) => {
+        const message =
+            page.props?.flash?.status ??
+            page.props?.flash?.error ??
+            page.props?.flash?.success
+        const type =
+            (page.props?.flash?.status && 'alert-info') ||
+            (page.props?.flash?.error && 'alert-warning') ||
+            (page.props?.flash?.success && 'alert-success')
 
         if (!message || !type) {
             return
         }
 
         $messages.push({
-            message: status(page.props?.flash?.status ?? page.props?.flash?.error ?? page.props?.flash?.success),
+            message: status(
+                page.props?.flash?.status ??
+                    page.props?.flash?.error ??
+                    page.props?.flash?.success
+            ),
             type: type,
             timestamp: new Date(),
-            autohide: true
+            autohide: true,
         })
-    });
+    })
 </script>
 
 <div class="toast toast-bottom toast-end">
     {#each $messages as message, i (i)}
-        <div class="alert {message.type}" out:fly={{x: "100%"}}>
+        <div class="alert {message.type}" out:fly={{ x: '100%' }}>
             <Fa icon={icon(message.type)} />
             <span>{message.message}</span>
             <div>
-                <button class="btn btn-circle btn-xs btn-ghost" on:click={() => $messages = $messages.slice(0, i)}>
+                <button
+                    class="btn btn-circle btn-xs btn-ghost"
+                    on:click={() => ($messages = $messages.slice(0, i))}
+                >
                     <Fa icon={faClose} />
                 </button>
             </div>

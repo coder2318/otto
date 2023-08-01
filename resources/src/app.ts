@@ -1,5 +1,5 @@
-import { createInertiaApp } from '@inertiajs/svelte'
-import { resolve, setup, progress } from './service/entry'
 import '@/app.scss'
+import { createInertiaApp } from '@inertiajs/svelte'
+import { progress, resolve, setup } from './service/entry'
 
 createInertiaApp({ resolve, setup, progress })

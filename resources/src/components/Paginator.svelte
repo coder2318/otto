@@ -1,21 +1,25 @@
 <script lang="ts">
-    import { inertia } from '@inertiajs/svelte';
-    export let meta : App.PaginationMeta = null;
-    export let buttonClass = "";
-    export let activeClass = "btn-primary";
-    let className = "";
-    export { className as class };
+    import { inertia } from '@inertiajs/svelte'
+    export let meta: App.PaginationMeta = null
+    export let buttonClass = ''
+    export let activeClass = 'btn-primary'
+    let className = ''
+    export { className as class }
 
     function linkStyle(link) {
-        let styles = [];
+        let styles = []
 
         if (!link.url) {
             styles.push('btn-disabled')
         }
 
-        styles.push(meta.current_page.toString() == link.label ? activeClass : buttonClass);
+        styles.push(
+            meta.current_page.toString() == link.label
+                ? activeClass
+                : buttonClass
+        )
 
-        return styles.join(' ');
+        return styles.join(' ')
     }
 </script>
 
@@ -25,7 +29,8 @@
             <a
                 href={link.url ?? '#'}
                 class="join-item btn {linkStyle(link)}"
-                use:inertia>
+                use:inertia
+            >
                 {@html link.label}
             </a>
         {/each}

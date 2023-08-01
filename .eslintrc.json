@@ -4,6 +4,7 @@
         "node": true
     },
     "plugins": [
+        "prettier",
         "@typescript-eslint"
     ],
     "extends": [
@@ -41,6 +42,9 @@
 
         // Svelte
         "svelte/no-at-html-tags": ["off"],
-        "svelte/valid-compile": ["warn"]
+        "svelte/valid-compile": ["warn"],
+
+        // Prettier
+        "prettier/prettier": ["warn", {"endOfLine": "lf"}]
     }
 }

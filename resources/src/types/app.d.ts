@@ -11,8 +11,8 @@ declare namespace App {
         from: number | null
         last_page: number
         links: Array<{
-            active: boolean,
-            label: string,
+            active: boolean
+            label: string
             url: string | null
         }>
         path: string

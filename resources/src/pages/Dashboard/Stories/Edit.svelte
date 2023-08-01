@@ -1,11 +1,11 @@
 <script context="module" lang="ts">
-    import Base from '@/components/Layouts/Base.svelte';
-    import Dashboard from '@/components/Layouts/Dashboard.svelte';
-    export const layout = [Base, Dashboard];
+    import Base from '@/components/Layouts/Base.svelte'
+    import Dashboard from '@/components/Layouts/Dashboard.svelte'
+    export const layout = [Base, Dashboard]
 </script>
 
 <script lang="ts">
-    export let story: { data: App.Story };
+    export let story: { data: App.Story }
 </script>
 
 <svelte:head>

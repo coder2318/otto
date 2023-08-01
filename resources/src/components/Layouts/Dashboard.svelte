@@ -1,5 +1,5 @@
 <script lang="ts">
-    import Navbar from '@/components/Dashboard/Navbar.svelte';
+    import Navbar from '@/components/Dashboard/Navbar.svelte'
 </script>
 
 <div class="min-h-screen flex flex-col bg-base-200">
