@@ -1,6 +1,5 @@
 import Echo from 'laravel-echo';
-import Pusher, { type Options } from 'pusher-js';
-import axios from 'axios';
+import Pusher, { type Options } from 'pusher-js/worker';
 
 const config : Options | any  = {
     broadcaster: 'pusher',

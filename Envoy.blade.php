@@ -24,6 +24,9 @@
     echo "Runnunt static analysis..."
     vendor/bin/phpstan --memory-limit=512M --no-progress || ret=$?
 
+    echo "Running eslint..."
+    npm run lint || ret=$?
+
     return $ret || 0
 @endtask
 

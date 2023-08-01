@@ -5,10 +5,10 @@
 </script>
 
 <script lang="ts">
-    import { inertia, router } from '@inertiajs/svelte';
+    import { inertia } from '@inertiajs/svelte';
     import { fade } from 'svelte/transition';
     import stripe from '@/assets/img/stripe.svg';
-    import { usd } from '@/service';
+    import { usd } from '@/service/helpers';
     import { start, done } from '@/components/Loading.svelte';
     export let plans : Array<App.Plan> = [];
 

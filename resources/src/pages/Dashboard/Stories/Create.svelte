@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition';
-    import { useForm, inertia } from '@inertiajs/svelte';
+    import { useForm } from '@inertiajs/svelte';
     const form = useForm<Partial<App.Story>>({
         title: '',
         cover: '',
@@ -23,6 +23,5 @@
     <div class="flex justify-between">
         <h1 class="text-3xl italic text-primary font-bold">Create New Story</h1>
     </div>
-
 
 </main>

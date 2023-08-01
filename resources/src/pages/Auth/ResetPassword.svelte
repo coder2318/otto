@@ -19,7 +19,7 @@
         password: '',
         password_confirmation: '',
         email: url.searchParams.get('email'),
-        token: url.pathname.split(/[\/]/).pop()
+        token: url.pathname.split(/[/]/).pop()
     })
 
     function submit() {

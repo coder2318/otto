@@ -9,7 +9,7 @@
     import { onMount } from 'svelte'
     import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js';
     import { fade } from 'svelte/transition';
-    import { usd } from '@/service'
+    import { usd } from '@/service/helpers'
     import { Elements, PaymentElement } from 'svelte-stripe'
 
     export let plan : App.Plan;

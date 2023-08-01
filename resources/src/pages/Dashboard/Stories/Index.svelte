@@ -5,11 +5,11 @@
 </script>
 
 <script lang="ts">
-    import { fade, blur } from 'svelte/transition';
+    import { fade } from 'svelte/transition';
     import Fa from 'svelte-fa';
     import Paginator from '@/components/Paginator.svelte';
     import { inertia } from '@inertiajs/svelte';
-    import { dayjs } from '@/service';
+    import { dayjs } from '@/service/dayjs';
     import { faPlus } from '@fortawesome/free-solid-svg-icons';
     export let stories : { data: Array<App.Story>, links: App.PaginationLinks, meta: App.PaginationMeta };
 </script>

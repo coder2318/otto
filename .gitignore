@@ -11,7 +11,7 @@
 .env
 .env.backup
 .env.production
-.phpunit.result.cache.
+.phpunit.result.cache
 .phpstorm.meta.php
 _ide_helper*.php
 Homestead.json

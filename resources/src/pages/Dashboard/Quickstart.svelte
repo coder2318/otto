@@ -4,7 +4,7 @@
     import NameScreen from '@/components/Quickstart/NameScreen.svelte';
     import OpenQuestionScreen from '@/components/Quickstart/OpenQuestionScreen.svelte';
     import QuestionScreen from '@/components/Quickstart/QuestionScreen.svelte';
-    import { range } from '@/service';
+    import { range } from '@/service/helpers';
     export const layout = [Base, Focus];
 </script>
 
