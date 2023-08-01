@@ -24,12 +24,11 @@
         <div class="form-control">
             <label class="label md:gap-4 font-serif flex-col items-start md:flex-row whitespace-nowrap">
                 <span class="label-text text-2xl lg:text-6xl md:text-5xl">What is your birthday?</span>
-                <input type="text" use:imask={{ mask: '00/00/0000' }} bind:value={$form.birth_date} placeholder="DD/MM/YYYY" class="input md:input-ghost md:px-0 italic lg:input-lg text-3xl lg:text-6xl md:text-5xl w-full" name="birth_date" id="birth_date" required>
+                <input type="text" use:imask={{ mask: '00/00/0000' }} pattern="\d&lcub;1,2&rcub;/\d&lcub;1,2&rcub;/\d&lcub;4&rcub;" bind:value={$form.birth_date} placeholder="DD/MM/YYYY" class="input md:input-ghost md:px-0 italic lg:input-lg text-3xl lg:text-6xl md:text-5xl w-full" name="birth_date" id="birth_date" required>
             </label>
         </div>
     </div>
-    <div class="form-control mb-4">
+    <div class="flex mb-4 items-center justify-center gap-4">
         <button type="submit" class="btn btn-primary w-40">Continue</button>
     </div>
-    <slot />
 </form>

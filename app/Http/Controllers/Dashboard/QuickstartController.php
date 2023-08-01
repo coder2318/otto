@@ -13,9 +13,15 @@ class QuickstartController extends Controller
 {
     public function index(Request $request)
     {
+        if ($request->user()->details) {
+            return redirect()->route('demo');
+        }
+
         return Inertia::render('Dashboard/Quickstart', [
             'details' => $request->user()->details,
-            'questions' => QuizQuestionResource::collection(QuizQuestion::all()),
+            'questions' => QuizQuestionResource::collection(
+                QuizQuestion::orderBy('order')->get()
+            ),
         ]);
     }
 
@@ -28,6 +34,6 @@ class QuickstartController extends Controller
 
         $user->save();
 
-        return redirect()->route('stories');
+        return redirect()->route('demo');
     }
 }

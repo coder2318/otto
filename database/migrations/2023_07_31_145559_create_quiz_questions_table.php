@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('quiz_questions', function (Blueprint $table) {
             $table->id();
             $table->text('question');
-            $table->json('answers');
+            $table->json('answers')->nullable();
+            $table->integer('order')->default(0);
             $table->timestamps();
         });
     }

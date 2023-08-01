@@ -12,6 +12,7 @@ class QuizQuestion extends Model
     protected $fillable = [
         'question',
         'answers',
+        'order',
     ];
 
     protected $casts = [

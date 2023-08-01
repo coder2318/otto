@@ -2,15 +2,13 @@
 
 namespace App\Data\User;
 
-use Illuminate\Support\Carbon;
+use Carbon\Carbon;
+use Spatie\LaravelData\Attributes\Validation\ArrayType;
 use Spatie\LaravelData\Attributes\Validation\Date;
 use Spatie\LaravelData\Attributes\Validation\Max;
 use Spatie\LaravelData\Attributes\Validation\Sometimes;
 use Spatie\LaravelData\Attributes\Validation\StringType;
-use Spatie\LaravelData\Attributes\WithCast;
-use Spatie\LaravelData\Casts\DateTimeInterfaceCast;
 use Spatie\LaravelData\Data;
-use Spatie\LaravelData\DataCollection;
 
 class Details extends Data
 {
@@ -29,11 +27,12 @@ class Details extends Data
     /**
      * User birth date
      */
-    #[WithCast(DateTimeInterfaceCast::class), Date, Sometimes]
+    #[Date, Sometimes]
     public ?Carbon $birth_date;
 
     /**
      * Quiz answers
      */
-    public DataCollection $quiz;
+    #[ArrayType, Sometimes]
+    public array $quiz;
 }

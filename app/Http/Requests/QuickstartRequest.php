@@ -4,9 +4,17 @@ namespace App\Http\Requests;
 
 use App\Data\User\Details;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Carbon;
 
 class QuickstartRequest extends FormRequest
 {
+    public function prepareForValidation(): void
+    {
+        $this->merge([
+            'birth_date' => Carbon::createFromFormat('d/m/Y', $this->birth_date)?->startOfDay() ?? null,
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
