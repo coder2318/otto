@@ -63,6 +63,8 @@ declare namespace App {
     }
 
     interface Timeline {
-        //
+        id: number
+        title: string
+        description: string
     }
 }

@@ -8,11 +8,12 @@
     import { fade } from 'svelte/transition'
     import { useForm } from '@inertiajs/svelte'
 
+    export let timelines: { data: App.Timeline[] }
+
     const form = useForm({
         title: '',
         cover: '',
-        status: '',
-        timeline_id: '',
+        timeline_id: null,
     })
 </script>
 
@@ -34,7 +35,7 @@
                     <span class="label-text">Title</span>
                 </label>
                 <input
-                    class="input-neutral input input-bordered"
+                    class="input input-bordered"
                     bind:value={$form.title}
                     type="text"
                     name="title"
@@ -43,6 +44,27 @@
                 {#if $form.errors.title}
                     <span class="label-text-alt mt-1 text-left text-error">
                         {$form.errors.title}
+                    </span>
+                {/if}
+            </div>
+            <div class="form-control">
+                <label class="label" for="timeline_id">
+                    <span class="label-text">Timeline</span>
+                </label>
+                <select
+                    class="select select-bordered"
+                    bind:value={$form.timeline_id}
+                >
+                    <option value={null} disabled selected
+                        >Select Timeline</option
+                    >
+                    {#each timelines.data as timeline}
+                        <option value={timeline.id}>{timeline.title}</option>
+                    {/each}
+                </select>
+                {#if $form.errors.timeline_id}
+                    <span class="label-text-alt mt-1 text-left text-error">
+                        {$form.errors.timeline_id}
                     </span>
                 {/if}
             </div>

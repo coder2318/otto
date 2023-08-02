@@ -5,27 +5,44 @@
 </script>
 
 <script lang="ts">
+    import qs from 'qs'
+    import { onMount } from 'svelte'
+    import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
     import Fa from 'svelte-fa'
     import Paginator from '@/components/Paginator.svelte'
-    import { inertia } from '@inertiajs/svelte'
+    import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'
-    export let query: any
+
+    export let timelines: { data: App.Timeline[] }
     export let stories: {
         data: Array<App.Story>
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
 
-    function filters(parameters = {}) {
-        return (
-            window.location.origin +
-            window.location.pathname +
-            '?' +
-            new URLSearchParams(parameters).toString()
+    $: query = qs.parse(
+        $page.url.replace(window.location.pathname, '').slice(1)
+    )
+
+    const filter = writable(
+        qs.parse($page.url.replace(window.location.pathname, '').slice(1))
+            ?.filter ?? {}
+    )
+
+    filter.subscribe((value) => {
+        router.get(
+            window.location.pathname + '?' + qs.stringify({ filter: value })
         )
+    })
+
+    function removeFilter(key: string) {
+        filter.update((value) => {
+            delete value[key]
+            return value
+        })
     }
 </script>
 
@@ -48,30 +65,58 @@
     </div>
 </header>
 
-<section class="container mx-auto flex p-4 lg:py-8" in:fade>
-    <div class="tabs flex-1 border-b-2 border-base-content/20">
-        <a
-            class="tab -mb-0.5 {!query?.filter?.status
-                ? 'tab-active tab-bordered'
-                : ''}"
-            href={filters()}
-            use:inertia>All</a
+<section
+    class="container m-4 mx-auto flex border-b-2 border-base-content/20 lg:my-8"
+    in:fade
+>
+    <div class="tabs flex-1">
+        <button
+            class="tab -mb-0.5"
+            class:tab-active={query?.filter?.status == undefined}
+            class:tab-bordered={query?.filter?.status == undefined}
+            on:click|preventDefault={() => removeFilter('status')}
         >
-        <a
-            class="tab -mb-0.5 {query?.filter?.status == 'pending'
-                ? 'tab-active tab-bordered'
-                : ''}"
-            href={filters({ 'filter[status]': 'pending' })}
-            use:inertia>Pending</a
+            All
+        </button>
+        <button
+            class="tab -mb-0.5"
+            class:tab-active={query?.filter?.status == 'pending'}
+            class:tab-bordered={query?.filter?.status == 'pending'}
+            on:click|preventDefault={() => ($filter.status = 'pending')}
         >
-        <a
-            class="tab -mb-0.5 {query?.filter?.status == 'published'
-                ? 'tab-active tab-bordered'
-                : ''}"
-            href={filters({ 'filter[status]': 'published' })}
-            use:inertia>Published</a
+            Pending
+        </button>
+        <button
+            class="tab -mb-0.5"
+            class:tab-active={query?.filter?.status == 'published'}
+            class:tab-bordered={query?.filter?.status == 'published'}
+            on:click|preventDefault={() => ($filter.status = 'published')}
         >
+            Published
+        </button>
     </div>
+
+    <span class="flex gap-2">
+        Timeline:
+        <select
+            class="select select-bordered select-ghost select-xs"
+            on:change={(e) =>
+                e.currentTarget.value !== ''
+                    ? ($filter.timeline_id = e.currentTarget.value)
+                    : removeFilter('timeline_id')}
+        >
+            <option value="" selected={query?.filter?.timeline_id == undefined}
+                >All</option
+            >
+            {#each timelines.data as timeline}
+                <option
+                    value={timeline.id}
+                    selected={query?.filter?.timeline_id == timeline.id}
+                    >{timeline.title}</option
+                >
+            {/each}
+        </select>
+    </span>
 </section>
 
 <main
