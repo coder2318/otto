@@ -25,7 +25,7 @@
     <div class="grid grid-cols-2 gap-4 lg:gap-8">
         <a
             use:inertia
-            href="/stories/{story.data.id}/write"
+            href="/stories/{story.data.id}/chapters"
             class="card bg-neutral transition-transform hover:scale-105"
         >
             <figure><img src={writing} alt="writing room" /></figure>

@@ -13,7 +13,7 @@
     <div class="navbar-start">
         <a
             class="btn btn-ghost text-xl normal-case"
-            href="/dashboard"
+            href="/stories"
             use:inertia
         >
             <Logo class="hidden h-full md:block" />

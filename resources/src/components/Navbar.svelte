@@ -16,7 +16,7 @@
         <div class="flex-none gap-2">
             <a
                 class="btn btn-secondary btn-outline rounded-full"
-                href="/dashboard"
+                href="/stories"
                 use:inertia>Start Writing</a
             >
             <div class="dropdown-end dropdown leading-none">

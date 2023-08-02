@@ -14,7 +14,7 @@ class TimelineQuestion extends Model implements HasMedia
     protected $fillable = [
         'question',
         'order',
-        'timeline_id'
+        'timeline_id',
     ];
 
     public function timeline()

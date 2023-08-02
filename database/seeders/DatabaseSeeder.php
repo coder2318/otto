@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             TimelineSeeder::class,
             TimelineQuestionSeeder::class,
             StorySeeder::class,
+            ChapterSeeder::class,
         ]);
     }
 }

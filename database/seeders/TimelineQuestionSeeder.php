@@ -2,9 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Timeline;
 use App\Models\TimelineQuestion;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class TimelineQuestionSeeder extends Seeder

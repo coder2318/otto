@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\QuickstartController;
@@ -11,9 +12,6 @@ Route::resource('quickstart', QuickstartController::class)
     ->only(['index', 'store']);
 
 Route::middleware('user-configured')->group(function () {
-    // Dashboard home
-    Route::inertia('dashboard', 'Dashboard/Index')->name('home');
-
     // Demo
     Route::get('demo', [DemoController::class, 'index'])
         ->name('demo')
@@ -21,7 +19,7 @@ Route::middleware('user-configured')->group(function () {
 
     // Stories
     Route::resource('stories', StoryController::class);
-    Route::get('stories/{story}/write', [StoryController::class, 'write'])->name('stories.write');
+    Route::resource('stories.chapters', ChapterController::class)->shallow();
 
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')

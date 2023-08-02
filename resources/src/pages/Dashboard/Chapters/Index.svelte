@@ -8,15 +8,13 @@
     import qs from 'qs'
     import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
-    import Fa from 'svelte-fa'
     import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
-    import { faPlus } from '@fortawesome/free-solid-svg-icons'
-    import background from '@/assets/img/stories-bg.jpg'
 
     export let timelines: { data: App.Timeline[] }
-    export let stories: {
+    export let story: { data: App.Story }
+    export let chapters: {
         data: Array<App.Story>
         links: App.PaginationLinks
         meta: App.PaginationMeta
@@ -32,8 +30,9 @@
     )
 
     filter.subscribe((value) => {
-        router.get(
-            window.location.pathname + '?' + qs.stringify({ filter: value })
+        router.visit(
+            window.location.pathname + '?' + qs.stringify({ filter: value }),
+            { only: ['chapters'] }
         )
     })
 
@@ -49,18 +48,25 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<header class="hero bg-top" style="background-image: url({background})" in:fade>
-    <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/60" />
+<header class="hero" style="background-image: url({story.data.cover})" in:fade>
+    <div class="hero-overlay bg-gradient-to-br from-primary/40 to-primary/10" />
     <div
-        class="container hero-content my-8 justify-between text-primary-content md:my-12 lg:my-16"
+        class="container hero-content my-8 flex-col items-start justify-between text-primary-content md:my-12 lg:my-16"
     >
+        <div class="breadcrumbs text-sm">
+            <ul>
+                <li><a href="/stories" use:inertia>Stories</a></li>
+                <li>
+                    <a href="/stories/{story.data.id}" use:inertia
+                        >{story.data.title}</a
+                    >
+                </li>
+                <li>Writing Room</li>
+            </ul>
+        </div>
         <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-            My Stories
+            {story.data.title}
         </h1>
-        <a href="/stories/create" use:inertia class="btn btn-secondary">
-            <Fa icon={faPlus} />
-            Create Story
-        </a>
     </div>
 </header>
 
@@ -125,31 +131,31 @@
     <div
         class="grid grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
-        {#each stories.data as story (story.id)}
+        {#each chapters.data as chapter (chapter.id)}
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/stories/{story.id}"
+                href="/stories/{story.data.id}/chapters/{chapter.id}"
                 use:inertia
                 in:fade
             >
                 <figure>
-                    <img src={story.cover} alt={story.title} />
+                    <img src={chapter.cover} alt={chapter.title} />
                 </figure>
                 <div class="card-body">
-                    <h2 class="card-title">{story.title}</h2>
+                    <h2 class="card-title">{chapter.title}</h2>
                     <p />
                     <div class="card-actions justify-between">
                         <div>
-                            Started: {dayjs(story.created_at).format(
+                            Started: {dayjs(chapter.created_at).format(
                                 'MMM DD, YYYY'
                             )}
                         </div>
-                        <div class="badge badge-outline">{story.status}</div>
+                        <div class="badge badge-outline">{chapter.status}</div>
                     </div>
                 </div>
             </a>
         {/each}
     </div>
 
-    <Paginator meta={stories.meta} />
+    <Paginator meta={chapters.meta} />
 </main>

@@ -3,7 +3,6 @@
 namespace Database\Factories;
 
 use App\Data\Story\Status;
-use App\Models\Timeline;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -20,7 +19,7 @@ class StoryFactory extends Factory
     {
         return [
             'title' => $this->faker->sentence(),
-            'status' => $this->faker->randomElement([Status::PUBLISHED, Status::PENDING]),
+            'status' => $this->faker->randomElement(array_column(Status::cases(), 'value')),
         ];
     }
 }

@@ -4,13 +4,14 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreStoryRequest;
-use App\Http\Requests\StoriesRequest;
-use App\Http\Requests\UpdateStoryRequest;
+use App\Http\Requests\Stories\StoreStoryRequest;
+use App\Http\Requests\Stories\StoriesRequest;
+use App\Http\Requests\Stories\UpdateStoryRequest;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\Story;
 use App\Models\Timeline;
+use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
 class StoryController extends Controller
@@ -23,11 +24,11 @@ class StoryController extends Controller
     public function index(StoriesRequest $request)
     {
         return Inertia::render('Dashboard/Stories/Index', [
-            'stories' => StoryResource::collection(
+            'stories' => fn () => StoryResource::collection(
                 $request->stories($request->user()->stories()->with('cover'))
                     ->paginate(6)
                     ->appends($request->query())
-            )
+            ),
         ]);
     }
 
@@ -78,11 +79,23 @@ class StoryController extends Controller
 
     public function update(UpdateStoryRequest $request, Story $story)
     {
-        //
+        $story->update($request->validated());
+
+        if ($request->hasFile('cover')) {
+            $story->cover?->delete();
+            $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
+
+        return redirect()->route('stories.index')->with('message', 'Story updated successfully!');
     }
 
     public function destroy(Story $story)
     {
+        DB::transaction(function () use ($story) {
+            $story->cover?->delete();
+            $story->delete();
+        });
 
+        return redirect()->route('stories.index')->with('message', 'Story deleted successfully!');
     }
 }

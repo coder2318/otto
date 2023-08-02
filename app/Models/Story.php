@@ -30,6 +30,11 @@ class Story extends Model implements HasMedia
         );
     }
 
+    public function chapters()
+    {
+        return $this->hasMany(Chapter::class);
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class);

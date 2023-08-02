@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Stories;
 
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -10,7 +10,7 @@ class StoreStoryRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
-            'cover' => ['nullable', 'image']
+            'cover' => ['nullable', 'image'],
         ];
     }
 }
