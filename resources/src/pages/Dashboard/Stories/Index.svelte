@@ -8,7 +8,7 @@
     import { fade } from 'svelte/transition'
     import Fa from 'svelte-fa'
     import Paginator from '@/components/Paginator.svelte'
-    import { inertia, page } from '@inertiajs/svelte'
+    import { inertia } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'

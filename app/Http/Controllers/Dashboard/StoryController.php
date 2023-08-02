@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStoryRequest;
 use App\Http\Requests\StoriesRequest;
@@ -52,7 +53,12 @@ class StoryController extends Controller
 
     public function store(StoreStoryRequest $request)
     {
-        //
+        $story = Story::create($request->validated() + [
+            'status' => Status::PENDING,
+            'user_id' => $request->user()->id,
+        ]);
+
+        return redirect()->route('stories.show', compact('story'))->with('message', 'Story created successfully!');
     }
 
     public function update(UpdateStoryRequest $request, Story $story)
@@ -62,6 +68,6 @@ class StoryController extends Controller
 
     public function destroy(Story $story)
     {
-        //
+
     }
 }

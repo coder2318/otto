@@ -72,22 +72,18 @@
         const message =
             page.props?.flash?.status ??
             page.props?.flash?.error ??
-            page.props?.flash?.success
+            page.props?.flash?.message
         const type =
             (page.props?.flash?.status && 'alert-info') ||
             (page.props?.flash?.error && 'alert-warning') ||
-            (page.props?.flash?.success && 'alert-success')
+            (page.props?.flash?.message && 'alert-success')
 
         if (!message || !type) {
             return
         }
 
         $messages.push({
-            message: status(
-                page.props?.flash?.status ??
-                    page.props?.flash?.error ??
-                    page.props?.flash?.success
-            ),
+            message: status(message),
             type: type,
             timestamp: new Date(),
             autohide: true,
