@@ -2,25 +2,25 @@
 
 namespace App\Models;
 
-use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-class Story extends Model implements HasMedia
+class TimelineQuestion extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
 
     protected $fillable = [
-        'title',
-        'status',
-        'user_id',
+        'question',
+        'order',
+        'timeline_id'
     ];
 
-    protected $casts = [
-        'status' => Status::class,
-    ];
+    public function timeline()
+    {
+        return $this->belongsTo(Timeline::class);
+    }
 
     public function cover()
     {
@@ -28,10 +28,5 @@ class Story extends Model implements HasMedia
             ['id' => 'MAX'],
             fn ($query) => $query->where('collection_name', 'cover')
         );
-    }
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
     }
 }

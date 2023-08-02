@@ -27,10 +27,7 @@ class StoryController extends Controller
                 $request->stories($request->user()->stories()->with('cover'))
                     ->paginate(6)
                     ->appends($request->query())
-            ),
-            'timelines' => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
-            ),
+            )
         ]);
     }
 
@@ -66,10 +63,15 @@ class StoryController extends Controller
 
     public function store(StoreStoryRequest $request)
     {
+        /** @var Story $story */
         $story = Story::create($request->validated() + [
             'status' => Status::PENDING,
             'user_id' => $request->user()->id,
         ]);
+
+        if ($request->hasFile('cover')) {
+            $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
 
         return redirect()->route('stories.show', compact('story'))->with('message', 'Story created successfully!');
     }

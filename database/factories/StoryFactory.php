@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Data\Story\Status;
+use App\Models\Timeline;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**

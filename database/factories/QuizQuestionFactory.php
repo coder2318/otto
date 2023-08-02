@@ -18,7 +18,7 @@ class QuizQuestionFactory extends Factory
     {
         return [
             'question' => $this->faker->sentence(),
-            'answers' => $this->faker->words(),
+            'answers' => $this->faker->unique()->words(),
         ];
     }
 }

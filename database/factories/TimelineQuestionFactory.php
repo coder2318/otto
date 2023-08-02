@@ -6,9 +6,9 @@ use App\Models\Timeline;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Chapter>
+ * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\TimelineQuestion>
  */
-class ChapterFactory extends Factory
+class TimelineQuestionFactory extends Factory
 {
     /**
      * Define the model's default state.
@@ -18,7 +18,7 @@ class ChapterFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'question' => $this->faker->sentence(),
         ];
     }
 

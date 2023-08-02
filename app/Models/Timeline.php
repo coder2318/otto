@@ -19,8 +19,13 @@ class Timeline extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function stories()
+    public function chapters()
     {
-        return $this->hasMany(Story::class);
+        return $this->hasMany(Chapter::class);
+    }
+
+    public function questions()
+    {
+        return $this->hasMany(TimelineQuestion::class);
     }
 }

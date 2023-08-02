@@ -20,4 +20,9 @@ class Chapter extends Model
     {
         return $this->belongsTo(Story::class);
     }
+
+    public function timeline()
+    {
+        return $this->belongsTo(Timeline::class);
+    }
 }

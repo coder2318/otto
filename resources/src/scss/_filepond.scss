@@ -1,0 +1,24 @@
+@import '~filepond/dist/filepond.css';
+@import '~filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css';
+
+.filepond--wrapper {
+    .filepond--image-preview {
+        @apply bg-base-300;
+    }
+
+    .filepond--drop-label {
+        @apply bg-base-100 text-base-content;
+
+        .filepond--label-action {
+            @apply link link-primary decoration-current;
+        }
+    }
+
+    .filepond--panel-root {
+        @apply bg-base-200;
+    }
+
+    .filepond--credits {
+        @apply hidden;
+    }
+}

@@ -14,14 +14,12 @@ class StorySeeder extends Seeder
      */
     public function run(): void
     {
-        Story::factory()->count(10)->create([
+        Story::factory(10)->create([
             'user_id' => User::value('id'),
         ])->each(function (Story $story) {
             $story->addMediaFromUrl('https://picsum.photos/640/480')
                 ->withResponsiveImages()
                 ->toMediaCollection('cover');
-
-            $story->timeline()->associate(Timeline::inRandomOrder()->value('id'));
         });
     }
 }

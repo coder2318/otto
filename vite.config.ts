@@ -93,9 +93,10 @@ export default ({ mode }) => {
             external: ['@inertiajs/core'],
         },
         resolve: {
-            alias: {
-                '@': path.resolve(__dirname, 'resources/src'),
-            }
+            alias: [
+                { find: "@", replacement: path.resolve(__dirname, 'resources/src') },
+                { find: /~(.+)/, replacement: path.join(process.cwd(), 'node_modules/$1') },
+            ]
         }
     });
 }

@@ -15,6 +15,7 @@
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'
 
+    export let timelines: { data: App.Timeline[] }
     export let stories: {
         data: Array<App.Story>
         links: App.PaginationLinks
@@ -93,6 +94,28 @@
             Published
         </button>
     </div>
+
+    <span class="flex gap-2">
+        Timeline:
+        <select
+            class="select select-bordered select-ghost select-xs"
+            on:change={(e) =>
+                e.currentTarget.value !== ''
+                    ? ($filter.timeline_id = e.currentTarget.value)
+                    : removeFilter('timeline_id')}
+        >
+            <option value="" selected={query?.filter?.timeline_id == undefined}
+                >All</option
+            >
+            {#each timelines.data as timeline}
+                <option
+                    value={timeline.id}
+                    selected={query?.filter?.timeline_id == timeline.id}
+                    >{timeline.title}</option
+                >
+            {/each}
+        </select>
+    </span>
 </section>
 
 <main

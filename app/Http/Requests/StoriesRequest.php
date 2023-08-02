@@ -16,7 +16,6 @@ class StoriesRequest extends FormRequest
             ->allowedFilters([
                 AllowedFilter::exact('status'),
                 AllowedFilter::exact('user_id'),
-                AllowedFilter::exact('timeline_id'),
             ]);
     }
 }

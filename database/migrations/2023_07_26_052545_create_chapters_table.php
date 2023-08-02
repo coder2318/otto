@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Story;
+use App\Models\Timeline;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -20,6 +21,8 @@ return new class extends Migration
             $table->integer('order')->default(0);
 
             $table->foreignIdFor(Story::class)
+                ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
+            $table->foreignIdFor(Timeline::class)
                 ->constrained()->cascadeOnDelete()->cascadeOnUpdate();
 
             $table->timestamps();

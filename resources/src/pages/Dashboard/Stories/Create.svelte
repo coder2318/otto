@@ -7,13 +7,11 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { useForm } from '@inertiajs/svelte'
-
-    export let timelines: { data: App.Timeline[] }
+    import FilePond from '@/components/FilePond.svelte'
 
     const form = useForm({
         title: '',
         cover: '',
-        timeline_id: null,
     })
 </script>
 
@@ -24,7 +22,8 @@
 <main class="container mx-auto flex flex-1 flex-col gap-8 p-4 py-8" in:fade>
     <form
         class="card bg-neutral shadow-sm"
-        on:submit|preventDefault={() => $form.post('/stories')}
+        on:submit|preventDefault={() =>
+            $form.post('/stories', { forceFormData: true })}
     >
         <div class="card-body gap-4">
             <h2 class="card-title text-3xl italic text-primary">
@@ -48,23 +47,18 @@
                 {/if}
             </div>
             <div class="form-control">
-                <label class="label" for="timeline_id">
-                    <span class="label-text">Timeline</span>
+                <label class="label" for="cover">
+                    <span class="label-text">Cover</span>
                 </label>
-                <select
-                    class="select select-bordered"
-                    bind:value={$form.timeline_id}
-                >
-                    <option value={null} disabled selected
-                        >Select Timeline</option
-                    >
-                    {#each timelines.data as timeline}
-                        <option value={timeline.id}>{timeline.title}</option>
-                    {/each}
-                </select>
-                {#if $form.errors.timeline_id}
+                <FilePond
+                    maxFiles="1"
+                    storeAsFile={true}
+                    name="cover"
+                    onaddfile={(err, data) => ($form.cover = data.file)}
+                />
+                {#if $form.errors.cover}
                     <span class="label-text-alt mt-1 text-left text-error">
-                        {$form.errors.timeline_id}
+                        {$form.errors.cover}
                     </span>
                 {/if}
             </div>
