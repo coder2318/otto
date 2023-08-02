@@ -8,8 +8,8 @@
         <meta name="apple-mobile-web-app-capable" content="yes">
         <meta name="apple-mobile-web-app-status-bar-style" content="default">
         <meta name="apple-mobile-web-app-title" content="{{ config('app.name') }}">
-        <meta name="msapplication-TileImage" content="{{ asset('build/assets/logo-row.svg') }}">
-        <meta name="apple-touch-icon" content="{{ asset('assets/assets/logo-row.svg') }}">
+        <meta name="msapplication-TileImage" content="{{ asset('build/assets/logo.svg') }}">
+        <meta name="apple-touch-icon" content="{{ asset('build/assets/logo.svg') }}">
         <meta name="msapplication-TileColor" content="#F1EDE7">
 
         @vite('resources/src/app.ts')

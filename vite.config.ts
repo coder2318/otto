@@ -58,6 +58,12 @@ export default ({ mode }) => {
                             purpose: "any",
                             sizes: "any"
                         },
+                        {
+                            src: "assets/logo.png",
+                            type: "image/png",
+                            purpose: "any",
+                            sizes: "any"
+                        }
                     ]
                 },
                 workbox: {
