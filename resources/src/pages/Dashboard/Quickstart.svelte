@@ -60,7 +60,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - Welcome</title>
 </svelte:head>
 
-<div class="z-10 flex flex-col flex-1 items-center">
+<div class="z-10 flex flex-1 flex-col items-center">
     {#key step}
         <svelte:component
             this={Screen}
@@ -68,7 +68,7 @@
             on:next={() => move(step + 1)}
             {form}
             {question}
-        ></svelte:component>
+        />
     {/key}
 
     <ul class="steps">

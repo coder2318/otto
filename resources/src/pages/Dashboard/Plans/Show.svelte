@@ -63,17 +63,17 @@
 </svelte:head>
 
 <div
-    class="z-10 flex flex-col flex-1 items-center justify-center gap-8"
+    class="z-10 flex flex-1 flex-col items-center justify-center gap-8"
     in:fade
 >
-    <h1 class="text-2xl md:text-4xl lg:text-6xl text-primary">
+    <h1 class="text-2xl text-primary md:text-4xl lg:text-6xl">
         Subscribe to <span class="italic">{plan.data.name}</span>
     </h1>
     <div class="card bg-neutral text-neutral-content md:flex-row">
         <div class="card-body md:w-1/2">
-            <h2 class="card-title text-primary text-2xl">{plan.data.name}</h2>
+            <h2 class="card-title text-2xl text-primary">{plan.data.name}</h2>
             <p>
-                <span class="font-bold text-4xl text-primary"
+                <span class="text-4xl font-bold text-primary"
                     >{usd(price.value, {
                         maximumFractionDigits: 0,
                         currency: price.currency,
@@ -86,7 +86,7 @@
             <p class="prose max-w-none">{@html plan.data.description}</p>
         </div>
         <div class="divider md:divider-horizontal" />
-        <div class="card-body md:w-1/2 justify-center">
+        <div class="card-body justify-center md:w-1/2">
             {#if stripe}
                 <Elements
                     {stripe}
@@ -112,7 +112,7 @@
                             {/if}
                             <button
                                 type="submit"
-                                class="btn btn-secondary rounded-full w-full"
+                                class="btn btn-secondary w-full rounded-full"
                                 disabled={processing}
                             >
                                 {#if processing}<span

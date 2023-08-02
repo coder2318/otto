@@ -14,7 +14,7 @@
 
 <div class="bg-transparent p-4">
     <div
-        class="rounded-box bg-base-200 border-base-content/20 text-base-content not-prose grid gap-3 border p-8"
+        class="not-prose rounded-box grid gap-3 border border-base-content/20 bg-base-200 p-8 text-base-content"
     >
         <!-- button -->
         <div class="grid grid-cols-3 gap-2">
@@ -46,17 +46,17 @@
                     <!-- tabs -->
                     <div class="tabs">
                         <button class="tab tab-lifted">Tab</button>
-                        <button class="tab tab-lifted tab-active">Tab</button>
+                        <button class="tab tab-active tab-lifted">Tab</button>
                         <button class="tab tab-lifted">Tab</button>
                     </div>
                     <!-- link -->
                     <div class="flex flex-col">
                         <span class="link">I'm a simple link</span>
-                        <span class="link link-primary">I'm a simple link</span>
-                        <span class="link link-secondary"
+                        <span class="link-primary link">I'm a simple link</span>
+                        <span class="link-secondary link"
                             >I'm a simple link</span
                         >
-                        <span class="link link-accent">I'm a simple link</span>
+                        <span class="link-accent link">I'm a simple link</span>
                     </div>
                 </div>
                 <div class="flex flex-col gap-3 md:w-1/2">
@@ -117,7 +117,7 @@
 
             <div class="flex flex-col gap-3 md:flex-row">
                 <!-- stat -->
-                <div class="stats bg-base-300 border-base-300 border md:w-1/2">
+                <div class="stats border border-base-300 bg-base-300 md:w-1/2">
                     <div class="stat">
                         <div class="stat-title">Total Page Views</div>
                         <div class="stat-value">89,400</div>
@@ -159,17 +159,17 @@
                         <input type="checkbox" class="toggle mr-1" checked />
                         <input
                             type="checkbox"
-                            class="toggle mr-1 toggle-primary"
+                            class="toggle toggle-primary mr-1"
                             checked
                         />
                         <input
                             type="checkbox"
-                            class="toggle mr-1 toggle-secondary"
+                            class="toggle toggle-secondary mr-1"
                             checked
                         />
                         <input
                             type="checkbox"
-                            class="toggle mr-1 toggle-accent"
+                            class="toggle toggle-accent mr-1"
                             checked
                         />
                     </div>
@@ -178,17 +178,17 @@
                         <input type="checkbox" class="checkbox mr-1" checked />
                         <input
                             type="checkbox"
-                            class="checkbox mr-1 checkbox-primary"
+                            class="checkbox-primary checkbox mr-1"
                             checked
                         />
                         <input
                             type="checkbox"
-                            class="checkbox mr-1 checkbox-secondary"
+                            class="checkbox-secondary checkbox mr-1"
                             checked
                         />
                         <input
                             type="checkbox"
-                            class="checkbox mr-1 checkbox-accent"
+                            class="checkbox-accent checkbox mr-1"
                             checked
                         />
                     </div>
@@ -203,17 +203,17 @@
                         <input
                             type="radio"
                             name="radio-1"
-                            class="radio mr-1 radio-primary"
+                            class="radio-primary radio mr-1"
                         />
                         <input
                             type="radio"
                             name="radio-1"
-                            class="radio mr-1 radio-secondary"
+                            class="radio-secondary radio mr-1"
                         />
                         <input
                             type="radio"
                             name="radio-1"
-                            class="radio mr-1 radio-accent"
+                            class="radio-accent radio mr-1"
                         />
                     </div>
                 </div>
@@ -231,21 +231,21 @@
                         min="0"
                         max="100"
                         value="70"
-                        class="range range-xs range-primary"
+                        class="range range-primary range-xs"
                     />
                     <input
                         type="range"
                         min="0"
                         max="100"
                         value="50"
-                        class="range range-xs range-secondary"
+                        class="range range-secondary range-xs"
                     />
                     <input
                         type="range"
                         min="0"
                         max="100"
                         value="40"
-                        class="range range-xs range-accent"
+                        class="range range-accent range-xs"
                     />
                 </div>
             </div>
@@ -260,44 +260,44 @@
                     <input
                         type="text"
                         placeholder="Primary"
-                        class="input input-primary input-bordered w-full"
+                        class="input input-bordered input-primary w-full"
                     />
                     <input
                         type="text"
                         placeholder="Secondary"
-                        class="input input-secondary input-bordered w-full"
+                        class="input input-bordered input-secondary w-full"
                     />
                     <input
                         type="text"
                         placeholder="Accent"
-                        class="input input-accent input-bordered w-full"
+                        class="input input-bordered input-accent w-full"
                     />
                 </div>
                 <div class="flex flex-col gap-3 md:w-1/2">
                     <input
                         type="text"
                         placeholder="Info"
-                        class="input input-info input-bordered w-full"
+                        class="input input-bordered input-info w-full"
                     />
                     <input
                         type="text"
                         placeholder="Success"
-                        class="input input-success input-bordered w-full"
+                        class="input input-bordered input-success w-full"
                     />
                     <input
                         type="text"
                         placeholder="Warning"
-                        class="input input-warning input-bordered w-full"
+                        class="input input-bordered input-warning w-full"
                     />
                     <input
                         type="text"
                         placeholder="Error"
-                        class="input input-error input-bordered w-full"
+                        class="input input-bordered input-error w-full"
                     />
                 </div>
             </div>
             <!-- navbar -->
-            <div class="navbar bg-primary text-primary-content rounded-box">
+            <div class="navbar rounded-box bg-primary text-primary-content">
                 <div class="flex-none">
                     <button class="btn btn-square btn-ghost">
                         <svg
@@ -322,7 +322,7 @@
                 </div>
             </div>
             <!-- breadcrumbs -->
-            <div class="text-sm breadcrumbs">
+            <div class="breadcrumbs text-sm">
                 <ul>
                     <li>
                         <a href="#hello">
@@ -330,7 +330,7 @@
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                class="w-4 h-4 mr-2 stroke-current"
+                                class="mr-2 h-4 w-4 stroke-current"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -348,7 +348,7 @@
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
-                                class="w-4 h-4 mr-2 stroke-current"
+                                class="mr-2 h-4 w-4 stroke-current"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -365,7 +365,7 @@
                             xmlns="http://www.w3.org/2000/svg"
                             fill="none"
                             viewBox="0 0 24 24"
-                            class="w-4 h-4 mr-2 stroke-current"
+                            class="mr-2 h-4 w-4 stroke-current"
                         >
                             <path
                                 stroke-linecap="round"
@@ -406,7 +406,7 @@
                     xmlns="http://www.w3.org/2000/svg"
                     fill="none"
                     viewBox="0 0 24 24"
-                    class="stroke-info h-6 w-6 flex-shrink-0"
+                    class="h-6 w-6 flex-shrink-0 stroke-info"
                 >
                     <path
                         stroke-linecap="round"
@@ -484,7 +484,7 @@
         </div>
         <!-- table-->
         <div
-            class="overflow-x-auto w-full border border-base-content/10 rounded-xl"
+            class="w-full overflow-x-auto rounded-xl border border-base-content/10"
         >
             <table class="table w-full">
                 <!-- head -->
@@ -512,7 +512,7 @@
                         <td>
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
-                                    <div class="mask mask-squircle w-12 h-12">
+                                    <div class="mask mask-squircle h-12 w-12">
                                         <img
                                             src="https://placehold.co/48"
                                             alt="Avatar Tailwind CSS Component"
@@ -550,7 +550,7 @@
                         <td>
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
-                                    <div class="mask mask-squircle w-12 h-12">
+                                    <div class="mask mask-squircle h-12 w-12">
                                         <img
                                             src="https://placehold.co/48"
                                             alt="Avatar Tailwind CSS Component"
@@ -586,7 +586,7 @@
                         <td>
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
-                                    <div class="mask mask-squircle w-12 h-12">
+                                    <div class="mask mask-squircle h-12 w-12">
                                         <img
                                             src="https://placehold.co/48"
                                             alt="Avatar Tailwind CSS Component"
@@ -624,7 +624,7 @@
                         <td>
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
-                                    <div class="mask mask-squircle w-12 h-12">
+                                    <div class="mask mask-squircle h-12 w-12">
                                         <img
                                             src="https://placehold.co/48"
                                             alt="Avatar Tailwind CSS Component"
@@ -654,7 +654,7 @@
             </table>
         </div>
     </div>
-    <article class="prose lg:prose-xl container mx-auto mt-8">
+    <article class="container prose mx-auto mt-8 lg:prose-xl">
         <Lorem />
     </article>
 </div>

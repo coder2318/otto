@@ -26,7 +26,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - Subscription Plans</title>
 </svelte:head>
 
-<div class="z-10 flex flex-col flex-1 items-center gap-8" in:fade>
+<div class="z-10 flex flex-1 flex-col items-center gap-8" in:fade>
     <h1 class="text-6xl text-primary">
         Chose a <span class="italic">Otto Story Plan</span>
     </h1>
@@ -34,9 +34,9 @@
     <div class="carousel rounded-box max-w-full flex-1">
         {#each plans.data as plan}
             <div class="carousel-item w-1/3">
-                <div class="card bg-neutral text-neutral-content m-5">
+                <div class="card m-5 bg-neutral text-neutral-content">
                     <div class="card-body">
-                        <h2 class="card-title text-primary text-2xl">
+                        <h2 class="card-title text-2xl text-primary">
                             {plan.name}
                         </h2>
                         <div class="flex">
@@ -44,7 +44,7 @@
                                 {#if price.interval === period}
                                     <span>
                                         <span
-                                            class="font-bold text-4xl text-primary"
+                                            class="text-4xl font-bold text-primary"
                                             >{usd(price.value, {
                                                 maximumFractionDigits: 0,
                                                 currency: price.currency,
@@ -62,7 +62,7 @@
                         <a
                             href="/plans/{plan.slug}?period={period}"
                             use:inertia={options}
-                            class="btn btn-secondary rounded-full w-full"
+                            class="btn btn-secondary w-full rounded-full"
                             >Chose Plan</a
                         >
                     </div>
@@ -70,7 +70,7 @@
             </div>
         {/each}
     </div>
-    <label class="cursor-pointer label gap-2">
+    <label class="label cursor-pointer gap-2">
         <span class="label-text">Monthly</span>
         <input type="checkbox" class="toggle-custom" bind:checked />
         <span class="label-text">Yearly</span>

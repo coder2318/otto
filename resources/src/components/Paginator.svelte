@@ -28,7 +28,7 @@
         {#each meta?.links as link}
             <a
                 href={link.url ?? '#'}
-                class="join-item btn {linkStyle(link)}"
+                class="btn join-item {linkStyle(link)}"
                 use:inertia
             >
                 {@html link.label}

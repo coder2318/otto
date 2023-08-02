@@ -26,18 +26,18 @@
     <title>{import.meta.env.VITE_APP_NAME} - Sign In</title>
 </svelte:head>
 
-<div class="p-4 flex flex-col w-full" in:fade>
-    <a href="/" use:inertia class="max-w-[300px] h-auto">
+<div class="flex w-full flex-col p-4" in:fade>
+    <a href="/" use:inertia class="h-auto max-w-[300px]">
         <Logo class="w-full" />
     </a>
 
-    <div class="font-serif text-3xl italic text-primary my-8">
+    <div class="my-8 font-serif text-3xl italic text-primary">
         Back to Your <span class="text-secondary-focus">Digital Book!!!</span>
     </div>
 
     <form
         on:submit|preventDefault={submit}
-        class="flex flex-col items-center w-full"
+        class="flex w-full flex-col items-center"
     >
         <div class="form-control w-full">
             <label class="label" for="email">
@@ -54,7 +54,7 @@
                 required
             />
             {#if $form.errors.email}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.email}</span
                 >
             {/if}
@@ -68,13 +68,13 @@
                 type="password"
                 name="password"
                 placeholder="Password"
-                class="w-full input input-bordered {$form.errors.password
+                class="input input-bordered w-full {$form.errors.password
                     ? 'input-error'
                     : ''}"
                 required
             />
             {#if $form.errors.password}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.password}</span
                 >
             {/if}
@@ -82,7 +82,7 @@
         <div class="form-control w-full">
             <div class="flex items-center justify-around">
                 <label
-                    class="label cursor-pointer justify-start gap-2 px-0 my-2"
+                    class="label my-2 cursor-pointer justify-start gap-2 px-0"
                 >
                     <input
                         bind:checked={$form.remember}
@@ -97,17 +97,17 @@
                 <a
                     href="/forgot-password"
                     use:inertia
-                    class="link link-primary ml-auto">Forgot password?</a
+                    class="link-primary link ml-auto">Forgot password?</a
                 >
             </div>
             {#if $form.errors.remember}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.remember}</span
                 >
             {/if}
         </div>
 
-        <div class="form-control w-full mt-8">
+        <div class="form-control mt-8 w-full">
             <button class="btn btn-primary rounded-full" type="submit"
                 >Login</button
             >
@@ -117,12 +117,12 @@
             Don't have an account? <a
                 href="/register"
                 use:inertia
-                class="link link-primary">Sign up</a
+                class="link-primary link">Sign up</a
             >
         </div>
     </form>
 
-    <div class="divider text-base-content/30 my-8 lg:my-16">
+    <div class="divider my-8 text-base-content/30 lg:my-16">
         or continue with
     </div>
 

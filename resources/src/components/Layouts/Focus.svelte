@@ -1,9 +1,9 @@
-<main class="min-h-screen lg:p-16 md:p-8 p-4 flex flex-col">
+<main class="flex min-h-screen flex-col p-4 md:p-8 lg:p-16">
     <div
-        class="background-particles bg-base-200 flex flex-1 rounded-xl relative lg:p-14 md:p-10 p-4"
+        class="background-particles relative flex flex-1 rounded-xl bg-base-200 p-4 md:p-10 lg:p-14"
     >
         <div
-            class="absolute inset-0 lg:-inset-10 md:-inset-6 background-people"
+            class="background-people absolute inset-0 md:-inset-6 lg:-inset-10"
         />
         <slot />
     </div>
@@ -14,9 +14,7 @@
         background-image: url(@/assets/img/quickstart-particle1.svg),
             url(@/assets/img/quickstart-particle2.svg);
         background-repeat: no-repeat, no-repeat;
-        background-position:
-            top 10px right 10px,
-            bottom 10px left 10px;
+        background-position: top 10px right 10px, bottom 10px left 10px;
 
         background-size: 9rem, 6rem;
 
@@ -35,9 +33,7 @@
                 url(@/assets/img/quickstart-female.png);
         }
         background-repeat: no-repeat, no-repeat;
-        background-position:
-            top left,
-            bottom right;
+        background-position: top left, bottom right;
 
         background-size: 9rem, 6rem;
 

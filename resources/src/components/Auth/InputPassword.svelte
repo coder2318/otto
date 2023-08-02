@@ -19,7 +19,7 @@
     <button
         type="button"
         on:click={toggle}
-        class="btn btn-ghost btn-sm btn-square absolute right-2 top-0 bottom-0 m-auto"
+        class="btn btn-square btn-ghost btn-sm absolute bottom-0 right-2 top-0 m-auto"
         tabindex="-1"
     >
         <Fa icon={hidden ? faEye : faEyeSlash} />

@@ -27,18 +27,18 @@
     <title>{import.meta.env.VITE_APP_NAME} - Reset Password</title>
 </svelte:head>
 
-<div class="w-full p-4 flex flex-col">
-    <a href="/" use:inertia class="max-w-[300px] h-auto">
+<div class="flex w-full flex-col p-4">
+    <a href="/" use:inertia class="h-auto max-w-[300px]">
         <Logo class="w-full" />
     </a>
 
-    <div class="font-serif text-3xl italic text-primary my-8">
+    <div class="my-8 font-serif text-3xl italic text-primary">
         Reset <span class="text-secondary-focus">Password</span>
     </div>
 
     <form
         on:submit|preventDefault={submit}
-        class="flex flex-col items-center w-full"
+        class="flex w-full flex-col items-center"
     >
         <div class="form-control w-full">
             <label class="label" for="password">
@@ -49,13 +49,13 @@
                 type="password"
                 name="password"
                 placeholder="Password"
-                class="w-full input input-bordered {$form.errors.password
+                class="input input-bordered w-full {$form.errors.password
                     ? 'input-error'
                     : ''}"
                 required
             />
             {#if $form.errors.password}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.password}</span
                 >
             {/if}
@@ -69,19 +69,19 @@
                 type="password"
                 name="password_confirmation"
                 placeholder="Password Confirmation"
-                class="w-full input input-bordered {$form.errors.password
+                class="input input-bordered w-full {$form.errors.password
                     ? 'input-error'
                     : ''}"
                 required
             />
             {#if $form.errors.password}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.password_confirmation}</span
                 >
             {/if}
         </div>
 
-        <div class="form-control w-full mt-8">
+        <div class="form-control mt-8 w-full">
             <button class="btn btn-primary rounded-full" type="submit"
                 >Save Password</button
             >

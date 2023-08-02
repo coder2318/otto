@@ -16,9 +16,9 @@
 </svelte:head>
 
 <main
-    class="container mx-auto flex-1 flex flex-col items-center justify-center gap-8 p-4 py-8"
+    class="container mx-auto flex flex-1 flex-col items-center justify-center gap-8 p-4 py-8"
 >
-    <h1 class="text-2xl lg:text-4xl text-primary text-center">
+    <h1 class="text-center text-2xl text-primary lg:text-4xl">
         Crafting Your Narrative:<br /><i>{story.data.title}</i>
     </h1>
 
@@ -26,7 +26,7 @@
         <a
             use:inertia
             href="/stories/{story.data.id}/write"
-            class="card bg-neutral hover:scale-105 transition-transform"
+            class="card bg-neutral transition-transform hover:scale-105"
         >
             <figure><img src={writing} alt="writing room" /></figure>
             <div class="card-body items-center">
@@ -36,7 +36,7 @@
         <a
             use:inertia
             href="/stories/{story.data.id}/edit"
-            class="card bg-neutral hover:scale-105 transition-transform"
+            class="card bg-neutral transition-transform hover:scale-105"
         >
             <figure><img src={editing} alt="editing room" /></figure>
             <div class="card-body items-center">

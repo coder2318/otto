@@ -26,18 +26,18 @@
     <title>{import.meta.env.VITE_APP_NAME} - Sign Up</title>
 </svelte:head>
 
-<div class="p-4 flex flex-col w-full" in:fade>
-    <a href="/" use:inertia class="max-w-[300px] h-auto">
+<div class="flex w-full flex-col p-4" in:fade>
+    <a href="/" use:inertia class="h-auto max-w-[300px]">
         <Logo class="w-full" />
     </a>
 
-    <div class="font-serif text-3xl italic text-primary my-8">
+    <div class="my-8 font-serif text-3xl italic text-primary">
         Start Your <span class="text-secondary-focus">Own Story!!!</span>
     </div>
 
     <form
         on:submit|preventDefault={submit}
-        class="flex flex-col items-center w-full"
+        class="flex w-full flex-col items-center"
         autocomplete="on"
     >
         <div class="form-control w-full">
@@ -56,7 +56,7 @@
                 autocomplete="email"
             />
             {#if $form.errors.email}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.email}</span
                 >
             {/if}
@@ -70,14 +70,14 @@
                 type="password"
                 name="password"
                 placeholder="Password"
-                class="w-full input input-bordered {$form.errors.password
+                class="input input-bordered w-full {$form.errors.password
                     ? 'input-error'
                     : ''}"
                 required
                 autocomplete="new-password"
             />
             {#if $form.errors.password}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.password}</span
                 >
             {/if}
@@ -91,7 +91,7 @@
                 type="password"
                 name="password_confirmation"
                 placeholder="Password Confirmation"
-                class="w-full input input-bordered {$form.errors
+                class="input input-bordered w-full {$form.errors
                     .password_confirmation
                     ? 'input-error'
                     : ''}"
@@ -99,13 +99,13 @@
                 autocomplete="new-password"
             />
             {#if $form.errors.password}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.password}</span
                 >
             {/if}
         </div>
 
-        <div class="form-control w-full mt-8">
+        <div class="form-control mt-8 w-full">
             <button class="btn btn-primary rounded-full" type="submit"
                 >Sign Up</button
             >
@@ -115,12 +115,12 @@
             Already have an account? <a
                 href="/login"
                 use:inertia
-                class="link link-primary">Log In</a
+                class="link-primary link">Log In</a
             >
         </div>
     </form>
 
-    <div class="divider text-base-content/30 my-8 lg:my-16">
+    <div class="divider my-8 text-base-content/30 lg:my-16">
         or continue with
     </div>
 

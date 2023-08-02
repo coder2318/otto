@@ -22,18 +22,18 @@
     <title>{import.meta.env.VITE_APP_NAME} - Forgot Password</title>
 </svelte:head>
 
-<div class="p-4 flex flex-col w-full" in:fade>
-    <a href="/" use:inertia class="max-w-[300px] h-auto">
+<div class="flex w-full flex-col p-4" in:fade>
+    <a href="/" use:inertia class="h-auto max-w-[300px]">
         <Logo class="w-full" />
     </a>
 
-    <div class="font-serif text-3xl italic text-primary my-8">
+    <div class="my-8 font-serif text-3xl italic text-primary">
         Forgot Your <span class="text-secondary-focus">Password</span>
     </div>
 
     <form
         on:submit|preventDefault={submit}
-        class="flex flex-col items-center w-full"
+        class="flex w-full flex-col items-center"
     >
         <div class="form-control w-full">
             <label class="label" for="email">
@@ -50,21 +50,21 @@
                 required
             />
             {#if $form.errors.email}
-                <span class="label-text-alt text-error text-left mt-1"
+                <span class="label-text-alt mt-1 text-left text-error"
                     >{$form.errors.email}</span
                 >
             {/if}
         </div>
 
-        <div class="form-control w-full mt-8">
+        <div class="form-control mt-8 w-full">
             <button class="btn btn-primary rounded-full" type="submit"
                 >Reset Password</button
             >
         </div>
     </form>
 
-    <div class="mt-8 lg:mt-16 text-center">
-        Back to <a href="/login" use:inertia class="link link-primary">Log in</a
+    <div class="mt-8 text-center lg:mt-16">
+        Back to <a href="/login" use:inertia class="link-primary link">Log in</a
         >
     </div>
 </div>

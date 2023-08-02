@@ -1,4 +1,4 @@
-<div class="flex gap-4 mx-auto">
+<div class="mx-auto flex gap-4">
     <a href="/login/google" class="btn rounded-full" type="button">
         <svg
             class="h-full"

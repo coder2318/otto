@@ -6,9 +6,9 @@
     $: user = $page.props.auth.user
 </script>
 
-<nav class="navbar bg-primary text-primary-content sticky top-0 z-20">
+<nav class="navbar sticky top-0 z-20 bg-primary text-primary-content">
     <div class="flex-1">
-        <a class="btn btn-ghost normal-case text-xl" href="/" use:inertia>
+        <a class="btn btn-ghost text-xl normal-case" href="/" use:inertia>
             <Logo class="h-full" />
         </a>
     </div>
@@ -19,10 +19,10 @@
                 href="/dashboard"
                 use:inertia>Start Writing</a
             >
-            <div class="dropdown dropdown-end leading-none">
+            <div class="dropdown-end dropdown leading-none">
                 <label
                     tabindex="-1"
-                    class="btn btn-ghost btn-circle avatar"
+                    class="avatar btn btn-circle btn-ghost"
                     for="dropdown"
                 >
                     <div class="h-full rounded-full">
@@ -39,7 +39,7 @@
                 <ul
                     tabindex="-1"
                     id="dropdown"
-                    class="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-200 text-base-content rounded-box w-48 border border-base-300"
+                    class="menu dropdown-content rounded-box menu-sm z-[1] mt-3 w-48 border border-base-300 bg-base-200 p-2 text-base-content shadow"
                 >
                     <li>
                         <button

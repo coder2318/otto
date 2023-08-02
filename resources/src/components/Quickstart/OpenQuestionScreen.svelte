@@ -19,14 +19,14 @@
     }
 </script>
 
-<div class="flex flex-col h-full w-full items-center justify-center" in:fade>
-    <div class="flex-1 flex flex-col items-center justify-center gap-8">
-        <h1 class="text-2xl md:text-4xl lg:text-6xl text-primary text-center">
+<div class="flex h-full w-full flex-col items-center justify-center" in:fade>
+    <div class="flex flex-1 flex-col items-center justify-center gap-8">
+        <h1 class="text-center text-2xl text-primary md:text-4xl lg:text-6xl">
             {question.question}
         </h1>
         <input
             type="text"
-            class="input input-bordered text-center font-serif w-full input-lg"
+            class="input input-bordered input-lg w-full text-center font-serif"
             placeholder="Type your answer..."
             name="answer"
             id="answer"
@@ -34,7 +34,7 @@
             bind:value={$form.quiz[question.id]}
         />
     </div>
-    <div class="flex mb-4 items-center justify-center gap-4">
+    <div class="mb-4 flex items-center justify-center gap-4">
         <button class="btn btn-primary w-40" on:click={() => dispatch('back')}
             >Back</button
         >

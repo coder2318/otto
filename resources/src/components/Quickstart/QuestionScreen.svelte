@@ -27,12 +27,12 @@
     }
 </script>
 
-<div class="flex flex-col h-full w-full items-center justify-center" in:fade>
-    <div class="flex-1 flex flex-col items-center justify-center">
-        <h1 class="text-2xl md:text-4xl lg:text-6xl text-primary text-center">
+<div class="flex h-full w-full flex-col items-center justify-center" in:fade>
+    <div class="flex flex-1 flex-col items-center justify-center">
+        <h1 class="text-center text-2xl text-primary md:text-4xl lg:text-6xl">
             {question.question}
         </h1>
-        <div class="flex gap-4 mt-8">
+        <div class="mt-8 flex gap-4">
             {#each question.answers as answer (answer)}
                 <button
                     on:click={() => toggleAnswer(answer)}
@@ -44,7 +44,7 @@
             {/each}
         </div>
     </div>
-    <div class="flex mb-4 items-center justify-center gap-4">
+    <div class="mb-4 flex items-center justify-center gap-4">
         <button class="btn btn-primary w-40" on:click={() => dispatch('back')}
             >Back</button
         >

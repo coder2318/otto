@@ -95,14 +95,14 @@
     })
 </script>
 
-<div class="toast toast-bottom toast-end">
+<div class="toast toast-end toast-bottom">
     {#each $messages as message, i (i)}
         <div class="alert {message.type}" out:fly={{ x: '100%' }}>
             <Fa icon={icon(message.type)} />
             <span>{message.message}</span>
             <div>
                 <button
-                    class="btn btn-circle btn-xs btn-ghost"
+                    class="btn btn-circle btn-ghost btn-xs"
                     on:click={() => ($messages = $messages.slice(0, i))}
                 >
                     <Fa icon={faClose} />

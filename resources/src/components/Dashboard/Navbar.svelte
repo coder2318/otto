@@ -9,22 +9,22 @@
     $: user = $page.props.auth.user as App.User | null
 </script>
 
-<nav class="navbar bg-primary text-primary-content sticky top-0 z-20">
+<nav class="navbar sticky top-0 z-20 bg-primary text-primary-content">
     <div class="navbar-start">
         <a
-            class="btn btn-ghost normal-case text-xl"
+            class="btn btn-ghost text-xl normal-case"
             href="/dashboard"
             use:inertia
         >
-            <Logo class="hidden md:block h-full" />
-            <LogoIcon class="md:hidden h-full" />
+            <Logo class="hidden h-full md:block" />
+            <LogoIcon class="h-full md:hidden" />
         </a>
     </div>
     <div class="navbar-end flex gap-1 md:gap-2">
         <div class="form-control relative">
             <Fa
                 icon={faSearch}
-                class="absolute top-1/2 -translate-y-1/2 left-4"
+                class="absolute left-4 top-1/2 -translate-y-1/2"
             />
             <input
                 type="text"
@@ -33,22 +33,22 @@
             />
         </div>
         <button
-            class="btn btn-ghost btn-circle border-neutral hover:border-neutral-focus"
+            class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
         >
             <Fa icon={faBell} class="h-full" />
         </button>
         <a
-            class="btn btn-ghost btn-circle border-neutral hover:border-neutral-focus"
+            class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
             href="/settrings"
             use:inertia
         >
             <Fa icon={faCog} class="h-full" />
         </a>
         {#if user}
-            <div class="dropdown dropdown-end leading-none">
+            <div class="dropdown-end dropdown leading-none">
                 <label
                     tabindex="-1"
-                    class="btn btn-ghost btn-circle avatar"
+                    class="avatar btn btn-circle btn-ghost"
                     for="dropdown"
                 >
                     <div class="w-full rounded-full">
@@ -65,7 +65,7 @@
                 <ul
                     tabindex="-1"
                     id="dropdown"
-                    class="mt-3 z-[1] p-2 shadow menu dropdown-content bg-base-100 text-base-content rounded-box w-48 border border-base-300"
+                    class="menu dropdown-content rounded-box z-[1] mt-3 w-48 border border-base-300 bg-base-100 p-2 text-base-content shadow"
                 >
                     <li>
                         <a href="/profile" use:inertia>Profile</a>

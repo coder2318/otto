@@ -17,18 +17,18 @@
     <title>{import.meta.env.VITE_APP_NAME} - Verify Email Address</title>
 </svelte:head>
 
-<div class="w-full p-4 flex flex-col">
-    <a href="/" use:inertia class="max-w-[300px] h-auto">
+<div class="flex w-full flex-col p-4">
+    <a href="/" use:inertia class="h-auto max-w-[300px]">
         <Logo class="w-full" />
     </a>
 
-    <div class="font-serif text-3xl italic text-primary my-8">
+    <div class="my-8 font-serif text-3xl italic text-primary">
         Verify Your <span class="text-secondary-focus">Email Address</span>
     </div>
 
     <form
         on:submit|preventDefault={submit}
-        class="flex flex-col items-center w-full"
+        class="flex w-full flex-col items-center"
     >
         <div class="mb-8">
             Thanks for signing up! Before getting started, could you verify your

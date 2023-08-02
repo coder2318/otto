@@ -13,10 +13,10 @@
     <title>{import.meta.env.VITE_APP_NAME} - Welcome</title>
 </svelte:head>
 
-<main class="flex flex-col justify-center items-center min-h-screen">
+<main class="flex min-h-screen flex-col items-center justify-center">
     <Navbar />
-    <div class="flex-1 flex flex-col items-center justify-center">
-        <div class="max-w-7xl mx-auto p-6 lg:p-8">
+    <div class="flex flex-1 flex-col items-center justify-center">
+        <div class="mx-auto max-w-7xl p-6 lg:p-8">
             <div class="flex justify-center">
                 <svg
                     viewBox="0 0 62 65"
@@ -30,21 +30,21 @@
                 </svg>
             </div>
             <div class="mt-16">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
+                <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:gap-8">
                     <a
                         href="https://laravel.com/docs"
-                        class="bg-base-200 scale-100 p-6 rounded-lg border border-base-300 shadow-xl flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-primary"
+                        class="duration-250 flex scale-100 rounded-lg border border-base-300 bg-base-200 p-6 shadow-xl transition-all focus:outline focus:outline-2 focus:outline-primary motion-safe:hover:scale-[1.01]"
                     >
                         <div>
                             <div
-                                class="h-16 w-16 bg-primary/20 flex items-center justify-center rounded-full"
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
-                                    class="w-7 h-7 stroke-primary"
+                                    class="h-7 w-7 stroke-primary"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -69,7 +69,7 @@
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            class="self-center shrink-0 stroke-primary w-6 h-6 mx-6"
+                            class="mx-6 h-6 w-6 shrink-0 self-center stroke-primary"
                         >
                             <path
                                 stroke-linecap="round"
@@ -80,18 +80,18 @@
                     </a>
                     <a
                         href="https://laracasts.com"
-                        class="bg-base-200 scale-100 p-6 rounded-lg border border-base-300 shadow-xl flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-primary"
+                        class="duration-250 flex scale-100 rounded-lg border border-base-300 bg-base-200 p-6 shadow-xl transition-all focus:outline focus:outline-2 focus:outline-primary motion-safe:hover:scale-[1.01]"
                     >
                         <div>
                             <div
-                                class="h-16 w-16 bg-primary/20 flex items-center justify-center rounded-full"
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
-                                    class="w-7 h-7 stroke-primary"
+                                    class="h-7 w-7 stroke-primary"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -114,7 +114,7 @@
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            class="self-center shrink-0 stroke-primary w-6 h-6 mx-6"
+                            class="mx-6 h-6 w-6 shrink-0 self-center stroke-primary"
                         >
                             <path
                                 stroke-linecap="round"
@@ -125,18 +125,18 @@
                     </a>
                     <a
                         href="https://laravel-news.com"
-                        class="bg-base-200 scale-100 p-6 rounded-lg border border-base-300 shadow-xl flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-primary"
+                        class="duration-250 flex scale-100 rounded-lg border border-base-300 bg-base-200 p-6 shadow-xl transition-all focus:outline focus:outline-2 focus:outline-primary motion-safe:hover:scale-[1.01]"
                     >
                         <div>
                             <div
-                                class="h-16 w-16 bg-primary/20 flex items-center justify-center rounded-full"
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
-                                    class="w-7 h-7 stroke-primary"
+                                    class="h-7 w-7 stroke-primary"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -160,7 +160,7 @@
                             fill="none"
                             viewBox="0 0 24 24"
                             stroke-width="1.5"
-                            class="self-center shrink-0 stroke-primary w-6 h-6 mx-6"
+                            class="mx-6 h-6 w-6 shrink-0 self-center stroke-primary"
                         >
                             <path
                                 stroke-linecap="round"
@@ -170,18 +170,18 @@
                         </svg>
                     </a>
                     <div
-                        class="bg-base-200 scale-100 p-6 rounded-lg border border-base-300 shadow-xl flex motion-safe:hover:scale-[1.01] transition-all duration-250 focus:outline focus:outline-2 focus:outline-primary"
+                        class="duration-250 flex scale-100 rounded-lg border border-base-300 bg-base-200 p-6 shadow-xl transition-all focus:outline focus:outline-2 focus:outline-primary motion-safe:hover:scale-[1.01]"
                     >
                         <div>
                             <div
-                                class="h-16 w-16 bg-primary/20 flex items-center justify-center rounded-full"
+                                class="flex h-16 w-16 items-center justify-center rounded-full bg-primary/20"
                             >
                                 <svg
                                     xmlns="http://www.w3.org/2000/svg"
                                     fill="none"
                                     viewBox="0 0 24 24"
                                     stroke-width="1.5"
-                                    class="w-7 h-7 stroke-primary"
+                                    class="h-7 w-7 stroke-primary"
                                 >
                                     <path
                                         stroke-linecap="round"
@@ -241,20 +241,20 @@
             </div>
 
             <div
-                class="flex justify-center mt-16 px-0 sm:items-center sm:justify-between"
+                class="mt-16 flex justify-center px-0 sm:items-center sm:justify-between"
             >
                 <div class="text-center text-sm sm:text-left">
                     <div class="flex items-center gap-4">
                         <a
                             href="https://github.com/sponsors/taylorotwell"
-                            class="link link-hover flex hover:link-primary group"
+                            class="group link-hover link flex hover:link-primary"
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
                                 fill="none"
                                 viewBox="0 0 24 24"
                                 stroke-width="1.5"
-                                class="-mt-px mr-1 w-5 h-5 stroke-base-content group-hover:stroke-primary"
+                                class="-mt-px mr-1 h-5 w-5 stroke-base-content group-hover:stroke-primary"
                             >
                                 <path
                                     stroke-linecap="round"
@@ -267,7 +267,7 @@
                     </div>
                 </div>
 
-                <div class="ml-4 text-center text-sm sm:text-right sm:ml-0">
+                <div class="ml-4 text-center text-sm sm:ml-0 sm:text-right">
                     Laravel v{laravelVersion} (PHP v{phpVersion})
                 </div>
             </div>

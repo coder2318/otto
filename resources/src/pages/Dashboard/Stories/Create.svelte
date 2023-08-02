@@ -19,8 +19,8 @@
     <title>{import.meta.env.VITE_APP_NAME} - Create New Story</title>
 </svelte:head>
 
-<main class="container mx-auto flex-1 flex flex-col gap-8 p-4 py-8" in:fade>
+<main class="container mx-auto flex flex-1 flex-col gap-8 p-4 py-8" in:fade>
     <div class="flex justify-between">
-        <h1 class="text-3xl italic text-primary font-bold">Create New Story</h1>
+        <h1 class="text-3xl font-bold italic text-primary">Create New Story</h1>
     </div>
 </main>

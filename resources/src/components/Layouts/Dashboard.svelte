@@ -2,7 +2,7 @@
     import Navbar from '@/components/Dashboard/Navbar.svelte'
 </script>
 
-<div class="min-h-screen flex flex-col bg-base-200">
+<div class="flex min-h-screen flex-col bg-base-200">
     <Navbar />
     <slot />
 </div>

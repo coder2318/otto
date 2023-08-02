@@ -36,9 +36,9 @@
 <header class="hero bg-top" style="background-image: url({background})" in:fade>
     <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/60" />
     <div
-        class="container hero-content justify-between text-primary-content my-8 md:my-12 lg:my-16"
+        class="container hero-content my-8 justify-between text-primary-content md:my-12 lg:my-16"
     >
-        <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold italic">
+        <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
             My Stories
         </h1>
         <a href="/stories/create" use:inertia class="btn btn-secondary">
@@ -49,24 +49,24 @@
 </header>
 
 <section class="container mx-auto flex p-4 lg:py-8" in:fade>
-    <div class="tabs border-b-2 border-base-content/20 flex-1">
+    <div class="tabs flex-1 border-b-2 border-base-content/20">
         <a
             class="tab -mb-0.5 {!query?.filter?.status
-                ? 'tab-bordered tab-active'
+                ? 'tab-active tab-bordered'
                 : ''}"
             href={filters()}
             use:inertia>All</a
         >
         <a
             class="tab -mb-0.5 {query?.filter?.status == 'pending'
-                ? 'tab-bordered tab-active'
+                ? 'tab-active tab-bordered'
                 : ''}"
             href={filters({ 'filter[status]': 'pending' })}
             use:inertia>Pending</a
         >
         <a
             class="tab -mb-0.5 {query?.filter?.status == 'published'
-                ? 'tab-bordered tab-active'
+                ? 'tab-active tab-bordered'
                 : ''}"
             href={filters({ 'filter[status]': 'published' })}
             use:inertia>Published</a
@@ -75,15 +75,15 @@
 </section>
 
 <main
-    class="container mx-auto p-4 lg:py-8 flex flex-col items-center justify-center gap-8"
+    class="container mx-auto flex flex-col items-center justify-center gap-8 p-4 lg:py-8"
     in:fade
 >
     <div
-        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-center"
+        class="grid grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
         {#each stories.data as story (story.id)}
             <a
-                class="card bg-neutral hover:scale-105 transition-transform"
+                class="card bg-neutral transition-transform hover:scale-105"
                 href="/stories/{story.id}"
                 use:inertia
                 in:fade

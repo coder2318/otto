@@ -12,9 +12,9 @@
 
 {#if $loading}
     <div
-        class="fixed inset-0 h-screen w-screen flex flex-col justify-center items-center bg-primary z-50"
+        class="fixed inset-0 z-50 flex h-screen w-screen flex-col items-center justify-center bg-primary"
         transition:fade
     >
-        <span class="loading loading-spinner text-primary-content w-36" />
+        <span class="loading loading-spinner w-36 text-primary-content" />
     </div>
 {/if}
