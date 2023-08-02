@@ -14,7 +14,8 @@
         "allowJs": true,
         "checkJs": true,
         "isolatedModules": true,
-        "types": ["vite/client"],
+        "lib": ["ESNext", "DOM", "WebWorker"],
+        "types": ["vite/client", "vite-plugin-pwa/client"],
         "paths": { "@/*": ["./resources/src/*"] }
     },
     "include": [

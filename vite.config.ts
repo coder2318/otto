@@ -1,54 +1,95 @@
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import laravel from 'laravel-vite-plugin';
 import { svelte } from '@sveltejs/vite-plugin-svelte';
+import { mdsvex } from 'mdsvex';
 import { viteStaticCopy as copy } from 'vite-plugin-static-copy';
+import { VitePWA as pwa } from 'vite-plugin-pwa'
 import eslint from 'vite-plugin-eslint';
-import markdown from 'vite-plugin-svelte-md';
 import sveltePreprocess from 'svelte-preprocess';
 import path from 'path';
 
-export default defineConfig({
-    plugins: [
-        laravel({
-            input: 'resources/src/app.ts',
-            ssr: 'resources/src/ssr.ts',
-            refresh: true,
-        }),
-        markdown(),
-        svelte({
-            extensions: [".svelte", ".md"],
-            preprocess: [sveltePreprocess({
-                typescript: true,
-            })],
-            compilerOptions: {
-                hydratable: true,
-            },
-        }),
-        copy({
-            targets: [
-                {
-                    src: path.resolve(__dirname, 'resources/assets'),
-                    dest: path.resolve(__dirname, 'public'),
+export default ({ mode }) => {
+    process.env = {...process.env, ...loadEnv(mode, process.cwd(), ['APP'])};
+
+    return defineConfig({
+        plugins: [
+            laravel({
+                input: 'resources/src/app.ts',
+                ssr: 'resources/src/ssr.ts',
+                refresh: true,
+            }),
+            svelte({
+                extensions: [".svelte", ".svx", ".md"],
+                preprocess: [
+                    sveltePreprocess({
+                        typescript: true,
+                    }),
+                    mdsvex({
+                        extensions: [".md", ".svx"],
+                    })
+                ],
+                compilerOptions: {
+                    hydratable: true,
                 },
-            ],
-        }),
-        eslint({
-            include: path.resolve(__dirname, 'resources/src/**/*.{ts,js,svelte}'),
-            fix: true,
-        })
-    ],
-    server: {
-        hmr: {
-            host: 'localhost',
+            }),
+            pwa({
+                mode: process.env.APP_ENV == 'production' ? 'production' : 'development',
+                strategies: 'injectManifest',
+                registerType: 'autoUpdate',
+                srcDir: 'resources/src',
+                filename: 'sw.ts',
+                injectRegister: 'auto',
+                manifest: {
+                    short_name: process.env.APP_NAME,
+                    name: process.env.APP_NAME,
+                    start_url: process.env.APP_URL,
+                    scope: process.env.APP_URL,
+                    description: "Your Autobiography AI",
+                    categories: ["books", "lifestyle", "entertainment", "education", "shopping"],
+                    theme_color: "#0C345C",
+                    background_color: "#F1EDE7",
+                    display: "standalone",
+                    orientation: "any",
+                    id: 'dashboard',
+                    icons: [
+                        {
+                            src: "assets/logo.svg",
+                            type: "image/svg+xml",
+                            purpose: "any",
+                            sizes: "any"
+                        },
+                    ]
+                },
+                workbox: {
+                    sourcemap: true
+                }
+            }),
+            copy({
+                targets: [
+                    {
+                        src: path.resolve(__dirname, 'resources/assets'),
+                        dest: path.resolve(__dirname, 'public/build'),
+                    },
+                ],
+            }),
+            eslint({
+                include: path.resolve(__dirname, 'resources/src/**/*.{ts,js,svelte}'),
+                fix: true,
+            })
+        ],
+        server: {
+            hmr: {
+                host: 'localhost',
+            }
+        },
+        ssr: {
+            noExternal: true,
+            external: ['@inertiajs/core'],
+        },
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'resources/src'),
+            }
         }
-    },
-    ssr: {
-        noExternal: true,
-        external: ['@inertiajs/core'],
-    },
-    resolve: {
-        alias: {
-            '@': path.resolve(__dirname, 'resources/src'),
-        }
-    }
-});
+    });
+}
