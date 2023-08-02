@@ -13,6 +13,11 @@ use Inertia\Inertia;
 
 class StoryController extends Controller
 {
+    public function __construct()
+    {
+        $this->authorizeResource(Story::class, 'story');
+    }
+
     public function index(StoriesRequest $request)
     {
         return Inertia::render('Dashboard/Stories/Index', [
