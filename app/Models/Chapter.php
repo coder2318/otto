@@ -6,7 +6,6 @@ use App\Data\Chapter\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -26,6 +25,7 @@ class Chapter extends Model implements HasMedia
     protected $casts = [
         'status' => Status::class,
     ];
+
     public function story(): BelongsTo
     {
         return $this->belongsTo(Story::class);
