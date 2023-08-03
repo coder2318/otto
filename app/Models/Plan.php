@@ -22,7 +22,7 @@ class Plan extends Model
         'features' => 'array',
     ];
 
-    public function getRouteKeyName()
+    public function getRouteKeyName(): string
     {
         return 'slug';
     }

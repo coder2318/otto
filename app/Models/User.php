@@ -5,6 +5,8 @@ namespace App\Models;
 use App\Data\User\Details;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
@@ -32,12 +34,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'details' => Details::class,
     ];
 
-    public function stories()
+    public function stories(): HasMany
     {
         return $this->hasMany(Story::class);
     }
 
-    public function chapters()
+    public function chapters(): HasManyThrough
     {
         return $this->hasManyThrough(Chapter::class, Story::class);
     }

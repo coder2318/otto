@@ -5,6 +5,9 @@ namespace App\Models;
 use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -22,7 +25,7 @@ class Story extends Model implements HasMedia
         'status' => Status::class,
     ];
 
-    public function cover()
+    public function cover(): MorphOne
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
@@ -30,12 +33,12 @@ class Story extends Model implements HasMedia
         );
     }
 
-    public function chapters()
+    public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
