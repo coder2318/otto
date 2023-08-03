@@ -18,7 +18,7 @@ class ChapterController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Story::class, 'story');
+        $this->authorizeResource(Chapter::class, 'story');
     }
 
     /**
@@ -42,48 +42,60 @@ class ChapterController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Story $story)
     {
-        //
+        return Inertia::render('Dashboard/Chapters/Create', [
+            'story' => fn () => StoryResource::make($story),
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(StoreChapterRequest $request)
+    public function store(Story $story, StoreChapterRequest $request)
     {
-        //
+        $chapter = $story->chapters()->create($request->validated());
+
+        return redirect()->route('chapters.show', compact('chapter'))->with('message', 'Chapter created successfully!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(Chapter $chapter)
+    public function show(Story $story, Chapter $chapter)
     {
-        //
+        return Inertia::render('Dashboard/Chapters/Show', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Chapter $chapter)
+    public function edit(Story $story, Chapter $chapter)
     {
-        //
+        return Inertia::render('Dashboard/Chapters/Edit', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(UpdateChapterRequest $request, Chapter $chapter)
+    public function update(UpdateChapterRequest $request, Story $story, Chapter $chapter)
     {
-        //
+        $chapter->update($request->validated());
+
+        return redirect()->route('chapters.show', $chapter)->with('message', 'Chapter updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Chapter $chapter)
+    public function destroy(Story $story, Chapter $chapter)
     {
-        //
+        $chapter->delete();
+
+        return redirect()->route('chapters.index', $story)->with('message', 'Chapter deleted successfully!');
     }
 }

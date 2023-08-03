@@ -19,7 +19,7 @@ Route::middleware('user-configured')->group(function () {
 
     // Stories
     Route::resource('stories', StoryController::class);
-    Route::resource('stories.chapters', ChapterController::class)->shallow();
+    Route::resource('stories.chapters', ChapterController::class);
 
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')
