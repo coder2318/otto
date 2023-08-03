@@ -75,6 +75,7 @@ class ChapterController extends Controller
     public function edit(Story $story, Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Edit', [
+            'story' => fn () => StoryResource::make($story),
             'chapter' => fn () => ChapterResource::make($chapter),
         ]);
     }
@@ -86,7 +87,7 @@ class ChapterController extends Controller
     {
         $chapter->update($request->validated());
 
-        return redirect()->route('chapters.show', $chapter)->with('message', 'Chapter updated successfully!');
+        return redirect()->back()->with('message', 'Chapter updated successfully!');
     }
 
     /**

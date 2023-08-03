@@ -11,6 +11,7 @@
     import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
+    import { truncate } from '@/service/helpers'
 
     export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
@@ -49,7 +50,7 @@
 </svelte:head>
 
 <header class="hero" style="background-image: url({story.data.cover})" in:fade>
-    <div class="hero-overlay bg-gradient-to-br from-primary/40 to-primary/10" />
+    <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/40" />
     <div
         class="container hero-content my-8 flex-col items-start justify-between text-primary-content md:my-12 lg:my-16"
     >
@@ -58,7 +59,7 @@
                 <li><a href="/stories" use:inertia>Stories</a></li>
                 <li>
                     <a href="/stories/{story.data.id}" use:inertia
-                        >{story.data.title}</a
+                        >{truncate(story.data.title, 20)}</a
                     >
                 </li>
                 <li>Writing Room</li>
@@ -104,7 +105,7 @@
     <span class="flex gap-2">
         Timeline:
         <select
-            class="select select-bordered select-ghost select-xs"
+            class="select select-bordered select-ghost select-xs w-48"
             on:change={(e) =>
                 e.currentTarget.value !== ''
                     ? ($filter.timeline_id = e.currentTarget.value)

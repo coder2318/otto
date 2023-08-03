@@ -23,6 +23,7 @@ export default ({ mode }) => {
                 preprocess: [
                     sveltePreprocess({
                         typescript: true,
+                        postcss: true,
                     }),
                     mdsvex({
                         extensions: [".md", ".svx"],

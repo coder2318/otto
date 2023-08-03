@@ -62,6 +62,19 @@ declare namespace App {
         updated_at: Date | string
     }
 
+    interface Chapter {
+        id: number
+        title: string
+        content: string
+        order: number
+        cover: string | null
+        status: string
+        story_id: number | null
+        story?: Story
+        created_at: Date | string
+        updated_at: Date | string
+    }
+
     interface Timeline {
         id: number
         title: string

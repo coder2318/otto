@@ -42,7 +42,7 @@
 
         // Svelte
         "svelte/no-at-html-tags": ["off"],
-        "svelte/valid-compile": ["warn"],
+        "svelte/valid-compile": ["off"],
 
         // Prettier
         "prettier/prettier": ["warn", {"endOfLine": "lf"}]

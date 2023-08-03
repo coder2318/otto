@@ -17,3 +17,7 @@ export function usd(
         ...options,
     }).format(amount)
 }
+
+export function truncate(str: string, num: number): string {
+    return str.length > num ? str.slice(0, num) + '...' : str
+}
