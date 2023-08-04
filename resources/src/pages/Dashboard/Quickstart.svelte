@@ -31,7 +31,7 @@
     $: Screen = step == 0 ? NameScreen : Question
 
     onMount(() => {
-        const quickstart = JSON.parse(localStorage?.quickstart)
+        const quickstart = JSON.parse(localStorage.getItem('quickstart') ?? '')
 
         step = quickstart?.step ?? step
         $form.first_name = quickstart?.form?.first_name ?? $form.first_name
