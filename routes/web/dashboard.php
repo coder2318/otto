@@ -19,8 +19,9 @@ Route::middleware('user-configured')->group(function () {
 
     // Stories
     Route::resource('stories', StoryController::class);
-    Route::resource('stories.chapters', ChapterController::class);
+    Route::resource('stories.chapters', ChapterController::class)->shallow();
     Route::get('/chapters/{chapter}/type', [ChapterController::class, 'type'])->name('chapters.type');
+    Route::get('/chapters/{chapter}/record', [ChapterController::class, 'record'])->name('chapters.record');
 
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')

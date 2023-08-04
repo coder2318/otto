@@ -146,7 +146,7 @@
         {#each chapters.data as chapter (chapter.id)}
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/stories/{story.data.id}/chapters/{chapter.id}/edit"
+                href="/chapters/{chapter.id}/edit"
                 use:inertia
                 in:fade
             >

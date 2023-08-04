@@ -28,7 +28,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - Create New Chapter</title>
 </svelte:head>
 
-<Breadcrumbs step={0} />
+<Breadcrumbs step={1} />
 
 <form on:submit|preventDefault={submit} bind:this={el}>
     <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">

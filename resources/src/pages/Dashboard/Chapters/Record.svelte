@@ -9,11 +9,12 @@
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import AudioRecorder from '@/components/AudioRecorder.svelte'
 
     export let chapter: { data: App.Chapter }
 
     const form = useForm({
-        content: chapter.data.content,
+        recordings: [],
         status: chapter.data.status,
     })
 
@@ -44,13 +45,7 @@
 <form on:submit|preventDefault={submit}>
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
-            <div class="form-control">
-                <div
-                    class="textarea textarea-ghost min-h-[200px] font-serif"
-                    contenteditable="true"
-                    bind:innerHTML={$form.content}
-                />
-            </div>
+            <AudioRecorder bind:recordings={$form.recordings} />
         </div>
     </main>
 

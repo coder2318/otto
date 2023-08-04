@@ -13,7 +13,6 @@
     import write from '@/assets/img/chapter-type.jpg'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
 
-    export let story: { data: App.Story }
     export let chapter: { data: App.Chapter }
 
     let el: HTMLFormElement
@@ -22,7 +21,7 @@
     })
 
     function submit() {
-        $form.patch(`/stories/${story.data.id}/chapters/${chapter.data.id}`)
+        $form.patch(`/chapters/${chapter.data.id}`)
     }
 </script>
 
@@ -86,7 +85,7 @@
 
 <section class="container mx-auto mb-8 flex justify-between">
     <a
-        href="/stories/{story.data.id}/chapters"
+        href="/stories/{chapter.data.story_id}/chapters"
         class="btn btn-neutral rounded-full pl-0"
         use:inertia
     >
