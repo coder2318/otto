@@ -23,7 +23,9 @@
 
     function submit() {
         $form.clearErrors()
-        $form.post(`/stories/${story.data.id}/chapters`, { forceFormData: true })
+        $form.post(`/stories/${story.data.id}/chapters`, {
+            forceFormData: true,
+        })
     }
 </script>
 

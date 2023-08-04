@@ -20,7 +20,6 @@
     })
 
     function submit(event: SubmitEvent) {
-        console.log($form)
         $form
             .transform((data) => ({
                 _method: 'PUT',

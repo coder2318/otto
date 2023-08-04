@@ -19,9 +19,9 @@ class ChapterResource extends JsonResource
             'recordings' => $this->whenLoaded('recordings', fn () => $this->resource->recordings->map(
                 fn ($record) => [
                     'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
-                    'name' => $record->file_name
+                    'name' => $record->file_name,
                 ]
-            ))
+            )),
         ]);
     }
 }

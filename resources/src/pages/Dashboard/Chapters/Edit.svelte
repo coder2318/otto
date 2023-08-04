@@ -15,7 +15,6 @@
 
     export let chapter: { data: App.Chapter }
 
-    let el: HTMLFormElement
     const form = useForm({
         title: chapter.data?.title ?? '',
         status: chapter.data.status,
