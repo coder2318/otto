@@ -10,11 +10,11 @@ Route::inertia('/', 'Index', [
     'phpVersion' => PHP_VERSION,
 ])->name('index');
 
-Route::get('/about', 'About')->name('about');
-Route::get('/privacy-policy', 'PrivacyPolicy')->name('privacy-policy');
-Route::get('/terms-and-conditions', 'TermsAndConditions')->name('terms-and-conditions');
-Route::get('/faq', 'FAQ')->name('faq');
-Route::get('/contact', 'Contact')->name('contact');
+Route::inertia('/about', 'About')->name('about');
+Route::inertia('/privacy-policy', 'PrivacyPolicy')->name('privacy-policy');
+Route::inertia('/terms-and-conditions', 'TermsAndConditions')->name('terms-and-conditions');
+Route::inertia('/faq', 'FAQ')->name('faq');
+Route::inertia('/contact', 'Contact')->name('contact');
 
 // Auth
 Route::controller(SocialAuthController::class)
