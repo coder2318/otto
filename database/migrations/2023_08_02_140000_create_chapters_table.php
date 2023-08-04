@@ -18,7 +18,7 @@ return new class extends Migration
             $table->id();
 
             $table->string('title');
-            $table->longText('content');
+            $table->longText('content')->nullable();
             $table->integer('order')->default(0);
             $table->string('status');
 

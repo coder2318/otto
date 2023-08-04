@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Data\Chapter\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chapters\ChaptersRequest;
-use App\Http\Requests\StoreChapterRequest;
-use App\Http\Requests\UpdateChapterRequest;
+use App\Http\Requests\Chapters\StoreChapterRequest;
+use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
@@ -54,9 +55,11 @@ class ChapterController extends Controller
      */
     public function store(Story $story, StoreChapterRequest $request)
     {
-        $chapter = $story->chapters()->create($request->validated());
+        $chapter = $story->chapters()->create($request->validated() + [
+            'status' => Status::DRAFT,
+        ]);
 
-        return redirect()->route('chapters.edit', $chapter)->with('message', 'Chapter created successfully!');
+        return redirect()->route('stories.chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
     }
 
     /**

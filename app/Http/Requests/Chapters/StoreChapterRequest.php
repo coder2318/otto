@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Chapters;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UpdateChapterRequest extends FormRequest
+class StoreChapterRequest extends FormRequest
 {
     /**
      * Get the validation rules that apply to the request.
@@ -14,7 +14,8 @@ class UpdateChapterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'required', 'string'],
+            'title' => ['required', 'string'],
+            'cover' => ['required', 'image', 'max:2048'],
         ];
     }
 }
