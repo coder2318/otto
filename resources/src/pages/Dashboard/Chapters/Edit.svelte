@@ -76,7 +76,12 @@
             contenteditable="true"
         />
         <div class="grid grid-cols-1 gap-8 p-4 md:grid-cols-3">
-            <a class="card bg-neutral transition-transform hover:scale-105">
+            <a
+                class="card bg-neutral transition-transform hover:scale-105"
+                href="/stories/{story.data.id}/chapters/{chapter.data
+                    .id}/record"
+                use:inertia
+            >
                 <figure>
                     <img src={record} alt="record" />
                 </figure>
@@ -84,7 +89,12 @@
                     <h2 class="card-title">Record your Answer</h2>
                 </div>
             </a>
-            <a class="card bg-neutral transition-transform hover:scale-105">
+            <a
+                class="card bg-neutral transition-transform hover:scale-105"
+                href="/stories/{story.data.id}/chapters/{chapter.data
+                    .id}/upload"
+                use:inertia
+            >
                 <figure>
                     <img src={upload} alt="upload" />
                 </figure>
@@ -92,7 +102,11 @@
                     <h2 class="card-title">Upload File</h2>
                 </div>
             </a>
-            <a class="card bg-neutral transition-transform hover:scale-105">
+            <a
+                class="card bg-neutral transition-transform hover:scale-105"
+                href="/stories/{story.data.id}/chapters/{chapter.data.id}/type"
+                use:inertia
+            >
                 <figure>
                     <img src={write} alt="write" />
                 </figure>
@@ -125,21 +139,3 @@
         </button>
     {/if}
 </section>
-
-<style lang="scss">
-    .step-breadcrumb {
-        @apply rounded-none border-b-4 border-b-primary py-4 text-left;
-
-        .step-icon {
-            @apply badge mask badge-secondary mask-circle rounded-full p-4;
-        }
-
-        &.inactive {
-            @apply hidden border-b-primary/20 md:block;
-
-            .step-icon {
-                @apply badge-neutral;
-            }
-        }
-    }
-</style>

@@ -76,9 +76,3 @@
         <span class="label-text">Yearly</span>
     </label>
 </div>
-
-<style lang="scss">
-    .toggle-custom {
-        @apply toggle toggle-error border-success bg-success;
-    }
-</style>

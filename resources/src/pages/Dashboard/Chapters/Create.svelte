@@ -119,21 +119,3 @@
         {/if}
     </section>
 </form>
-
-<style lang="scss">
-    .step-breadcrumb {
-        @apply rounded-none border-b-4 border-b-primary py-4 text-left;
-
-        .step-icon {
-            @apply badge mask badge-secondary mask-circle rounded-full p-4;
-        }
-
-        &.inactive {
-            @apply hidden border-b-primary/20 md:block;
-
-            .step-icon {
-                @apply badge-neutral;
-            }
-        }
-    }
-</style>
