@@ -72,7 +72,7 @@
     </div>
     <label class="label cursor-pointer gap-2">
         <span class="label-text">Monthly</span>
-        <input type="checkbox" class="toggle-custom" bind:checked />
+        <input type="checkbox" class="toggle-success-error" bind:checked />
         <span class="label-text">Yearly</span>
     </label>
 </div>
