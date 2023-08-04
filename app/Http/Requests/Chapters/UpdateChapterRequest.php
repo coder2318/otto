@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests\Chapters;
 
+use App\Data\Chapter\Status;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class UpdateChapterRequest extends FormRequest
 {
@@ -15,6 +17,8 @@ class UpdateChapterRequest extends FormRequest
     {
         return [
             'title' => ['sometimes', 'required', 'string'],
+            'content' => ['sometimes', 'required', 'string'],
+            'status' => ['required', new Enum(Status::class)],
         ];
     }
 }

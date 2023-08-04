@@ -7,14 +7,9 @@
 <script lang="ts">
     import { useForm, inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
-    import Otto from '@/components/SVG/otto.svg.svelte'
-    import {
-        faPencil,
-        faKeyboard,
-        faThumbsUp,
-        faArrowLeft,
-    } from '@fortawesome/free-solid-svg-icons'
     import FilePond from '@/components/FilePond.svelte'
+    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
     export let story: { data: App.Story }
 
@@ -33,34 +28,8 @@
     <title>{import.meta.env.VITE_APP_NAME} - Create New Chapter</title>
 </svelte:head>
 
-<header
-    class="container m-4 mx-auto grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
->
-    <div class="step-breadcrumb">
-        <span class="step-icon">
-            <Fa icon={faPencil} />
-        </span>
-        Edit your question
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Fa icon={faKeyboard} />
-        </span>
-        Tell your story
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Otto class="w-4 leading-none" />
-        </span>
-        Colaborate with OTTO
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Fa icon={faThumbsUp} />
-        </span>
-        Save
-    </div>
-</header>
+<Breadcrumbs step={0} />
+
 <form on:submit|preventDefault={submit} bind:this={el}>
     <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
         <div class="card-body gap-4">

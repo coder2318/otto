@@ -7,16 +7,11 @@
 <script lang="ts">
     import { useForm, inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
-    import Otto from '@/components/SVG/otto.svg.svelte'
-    import {
-        faPencil,
-        faKeyboard,
-        faThumbsUp,
-        faArrowLeft,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import record from '@/assets/img/chapter-record.jpg'
     import upload from '@/assets/img/chapter-upload.jpg'
     import write from '@/assets/img/chapter-type.jpg'
+    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
 
     export let story: { data: App.Story }
     export let chapter: { data: App.Chapter }
@@ -35,34 +30,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<header
-    class="container m-4 mx-auto grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
->
-    <div class="step-breadcrumb">
-        <span class="step-icon">
-            <Fa icon={faPencil} />
-        </span>
-        Edit your question
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Fa icon={faKeyboard} />
-        </span>
-        Tell your story
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Otto class="w-4 leading-none" />
-        </span>
-        Colaborate with OTTO
-    </div>
-    <div class="step-breadcrumb inactive">
-        <span class="step-icon">
-            <Fa icon={faThumbsUp} />
-        </span>
-        Save
-    </div>
-</header>
+<Breadcrumbs step={1} />
 
 <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
     <form
@@ -78,8 +46,7 @@
         <div class="grid grid-cols-1 gap-8 p-4 md:grid-cols-3">
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/stories/{story.data.id}/chapters/{chapter.data
-                    .id}/record"
+                href="/chapters/{chapter.data.id}/record"
                 use:inertia
             >
                 <figure>
@@ -91,8 +58,7 @@
             </a>
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/stories/{story.data.id}/chapters/{chapter.data
-                    .id}/upload"
+                href="/chapters/{chapter.data.id}/upload"
                 use:inertia
             >
                 <figure>
@@ -104,7 +70,7 @@
             </a>
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/stories/{story.data.id}/chapters/{chapter.data.id}/type"
+                href="/chapters/{chapter.data.id}/type"
                 use:inertia
             >
                 <figure>

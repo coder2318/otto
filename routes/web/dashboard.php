@@ -20,6 +20,7 @@ Route::middleware('user-configured')->group(function () {
     // Stories
     Route::resource('stories', StoryController::class);
     Route::resource('stories.chapters', ChapterController::class);
+    Route::get('/chapters/{chapter}/type', [ChapterController::class, 'type'])->name('chapters.type');
 
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')

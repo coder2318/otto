@@ -40,6 +40,13 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function type(Chapter $chapter)
+    {
+        return Inertia::render('Dashboard/Chapters/Type', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
