@@ -11,7 +11,7 @@
 </script>
 
 <header
-    class="container m-4 mx-auto grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4"
+    class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 lg:grid-cols-4"
 >
     <div class="step-breadcrumb" class:inactive={step < 1}>
         <span class="step-icon">

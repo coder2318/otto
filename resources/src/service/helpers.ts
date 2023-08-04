@@ -21,3 +21,14 @@ export function usd(
 export function truncate(str: string, num: number): string {
     return str.length > num ? str.slice(0, num) + '...' : str
 }
+
+export function msToTime(s: number): string {
+    const pad = (n, z = 2) => ('00' + n).slice(-z)
+    const ms = s % 1000
+    s = (s - ms) / 1000
+    const secs = s % 60
+    s = (s - secs) / 60
+    const mins = s % 60
+
+    return pad(mins) + ':' + pad(secs)
+}

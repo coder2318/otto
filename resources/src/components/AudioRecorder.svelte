@@ -1,14 +1,20 @@
 <script lang="ts">
+    import { msToTime } from '@/service/helpers'
+    import {
+        faMicrophone,
+        faStop,
+        faTrash,
+    } from '@fortawesome/free-solid-svg-icons'
+    import dayjs from 'dayjs'
+    import Fa from 'svelte-fa'
+
     let player: HTMLAudioElement
     let mediaRecorder: MediaRecorder
+    let interval: number
+    let timer: number
 
-    function changer(event: Event) {
-        // @ts-ignore
-        const file = event.currentTarget.files[0]
-        const url = URL.createObjectURL(file)
-        // Do something with the audio file.
-        player.src = url
-    }
+    export let max: number = 5 * 60 * 1000
+    export let recordings: File[]
 
     function startRecording() {
         navigator.mediaDevices
@@ -24,18 +30,101 @@
                 })
 
                 mediaRecorder.addEventListener('stop', function () {
-                    player.src = URL.createObjectURL(new Blob(recordedChunks))
+                    recordings.push(
+                        new File(
+                            recordedChunks,
+                            `audio_${dayjs().format(
+                                'YYYY-MM-DD_HH-mm-ss'
+                            )}.webm`,
+                            { type: 'audio/webm' }
+                        )
+                    )
+                    recordings = recordings
                 })
 
                 mediaRecorder.start()
+                timer = 0
+                interval = setInterval(() => {
+                    timer += 10
+                }, 10)
             })
     }
 
     function stopRecording() {
+        timer = null
+        clearInterval(interval)
         mediaRecorder.stop()
+        mediaRecorder = null
     }
 </script>
 
-<button on:click|preventDefault={startRecording}>Start Recording</button>
-<button on:click|preventDefault={stopRecording}>Stop Recording</button>
-<audio id="player" controls bind:this={player} />
+<div class="flex flex-col items-center justify-center gap-4">
+    <div class="mask mask-circle bg-primary/5 p-4">
+        <div class="mask mask-circle bg-primary/10 p-4">
+            <div class="mask mask-circle bg-primary/30 p-4">
+                <div
+                    class="mask mask-circle bg-primary p-4"
+                    class:animate-pulse={!!mediaRecorder}
+                >
+                    <div class="mask mask-circle bg-neutral">
+                        <button
+                            class="btn btn-circle btn-ghost btn-lg text-4xl"
+                            on:click|preventDefault={() =>
+                                mediaRecorder
+                                    ? stopRecording()
+                                    : startRecording()}
+                        >
+                            <label class="swap-rotate swap">
+                                <input
+                                    type="checkbox"
+                                    checked={!!mediaRecorder}
+                                />
+                                <div class="swap-on text-secondary">
+                                    <Fa icon={faStop} />
+                                </div>
+                                <div class="swap-off text-primary">
+                                    <Fa icon={faMicrophone} />
+                                </div>
+                            </label>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {#each recordings as recording, i (recording.name)}
+        <div
+            class="group relative flex items-center justify-center gap-2 transition-all"
+        >
+            <audio
+                bind:this={player}
+                src={URL.createObjectURL(recording)}
+                controls
+            />
+            <button
+                class="btn btn-circle btn-error btn-outline btn-sm text-error"
+                on:click={() => recordings.splice(i, 1)}
+            >
+                <Fa icon={faTrash} />
+            </button>
+        </div>
+    {/each}
+    {#if timer}
+        <div
+            class="flex items-center justify-center gap-2 rounded-full bg-primary/10 p-4 text-primary"
+        >
+            <span class="w-12"> {msToTime(timer)}</span>
+            <progress
+                class="progress progress-primary w-36"
+                value={timer}
+                {max}
+            />
+            <span class="w-12"> {msToTime(max)}</span>
+        </div>
+    {:else if !recordings.length}
+        <div class="flex flex-col items-center justify-center gap-2">
+            <h6 class="text-2xl text-primary">Press Start Recording</h6>
+            <p>You have {msToTime(max)} minutes to record your answer.</p>
+        </div>
+    {/if}
+</div>
