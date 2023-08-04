@@ -52,16 +52,21 @@
 <header class="hero bg-top" style="background-image: url({background})" in:fade>
     <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/60" />
     <div
-        class="container hero-content my-8 flex-col items-start justify-between text-primary-content md:my-12 lg:my-16"
+        class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
     >
         <div class="breadcrumbs text-sm">
             <ul>
                 <li>Stories</li>
             </ul>
         </div>
-        <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-            My Stories
-        </h1>
+        <div class="flex justify-between">
+            <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
+                My Stories
+            </h1>
+            <a href="/stories/create" use:inertia class="btn btn-secondary">
+                <Fa icon={faPlus} /> Create Story
+            </a>
+        </div>
     </div>
 </header>
 

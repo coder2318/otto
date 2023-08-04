@@ -35,6 +35,7 @@
                 </label>
                 <input
                     class="input input-bordered"
+                    class:input-error={$form.errors.title}
                     bind:value={$form.title}
                     type="text"
                     name="title"

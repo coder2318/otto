@@ -9,8 +9,8 @@ class StoreStoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string'],
-            'cover' => ['nullable', 'image'],
+            'title' => ['required', 'string', 'max:255'],
+            'cover' => ['required', 'image', 'max:2048'],
         ];
     }
 }

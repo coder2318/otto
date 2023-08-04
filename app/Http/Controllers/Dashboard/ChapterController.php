@@ -56,7 +56,7 @@ class ChapterController extends Controller
     {
         $chapter = $story->chapters()->create($request->validated());
 
-        return redirect()->route('chapters.show', compact('chapter'))->with('message', 'Chapter created successfully!');
+        return redirect()->route('chapters.edit', $chapter)->with('message', 'Chapter created successfully!');
     }
 
     /**

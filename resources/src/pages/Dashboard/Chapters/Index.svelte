@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import Fa from 'svelte-fa'
     import qs from 'qs'
     import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
@@ -12,6 +13,7 @@
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
     import { truncate } from '@/service/helpers'
+    import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
     export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
@@ -52,7 +54,7 @@
 <header class="hero" style="background-image: url({story.data.cover})" in:fade>
     <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/40" />
     <div
-        class="container hero-content my-8 flex-col items-start justify-between text-primary-content md:my-12 lg:my-16"
+        class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
     >
         <div class="breadcrumbs text-sm">
             <ul>
@@ -65,9 +67,18 @@
                 <li>Writing Room</li>
             </ul>
         </div>
-        <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-            {story.data.title}
-        </h1>
+        <div class="flex justify-between">
+            <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
+                {story.data.title}
+            </h1>
+            <a
+                href="/stories/{story.data.id}/chapters/create"
+                use:inertia
+                class="btn btn-secondary"
+            >
+                <Fa icon={faPlus} /> Create Chapter
+            </a>
+        </div>
     </div>
 </header>
 

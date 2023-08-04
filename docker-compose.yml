@@ -24,7 +24,7 @@ services:
             - sail
         depends_on:
             - pgsql
-            - redis
+            - dragonfly
             - minio
             - meilisearch
             - soketi
@@ -55,19 +55,17 @@ services:
                 - '${DB_USERNAME}'
             retries: 3
             timeout: 5s
-    redis:
-        image: 'redis:alpine'
+    dragonfly:
+        image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
+        command: --requirepass=${REDIS_PASSWORD}
         ports:
             - '${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
-            - 'sail-redis:/data'
+            - 'sail-dragonfly:/data'
         networks:
             - sail
         healthcheck:
-            test:
-                - CMD
-                - redis-cli
-                - ping
+            test: ["CMD", "redis-cli", "ping"]
             retries: 3
             timeout: 5s
     dbgate:
@@ -89,13 +87,13 @@ services:
             ENGINE_PGSQL: postgres@dbgate-plugin-postgres
 
             LABEL_REDIS: Redis
-            SERVER_REDIS: redis
+            SERVER_REDIS: dragonfly
             PASSWORD_REDIS: '${REDIS_PASSWORD}'
             PORT_REDIS: ${REDIS_PORT:-6379}
             ENGINE_REDIS: redis@dbgate-plugin-redis
         depends_on:
             - pgsql
-            - redis
+            - dragonfly
     minio:
         image: 'minio/minio:latest'
         ports:
@@ -168,7 +166,7 @@ networks:
 volumes:
     sail-pgsql:
         driver: local
-    sail-redis:
+    sail-dragonfly:
         driver: local
     sail-minio:
         driver: local
