@@ -8,6 +8,7 @@
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
 
+    let dialog: HTMLDialogElement
     let player: HTMLAudioElement
     let mediaRecorder: MediaRecorder
     let interval: number
@@ -45,7 +46,9 @@
                 mediaRecorder.start()
                 timer = 0
                 interval = setInterval(() => {
-                    timer += 10
+                    if (max - 10 < (timer += 10)) {
+                        stopRecording()
+                    }
                 }, 10)
             })
     }
@@ -55,6 +58,19 @@
         clearInterval(interval)
         mediaRecorder.stop()
         mediaRecorder = null
+    }
+
+    let deleting: number = null
+
+    function deleteRecording(index: number) {
+        deleting = index
+        dialog.showModal()
+    }
+
+    function confirmDelete() {
+        recordings.splice(deleting, 1)
+        recordings = recordings
+        dialog.close()
     }
 </script>
 
@@ -68,6 +84,7 @@
                 >
                     <div class="mask mask-circle bg-neutral">
                         <button
+                            type="button"
                             class="btn btn-circle btn-ghost btn-lg text-4xl"
                             on:click|preventDefault={() =>
                                 mediaRecorder
@@ -102,8 +119,9 @@
                 controls
             />
             <button
+                type="button"
                 class="btn btn-circle btn-error btn-outline btn-sm text-error"
-                on:click={() => recordings.splice(i, 1)}
+                on:click={() => deleteRecording(i)}
             >
                 <Fa icon={faTrash} />
             </button>
@@ -128,3 +146,20 @@
         </div>
     {/if}
 </div>
+
+<dialog bind:this={dialog} class="modal">
+    <form method="dialog" class="modal-box">
+        <h3 class="text-lg font-bold">
+            Are you sure you want to delete this recording?
+        </h3>
+        <div class="modal-action">
+            <button
+                class="btn btn-error btn-sm"
+                on:click|preventDefault={confirmDelete}>Delete</button
+            >
+            <button class="btn btn-sm" on:click={() => dialog.close()}
+                >Close</button
+            >
+        </div>
+    </form>
+</dialog>

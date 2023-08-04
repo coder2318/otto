@@ -14,19 +14,22 @@
     export let chapter: { data: App.Chapter }
 
     const form = useForm({
+        title: chapter.data.title,
         recordings: [],
         status: chapter.data.status,
     })
 
     function submit(event: SubmitEvent) {
+        console.log($form)
         $form
             .transform((data) => ({
+                _method: 'PUT',
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(
-                `/stories/${chapter.data.story_id}/chapters/${chapter.data.id}`
-            )
+            .post(`/chapters/${chapter.data.id}`, {
+                forceFormData: true,
+            })
     }
 </script>
 
@@ -38,7 +41,10 @@
 
 <section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
     <div class="card-body gap-4">
-        <h1 class="card-title">{chapter.data.title}</h1>
+        <input
+            class="input card-title input-ghost font-serif"
+            bind:value={$form.title}
+        />
     </div>
 </section>
 
@@ -60,7 +66,7 @@
             >
             Back
         </a>
-        {#if $form.content != chapter.data.content}
+        {#if $form.isDirty}
             <button
                 type="submit"
                 class="btn btn-secondary rounded-full"

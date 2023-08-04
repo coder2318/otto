@@ -97,11 +97,11 @@
         </button>
         <button
             class="tab -mb-0.5"
-            class:tab-active={query?.filter?.status == 'pending'}
-            class:tab-bordered={query?.filter?.status == 'pending'}
-            on:click|preventDefault={() => ($filter.status = 'pending')}
+            class:tab-active={query?.filter?.status == 'draft'}
+            class:tab-bordered={query?.filter?.status == 'draft'}
+            on:click|preventDefault={() => ($filter.status = 'draft')}
         >
-            Pending
+            Draft
         </button>
         <button
             class="tab -mb-0.5"

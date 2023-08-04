@@ -14,6 +14,7 @@
 
     const form = useForm({
         content: chapter.data.content,
+        title: chapter.data.title,
         status: chapter.data.status,
     })
 
@@ -37,7 +38,10 @@
 
 <section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
     <div class="card-body gap-4">
-        <h1 class="card-title">{chapter.data.title}</h1>
+        <input
+            class="input card-title input-ghost font-serif"
+            bind:value={$form.title}
+        />
     </div>
 </section>
 
@@ -45,10 +49,11 @@
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
             <div class="form-control">
-                <div
-                    class="textarea textarea-ghost min-h-[200px] font-serif"
+                <textarea
+                    class="textarea textarea-bordered textarea-ghost min-h-[200px] font-serif"
                     contenteditable="true"
-                    bind:innerHTML={$form.content}
+                    bind:value={$form.content}
+                    placeholder="Write your story here..."
                 />
             </div>
         </div>

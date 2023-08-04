@@ -15,6 +15,7 @@ class StoreChapterRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string'],
+            'timeline_id' => ['required', 'integer', 'exists:timelines,id'],
             'cover' => ['required', 'image', 'max:2048'],
         ];
     }

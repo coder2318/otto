@@ -11,16 +11,19 @@
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
+    export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
 
     let el: HTMLFormElement
     const form = useForm({
         title: '',
+        timeline_id: null,
         cover: null,
     })
 
     function submit() {
-        $form.post(`/stories/${story.data.id}/chapters`)
+        $form.clearErrors()
+        $form.post(`/stories/${story.data.id}/chapters`, { forceFormData: true })
     }
 </script>
 
@@ -52,15 +55,38 @@
                 {/if}
             </div>
             <div class="form-control">
+                <label class="label" for="timeline_id">
+                    <span class="label-text">Timeline</span>
+                </label>
+                <select
+                    bind:value={$form.timeline_id}
+                    class:select-error={$form.errors.timeline_id}
+                    class="select select-bordered"
+                    name="timeline_id"
+                >
+                    <option value={null} disabled>Select Timeline...</option>
+                    {#each timelines.data as timeline}
+                        <option value={timeline.id}>{timeline.title}</option>
+                    {/each}
+                </select>
+                {#if $form.errors.timeline_id}
+                    <span class="label-text-alt mt-1 text-left text-error">
+                        {$form.errors.timeline_id}
+                    </span>
+                {/if}
+            </div>
+            <div class="form-control">
                 <label class="label" for="cover">
                     <span class="label-text">Cover</span>
                 </label>
-                <FilePond
-                    maxFiles="1"
-                    storeAsFile={true}
-                    name="cover"
-                    onaddfile={(err, data) => ($form.cover = data.file)}
-                />
+                <div class={$form.errors.cover ? 'border border-error' : ''}>
+                    <FilePond
+                        maxFiles="1"
+                        storeAsFile={true}
+                        name="cover"
+                        onaddfile={(err, data) => ($form.cover = data.file)}
+                    />
+                </div>
                 {#if $form.errors.cover}
                     <span class="label-text-alt mt-1 text-left text-error">
                         {$form.errors.cover}
@@ -81,9 +107,15 @@
             > Back
         </a>
 
-        {#if $form.title}
-            <button type="submit" class="btn btn-secondary rounded-full">
-                Save
+        {#if $form.isDirty}
+            <button
+                type="submit"
+                class="btn btn-secondary rounded-full"
+                disabled={$form.processing}
+            >
+                {#if $form.processing}
+                    <span class="loading loading-spinner" />
+                {/if} Save
             </button>
         {/if}
     </section>

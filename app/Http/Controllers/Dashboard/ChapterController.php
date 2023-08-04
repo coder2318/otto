@@ -13,6 +13,7 @@ use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
+use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 
 class ChapterController extends Controller
@@ -60,6 +61,7 @@ class ChapterController extends Controller
     public function create(Story $story)
     {
         return Inertia::render('Dashboard/Chapters/Create', [
+            'timelines' => fn () => TimelineResource::collection(Timeline::all(['id', 'title'])),
             'story' => fn () => StoryResource::make($story),
         ]);
     }
@@ -69,9 +71,18 @@ class ChapterController extends Controller
      */
     public function store(Story $story, StoreChapterRequest $request)
     {
+        /** @var Chapter */
         $chapter = $story->chapters()->create($request->validated() + [
             'status' => Status::DRAFT,
         ]);
+
+        if ($request->hasFile('cover')) {
+            $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
+        /** @var UploadedFile */
+        foreach ($request->validated('recordings', []) as $record) {
+            $chapter->addMedia($record)->toMediaCollection('recordings');
+        }
 
         return redirect()->route('chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
     }
@@ -102,6 +113,16 @@ class ChapterController extends Controller
     public function update(UpdateChapterRequest $request, Chapter $chapter)
     {
         $chapter->update($request->validated());
+
+        if ($request->hasFile('cover')) {
+            $chapter->cover()->delete();
+            $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
+
+        /** @var UploadedFile */
+        foreach ($request->validated('recordings', []) as $record) {
+            $chapter->addMedia($record)->withCustomProperties(['mime-type' => 'audio/webm'])->toMediaCollection('recordings', 's3');
+        }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
     }
