@@ -20,7 +20,7 @@ class ChapterResource extends JsonResource
             'recordings' => $this->whenLoaded('recordings', fn () => $this->resource->recordings->map(
                 fn (Media $record) => [
                     'id' => $record->id,
-                    'url' => $record->getUrl(), // $record->getTemporaryUrl(now()->addMinutes(5)),
+                    'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
                     'name' => $record->file_name,
                     'size' => $record->size,
                     'transcribed' => $record->hasCustomProperty('transcribed'),
