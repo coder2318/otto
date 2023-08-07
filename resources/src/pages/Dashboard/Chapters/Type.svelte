@@ -18,6 +18,8 @@
         status: chapter.data.status,
     })
 
+    $: words = $form.content?.split(' ')?.filter((v) => v).length ?? 0
+
     function submit(event: SubmitEvent) {
         $form
             .transform((data) => ({
@@ -46,16 +48,19 @@
 </section>
 
 <form on:submit|preventDefault={submit}>
-    <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
-        <div class="card-body gap-4">
-            <div class="form-control">
-                <textarea
-                    class="textarea textarea-bordered textarea-ghost min-h-[200px] font-serif"
-                    contenteditable="true"
-                    bind:value={$form.content}
-                    placeholder="Write your story here..."
-                />
+    <main class="container card m-4 mx-auto">
+        <div class="form-control join join-vertical">
+            <div class="alert alert-success flex items-start rounded-b-none">
+                <span>You have shared {words} words in this chapter</span>
+                <span>|</span>
+                <span>{Math.round(words / 500)} pages</span>
             </div>
+            <textarea
+                class="textarea textarea-bordered textarea-ghost min-h-[200px] rounded-t-none bg-neutral font-serif"
+                contenteditable="true"
+                bind:value={$form.content}
+                placeholder="Write your story here..."
+            />
         </div>
     </main>
 

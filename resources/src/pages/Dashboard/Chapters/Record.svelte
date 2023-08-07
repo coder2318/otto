@@ -15,7 +15,7 @@
 
     const form = useForm({
         title: chapter.data.title,
-        recordings: [],
+        recordings: null,
         status: chapter.data.status,
     })
 

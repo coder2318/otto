@@ -31,16 +31,16 @@
                 })
 
                 mediaRecorder.addEventListener('stop', function () {
-                    recordings.push(
+                    recordings = [
+                        ...(recordings ?? []),
                         new File(
                             recordedChunks,
                             `audio_${dayjs().format(
                                 'YYYY-MM-DD_HH-mm-ss'
                             )}.webm`,
                             { type: 'audio/webm' }
-                        )
-                    )
-                    recordings = recordings
+                        ),
+                    ]
                 })
 
                 mediaRecorder.start()
@@ -69,7 +69,7 @@
 
     function confirmDelete() {
         recordings.splice(deleting, 1)
-        recordings = recordings
+        recordings = recordings.length ? recordings : null
         dialog.close()
     }
 </script>
@@ -91,7 +91,7 @@
                                     ? stopRecording()
                                     : startRecording()}
                         >
-                            <label class="swap swap-rotate">
+                            <label class="swap-rotate swap">
                                 <input
                                     type="checkbox"
                                     checked={!!mediaRecorder}
@@ -109,7 +109,7 @@
             </div>
         </div>
     </div>
-    {#each recordings as recording, i (recording.name)}
+    {#each recordings ?? [] as recording, i (recording.name)}
         <div
             class="group relative flex items-center justify-center gap-2 transition-all"
         >
@@ -139,7 +139,7 @@
             />
             <span class="w-12"> {msToTime(max)}</span>
         </div>
-    {:else if !recordings.length}
+    {:else if !recordings?.length}
         <div class="flex flex-col items-center justify-center gap-2">
             <h6 class="text-2xl text-primary">Press Start Recording</h6>
             <p>You have {msToTime(max)} minutes to record your answer.</p>
