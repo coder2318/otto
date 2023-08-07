@@ -22,7 +22,7 @@ class ChapterController extends Controller
 {
     public function __construct()
     {
-        $this->authorizeResource(Chapter::class, 'story');
+        $this->authorizeResource(Chapter::class, 'chapter');
     }
 
     /**
@@ -45,6 +45,8 @@ class ChapterController extends Controller
 
     public function type(Chapter $chapter)
     {
+        $this->authorize('update', $chapter);
+
         return Inertia::render('Dashboard/Chapters/Type', [
             'chapter' => fn () => ChapterResource::make($chapter),
             'transcription' => fn () => session('transcription'),
@@ -53,6 +55,8 @@ class ChapterController extends Controller
 
     public function recordings(Chapter $chapter)
     {
+        $this->authorize('update', $chapter);
+
         return Inertia::render('Dashboard/Chapters/Recordings', [
             'chapter' => fn () => ChapterResource::make(
                 $chapter->load('recordings')
@@ -62,6 +66,8 @@ class ChapterController extends Controller
 
     public function transcribe(Chapter $chapter, TranscribeRequest $request, DeepgramService $deepgram)
     {
+        $this->authorize('update', $chapter);
+
         /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Media> */
         $media = $chapter->recordings()->whereIn('id', $request->validated('recordings'))->get();
 
@@ -74,6 +80,8 @@ class ChapterController extends Controller
 
     public function record(Chapter $chapter)
     {
+        $this->authorize('update', $chapter);
+
         return Inertia::render('Dashboard/Chapters/Record', [
             'chapter' => fn () => ChapterResource::make($chapter),
         ]);
@@ -81,6 +89,8 @@ class ChapterController extends Controller
 
     public function finish(Chapter $chapter)
     {
+        $this->authorize('update', $chapter);
+
         $chapter->update([
             'status' => Status::PUBLISHED,
         ]);
