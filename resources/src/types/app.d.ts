@@ -68,6 +68,7 @@ declare namespace App {
         content: string
         order: number
         cover: string | null
+        recordings: Recording[] | null
         status: string
         story_id: number | null
         story?: Story
@@ -79,5 +80,13 @@ declare namespace App {
         id: number
         title: string
         description: string
+    }
+
+    interface Recording {
+        id: number
+        url: string
+        name: string
+        size: number
+        transcribed: boolean
     }
 }

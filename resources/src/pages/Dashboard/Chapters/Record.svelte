@@ -74,21 +74,12 @@
                 Save it as Draft
             </button>
         {:else}
-            <div class="flex gap-4">
-                <a
-                    class="btn btn-primary btn-outline btn-lg rounded-full"
-                    href="/chapters/{chapter.data.id}/finish"
-                >
-                    Complete &<br /> Finish this Chapter
-                </a>
-
-                <a
-                    class="btn btn-primary btn-lg rounded-full"
-                    href="/chapters/{chapter.data.id}/enchance"
-                >
-                    Ask Otto AI to<br />Enchance the Writing
-                </a>
-            </div>
+            <a
+                class="btn btn-primary btn-outline btn-lg rounded-full"
+                href="/chapters/{chapter.data.id}/recordings"
+            >
+                Transcribe Recordings
+            </a>
         {/if}
     </section>
 </form>

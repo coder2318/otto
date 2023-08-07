@@ -10,6 +10,7 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
+    export let transcription: string[] | null = null
     export let chapter: { data: App.Chapter }
 
     const form = useForm({
@@ -27,6 +28,11 @@
                 status: event.submitter.dataset?.status ?? data.status,
             }))
             .put(`/chapters/${chapter.data.id}`)
+    }
+
+    function pasteTranscript() {
+        const text = transcription.join('\n')
+        $form.content = $form.content ? $form.content + '\n' + text : text
     }
 </script>
 
@@ -48,10 +54,22 @@
 <form on:submit|preventDefault={submit}>
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
-            <div class="alert alert-success flex items-start rounded-b-none">
+            <div class="alert alert-success flex items-center rounded-b-none">
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>
                 <span>{Math.round(words / 500)} pages</span>
+
+                {#if transcription}
+                    <div class="ml-auto">
+                        <button
+                            type="button"
+                            class="btn btn-primary btn-sm"
+                            on:click|preventDefault={pasteTranscript}
+                        >
+                            Paste transcription
+                        </button>
+                    </div>
+                {/if}
             </div>
             <textarea
                 class="textarea textarea-bordered textarea-ghost min-h-[200px] rounded-t-none bg-neutral font-serif"

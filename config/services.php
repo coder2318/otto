@@ -47,4 +47,8 @@ return [
         'redirect' => env('FACEBOOK_REDIRECT'),
     ],
 
+    'deepgram' => [
+        'key' => env('DEEPGRAM_API_KEY'),
+    ],
+
 ];

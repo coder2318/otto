@@ -6,6 +6,7 @@ use App\Data\Chapter\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Chapters\ChaptersRequest;
 use App\Http\Requests\Chapters\StoreChapterRequest;
+use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
@@ -13,6 +14,7 @@ use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
+use App\Services\DeepgramService;
 use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 
@@ -45,7 +47,29 @@ class ChapterController extends Controller
     {
         return Inertia::render('Dashboard/Chapters/Type', [
             'chapter' => fn () => ChapterResource::make($chapter),
+            'transcription' => fn () => session('transcription'),
         ]);
+    }
+
+    public function recordings(Chapter $chapter)
+    {
+        return Inertia::render('Dashboard/Chapters/Recordings', [
+            'chapter' => fn () => ChapterResource::make(
+                $chapter->load('recordings')
+            ),
+        ]);
+    }
+
+    public function transcribe(Chapter $chapter, TranscribeRequest $request, DeepgramService $deepgram)
+    {
+        /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Media> */
+        $media = $chapter->recordings()->whereIn('id', $request->validated('recordings'))->get();
+
+        foreach ($media as $record) {
+            $transcription[] = $deepgram->transcribeMedia($record);
+        }
+
+        return redirect()->route('chapters.type', compact('chapter'))->with('transcription', $transcription);
     }
 
     public function record(Chapter $chapter)
