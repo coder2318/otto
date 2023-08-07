@@ -55,6 +55,17 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function finish(Chapter $chapter)
+    {
+        $chapter->update([
+            'status' => Status::PUBLISHED,
+        ]);
+
+        return Inertia::render('Dashboard/Chapters/Finish', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */

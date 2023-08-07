@@ -26,9 +26,7 @@
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(
-                `/stories/${chapter.data.story_id}/chapters/${chapter.data.id}`
-            )
+            .put(`/chapters/${chapter.data.id}`)
     }
 </script>
 
