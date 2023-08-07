@@ -12,7 +12,7 @@ class DeepgramTest extends TestCase
     {
         Http::fake([
             'api.deepgram.com/v1/*' => Http::response(
-                $data = json_decode(file_get_contents(__DIR__ . '/../Mock/DeepgramResponse.json'), true),
+                $data = json_decode(file_get_contents(__DIR__.'/../Mock/DeepgramResponse.json'), true),
                 200, ['Content-Type' => 'application/json']
             ),
         ]);
