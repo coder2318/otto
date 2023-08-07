@@ -92,7 +92,7 @@ export default ({ mode }) => {
         },
         ssr: {
             noExternal: true,
-            external: ['@inertiajs/core'],
+            external: ['@inertiajs/core', 'util'],
         },
         resolve: {
             alias: [
