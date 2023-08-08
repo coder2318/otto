@@ -68,7 +68,7 @@ class ChapterController extends Controller
     {
         $this->authorize('update', $chapter);
 
-        /** @var \Illuminate\Database\Eloquent\Collection<\App\Models\Media> */
+        /** @var \Illuminate\Database\Eloquent\Collection<\Spatie\MediaLibrary\MediaCollections\Models\Media> */
         $media = $chapter->recordings()->whereIn('id', $request->validated('recordings'))->get();
 
         foreach ($media as $record) {

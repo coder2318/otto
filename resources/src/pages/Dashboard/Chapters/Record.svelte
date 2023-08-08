@@ -28,6 +28,9 @@
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
+                onSuccess: () => {
+                    $form.reset()
+                },
             })
     }
 </script>

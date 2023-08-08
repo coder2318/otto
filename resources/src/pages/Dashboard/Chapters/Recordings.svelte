@@ -83,6 +83,12 @@
                         </div>
                     </div>
                 </div>
+            {:else}
+                <div class="card text-base-content/60">
+                    <div class="card-body items-center">
+                        <span>No recordings found</span>
+                    </div>
+                </div>
             {/each}
         </div>
     </main>
