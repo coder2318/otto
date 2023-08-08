@@ -82,7 +82,7 @@ class ChapterController extends Controller
 
     public function deleteRecording(Chapter $chapter, int $recording)
     {
-        abort_unless(!!$recording = $chapter->recordings()->find($recording), 404);
+        abort_unless((bool) $recording = $chapter->recordings()->find($recording), 404);
 
         $this->authorize('update', $chapter);
 
