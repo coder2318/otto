@@ -8,7 +8,6 @@ use App\Http\Requests\Chapters\ChaptersRequest;
 use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
-use App\Http\Requests\Chapters\UploadFilesRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
@@ -72,8 +71,10 @@ class ChapterController extends Controller
         /** @var \Illuminate\Database\Eloquent\Collection<\Spatie\MediaLibrary\MediaCollections\Models\Media> */
         $media = $chapter->recordings()->whereIn('id', $request->validated('recordings'))->get();
 
+        $transcription = [];
+
         foreach ($media as $record) {
-            $transcription[] = $deepgram->transcribeMedia($record);
+            array_push($transcription, $deepgram->transcribeMedia($record));
         }
 
         return redirect()->route('chapters.type', compact('chapter'))->with('transcription', $transcription);
@@ -81,7 +82,7 @@ class ChapterController extends Controller
 
     public function deleteRecording(Chapter $chapter, int $recording)
     {
-        abort_unless($recording = $chapter->recordings()->find($recording), 404);
+        abort_unless(!!$recording = $chapter->recordings()->find($recording), 404);
 
         $this->authorize('update', $chapter);
 

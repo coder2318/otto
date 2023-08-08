@@ -24,7 +24,7 @@ class ChapterResource extends JsonResource
                     'name' => $record->file_name,
                     'size' => $record->size,
                     'transcribed' => $record->hasCustomProperty('transcript'),
-                    'created_at' => $record->created_at
+                    'created_at' => $record->created_at,
                 ]
             )),
         ]);
