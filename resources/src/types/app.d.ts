@@ -88,5 +88,6 @@ declare namespace App {
         name: string
         size: number
         transcribed: boolean
+        created_at: Date | string
     }
 }

@@ -32,3 +32,23 @@ export function msToTime(s: number): string {
 
     return pad(mins) + ':' + pad(secs)
 }
+
+export function bytes(bytes: number): string {
+    const units = [
+        'bytes',
+        'KiB',
+        'MiB',
+        'GiB',
+        'TiB',
+        'PiB',
+        'EiB',
+        'ZiB',
+        'YiB',
+    ]
+    let l = 0
+
+    while (bytes >= 1024 && ++l) {
+        bytes = bytes / 1024
+    }
+    return bytes.toFixed(bytes < 10 && l > 0 ? 1 : 0) + ' ' + units[l]
+}

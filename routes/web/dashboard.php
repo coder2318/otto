@@ -24,8 +24,9 @@ Route::middleware('user-configured')->group(function () {
     Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
         Route::get('/type', 'type')->name('type');
         Route::get('/record', 'record')->name('record');
-        Route::get('/recordings', 'recordings')->name('transcribe');
-        Route::post('/recordings', 'transcribe')->name('transcribe.post');
+        Route::get('/recordings', 'recordings')->name('recordings');
+        Route::post('/recordings', 'transcribe')->name('recordings.transcribe');
+        Route::delete('/recordings/{recording}', 'deleteRecording')->name('recordings.destroy');
         Route::get('/finish', 'finish')->name('finish');
     });
 

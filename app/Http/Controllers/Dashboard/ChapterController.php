@@ -78,6 +78,17 @@ class ChapterController extends Controller
         return redirect()->route('chapters.type', compact('chapter'))->with('transcription', $transcription);
     }
 
+    public function deleteRecording(Chapter $chapter, int $recording)
+    {
+        abort_unless($recording = $chapter->recordings()->find($recording), 404);
+
+        $this->authorize('update', $chapter);
+
+        $recording->delete();
+
+        return redirect()->route('chapters.recordings', compact('chapter'))->with('message', 'Recording deleted successfully!');
+    }
+
     public function record(Chapter $chapter)
     {
         $this->authorize('update', $chapter);

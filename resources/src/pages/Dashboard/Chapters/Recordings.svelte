@@ -10,6 +10,8 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
     import { start, done } from '@/components/Loading.svelte'
+    import { bytes } from '@/service/helpers'
+    import { dayjs } from '@/service/dayjs'
 
     export let chapter: { data: App.Chapter }
 
@@ -40,7 +42,7 @@
     }
 
     function confirmDelete() {
-        // TODO: delete
+        $form.delete(`/chapters/${chapter.data.id}/recordings/${deleting}`)
         dialog.close()
     }
 </script>
@@ -59,19 +61,36 @@
             {#each chapter.data?.recordings as recording}
                 <div class="card bg-neutral">
                     <div
-                        class="card-body flex-row items-center justify-between gap-4"
+                        class="card-body grid auto-rows-min grid-cols-4 flex-row items-center justify-between gap-4 lg:flex"
                     >
                         <input
                             type="checkbox"
-                            class="checkbox-primary checkbox"
+                            class="checkbox-primary checkbox col-span-1"
                             class:checkbox-success={recording.transcribed}
                             bind:checked={selected[recording.id]}
                         />
-                        <div class="flex flex-col gap-2">
+                        <div
+                            class="col-span-3 flex flex-1 flex-col gap-2 lg:col-span-1"
+                        >
                             <span>{recording.name}</span>
+                            <span class="flex gap-2 text-xs opacity-50">
+                                <span>Size: {bytes(recording.size)}</span>
+                                <span
+                                    >Transcribed: {recording.transcribed
+                                        ? 'Yes'
+                                        : 'No'}</span
+                                >
+                                <span
+                                    >Recorded: {dayjs(
+                                        recording.created_at
+                                    ).format('YYYY-MM-DD HH:mm')}</span
+                                >
+                            </span>
                         </div>
-                        <audio src={recording.url} controls />
-                        <div>
+                        <div class="col-span-4 mx-auto">
+                            <audio src={recording.url} controls />
+                        </div>
+                        <div class="col-span-4 mx-auto">
                             <button
                                 type="button"
                                 class="btn btn-error btn-sm"

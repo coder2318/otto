@@ -23,7 +23,8 @@ class ChapterResource extends JsonResource
                     'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
                     'name' => $record->file_name,
                     'size' => $record->size,
-                    'transcribed' => $record->hasCustomProperty('transcribed'),
+                    'transcribed' => $record->hasCustomProperty('transcript'),
+                    'created_at' => $record->created_at
                 ]
             )),
         ]);
