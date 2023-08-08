@@ -18,11 +18,10 @@ class DeepgramTest extends TestCase
         ]);
 
         /** @var DeepgramService */
-        $service = app(DeepgramService::class);
+        $service = $this->app->make(DeepgramService::class);
 
         $transcript = $service->transcribeFromUrl('https://static.deepgram.com/examples/interview_speech-analytics.wav');
 
-        $this->assertIsString($transcript);
         $this->assertEquals($data['results']['channels'][0]['alternatives'][0]['transcript'], $transcript);
     }
 }

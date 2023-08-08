@@ -26,8 +26,4 @@ return [
 
     'request_timeout' => env('OPENAI_REQUEST_TIMEOUT', 30),
 
-    'models' => [
-        'edits' => 'text-davinci-edit-001',
-        'chat' => 'gpt-3.5-turbo',
-    ],
 ];

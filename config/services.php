@@ -49,6 +49,18 @@ return [
 
     'deepgram' => [
         'key' => env('DEEPGRAM_API_KEY'),
+        'fake' => env('DEEPGRAM_FAKE', env('APP_ENV', 'production') !== 'production'),
+    ],
+
+    'openai' => [
+        'key' => env('OPENAI_API_KEY'),
+        'fake' => env('OPENAI_FAKE', env('APP_ENV', 'production') !== 'production'),
+        'models' => [
+            'audio' => 'whisper-1',
+            'chat' => 'gpt-3.5-turbo',
+            'completions' => 'text-davinci-003',
+            'edits' => 'text-davinci-edit-001',
+        ],
     ],
 
 ];

@@ -1,0 +1,26 @@
+<?php
+
+namespace App\Services;
+
+use OpenAI\Laravel\Facades\OpenAI;
+
+class OpenAIService
+{
+    protected bool $fake;
+
+    public function __construct()
+    {
+        $this->fake = config('services.openai.fake');
+    }
+
+    public function edit(string $prompt, string $instruction): string
+    {
+        if ($this->fake) {
+            return $prompt;
+        }
+
+        $edit = OpenAI::edits()->create(['model' => config('services.openai.models.edits')] + compact('prompt', 'instruction'));
+
+        return $edit['choices'][0]['text'];
+    }
+}

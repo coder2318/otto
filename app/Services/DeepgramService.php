@@ -9,10 +9,17 @@ use Storage;
 
 class DeepgramService
 {
-    protected $query = [
+    protected bool $fake;
+
+    protected array $query = [
         'punctuate' => 'true',
         'smart_format' => 'true',
     ];
+
+    public function __construct()
+    {
+        $this->fake = config('services.deepgram.fake');
+    }
 
     protected function client()
     {
@@ -24,9 +31,11 @@ class DeepgramService
 
     public function transcribeFromUrl(string $url): ?string
     {
-        return $this->client()->asJson()
-            ->post('listen', compact('url'))
-            ->json('results.channels.0.alternatives.0.transcript');
+        return $this->fake
+            ? fake()->paragraph()
+            : $this->client()->asJson()
+                ->post('listen', compact('url'))
+                ->json('results.channels.0.alternatives.0.transcript');
     }
 
     public function transcribeMedia(Media $media): ?string
@@ -39,10 +48,12 @@ class DeepgramService
             return $media->getCustomProperty('transcript');
         }
 
-        $transcript = $this->client()
-            ->withBody(Storage::disk('s3')->get($media->getPath()), $mime)
-            ->post('listen')
-            ->json('results.channels.0.alternatives.0.transcript');
+        $transcript = $this->fake
+            ? fake()->paragraph()
+            : $this->client()
+                ->withBody(Storage::disk('s3')->get($media->getPath()), $mime)
+                ->post('listen')
+                ->json('results.channels.0.alternatives.0.transcript');
 
         $media->setCustomProperty('transcript', $transcript);
         $media->save();

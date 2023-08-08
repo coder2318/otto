@@ -26,5 +26,7 @@
         <env name="QUEUE_CONNECTION" value="sync"/>
         <env name="SESSION_DRIVER" value="array"/>
         <env name="TELESCOPE_ENABLED" value="false"/>
+        <env name="OPENAI_FAKE" value="false"/>
+        <env name="DEEPGRAM_FAKE" value="false"/>
     </php>
 </phpunit>
