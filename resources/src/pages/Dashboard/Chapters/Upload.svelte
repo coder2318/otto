@@ -9,15 +9,38 @@
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-    import AudioRecorder from '@/components/AudioRecorder.svelte'
+    import FilePond from '@/components/FilePond.svelte'
+    import type {
+        FilePondErrorDescription,
+        FilePondFile,
+        FilePond as FilePondType,
+    } from 'filepond'
 
     export let chapter: { data: App.Chapter }
+
+    let filepond: FilePondType
 
     const form = useForm({
         title: chapter.data.title,
         recordings: null,
+        texts: null,
         status: chapter.data.status,
     })
+
+    function syncFiles(err: FilePondErrorDescription | null) {
+        if (err) {
+            return
+        }
+
+        const files = filepond.getFiles()
+
+        $form.recordings = files
+            .filter((file) => file.fileType.match(/audio/))
+            .map((file) => file.file)
+        $form.texts = files
+            .filter((file) => !file.fileType.match(/audio/))
+            .map((file) => file.file)
+    }
 
     function submit(event: SubmitEvent) {
         $form
@@ -29,7 +52,8 @@
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
                 onSuccess: () => {
-                    $form.reset()
+                    filepond.removeFiles()
+                    setTimeout(() => $form.reset(), 200)
                 },
             })
     }
@@ -53,7 +77,20 @@
 <form on:submit|preventDefault={submit}>
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
-            <AudioRecorder bind:recordings={$form.recordings} />
+            <FilePond
+                bind:pond={filepond}
+                allowMultiple={true}
+                allowProcess={false}
+                instantUpload={false}
+                onaddfile={syncFiles}
+                onremovefile={syncFiles}
+                acceptedFileTypes={[
+                    'audio/*',
+                    'text/plain',
+                    'application/pdf',
+                    'application/msword',
+                ]}
+            />
         </div>
     </main>
 
@@ -77,13 +114,22 @@
                 Save it as Draft
             </button>
         {:else}
-            <a
-                class="btn btn-primary btn-outline btn-lg rounded-full"
-                href="/chapters/{chapter.data.id}/recordings"
-                use:inertia
-            >
-                Transcribe Recordings
-            </a>
+            <div>
+                <a
+                    class="btn btn-primary btn-outline btn-lg rounded-full"
+                    href="/chapters/{chapter.data.id}/recordings"
+                    use:inertia
+                >
+                    Transcribe Recordings
+                </a>
+                <a
+                    class="btn btn-primary btn-outline btn-lg rounded-full"
+                    href="/chapters/{chapter.data.id}/files"
+                    use:inertia
+                >
+                    Parse Files
+                </a>
+            </div>
         {/if}
     </section>
 </form>

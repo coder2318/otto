@@ -20,9 +20,9 @@ Route::middleware('user-configured')->group(function () {
     // Stories
     Route::resource('stories', StoryController::class);
     Route::resource('stories.chapters', ChapterController::class)->shallow();
-
     Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
         Route::get('/type', 'type')->name('type');
+        Route::get('/upload', 'upload')->name('upload');
         Route::get('/record', 'record')->name('record');
         Route::get('/recordings', 'recordings')->name('recordings');
         Route::post('/recordings', 'transcribe')->name('recordings.transcribe');

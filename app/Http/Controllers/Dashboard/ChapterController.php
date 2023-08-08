@@ -8,6 +8,7 @@ use App\Http\Requests\Chapters\ChaptersRequest;
 use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
+use App\Http\Requests\Chapters\UploadFilesRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
@@ -98,6 +99,15 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function upload(Chapter $chapter)
+    {
+        $this->authorize('update', $chapter);
+
+        return Inertia::render('Dashboard/Chapters/Upload', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
     public function finish(Chapter $chapter)
     {
         $this->authorize('update', $chapter);
@@ -134,10 +144,6 @@ class ChapterController extends Controller
 
         if ($request->hasFile('cover')) {
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
-        }
-        /** @var UploadedFile */
-        foreach ($request->validated('recordings', []) as $record) {
-            $chapter->addMedia($record)->toMediaCollection('recordings');
         }
 
         return redirect()->route('chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
@@ -178,6 +184,10 @@ class ChapterController extends Controller
         /** @var UploadedFile */
         foreach ($request->validated('recordings', []) as $record) {
             $chapter->addMedia($record)->withCustomProperties(['mime-type' => 'audio/webm'])->toMediaCollection('recordings', 's3');
+        }
+        /** @var UploadedFile */
+        foreach ($request->validated('texts', []) as $text) {
+            $chapter->addMedia($text)->toMediaCollection('texts');
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');

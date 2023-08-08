@@ -81,7 +81,7 @@
                                         : 'No'}</span
                                 >
                                 <span
-                                    >Recorded: {dayjs(
+                                    >Uploaded: {dayjs(
                                         recording.created_at
                                     ).format('YYYY-MM-DD HH:mm')}</span
                                 >

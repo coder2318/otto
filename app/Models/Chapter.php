@@ -49,4 +49,9 @@ class Chapter extends Model implements HasMedia
     {
         return $this->media()->where('collection_name', 'recordings');
     }
+
+    public function texts(): MorphMany
+    {
+        return $this->media()->where('collection_name', 'texts');
+    }
 }
