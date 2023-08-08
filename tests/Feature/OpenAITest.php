@@ -16,7 +16,7 @@ class OpenAITest extends TestCase
         OpenAI::fake([
             CreateResponse::fake([
                 'choices' => [
-                    [ 'text' => 'What day of the week is it?' ],
+                    ['text' => 'What day of the week is it?'],
                 ],
             ]),
         ]);
