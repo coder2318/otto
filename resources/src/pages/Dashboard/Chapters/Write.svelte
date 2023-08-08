@@ -8,10 +8,14 @@
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft, faFile } from '@fortawesome/free-solid-svg-icons'
+    import TipTap from '@/components/TipTap.svelte'
+    import type { Editor } from '@tiptap/core'
 
-    export let transcription: string[] | null = null
+    export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
+
+    let editor: Editor
 
     const form = useForm({
         content: chapter.data.content,
@@ -19,7 +23,12 @@
         status: chapter.data.status,
     })
 
-    $: words = $form.content?.split(' ')?.filter((v) => v).length ?? 0
+    $: words =
+        $form.content
+            ?.replace(/(<([^>]+)>)/gi, '')
+            .replace(/&nbsp;/gi, ' ')
+            .trim()
+            .split(/\s+/).length ?? 0
 
     function submit(event: SubmitEvent) {
         $form
@@ -30,9 +39,16 @@
             .put(`/chapters/${chapter.data.id}`)
     }
 
-    function pasteTranscript() {
-        const text = transcription.join('\n')
-        $form.content = $form.content ? $form.content + '\n' + text : text
+    function pasteTranscription(transcription: string) {
+        editor.commands.insertContent({
+            type: 'paragraph',
+            content: [
+                {
+                    type: 'text',
+                    text: transcription,
+                },
+            ],
+        })
     }
 </script>
 
@@ -50,7 +66,29 @@
         />
     </div>
 </section>
-
+{#if transcriptions}
+    <div
+        class="tooltip tooltip-info"
+        data-tip="Click on filename to paste it's transcription to the editor"
+    >
+        <ul
+            class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
+        >
+            {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
+                <li>
+                    <button
+                        type="button"
+                        on:click|preventDefault={() =>
+                            pasteTranscription(transcription)}
+                    >
+                        <Fa icon={faFile} />
+                        {file}
+                    </button>
+                </li>
+            {/each}
+        </ul>
+    </div>
+{/if}
 <form on:submit|preventDefault={submit}>
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
@@ -58,23 +96,11 @@
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>
                 <span>{Math.round(words / 500)} pages</span>
-
-                {#if transcription}
-                    <div class="ml-auto">
-                        <button
-                            type="button"
-                            class="btn btn-primary btn-sm"
-                            on:click|preventDefault={pasteTranscript}
-                        >
-                            Paste transcription
-                        </button>
-                    </div>
-                {/if}
             </div>
-            <textarea
-                class="textarea textarea-bordered textarea-ghost min-h-[200px] rounded-t-none bg-neutral font-serif"
-                contenteditable="true"
-                bind:value={$form.content}
+            <TipTap
+                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                bind:editor
+                bind:content={$form.content}
                 placeholder="Write your story here..."
             />
         </div>
@@ -102,14 +128,14 @@
         {:else}
             <div class="flex gap-4">
                 <a
-                    class="btn btn-primary btn-outline btn-lg rounded-full"
+                    class="btn btn-primary btn-outline rounded-full"
                     href="/chapters/{chapter.data.id}/finish"
                 >
                     Complete &<br /> Finish this Chapter
                 </a>
 
                 <a
-                    class="btn btn-primary btn-lg rounded-full"
+                    class="btn btn-primary rounded-full"
                     href="/chapters/{chapter.data.id}/enchance"
                 >
                     Ask Otto AI to<br />Enchance the Writing

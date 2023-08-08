@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { inertia, useForm, page } from '@inertiajs/svelte'
+    import { page } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Stamp from '@/components/SVG/stamp.svg.svelte'
     import { dayjs } from '@/service/dayjs'

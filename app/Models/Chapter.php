@@ -45,13 +45,8 @@ class Chapter extends Model implements HasMedia
         );
     }
 
-    public function recordings(): MorphMany
+    public function attachments(): MorphMany
     {
-        return $this->media()->where('collection_name', 'recordings');
-    }
-
-    public function texts(): MorphMany
-    {
-        return $this->media()->where('collection_name', 'texts');
+        return $this->media()->where('collection_name', 'attachments');
     }
 }

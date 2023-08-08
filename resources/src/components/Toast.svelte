@@ -93,7 +93,7 @@
 
 <div class="toast toast-end toast-bottom">
     {#each $messages as message, i (i)}
-        <div class="alert {message.type}" out:fly={{ x: '100%' }}>
+        <div class="alert grid-flow-col {message.type}" out:fly={{ x: '100%' }}>
             <Fa icon={icon(message.type)} />
             <span>{message.message}</span>
             <div>

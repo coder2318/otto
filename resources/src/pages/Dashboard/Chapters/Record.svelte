@@ -15,7 +15,7 @@
 
     const form = useForm({
         title: chapter.data.title,
-        recordings: null,
+        attachments: null,
         status: chapter.data.status,
     })
 
@@ -53,7 +53,7 @@
 <form on:submit|preventDefault={submit}>
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
-            <AudioRecorder bind:recordings={$form.recordings} />
+            <AudioRecorder bind:recordings={$form.attachments} />
         </div>
     </main>
 
@@ -78,11 +78,11 @@
             </button>
         {:else}
             <a
-                class="btn btn-primary btn-outline btn-lg rounded-full"
-                href="/chapters/{chapter.data.id}/recordings"
+                class="btn btn-primary btn-outline rounded-full"
+                href="/chapters/{chapter.data.id}/files"
                 use:inertia
             >
-                Transcribe Recordings
+                Transcribe Attachments
             </a>
         {/if}
     </section>

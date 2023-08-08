@@ -70,7 +70,7 @@
                 </a>
                 <a
                     class="card bg-neutral transition-transform hover:scale-105"
-                    href="/chapters/{chapter.data.id}/type"
+                    href="/chapters/{chapter.data.id}/write"
                     use:inertia
                 >
                     <figure>
@@ -84,7 +84,7 @@
         </div>
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-between">
+    <section class="container mx-auto mb-8 flex items-center justify-between">
         <a
             href="/stories/{chapter.data.story_id}/chapters"
             class="btn btn-neutral rounded-full pl-0"
@@ -103,6 +103,16 @@
             >
                 Save
             </button>
+        {:else}
+            <div>
+                <a
+                    class="btn btn-primary btn-outline rounded-full"
+                    href="/chapters/{chapter.data.id}/files"
+                    use:inertia
+                >
+                    Transcribe Attachments
+                </a>
+            </div>
         {/if}
     </section>
 </form>

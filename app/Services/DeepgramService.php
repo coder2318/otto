@@ -2,10 +2,8 @@
 
 namespace App\Services;
 
-use Exception;
+use Illuminate\Filesystem\FilesystemAdapter;
 use Illuminate\Support\Facades\Http;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Storage;
 
 class DeepgramService
 {
@@ -32,32 +30,19 @@ class DeepgramService
     public function transcribeFromUrl(string $url): ?string
     {
         return $this->fake
-            ? fake()->paragraph()
+            ? 'This is a fake Deepgram transcript.'
             : $this->client()->asJson()
                 ->post('listen', compact('url'))
                 ->json('results.channels.0.alternatives.0.transcript');
     }
 
-    public function transcribeMedia(Media $media): ?string
+    public function transcribeFromFile(FilesystemAdapter $storage, string $path): ?string
     {
-        if ('audio/webm' !== $mime = $media->getCustomProperty('mime-type', $media->mime_type)) {
-            throw new Exception('mime-type must be audio/webm');
-        }
-
-        if ($media->hasCustomProperty('transcript')) {
-            return $media->getCustomProperty('transcript');
-        }
-
-        $transcript = $this->fake
-            ? fake()->paragraph()
+        return $this->fake
+            ? 'This is a fake Deepgram transcript.'
             : $this->client()
-                ->withBody(Storage::disk('s3')->get($media->getPath()), $mime)
+                ->withBody($storage->get($path), $storage->mimeType($path))
                 ->post('listen')
                 ->json('results.channels.0.alternatives.0.transcript');
-
-        $media->setCustomProperty('transcript', $transcript);
-        $media->save();
-
-        return $transcript;
     }
 }

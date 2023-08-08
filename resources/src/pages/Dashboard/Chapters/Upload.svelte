@@ -12,7 +12,6 @@
     import FilePond from '@/components/FilePond.svelte'
     import type {
         FilePondErrorDescription,
-        FilePondFile,
         FilePond as FilePondType,
     } from 'filepond'
 
@@ -22,8 +21,7 @@
 
     const form = useForm({
         title: chapter.data.title,
-        recordings: null,
-        texts: null,
+        attachments: null,
         status: chapter.data.status,
     })
 
@@ -32,14 +30,9 @@
             return
         }
 
-        const files = filepond.getFiles()
+        const files = filepond.getFiles().map((file) => file.file)
 
-        $form.recordings = files
-            .filter((file) => file.fileType.match(/audio/))
-            .map((file) => file.file)
-        $form.texts = files
-            .filter((file) => !file.fileType.match(/audio/))
-            .map((file) => file.file)
+        $form.attachments = files.length ? files : null
     }
 
     function submit(event: SubmitEvent) {
@@ -53,7 +46,6 @@
                 forceFormData: true,
                 onSuccess: () => {
                     filepond.removeFiles()
-                    setTimeout(() => $form.reset(), 200)
                 },
             })
     }
@@ -116,18 +108,11 @@
         {:else}
             <div>
                 <a
-                    class="btn btn-primary btn-outline btn-lg rounded-full"
-                    href="/chapters/{chapter.data.id}/recordings"
-                    use:inertia
-                >
-                    Transcribe Recordings
-                </a>
-                <a
-                    class="btn btn-primary btn-outline btn-lg rounded-full"
+                    class="btn btn-primary btn-outline rounded-full"
                     href="/chapters/{chapter.data.id}/files"
                     use:inertia
                 >
-                    Parse Files
+                    Transcribe Attachments
                 </a>
             </div>
         {/if}

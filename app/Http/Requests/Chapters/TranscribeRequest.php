@@ -14,8 +14,8 @@ class TranscribeRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'recordings' => ['required', 'array'],
-            'recordings.*' => ['required', 'integer', 'exists:media,id'],
+            'attachments' => ['required', 'array'],
+            'attachments.*' => ['required', 'integer', 'exists:media,id'],
         ];
     }
 }

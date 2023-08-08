@@ -16,17 +16,17 @@
     export let chapter: { data: App.Chapter }
 
     const form = useForm({
-        recordings: [],
+        attachments: [],
     })
 
     let selected = {}
 
-    $: $form.recordings = Object.entries(selected)
+    $: $form.attachments = Object.entries(selected)
         .filter(([, v]) => v)
         .map(([id]) => id)
 
-    function submit(event: SubmitEvent) {
-        $form.post(`/chapters/${chapter.data.id}/recordings`, {
+    function submit() {
+        $form.post(`/chapters/${chapter.data.id}/files`, {
             onStart: start,
             onFinish: done,
             hideProgress: true,
@@ -42,7 +42,7 @@
     }
 
     function confirmDelete() {
-        $form.delete(`/chapters/${chapter.data.id}/recordings/${deleting}`)
+        $form.delete(`/chapters/${chapter.data.id}/files/${deleting}`)
         dialog.close()
     }
 </script>
@@ -58,7 +58,7 @@
         <div class="card-body gap-4">
             <h1 class="card-title mb-4">{chapter.data.title}</h1>
 
-            {#each chapter.data?.recordings as recording}
+            {#each chapter.data?.attachments as recording}
                 <div class="card bg-neutral">
                     <div
                         class="card-body grid auto-rows-min grid-cols-4 flex-row items-center justify-between gap-4 lg:flex"
@@ -105,7 +105,7 @@
             {:else}
                 <div class="card text-base-content/60">
                     <div class="card-body items-center">
-                        <span>No recordings found</span>
+                        <span>No attachments found</span>
                     </div>
                 </div>
             {/each}
@@ -114,7 +114,7 @@
 
     <section class="container mx-auto mb-8 flex justify-between">
         <a
-            href="/chapters/{chapter.data.id}/record"
+            href="/chapters/{chapter.data.id}/edit"
             class="btn btn-neutral rounded-full pl-0"
             use:inertia
         >
@@ -123,7 +123,7 @@
             >
             Back
         </a>
-        {#if $form.recordings.length}
+        {#if $form.attachments.length}
             <button type="submit" class="btn btn-secondary rounded-full">
                 Transcribe
             </button>

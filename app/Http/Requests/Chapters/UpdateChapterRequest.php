@@ -20,10 +20,8 @@ class UpdateChapterRequest extends FormRequest
             'content' => ['sometimes', 'required', 'string'],
             'timeline_id' => ['sometimes', 'required', 'integer', 'exists:timelines,id'],
             'cover' => ['sometimes', 'required', 'image', 'max:2048'],
-            'recordings' => ['sometimes', 'nullable', 'array'],
-            'recordings.*' => ['sometimes', 'required', 'file', 'mimes:webm,wav,mp3', 'max:10240'],
-            'texts' => ['sometimes', 'nullable', 'array'],
-            'texts.*' => ['sometimes', 'required', 'file', 'mimes:txt,pdf,doc,docx', 'max:10240'],
+            'attachments' => ['sometimes', 'nullable', 'array'],
+            'attachments.*' => ['sometimes', 'required', 'file', 'mimes:webm,wav,mp3,txt,pdf,doc,docx', 'max:10240'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
         ];
     }

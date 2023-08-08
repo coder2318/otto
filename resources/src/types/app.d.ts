@@ -68,7 +68,7 @@ declare namespace App {
         content: string
         order: number
         cover: string | null
-        recordings: Recording[] | null
+        attachments: Attachment[] | null
         status: string
         story_id: number | null
         story?: Story
@@ -82,12 +82,16 @@ declare namespace App {
         description: string
     }
 
-    interface Recording {
+    interface Attachment {
         id: number
         url: string
         name: string
         size: number
         transcribed: boolean
         created_at: Date | string
+    }
+
+    interface TranscriptionsData {
+        [filename: string]: string
     }
 }

@@ -14,7 +14,7 @@ use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
-use App\Services\DeepgramService;
+use App\Services\MediaService;
 use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 
@@ -43,52 +43,54 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function type(Chapter $chapter)
+    public function write(Chapter $chapter)
     {
         $this->authorize('update', $chapter);
 
-        return Inertia::render('Dashboard/Chapters/Type', [
+        return Inertia::render('Dashboard/Chapters/Write', [
             'chapter' => fn () => ChapterResource::make($chapter),
-            'transcription' => fn () => session('transcription'),
+            'transcriptions' => fn () => session('transcriptions'),
         ]);
     }
 
-    public function recordings(Chapter $chapter)
+    public function attachments(Chapter $chapter)
     {
         $this->authorize('update', $chapter);
 
-        return Inertia::render('Dashboard/Chapters/Recordings', [
+        return Inertia::render('Dashboard/Chapters/Attachments', [
             'chapter' => fn () => ChapterResource::make(
-                $chapter->load('recordings')
+                $chapter->load('attachments')
             ),
         ]);
     }
 
-    public function transcribe(Chapter $chapter, TranscribeRequest $request, DeepgramService $deepgram)
+    public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
         $this->authorize('update', $chapter);
 
-        /** @var \Illuminate\Database\Eloquent\Collection<\Spatie\MediaLibrary\MediaCollections\Models\Media> */
-        $media = $chapter->recordings()->whereIn('id', $request->validated('recordings'))->get();
+        /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> */
+        $media = $chapter->attachments()->whereIn('id', $request->validated('attachments'))->get();
 
-        $transcription = [];
+        $transcriptions = null;
 
         foreach ($media as $record) {
-            array_push($transcription, $deepgram->transcribeMedia($record));
+            if ($transcription = $service->transcribe($record)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
         }
 
-        return redirect()->route('chapters.type', compact('chapter'))->with('transcription', $transcription);
+        return redirect()->route('chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
     }
 
-    public function deleteRecording(Chapter $chapter, int $recording)
+    public function deleteAttachments(Chapter $chapter, int $attachment)
     {
-        abort_unless((bool) $recording = $chapter->recordings()->find($recording), 404);
+        abort_unless((bool) $attachment = $chapter->attachments()->find($attachment), 404);
 
         $this->authorize('update', $chapter);
 
-        $recording->delete();
+        $attachment->delete();
 
-        return redirect()->route('chapters.recordings', compact('chapter'))->with('message', 'Recording deleted successfully!');
+        return redirect()->route('chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
     }
 
     public function record(Chapter $chapter)
@@ -183,12 +185,10 @@ class ChapterController extends Controller
         }
 
         /** @var UploadedFile */
-        foreach ($request->validated('recordings', []) as $record) {
-            $chapter->addMedia($record)->withCustomProperties(['mime-type' => 'audio/webm'])->toMediaCollection('recordings', 's3');
-        }
-        /** @var UploadedFile */
-        foreach ($request->validated('texts', []) as $text) {
-            $chapter->addMedia($text)->toMediaCollection('texts');
+        foreach ($request->validated('attachments', []) as $file) {
+            $chapter->addMedia($file)
+                ->withCustomProperties(['mime-type' => $file->getMimeType()])
+                ->toMediaCollection('attachments', 's3');
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
