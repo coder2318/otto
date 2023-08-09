@@ -14,13 +14,13 @@ class OpenAIService
         $this->fake = config('services.openai.fake');
     }
 
-    public function edit(string $prompt, string $instruction): string
+    public function edit(string $input, string $instruction): string
     {
         if ($this->fake) {
-            return $prompt;
+            return $input;
         }
 
-        $edit = OpenAI::edits()->create(['model' => config('services.openai.models.edits')] + compact('prompt', 'instruction'));
+        $edit = OpenAI::edits()->create(['model' => config('services.openai.models.edits')] + compact('input', 'instruction'));
 
         return $edit['choices'][0]['text'];
     }
