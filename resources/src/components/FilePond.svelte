@@ -13,7 +13,7 @@
         FilePondPluginFileEncode
     )
 
-    export let pond: FilePond
+    export let pond: FilePond = null
     export let name = 'filepond'
 </script>
 
