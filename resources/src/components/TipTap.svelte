@@ -18,9 +18,9 @@
             extensions: [StarterKit],
             content:
                 '<p>' +
-                content
+                (content
                     ?.replace(/\n([ \t]*\n)+/g, '</p><p>')
-                    .replace('\n', '<br />') ?? '' +
+                    ?.replace('\n', '<br />') ?? '') +
                 '</p>',
             onTransaction: () => (editor = editor),
             onUpdate: ({ editor }) =>
