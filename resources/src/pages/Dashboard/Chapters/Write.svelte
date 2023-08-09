@@ -10,6 +10,7 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft, faFile } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
+    import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'
 
     export let transcriptions: App.TranscriptionsData | null = null
@@ -128,6 +129,7 @@
         {:else}
             <div class="flex gap-4">
                 <a
+                    use:inertia
                     class="btn btn-primary btn-outline rounded-full"
                     href="/chapters/{chapter.data.id}/finish"
                 >
@@ -135,6 +137,11 @@
                 </a>
 
                 <a
+                    use:inertia={{
+                        onStart: start,
+                        onFinish: done,
+                        hideProgress: true,
+                    }}
                     class="btn btn-primary rounded-full"
                     href="/chapters/{chapter.data.id}/enchance"
                 >

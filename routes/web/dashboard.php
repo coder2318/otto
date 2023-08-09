@@ -27,6 +27,7 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/files', 'attachments')->name('attachments');
         Route::post('/files', 'transcribe')->name('attachments.transcribe');
         Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
+        Route::get('/enchance', 'enchance')->name('enchance');
         Route::get('/finish', 'finish')->name('finish');
     });
 

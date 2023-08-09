@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\PdfToText\Pdf;
-use ZipArchive;
 
 class MediaService
 {
@@ -29,11 +28,9 @@ class MediaService
             default => null,
         });
 
-        if ($transcript) {
-            $media->setCustomProperty('transcript', $transcript)->save();
-        } else {
-            Session::flash('error', 'Some files could not be transcribed.');
-        }
+        $transcript
+            ? $media->setCustomProperty('transcript', $transcript)->save()
+            : Session::flash('error', 'Some files could not be transcribed.');
 
         return $transcript;
     }
@@ -64,7 +61,7 @@ class MediaService
         );
 
         $content = null;
-        $zip = new ZipArchive();
+        $zip = new \ZipArchive;
 
         if ($zip->open(Storage::disk('local')->path($path)) && $index = $zip->locateName('word/document.xml')) {
             $content = str_replace('</w:r></w:p></w:tc><w:tc>', ' ', $zip->getFromIndex($index));

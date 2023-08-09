@@ -15,6 +15,8 @@ use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
 use App\Services\MediaService;
+use App\Services\OpenAIService;
+use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 
@@ -108,6 +110,19 @@ class ChapterController extends Controller
 
         return Inertia::render('Dashboard/Chapters/Upload', [
             'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
+    public function enchance(Chapter $chapter, Request $request, OpenAIService $service)
+    {
+        $this->authorize('update', $chapter);
+
+        return Inertia::render('Dashboard/Chapters/Enchance', [
+            'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
+            'otto_edit' => $service->edit(
+                $chapter->content,
+                $service->createInstractions($request->user()?->details)
+            ),
         ]);
     }
 
