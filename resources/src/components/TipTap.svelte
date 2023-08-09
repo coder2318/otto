@@ -16,12 +16,9 @@
             },
             element: element,
             extensions: [StarterKit],
-            content:
-                '<p>' +
-                (content
-                    ?.replace(/\n([ \t]*\n)+/g, '</p><p>')
-                    ?.replace('\n', '<br />') ?? '') +
-                '</p>',
+            content: content ? content
+                ?.replace(/\n([ \t]*\n)+/g, '</p><p>')
+                ?.replace('\n', '<br />') : '',
             onTransaction: () => (editor = editor),
             onUpdate: ({ editor }) =>
                 (content = editor.getText({ blockSeparator: '\n\n' })),
