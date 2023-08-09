@@ -10,6 +10,9 @@ class DeepgramService
     protected bool $fake;
 
     protected array $query = [
+        'model' => 'nova',
+        'detect_language' => 'true',
+        'paragraphs' => 'true',
         'punctuate' => 'true',
         'smart_format' => 'true',
     ];
