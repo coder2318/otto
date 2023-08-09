@@ -21,7 +21,7 @@ class UpdateChapterRequest extends FormRequest
             'timeline_id' => ['sometimes', 'required', 'integer', 'exists:timelines,id'],
             'cover' => ['sometimes', 'required', 'image', 'max:2048'],
             'attachments' => ['sometimes', 'nullable', 'array'],
-            'attachments.*' => ['sometimes', 'required', 'file', 'mimes:webm,wav,mp3,txt,pdf,doc,docx', 'max:10240'],
+            'attachments.*' => ['sometimes', 'required', 'file', 'mimes:webm,weba,wav,mp3,text,txt,pdf,doc,docx', 'max:10240'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
         ];
     }

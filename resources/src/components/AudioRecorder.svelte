@@ -37,7 +37,7 @@
                             recordedChunks,
                             `audio_${dayjs().format(
                                 'YYYY-MM-DD_HH-mm-ss'
-                            )}.webm`,
+                            )}.weba`,
                             { type: 'audio/webm' }
                         ),
                     ]

@@ -77,10 +77,12 @@
                 onaddfile={syncFiles}
                 onremovefile={syncFiles}
                 acceptedFileTypes={[
-                    'audio/*',
+                    'audio/webm',
+                    'audio/x-wav',
+                    'audio/mpeg',
                     'text/plain',
                     'application/pdf',
-                    'application/msword',
+                    `application/vnd.openxmlformats-officedocument.wordprocessingml.document`,
                 ]}
             />
         </div>

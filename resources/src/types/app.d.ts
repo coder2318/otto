@@ -88,6 +88,7 @@ declare namespace App {
         name: string
         size: number
         transcribed: boolean
+        is_media: boolean
         created_at: Date | string
     }
 

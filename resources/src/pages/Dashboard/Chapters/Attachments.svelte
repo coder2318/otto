@@ -88,7 +88,16 @@
                             </span>
                         </div>
                         <div class="col-span-4 mx-auto">
-                            <audio src={recording.url} controls />
+                            {#if recording.is_media}
+                                <audio src={recording.url} controls />
+                            {:else}
+                                <a
+                                    href={recording.url}
+                                    target="_blank"
+                                    class="btn btn-primary btn-outline btn-xs rounded-full"
+                                    >Preview</a
+                                >
+                            {/if}
                         </div>
                         <div class="col-span-4 mx-auto">
                             <button
