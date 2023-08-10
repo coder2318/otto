@@ -17,7 +17,6 @@ use App\Models\Timeline;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 

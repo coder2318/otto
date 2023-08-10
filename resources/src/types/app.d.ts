@@ -95,4 +95,15 @@ declare namespace App {
     interface TranscriptionsData {
         [filename: string]: string
     }
+
+    interface BookCoverTemplate {
+        id: number
+        name: string
+        src: string
+        parameters: BookCoverTemplateParameters
+    }
+
+    interface BookCoverTemplateParameters {
+        [name: string]: string
+    }
 }
