@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
@@ -59,7 +60,7 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
+<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
     <div class="card-body gap-4">
         <input
             class="input card-title input-ghost font-serif"
@@ -67,30 +68,30 @@
         />
     </div>
 </section>
-{#if transcriptions}
-    <div
-        class="tooltip tooltip-info"
-        data-tip="Click on filename to paste it's transcription to the editor"
-    >
-        <ul
-            class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
+<form on:submit|preventDefault={submit} in:fade>
+    {#if transcriptions}
+        <div
+            class="tooltip tooltip-info"
+            data-tip="Click on filename to paste it's transcription to the editor"
         >
-            {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
-                <li>
-                    <button
-                        type="button"
-                        on:click|preventDefault={() =>
-                            pasteTranscription(transcription)}
-                    >
-                        <Fa icon={faFile} />
-                        {file}
-                    </button>
-                </li>
-            {/each}
-        </ul>
-    </div>
-{/if}
-<form on:submit|preventDefault={submit}>
+            <ul
+                class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
+            >
+                {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
+                    <li>
+                        <button
+                            type="button"
+                            on:click|preventDefault={() =>
+                                pasteTranscription(transcription)}
+                        >
+                            <Fa icon={faFile} />
+                            {file}
+                        </button>
+                    </li>
+                {/each}
+            </ul>
+        </div>
+    {/if}
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
             <div class="alert alert-success flex items-center rounded-b-none">

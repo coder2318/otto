@@ -19,17 +19,17 @@ use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Inertia\Inertia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ChapterController extends Controller
 {
     public function __construct()
     {
         $this->authorizeResource(Chapter::class, 'chapter');
+        $this->middleware('can:update,chapter')
+            ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enchance', 'finish']);
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Story $story, ChaptersRequest $request)
     {
         return Inertia::render('Dashboard/Chapters/Index', [
@@ -47,8 +47,6 @@ class ChapterController extends Controller
 
     public function write(Chapter $chapter)
     {
-        $this->authorize('update', $chapter);
-
         return Inertia::render('Dashboard/Chapters/Write', [
             'chapter' => fn () => ChapterResource::make($chapter),
             'transcriptions' => fn () => session('transcriptions'),
@@ -57,8 +55,6 @@ class ChapterController extends Controller
 
     public function attachments(Chapter $chapter)
     {
-        $this->authorize('update', $chapter);
-
         return Inertia::render('Dashboard/Chapters/Attachments', [
             'chapter' => fn () => ChapterResource::make(
                 $chapter->load('attachments')
@@ -68,8 +64,6 @@ class ChapterController extends Controller
 
     public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
-        $this->authorize('update', $chapter);
-
         /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> */
         $media = $chapter->attachments()->whereIn('id', $request->validated('attachments'))->get();
 
@@ -84,12 +78,8 @@ class ChapterController extends Controller
         return redirect()->route('chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
     }
 
-    public function deleteAttachments(Chapter $chapter, int $attachment)
+    public function deleteAttachments(Chapter $chapter, Media $attachment)
     {
-        abort_unless((bool) $attachment = $chapter->attachments()->find($attachment), 404);
-
-        $this->authorize('update', $chapter);
-
         $attachment->delete();
 
         return redirect()->route('chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
@@ -97,8 +87,6 @@ class ChapterController extends Controller
 
     public function record(Chapter $chapter)
     {
-        $this->authorize('update', $chapter);
-
         return Inertia::render('Dashboard/Chapters/Record', [
             'chapter' => fn () => ChapterResource::make($chapter),
         ]);
@@ -106,8 +94,6 @@ class ChapterController extends Controller
 
     public function upload(Chapter $chapter)
     {
-        $this->authorize('update', $chapter);
-
         return Inertia::render('Dashboard/Chapters/Upload', [
             'chapter' => fn () => ChapterResource::make($chapter),
         ]);
@@ -115,7 +101,9 @@ class ChapterController extends Controller
 
     public function enchance(Chapter $chapter, Request $request, OpenAIService $service)
     {
-        $this->authorize('update', $chapter);
+        if (! $chapter->content) {
+            return redirect()->back()->with('status', 'Chapter content is empty!');
+        }
 
         return Inertia::render('Dashboard/Chapters/Enchance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
@@ -128,8 +116,6 @@ class ChapterController extends Controller
 
     public function finish(Chapter $chapter)
     {
-        $this->authorize('update', $chapter);
-
         $chapter->update([
             'status' => Status::PUBLISHED,
         ]);
@@ -139,9 +125,6 @@ class ChapterController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create(Story $story)
     {
         return Inertia::render('Dashboard/Chapters/Create', [
@@ -150,9 +133,6 @@ class ChapterController extends Controller
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Story $story, StoreChapterRequest $request)
     {
         /** @var Chapter */
@@ -167,9 +147,6 @@ class ChapterController extends Controller
         return redirect()->route('chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Show', [
@@ -177,9 +154,6 @@ class ChapterController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Edit', [
@@ -187,9 +161,6 @@ class ChapterController extends Controller
         ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(UpdateChapterRequest $request, Chapter $chapter)
     {
         $chapter->update($request->validated());
@@ -199,19 +170,19 @@ class ChapterController extends Controller
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        /** @var UploadedFile */
-        foreach ($request->validated('attachments', []) as $file) {
-            $chapter->addMedia($file)
-                ->withCustomProperties(['mime-type' => $file->getMimeType()])
+        foreach ($request->validated('attachments', []) as $attachment) {
+            $chapter->addMedia($attachment['file'])
+                ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + $attachment['options'] ?? [])
                 ->toMediaCollection('attachments', 's3');
+        }
+
+        if ($request->validated('status') == Status::PUBLISHED->value) {
+            return redirect()->route('chapters.finish', compact('chapter'))->with('message', 'Chapter published successfully!');
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Chapter $chapter)
     {
         $chapter->delete();

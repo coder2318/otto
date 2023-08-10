@@ -15,7 +15,9 @@
     let timer: number
 
     export let max: number = 5 * 60 * 1000
-    export let recordings: File[]
+    export let recordings: Array<{ file: File; options: object }>
+
+    let options: any = {}
 
     function startRecording() {
         navigator.mediaDevices
@@ -33,13 +35,16 @@
                 mediaRecorder.addEventListener('stop', function () {
                     recordings = [
                         ...(recordings ?? []),
-                        new File(
-                            recordedChunks,
-                            `audio_${dayjs().format(
-                                'YYYY-MM-DD_HH-mm-ss'
-                            )}.weba`,
-                            { type: 'audio/webm' }
-                        ),
+                        {
+                            options: { ...options },
+                            file: new File(
+                                recordedChunks,
+                                `audio_${dayjs().format(
+                                    'YYYY-MM-DD_HH-mm-ss'
+                                )}.weba`,
+                                { type: 'audio/webm' }
+                            ),
+                        },
                     ]
                 })
 
@@ -109,13 +114,45 @@
             </div>
         </div>
     </div>
-    {#each recordings ?? [] as recording, i (recording.name)}
+    {#if !timer}
+        <div class="form-control">
+            <label class="label flex gap-4">
+                <span class="label-text">Language:</span>
+                <select
+                    class="select select-bordered select-ghost"
+                    name="language"
+                    bind:value={options.language}
+                >
+                    <option value={null}>Recognize</option>
+                    <option value="en">English</option>
+                    <option value="nl">Dutch</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="hi">Hindi</option>
+                    <option value="id">Indonesian</option>
+                    <option value="it">Italian</option>
+                    <option value="ja">Japanese</option>
+                    <option value="ko">Korean</option>
+                    <option value="zh">Mandarin</option>
+                    <option value="no">Norwegian</option>
+                    <option value="pl">Polish</option>
+                    <option value="pt">Portuguese</option>
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>
+                    <option value="sv">Swedish</option>
+                    <option value="tr">Turkish</option>
+                    <option value="uk">Ukrainian</option>
+                </select>
+            </label>
+        </div>
+    {/if}
+    {#each recordings ?? [] as recording, i (recording.file.name)}
         <div
             class="group relative flex items-center justify-center gap-2 transition-all"
         >
             <audio
                 bind:this={player}
-                src={URL.createObjectURL(recording)}
+                src={URL.createObjectURL(recording.file)}
                 controls
             />
             <button

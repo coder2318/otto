@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
@@ -53,7 +54,7 @@
 
 <Breadcrumbs step={2} />
 
-<form on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
         <div class="card-body gap-4">
             <h1 class="card-title mb-4">{chapter.data.title}</h1>

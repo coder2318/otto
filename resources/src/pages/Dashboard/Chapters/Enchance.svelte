@@ -5,10 +5,11 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft, faFile } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'
@@ -43,6 +44,7 @@
             .transform((data) => ({
                 content: data[data.use],
                 status: event.submitter.dataset?.status ?? data.status,
+                redirect: event.submitter.dataset?.redirect ?? null,
             }))
             .put(`/chapters/${chapter.data.id}`)
     }
@@ -57,6 +59,7 @@
 <section
     class="container card relative m-4 mx-auto rounded-xl px-4"
     style="background-image:{chapter.data.cover};"
+    in:fade
 >
     <div
         class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40"
@@ -68,7 +71,7 @@
     </div>
 </section>
 
-<form on:submit|preventDefault={submit} class="p-4">
+<form on:submit|preventDefault={submit} class="p-4" in:fade>
     <main class="container m-4 mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div
             class="form-control join join-vertical transition-all {$form.use ==
@@ -155,13 +158,23 @@
             Back
         </a>
         {#if $form.isDirty && $form.use}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-            >
-                Save it as Draft
-            </button>
+            <div class="flex gap-2">
+                <button
+                    type="submit"
+                    class="btn btn-secondary rounded-full"
+                    data-status="draft"
+                >
+                    Save it as Draft
+                </button>
+                <button
+                    type="submit"
+                    class="btn btn-primary rounded-full"
+                    data-status="published"
+                    data-redirect="chapters.finish"
+                >
+                    Finish this Chapter
+                </button>
+            </div>
         {:else}
             <div class="flex gap-4">
                 <a

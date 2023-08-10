@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { page } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Stamp from '@/components/SVG/stamp.svg.svelte'
@@ -30,6 +31,7 @@
 
 <section
     class="container card m-4 mx-auto rounded-xl bg-gradient-to-r from-primary to-primary/70 px-4 text-primary-content"
+    in:fade
 >
     <div class="card-body grid grid-cols-3 items-center justify-center gap-8">
         <Stamp class="col-span-3 mx-auto h-64 w-64 md:col-span-1" />

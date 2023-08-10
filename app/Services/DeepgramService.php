@@ -26,25 +26,26 @@ class DeepgramService
     {
         return Http::baseUrl('https://api.deepgram.com/v1')
             ->acceptJson()
-            ->withToken(config('services.deepgram.key'), 'Token')
-            ->withQueryParameters($this->query);
+            ->withToken(config('services.deepgram.key'), 'Token');
     }
 
-    public function transcribeFromUrl(string $url): ?string
+    public function transcribeFromUrl(string $url, array $options = null): ?string
     {
         return $this->fake
             ? 'This is a fake Deepgram transcript.'
             : $this->client()->asJson()
+                ->withQueryParameters($options ?? $this->query)
                 ->post('listen', compact('url'))
                 ->json('results.channels.0.alternatives.0.transcript');
     }
 
-    public function transcribeFromFile(FilesystemAdapter $storage, string $path): ?string
+    public function transcribeFromFile(FilesystemAdapter $storage, string $path, array $options = null): ?string
     {
         return $this->fake
             ? 'This is a fake Deepgram transcript.'
             : $this->client()
                 ->withBody($storage->get($path), $storage->mimeType($path))
+                ->withQueryParameters($options ?? $this->query)
                 ->post('listen')
                 ->json('results.channels.0.alternatives.0.transcript');
     }

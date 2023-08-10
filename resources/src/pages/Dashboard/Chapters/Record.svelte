@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
@@ -41,7 +42,7 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
+<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
     <div class="card-body gap-4">
         <input
             class="input card-title input-ghost font-serif"
@@ -50,7 +51,7 @@
     </div>
 </section>
 
-<form on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
             <AudioRecorder bind:recordings={$form.attachments} />

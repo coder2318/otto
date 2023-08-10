@@ -37,7 +37,18 @@ class MediaService
 
     protected function transcribeAudio(Media &$media): ?string
     {
-        return $this->deepgram->transcribeFromFile(Storage::disk($media->disk), $media->getPath());
+        $language = $media->getCustomProperty('language');
+
+        return $this->deepgram->transcribeFromFile(
+            Storage::disk($media->disk),
+            $media->getPath(),
+            $language ? [
+                'language' => $language,
+                'paragraphs' => 'true',
+                'punctuate' => 'true',
+                'smart_format' => 'true',
+            ] : null
+        );
     }
 
     protected function transcribePdf(Media &$media): ?string

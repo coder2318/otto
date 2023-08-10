@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { useForm, inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
     import FilePond from '@/components/FilePond.svelte'
@@ -35,7 +36,7 @@
 
 <Breadcrumbs step={1} />
 
-<form on:submit|preventDefault={submit} bind:this={el}>
+<form on:submit|preventDefault={submit} bind:this={el} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
         <div class="card-body gap-4">
             <div class="form-control">

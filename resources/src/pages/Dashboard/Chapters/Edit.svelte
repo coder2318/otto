@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { useForm, inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -36,7 +37,7 @@
 
 <Breadcrumbs step={1} />
 
-<form on:submit|preventDefault={submit}>
+<form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
         <div class="card-body gap-4">
             <input
