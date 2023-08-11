@@ -4,7 +4,7 @@
 </script>
 
 <script lang="ts">
-    import Navbar from '@/components/Navbar.svelte'
+    import Navbar from '@/components/Static/Navbar.svelte'
     import Hero from '@/components/Static/Hero.svelte'
 </script>
 
@@ -12,7 +12,5 @@
     <title>{import.meta.env.VITE_APP_NAME} - About</title>
 </svelte:head>
 
-<main class="flex min-h-screen flex-col items-center justify-center">
-    <Navbar />
-    <Hero />
-</main>
+<Navbar />
+<Hero />
