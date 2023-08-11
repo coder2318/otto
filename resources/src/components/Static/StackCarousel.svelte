@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { blur } from 'svelte/transition'
+    import { fly } from 'svelte/transition'
     import person1 from '@/assets/img/stack-person1.jpg'
     import person2 from '@/assets/img/stack-person2.jpg'
     import person3 from '@/assets/img/stack-person3.jpg'
@@ -11,40 +11,46 @@
         {
             index: 0,
             image: person1,
-            class: '-rotate-3',
+            class: '-rotate-6',
+            key: Math.random().toString(36).slice(2, 7),
         },
         {
             index: 1,
             image: person2,
-            class: '-rotate-6',
+            class: '-rotate-2',
+            key: Math.random().toString(36).slice(2, 7),
         },
         {
             index: 2,
             image: person3,
-            class: '-rotate-10',
+            class: 'rotate-2',
+            key: Math.random().toString(36).slice(2, 7),
         },
         {
             index: 3,
             image: person4,
-            class: '',
+            class: 'rotate-6',
+            key: Math.random().toString(36).slice(2, 7),
         },
     ]
 
     function change(back: boolean = false, update: boolean = true) {
-        back
-            ? elements.unshift(elements.pop())
-            : elements.push(elements.shift())
+        const element = back ? elements.pop() : elements.shift()
+        back ? elements.unshift(element) : elements.push(element)
+        let transition = back ? 0 : elements.length - 1
+        elements[transition].key = Math.random().toString(36).slice(2, 7)
 
-        if (!update) {
-            return
+        if (update) {
+            elements = elements
         }
-
-        elements = elements
     }
 
     function setActive(index: number) {
+        const back =
+            elements[0].index - index > 0 && elements[0].index - index != 3
+
         while (elements[0].index !== index) {
-            change(false, false)
+            change(back, false)
         }
         elements = elements
     }
@@ -53,7 +59,7 @@
 <section class="flex min-h-screen items-center justify-center py-16">
     <div class="container grid gap-20 lg:grid-cols-2">
         <div class="card">
-            <div class="flex flex-col gap-8">
+            <div class="flex flex-col gap-8 p-4">
                 <h5
                     class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
                 >
@@ -80,21 +86,20 @@
                 </p>
             </div>
         </div>
-        <div
-            class="card bg-contain bg-center bg-no-repeat"
-            style="background-image: url({bg})"
-        >
-            <div class="items-bottom card-body justify-center p-20">
+        <div class="card">
+            <div
+                class="items-bottom card-body justify-center bg-contain bg-center bg-no-repeat p-20"
+                style="background-image: url({bg})"
+            >
                 <div class="relative h-full min-h-[25rem] w-full">
-                    {#each elements as element (element.index)}
-                        {#key Math.random().toString(36).slice(2, 7)}
-                            <img
-                                in:blur
-                                src={element.image}
-                                class="mask absolute h-full w-full rounded-lg object-cover drop-shadow-lg {element.class}"
-                                alt=""
-                            />
-                        {/key}
+                    {#each [...elements].reverse() as element (element.key)}
+                        <img
+                            out:fly={{ y: 100, duration: 250 }}
+                            in:fly={{ y: 100, duration: 250, delay: 250 }}
+                            src={element.image}
+                            class="mask absolute h-full w-full rounded-lg object-cover shadow-lg drop-shadow-xl {element.class}"
+                            alt=""
+                        />
                     {/each}
                 </div>
 
