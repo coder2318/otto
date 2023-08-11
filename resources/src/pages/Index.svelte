@@ -5,6 +5,7 @@
 <script lang="ts">
     import Navbar from '@/components/Static/Navbar.svelte'
     import Hero from '@/components/Static/Hero.svelte'
+    import StackCarousel from '@/components/Static/StackCarousel.svelte'
 </script>
 
 <svelte:head>
@@ -14,3 +15,5 @@
 <Navbar />
 
 <Hero />
+
+<StackCarousel />

@@ -6,7 +6,7 @@
     let scrolled = false
 
     onMount(() => {
-        const setScrolled = () => (scrolled = window.scrollY > 0)
+        const setScrolled = () => (scrolled = window.scrollY > 50)
         window.addEventListener('scroll', setScrolled)
 
         return () => window.removeEventListener('scroll', setScrolled)
