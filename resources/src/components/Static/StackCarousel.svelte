@@ -5,7 +5,6 @@
     import person3 from '@/assets/img/stack-person3.jpg'
     import person4 from '@/assets/img/stack-person4.jpg'
     import bg from '@/assets/img/stack-bg.svg'
-    import { onMount } from 'svelte'
 
     let elements = [
         {

@@ -6,6 +6,7 @@
     import Navbar from '@/components/Static/Navbar.svelte'
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
+    import Focus from '@/components/Layouts/Focus.svelte'
 </script>
 
 <svelte:head>
@@ -17,3 +18,14 @@
 <Hero />
 
 <StackCarousel />
+
+<Focus>
+    <div class="flex w-full items-center justify-center">
+        <h6
+            class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+        >
+            Wave goodbye to expensive fees and embrace the chance to author your
+            life story.
+        </h6>
+    </div>
+</Focus>
