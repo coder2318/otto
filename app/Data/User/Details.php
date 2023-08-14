@@ -34,5 +34,5 @@ class Details extends Data
      * Quiz answers
      */
     #[ArrayType, Sometimes]
-    public array $quiz;
+    public ?array $quiz;
 }
