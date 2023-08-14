@@ -8,7 +8,7 @@
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import type { FilePondFile, FilePond as FilePondType } from 'filepond'
+    import type { FilePond as FilePondType } from 'filepond'
     import { createCropperForFilepond } from '@/service/cropper'
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
@@ -53,10 +53,6 @@
         editor.onclose && editor.onclose()
         editor?.cropper?.destroy()
     }
-
-    function updatedFile(pondFile: FilePondFile, blob: Blob) {
-        parameters.cover = URL.createObjectURL(blob)
-    }
 </script>
 
 <svelte:head>
@@ -80,7 +76,9 @@
                 {#if editor}
                     <FilePond
                         bind:pond={filepond}
-                        onpreparefile={updatedFile}
+                        onpreparefile={(file, blob) =>
+                            (parameters.cover = URL.createObjectURL(blob))}
+                        onremovefile={() => (parameters.cover = null)}
                         imageEditEditor={editor}
                         allowMultiple={false}
                         imageEditInstantEdit={true}

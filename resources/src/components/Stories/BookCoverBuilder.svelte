@@ -7,23 +7,27 @@
 
     let element: HTMLElement
     let svg: HTMLElement
+    let defaultParameters: any = {}
 
     $: {
         Object.entries(parameters).forEach(([key, value]) => {
-            if (!value || !svg) {
-                return
-            }
+            if (!svg) return
             svg.querySelectorAll(`[data-${key}]`).forEach(
                 (node: HTMLElement) => {
                     switch (node.dataset[key]) {
                         case 'innerText':
-                            node.innerHTML = value
+                            node.innerHTML =
+                                value ?? defaultParameters[key] ?? ''
                             break
                         case 'innerHTML':
-                            node.innerHTML = value
+                            node.innerHTML =
+                                value ?? defaultParameters[key] ?? ''
                             break
                         default:
-                            node.setAttribute(node.dataset[key], value)
+                            node.setAttribute(
+                                node.dataset[key],
+                                value ?? defaultParameters[key] ?? ''
+                            )
                             break
                     }
                 }
@@ -36,7 +40,29 @@
             template,
             'image/svg+xml'
         ).documentElement
+
         element.appendChild(svg)
+
+        svg.querySelectorAll('[data-editable]').forEach((node: HTMLElement) => {
+            Object.entries(node.dataset).forEach(([key, value]) => {
+                if (key === 'editable') {
+                    return
+                }
+
+                switch (node.dataset[key]) {
+                    case 'innerText':
+                        defaultParameters[key] = node.innerText
+                        break
+                    case 'innerHTML':
+                        defaultParameters[key] = node.innerHTML
+                        break
+                    default:
+                        defaultParameters[key] = node.getAttribute(
+                            node.dataset[key]
+                        )
+                }
+            })
+        })
     })
 </script>
 
