@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             UserSeeder::class,
             QuizQuestionSeeder::class,
+            BookCoverTemplateSeeder::class,
             TimelineSeeder::class,
             TimelineQuestionSeeder::class,
             StorySeeder::class,

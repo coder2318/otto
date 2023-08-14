@@ -7,10 +7,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Stories\StoreStoryRequest;
 use App\Http\Requests\Stories\StoriesRequest;
 use App\Http\Requests\Stories\UpdateStoryRequest;
+use App\Http\Resources\BookCoverTemplateResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
+use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\Timeline;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 
@@ -55,10 +58,16 @@ class StoryController extends Controller
         ]);
     }
 
-    public function edit(Story $story)
+    public function edit(Story $story, Request $request)
     {
         return Inertia::render('Dashboard/Stories/Edit', [
             'story' => StoryResource::make($story),
+            'template' => BookCoverTemplateResource::make(
+                BookCoverTemplate::when(
+                    $tmpl = $request->query('template'),
+                    fn ($query) => $query->where('id', $tmpl)
+                )->firstOrFail()
+            ),
         ]);
     }
 

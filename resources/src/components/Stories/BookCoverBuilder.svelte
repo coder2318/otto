@@ -2,42 +2,41 @@
     import { onMount } from 'svelte'
     import bookCover from '@/assets/img/book-cover.svg?raw'
 
-    export let template: string = bookCover
-    export let parameters: App.BookCoverTemplateParameters
+    export let template: App.BookCoverTemplate
+    export let parameters: any
 
     let element: HTMLElement
     let svg: HTMLElement
     let defaultParameters: any = {}
 
     $: {
+        console.log(parameters)
         Object.entries(parameters).forEach(([key, value]) => {
             if (!svg) return
-            svg.querySelectorAll(`[data-${key}]`).forEach(
-                (node: HTMLElement) => {
-                    switch (node.dataset[key]) {
-                        case 'innerText':
-                            node.innerHTML =
-                                value ?? defaultParameters[key] ?? ''
-                            break
-                        case 'innerHTML':
-                            node.innerHTML =
-                                value ?? defaultParameters[key] ?? ''
-                            break
-                        default:
-                            node.setAttribute(
-                                node.dataset[key],
-                                value ?? defaultParameters[key] ?? ''
-                            )
-                            break
-                    }
+            svg.querySelectorAll(
+                `[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`
+            ).forEach((node: HTMLElement) => {
+                switch (node.dataset[key]) {
+                    case 'innerText':
+                        node.innerHTML = value ?? defaultParameters[key] ?? ''
+                        break
+                    case 'innerHTML':
+                        node.innerHTML = value ?? defaultParameters[key] ?? ''
+                        break
+                    default:
+                        node.setAttribute(
+                            node.dataset[key],
+                            value ?? defaultParameters[key] ?? ''
+                        )
+                        break
                 }
-            )
+            })
         })
     }
 
     onMount(() => {
         svg = new DOMParser().parseFromString(
-            template,
+            template.template,
             'image/svg+xml'
         ).documentElement
 

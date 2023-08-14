@@ -99,11 +99,11 @@ declare namespace App {
     interface BookCoverTemplate {
         id: number
         name: string
-        src: string
-        parameters: BookCoverTemplateParameters
-    }
-
-    interface BookCoverTemplateParameters {
-        [name: string]: string
+        fields: Array<{
+            name: string
+            type: string
+            key: string
+        }>
+        template: string
     }
 }
