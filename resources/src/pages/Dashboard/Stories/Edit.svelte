@@ -42,16 +42,16 @@
     })
 
     function canvelEdit() {
-        editor?.cropper?.destroy()
         editor.oncancel()
         editor.onclose && editor.onclose()
+        editor?.clear()
     }
 
     function saveImage() {
         modal.close()
         editor.onconfirm(editor.getOptions())
         editor.onclose && editor.onclose()
-        editor?.cropper?.destroy()
+        editor?.clear()
     }
 </script>
 

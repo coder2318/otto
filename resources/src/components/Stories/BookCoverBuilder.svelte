@@ -43,24 +43,13 @@
 
         element.appendChild(svg)
 
-        svg.querySelectorAll('[data-editable]').forEach((node: HTMLElement) => {
+        svg.querySelectorAll('[data-default]').forEach((node: HTMLElement) => {
             Object.entries(node.dataset).forEach(([key, value]) => {
                 if (key === 'editable') {
                     return
                 }
 
-                switch (node.dataset[key]) {
-                    case 'innerText':
-                        defaultParameters[key] = node.innerText
-                        break
-                    case 'innerHTML':
-                        defaultParameters[key] = node.innerHTML
-                        break
-                    default:
-                        defaultParameters[key] = node.getAttribute(
-                            node.dataset[key]
-                        )
-                }
+                defaultParameters[key] = node.getAttribute(value)
             })
         })
     })

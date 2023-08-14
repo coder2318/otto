@@ -4,11 +4,16 @@ export function createCropperForFilepond(
     element: HTMLElement = document.body,
     options: Cropper.Options<HTMLImageElement> = {}
 ) {
-    const editor = {
-        image: document.createElement('img'),
+    return {
+        file: null as Blob | null,
+        image: null,
         cropper: null as Cropper | null,
-        async open(file: Blob, instructions) {
-            this.image.src = (await toBase64(file)) as string
+        open(file: Blob) {
+            this.file = file
+            this.image = document.createElement('img')
+            this.image.style.display = 'none'
+            element.appendChild(this.image)
+            this.image.src = URL.createObjectURL(this.file)
             this.cropper?.destroy()
             this.cropper = new Cropper(this.image, {
                 ...options,
@@ -21,23 +26,10 @@ export function createCropperForFilepond(
         clear() {
             this.cropper?.destroy()
             this.cropper = null
+            URL.revokeObjectURL(this.file)
             this.image.remove()
         },
     }
-
-    editor.image.style.display = 'none'
-    element.appendChild(editor.image)
-
-    return editor
-}
-
-export function toBase64(file: Blob): Promise<string | ArrayBuffer> {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = () => resolve(reader.result)
-        reader.onerror = reject
-    })
 }
 
 function getEditedOptions(cropper: Cropper) {
