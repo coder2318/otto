@@ -34,7 +34,6 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/finish', 'finish')->name('finish');
     });
 
-
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')
         ->name('preview')
