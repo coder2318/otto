@@ -7,6 +7,7 @@
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
+    import TwoColumns from '@/components/Static/TwoColumns.svelte'
 </script>
 
 <svelte:head>
@@ -29,3 +30,5 @@
         </h6>
     </div>
 </Focus>
+
+<TwoColumns />
