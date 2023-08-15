@@ -27,7 +27,7 @@ export function createCropperForFilepond(
             this.cropper?.destroy()
             this.cropper = null
             URL.revokeObjectURL(this.file)
-            this.image.remove()
+            this.image?.remove()
         },
     }
 }

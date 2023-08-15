@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import qs from 'qs'
-    import { writable } from 'svelte/store'
+    import { writable, type Writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
     import Fa from 'svelte-fa'
     import Paginator from '@/components/Paginator.svelte'
@@ -14,6 +14,7 @@
     import { dayjs } from '@/service/dayjs'
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'
+    import { onMount } from 'svelte'
 
     export let stories: {
         data: Array<App.Story>
@@ -21,20 +22,29 @@
         meta: App.PaginationMeta
     }
 
-    $: query = qs.parse(
-        $page.url.replace(window.location.pathname, '').slice(1)
-    )
+    let query: { filter?: { [key: string]: string } }
+    let filter: Writable<{ [key: string]: string }>
 
-    const filter = writable(
-        qs.parse($page.url.replace(window.location.pathname, '').slice(1))
-            ?.filter ?? {}
-    )
-
-    filter.subscribe((value) => {
-        router.visit(
-            window.location.pathname + '?' + qs.stringify({ filter: value }),
-            { only: ['stories'] }
+    onMount(() => {
+        filter = writable(
+            qs.parse($page.url.replace(window.location.pathname, '').slice(1))
+                ?.filter ?? {}
         )
+
+        filter.subscribe((value) => {
+            router.visit(
+                window.location.pathname +
+                    '?' +
+                    qs.stringify({ filter: value }),
+                { only: ['stories'] }
+            )
+        })
+
+        page.subscribe((value) => {
+            query = qs.parse(
+                value.url.replace(window.location.pathname, '').slice(1)
+            )
+        })
     })
 
     function removeFilter(key: string) {

@@ -35,7 +35,7 @@
             },
         })
 
-        return () => editor.clear()
+        return () => editor?.clear()
     })
 
     function canvelEdit() {
