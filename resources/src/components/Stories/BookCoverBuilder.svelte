@@ -38,6 +38,8 @@
             'image/svg+xml'
         ).documentElement
 
+        svg.classList.add('w-full', 'h-full', 'select-none')
+
         element.appendChild(svg)
 
         svg.querySelectorAll('[data-default]').forEach((node: HTMLElement) => {

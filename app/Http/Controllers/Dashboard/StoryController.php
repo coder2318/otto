@@ -107,4 +107,14 @@ class StoryController extends Controller
 
         return redirect()->route('stories.index')->with('message', 'Story deleted successfully!');
     }
+
+    public function covers(Story $story)
+    {
+        return Inertia::render('Dashboard/Stories/Covers', [
+            'story' => StoryResource::make($story),
+            'covers' => BookCoverTemplateResource::collection(
+                BookCoverTemplate::paginate()
+            ),
+        ]);
+    }
 }

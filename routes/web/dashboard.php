@@ -19,6 +19,9 @@ Route::middleware('user-configured')->group(function () {
 
     // Stories
     Route::resource('stories', StoryController::class);
+    Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
+        Route::get('/covers', 'covers')->name('covers');
+    });
     Route::resource('stories.chapters', ChapterController::class)->shallow();
     Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
         Route::get('/write', 'write')->name('write');
@@ -30,6 +33,7 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/enchance', 'enchance')->name('enchance');
         Route::get('/finish', 'finish')->name('finish');
     });
+
 
     // Test
     Route::inertia('/preview', 'Dashboard/Preview')

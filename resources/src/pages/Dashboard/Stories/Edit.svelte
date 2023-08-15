@@ -5,6 +5,7 @@
 </script>
 
 <script lang="ts">
+    import { inertia } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
@@ -13,6 +14,8 @@
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
+    import Fa from 'svelte-fa'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -96,13 +99,35 @@
         </div>
     </div>
     <div class="card border-2 border-base-300">
-        <div class="card-body items-center justify-center gap-4">
+        <div class="card-body max-h-screen items-center justify-center gap-4">
             <BookCoverBuilder
-                class="h-full w-full select-none"
+                class="h-full w-full"
                 {parameters}
                 template={template.data}
             />
         </div>
+    </div>
+</section>
+
+<section class="container mx-auto mb-8 flex justify-between">
+    <a
+        href="/stories/{story.data.id}"
+        class="btn btn-neutral rounded-full pl-0"
+        use:inertia
+    >
+        <span class="badge mask badge-accent mask-circle p-4"
+            ><Fa icon={faArrowLeft} /></span
+        >
+        Back
+    </a>
+    <div class="flex gap-4">
+        <a
+            href="/stories/{story.data.id}/covers"
+            use:inertia
+            class="btn btn-neutral rounded-full"
+        >
+            More Covers
+        </a>
     </div>
 </section>
 
