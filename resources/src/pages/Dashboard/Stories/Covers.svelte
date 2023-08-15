@@ -44,4 +44,4 @@
     {/each}
 </section>
 
-<Paginator class="mx-auto" meta={covers.meta} />
+<Paginator class="mx-auto py-4" meta={covers.meta} />

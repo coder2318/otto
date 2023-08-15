@@ -113,7 +113,7 @@ class StoryController extends Controller
         return Inertia::render('Dashboard/Stories/Covers', [
             'story' => StoryResource::make($story),
             'covers' => BookCoverTemplateResource::collection(
-                BookCoverTemplate::paginate()
+                BookCoverTemplate::paginate(12)
             ),
         ]);
     }
