@@ -14,7 +14,9 @@
         background-image: url(@/assets/img/quickstart-particle1.svg),
             url(@/assets/img/quickstart-particle2.svg);
         background-repeat: no-repeat, no-repeat;
-        background-position: top 10px right 10px, bottom 10px left 10px;
+        background-position:
+            top 10px right 10px,
+            bottom 10px left 10px;
 
         background-size: 9rem, 6rem;
 
@@ -33,7 +35,9 @@
                 url(@/assets/img/quickstart-female.png);
         }
         background-repeat: no-repeat, no-repeat;
-        background-position: top left, bottom right;
+        background-position:
+            top left,
+            bottom right;
 
         background-size: 9rem, 6rem;
 

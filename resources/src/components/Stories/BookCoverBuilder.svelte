@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import bookCover from '@/assets/img/book-cover.svg?raw'
 
     export let template: App.BookCoverTemplate
     export let parameters: any
@@ -10,7 +9,6 @@
     let defaultParameters: any = {}
 
     $: {
-        console.log(parameters)
         Object.entries(parameters).forEach(([key, value]) => {
             if (!svg) return
             svg.querySelectorAll(
