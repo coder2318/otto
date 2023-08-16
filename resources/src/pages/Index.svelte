@@ -7,10 +7,8 @@
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
-    import TwoColumns from '@/components/Static/TwoColumnsSection.svelte'
     import RepliesCarousel from '@/components/Static/RepliesCarousel.svelte'
 
-    import checkMark from '@/assets/img/checkmark.svg'
     import img1 from '@/assets/img/index-img-1.jpg'
     import img2 from '@/assets/img/index-img-2.jpg'
     import img3 from '@/assets/img/index-img-3.jpg'
@@ -44,7 +42,7 @@
     </div>
 </Focus>
 
-<section class="tems-center flex justify-center py-16">
+<section class="flex items-center justify-center py-16">
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
@@ -108,7 +106,7 @@
     </div>
 </section>
 
-<section class="tems-center flex justify-center py-16">
+<section class="flex items-center justify-center py-16">
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
@@ -175,7 +173,7 @@
     </div>
 </section>
 
-<section class="tems-center flex justify-center py-16">
+<section class="flex items-center justify-center py-16">
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
@@ -240,7 +238,7 @@
     </div>
 </section>
 
-<section class="tems-center flex justify-center py-16">
+<section class="flex items-center justify-center py-16">
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
