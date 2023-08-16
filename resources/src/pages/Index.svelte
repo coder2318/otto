@@ -19,6 +19,8 @@
     import splash4 from '@/assets/img/splash-4.svg'
     import Fa from 'svelte-fa'
     import { faCheck } from '@fortawesome/free-solid-svg-icons'
+    import Footer from '@/components/Static/Footer.svelte'
+    import Contact from '@/components/Static/Contact.svelte'
 </script>
 
 <svelte:head>
@@ -46,7 +48,7 @@
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="card order-2">
+        <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex">
                     <div class="absolute -left-16 -top-12 -z-10">
@@ -98,7 +100,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-1 hidden md:block">
+        <div class="card order-1">
             <figure>
                 <img class="rounded-2xl" src={img1} alt="" />
             </figure>
@@ -165,7 +167,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-2 hidden md:block">
+        <div class="card order-1 md:order-2">
             <figure>
                 <img class="rounded-2xl" src={img2} alt="" />
             </figure>
@@ -177,7 +179,7 @@
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="card order-2">
+        <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex">
                     <div class="absolute -left-16 -top-12 -z-10">
@@ -230,7 +232,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-1 hidden md:block">
+        <div class="card order-1">
             <figure>
                 <img class="rounded-2xl" src={img3} alt="" />
             </figure>
@@ -295,7 +297,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-2 hidden md:block">
+        <div class="card order-1 md:order-2">
             <figure>
                 <img class="rounded-2xl" src={img4} alt="" />
             </figure>
@@ -304,3 +306,21 @@
 </section>
 
 <RepliesCarousel />
+
+<Focus>
+    <div class="flex w-full items-center justify-center">
+        <h6
+            class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+        >
+            Turn your memories into stories, experiences into wisdom, and a
+            lifetime into a beautiful book with OttoStory.
+            <br />
+            <br />
+            Ready to tell <i>your story?</i>
+        </h6>
+    </div>
+</Focus>
+
+<Contact />
+
+<Footer />

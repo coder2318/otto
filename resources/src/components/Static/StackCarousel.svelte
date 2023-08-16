@@ -55,7 +55,7 @@
     }
 </script>
 
-<section class="flex min-h-screen items-center justify-center py-16">
+<section class="flex items-center justify-center py-16">
     <div class="container grid gap-20 lg:grid-cols-2">
         <div class="card">
             <div class="flex flex-col gap-8 p-4">
