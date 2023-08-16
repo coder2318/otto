@@ -8,6 +8,7 @@
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
     import TwoColumns from '@/components/Static/TwoColumns.svelte'
+    import RepliesCarousel from '@/components/Static/RepliesCarousel.svelte'
 
     import checkMark from '@/assets/img/checkmark.svg'
     import img1 from '@/assets/img/img-1.jpg'
@@ -320,3 +321,5 @@
         </ul>
     </div>
 </TwoColumns>
+
+<RepliesCarousel />
