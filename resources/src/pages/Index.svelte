@@ -7,18 +7,20 @@
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
-    import TwoColumns from '@/components/Static/TwoColumns.svelte'
+    import TwoColumns from '@/components/Static/TwoColumnsSection.svelte'
     import RepliesCarousel from '@/components/Static/RepliesCarousel.svelte'
 
     import checkMark from '@/assets/img/checkmark.svg'
-    import img1 from '@/assets/img/img-1.jpg'
-    import img2 from '@/assets/img/img-2.jpg'
-    import img3 from '@/assets/img/img-3.jpg'
-    import img4 from '@/assets/img/img-4.jpg'
+    import img1 from '@/assets/img/index-img-1.jpg'
+    import img2 from '@/assets/img/index-img-2.jpg'
+    import img3 from '@/assets/img/index-img-3.jpg'
+    import img4 from '@/assets/img/index-img-4.jpg'
     import splash1 from '@/assets/img/splash-1.svg'
     import splash2 from '@/assets/img/splash-2.svg'
     import splash3 from '@/assets/img/splash-3.svg'
     import splash4 from '@/assets/img/splash-4.svg'
+    import Fa from 'svelte-fa'
+    import { faCheck } from '@fortawesome/free-solid-svg-icons'
 </script>
 
 <svelte:head>
@@ -42,284 +44,265 @@
     </div>
 </Focus>
 
-<TwoColumns img={img1}>
+<section class="tems-center flex justify-center py-16">
     <div
-        class="relative mb-7 flex w-fit items-center rounded-full bg-white py-2 pl-3 pr-4 text-lg max-sm:text-base"
+        class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="absolute left-[-64px] top-[-48px] z-[-1]">
-            <img src={splash1} alt="splash" />
+        <div class="card order-2">
+            <div class="flex flex-col gap-8 p-4">
+                <div class="relative flex">
+                    <div class="absolute -left-16 -top-12 -z-10">
+                        <img src={splash1} alt="splash" />
+                    </div>
+                    <div class="badge badge-neutral gap-4 px-2 py-6 text-lg">
+                        <span class="badge badge-accent h-8 w-8">1</span>
+                        <span>Kick-starting Your Story</span>
+                    </div>
+                </div>
+                <h5
+                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
+                >
+                    Your Story <i>Starts Here</i>
+                </h5>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Begin your storytelling by diving into a random chapter
+                    presented by Otto, navigate through your life's timeline
+                    divided into distinct periods like childhood, adolescence,
+                    and beyond, or revise your previous drafts.
+                </p>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Each question you encounter has been meticulously designed
+                    by experienced psychologists, ensuring meaningful and
+                    reflective storytelling. Your journey through the past,
+                    present, and future is just a story-start away.
+                </p>
+                <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Carefully curated questions and prompts
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Organize your story by key lifetime events or milestones
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+                        Timeline structure
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <span
-            class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#F7A392] text-sm text-white max-sm:h-6 max-sm:w-6 max-sm:text-xs"
-        >
-            1
-        </span>
-
-        Kick-starting Your Story
+        <div class="card order-1 hidden md:block">
+            <figure>
+                <img class="rounded-2xl" src={img1} alt="" />
+            </figure>
+        </div>
     </div>
+</section>
 
-    <h2
-        class="mb-7 text-6xl tracking-[-1.2px] text-primary max-sm:mb-3 max-sm:text-3xl"
-    >
-        Your Story
-
-        <span class="text-[64px] italic tracking-[-1.28px] max-sm:text-3xl">
-            Starts Here
-        </span>
-    </h2>
-
-    <div class="pl-28 text-lg max-sm:pl-7 max-sm:text-base">
-        <p class="mb-7 max-sm:mb-5">
-            Begin your storytelling by diving into a random chapter presented by
-            Otto, navigate through your life's timeline divided into distinct
-            periods like childhood, adolescence, and beyond, or revise your
-            previous drafts.
-        </p>
-
-        <p class="mb-7 max-sm:mb-5">
-            Each question you encounter has been meticulously designed by
-            experienced psychologists, ensuring meaningful and reflective
-            storytelling. Your journey through the past, present, and future is
-            just a story-start away.
-        </p>
-
-        <ul>
-            <li class="flex border-b border-white pb-4">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Carefully curated questions and prompts
-            </li>
-
-            <li class="flex border-b border-white pb-4 pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Organize your story by key lifetime events or milestones
-            </li>
-
-            <li class="flex pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Timeline structure
-            </li>
-        </ul>
-    </div>
-</TwoColumns>
-
-<TwoColumns reversed img={img2}>
+<section class="tems-center flex justify-center py-16">
     <div
-        class="relative mb-7 flex w-fit items-center rounded-full bg-white py-2 pl-3 pr-4 text-lg max-sm:text-base"
+        class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="absolute left-[-64px] top-[-48px] z-[-1]">
-            <img src={splash2} alt="splash" />
+        <div class="card order-1">
+            <div class="flex flex-col gap-8 p-4">
+                <div class="relative flex">
+                    <div class="absolute -left-16 -top-12 -z-10">
+                        <img src={splash2} alt="splash" />
+                    </div>
+                    <div class="badge badge-neutral gap-4 px-2 py-6 text-lg">
+                        <span class="badge badge-primary h-8 w-8 text-neutral"
+                            >2</span
+                        >
+                        <span>Intuitive Engagement with Otto</span>
+                    </div>
+                </div>
+                <h5
+                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
+                >
+                    Your Story, <i>Your Way</i>
+                </h5>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Sharing your life with OttoStory is a breeze. Engage with
+                    Otto Story in the way that suits you best. Reply to our
+                    curated questions and prompts through spoken voice
+                    recordings, uploaded pre-written files, or simply type out
+                    your tales on the keyboard.
+                </p>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Each entry allows room for drafting, editing, and
+                    personalizing your story. And remember, Otto is always there
+                    to listen and to refine your narrative, ensuring your memoir
+                    shines as brightly as your memories.
+                </p>
+                <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Unlimited draft editing and recordings
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Upload PDFs, Doc or TXT files
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+                        Multi-lingual translations
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <span
-            class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#112948] text-sm text-white max-sm:h-6 max-sm:w-6 max-sm:text-xs"
-        >
-            2
-        </span>
-
-        Intuitive Engagement with Otto
+        <div class="card order-2 hidden md:block">
+            <figure>
+                <img class="rounded-2xl" src={img2} alt="" />
+            </figure>
+        </div>
     </div>
+</section>
 
-    <h2
-        class="mb-7 text-6xl tracking-[-1.2px] text-primary max-sm:mb-3 max-sm:text-3xl"
-    >
-        Your Story,
-
-        <span class="text-[64px] italic tracking-[-1.28px] max-sm:text-3xl">
-            Your Way
-        </span>
-    </h2>
-
-    <div class="pl-28 text-lg max-sm:pl-7 max-sm:text-base">
-        <p class="mb-7 max-sm:mb-5">
-            Sharing your life with OttoStory is a breeze. Engage with Otto Story
-            in the way that suits you best. Reply to our curated questions and
-            prompts through spoken voice recordings, uploaded pre-written files,
-            or simply type out your tales on the keyboard.
-        </p>
-
-        <p class="mb-7 max-sm:mb-5">
-            Each entry allows room for drafting, editing, and personalizing your
-            story. And remember, Otto is always there to listen and to refine
-            your narrative, ensuring your memoir shines as brightly as your
-            memories.
-        </p>
-
-        <ul>
-            <li class="flex border-b border-white pb-4">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Unlimited draft editing and recordings
-            </li>
-
-            <li class="flex border-b border-white pb-4 pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Upload PDFs, Doc or TXT files
-            </li>
-
-            <li class="flex pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Multi-lingual translations
-            </li>
-        </ul>
-    </div>
-</TwoColumns>
-
-<TwoColumns img={img3}>
+<section class="tems-center flex justify-center py-16">
     <div
-        class="relative mb-7 flex w-fit items-center rounded-full bg-white py-2 pl-3 pr-4 text-lg max-sm:text-base"
+        class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="absolute left-[-64px] top-[-48px] z-[-1]">
-            <img src={splash3} alt="splash" />
+        <div class="card order-2">
+            <div class="flex flex-col gap-8 p-4">
+                <div class="relative flex">
+                    <div class="absolute -left-16 -top-12 -z-10">
+                        <img src={splash3} alt="splash" />
+                    </div>
+                    <div class="badge badge-neutral gap-4 px-2 py-6 text-lg">
+                        <span class="badge badge-success h-8 w-8">3</span>
+                        <span>Finalizing Your Masterpiece</span>
+                    </div>
+                </div>
+                <h5
+                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
+                >
+                    From Digital Pages to <i>Tangible Keepsake</i>
+                </h5>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Take artistic control and create a personalized cover that
+                    encapsulates the essence of your story. From choosing
+                    captivating images to selecting the perfect font, you shape
+                    the face of your autobiography.
+                </p>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    Finally, your digital memoir is transformed into a tangible
+                    keepsake, professionally printed and bound in hardback.
+                    Every page you turn is a testament to your life's unique
+                    journey, now immortalized in print, waiting to be shared and
+                    cherished forever.
+                </p>
+                <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Physical hardcopy
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Digital version
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+                        Custom cover designs
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <span
-            class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#C0DFB0] text-sm text-white max-sm:h-6 max-sm:w-6 max-sm:text-xs"
-        >
-            3
-        </span>
-
-        Finalizing Your Masterpiece
+        <div class="card order-1 hidden md:block">
+            <figure>
+                <img class="rounded-2xl" src={img3} alt="" />
+            </figure>
+        </div>
     </div>
+</section>
 
-    <h2
-        class="mb-7 text-6xl tracking-[-1.2px] text-primary max-sm:mb-3 max-sm:text-3xl"
-    >
-        From Digital Pages to
-
-        <span class="text-[64px] italic tracking-[-1.28px] max-sm:text-3xl">
-            Tangible Keepsake
-        </span>
-    </h2>
-
-    <div class="pl-28 text-lg max-sm:pl-7 max-sm:text-base">
-        <p class="mb-7 max-sm:mb-5">
-            Take artistic control and create a personalized cover that
-            encapsulates the essence of your story. From choosing captivating
-            images to selecting the perfect font, you shape the face of your
-            autobiography.
-        </p>
-
-        <p class="mb-7 max-sm:mb-5">
-            Finally, your digital memoir is transformed into a tangible
-            keepsake, professionally printed and bound in hardback. Every page
-            you turn is a testament to your life's unique journey, now
-            immortalized in print, waiting to be shared and cherished forever.
-        </p>
-
-        <ul>
-            <li class="flex border-b border-white pb-4">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Physical hardcopy
-            </li>
-
-            <li class="flex border-b border-white pb-4 pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Digital version
-            </li>
-
-            <li class="flex pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Custom cover designs
-            </li>
-        </ul>
-    </div>
-</TwoColumns>
-
-<TwoColumns img={img4} reversed>
+<section class="tems-center flex justify-center py-16">
     <div
-        class="relative mb-7 flex w-fit items-center rounded-full bg-white py-2 pl-3 pr-4 text-lg max-sm:text-base"
+        class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="absolute left-[-64px] top-[-48px] z-[-1]">
-            <img src={splash4} alt="splash" />
+        <div class="card order-1">
+            <div class="flex flex-col gap-8 p-4">
+                <div class="relative flex">
+                    <div class="absolute -left-16 -top-12 -z-10">
+                        <img src={splash4} alt="splash" />
+                    </div>
+                    <div class="badge badge-neutral gap-4 px-2 py-6 text-lg">
+                        <span class="badge badge-secondary h-8 w-8">4</span>
+                        <span>Share and Sell Your Autobiography</span>
+                    </div>
+                </div>
+                <h5
+                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
+                >
+                    Memoirs Meet <i>Marketplace</i>
+                </h5>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    OttoStory isn't just about preserving your life story for
+                    yourself and your loved ones. We provide a platform for you
+                    to share your memoir with the world. Imagine self-publishing
+                    your autobiography online and reaching an audience eager to
+                    hear your unique journey.
+                </p>
+                <p class="md:text-md lg:text-lg xl:pl-20">
+                    That's the beauty of OttoStory's marketplace - not just a
+                    writing platform but a stage for your narrative. Here, your
+                    story can inspire, entertain, and touch lives far beyond
+                    your immediate circle.
+                </p>
+                <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Worldwide exposure
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+
+                        Monetize your life's experiences
+                    </li>
+                    <li class="flex items-center gap-4">
+                        <div class="badge badge-primary h-8 w-8 text-secondary">
+                            <Fa icon={faCheck} />
+                        </div>
+                        Inspire, uplift, and influence
+                    </li>
+                </ul>
+            </div>
         </div>
-
-        <span
-            class="mr-3 flex h-9 w-9 items-center justify-center rounded-full bg-[#C0DFB0] text-sm text-white max-sm:h-6 max-sm:w-6 max-sm:text-xs"
-        >
-            4
-        </span>
-
-        Share and Sell Your Autobiography
+        <div class="card order-2 hidden md:block">
+            <figure>
+                <img class="rounded-2xl" src={img4} alt="" />
+            </figure>
+        </div>
     </div>
-
-    <h2
-        class="mb-7 text-6xl tracking-[-1.2px] text-primary max-sm:mb-3 max-sm:text-3xl"
-    >
-        Memoirs Meet
-
-        <span class="text-[64px] italic tracking-[-1.28px] max-sm:text-3xl">
-            Marketplace
-        </span>
-    </h2>
-
-    <div class="pl-28 text-lg max-sm:pl-7 max-sm:text-base">
-        <p class="mb-7 max-sm:mb-5">
-            OttoStory isn't just about preserving your life story for yourself
-            and your loved ones. We provide a platform for you to share your
-            memoir with the world. Imagine self-publishing your autobiography
-            online and reaching an audience eager to hear your unique journey.
-        </p>
-
-        <p class="mb-7 max-sm:mb-5">
-            That's the beauty of OttoStory's marketplace - not just a writing
-            platform but a stage for your narrative. Here, your story can
-            inspire, entertain, and touch lives far beyond your immediate
-            circle.
-        </p>
-
-        <ul>
-            <li class="flex border-b border-white pb-4">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Worldwide exposure
-            </li>
-
-            <li class="flex border-b border-white pb-4 pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Monetize your life's experiences
-            </li>
-
-            <li class="flex pt-3.5">
-                <span class="mr-4">
-                    <img src={checkMark} alt="Checkmark" />
-                </span>
-
-                Inspire, uplift, and influence
-            </li>
-        </ul>
-    </div>
-</TwoColumns>
+</section>
 
 <RepliesCarousel />

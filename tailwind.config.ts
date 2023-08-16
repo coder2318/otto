@@ -33,6 +33,7 @@ export default {
                 'base-100': '#F1EDE7',
                 'base-200': '#ECE6DF',
                 'base-300': '#D9CEBF',
+                'success': '#C0DFB0',
             }
         }]
     }
