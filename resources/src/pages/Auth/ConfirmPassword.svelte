@@ -12,9 +12,11 @@
 
     $: honeypot = $page?.props?.honeypot as Honeypot
 
-    const form = useForm(addHoneypot(honeypot)({
-        password: '',
-    }))
+    const form = useForm(
+        addHoneypot(honeypot)({
+            password: '',
+        })
+    )
 
     function submit() {
         $form.post('/user/confirm-password', { replace: true })
@@ -38,12 +40,20 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
-    {#if honeypot.enabled}
-        <div class="hidden">
-            <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
-            <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
-        </div>
-    {/if}
+        {#if honeypot.enabled}
+            <div class="hidden">
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.nameFieldName]}
+                    name="honeypot.nameFieldName"
+                    id="honeypot.nameFieldName"
+                />
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.validFromFieldName]}
+                />
+            </div>
+        {/if}
         <div class="form-control w-full">
             <label class="label" for="password">
                 <span class="label-text">Password</span>

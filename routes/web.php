@@ -7,8 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 // Static Pages
 Route::inertia('/', 'Index', [
-    'laravelVersion' => \Illuminate\Foundation\Application::VERSION,
-    'phpVersion' => PHP_VERSION,
+    'honeypot' => fn () => app(\Spatie\Honeypot\Honeypot::class),
 ])->name('index');
 
 Route::inertia('/about', 'About')->name('about');

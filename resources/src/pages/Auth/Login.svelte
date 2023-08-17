@@ -14,11 +14,13 @@
 
     $: honeypot = $page?.props?.honeypot as Honeypot
 
-    const form = useForm(addHoneypot(honeypot)({
-        email: '',
-        password: '',
-        remember: false,
-    }))
+    const form = useForm(
+        addHoneypot(honeypot)({
+            email: '',
+            password: '',
+            remember: false,
+        })
+    )
 
     function submit() {
         $form.post('/login')
@@ -44,8 +46,16 @@
     >
         {#if honeypot.enabled}
             <div class="hidden">
-                <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
-                <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.nameFieldName]}
+                    name="honeypot.nameFieldName"
+                    id="honeypot.nameFieldName"
+                />
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.validFromFieldName]}
+                />
             </div>
         {/if}
         <div class="form-control w-full">

@@ -14,11 +14,13 @@
 
     $: honeypot = $page?.props?.honeypot as Honeypot
 
-    const form = useForm(addHoneypot(honeypot)({
-        email: '',
-        password: '',
-        password_confirmation: '',
-    }))
+    const form = useForm(
+        addHoneypot(honeypot)({
+            email: '',
+            password: '',
+            password_confirmation: '',
+        })
+    )
 
     function submit() {
         $form.post('/register')
@@ -43,12 +45,20 @@
         class="flex w-full flex-col items-center"
         autocomplete="on"
     >
-    {#if honeypot.enabled}
-        <div class="hidden">
-            <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
-            <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
-        </div>
-    {/if}
+        {#if honeypot.enabled}
+            <div class="hidden">
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.nameFieldName]}
+                    name="honeypot.nameFieldName"
+                    id="honeypot.nameFieldName"
+                />
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.validFromFieldName]}
+                />
+            </div>
+        {/if}
         <div class="form-control w-full">
             <label class="label" for="email">
                 <span class="label-text">Email</span>

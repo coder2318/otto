@@ -36,7 +36,6 @@ class HandleInertiaRequests extends Middleware
     {
         return array_merge(parent::share($request), [
             'auth.user' => fn () => $request->user(),
-            'honeypot' => fn () => app(Honeypot::class),
             'flash' => fn () => [
                 'message' => $request->session()->get('message'),
                 'status' => $request->session()->get('status'),

@@ -14,12 +14,14 @@
 
     let url = new URL(document.location.toString())
 
-    const form = useForm(addHoneypot(honeypot)({
-        password: '',
-        password_confirmation: '',
-        email: url.searchParams.get('email'),
-        token: url.pathname.split(/[/]/).pop(),
-    }))
+    const form = useForm(
+        addHoneypot(honeypot)({
+            password: '',
+            password_confirmation: '',
+            email: url.searchParams.get('email'),
+            token: url.pathname.split(/[/]/).pop(),
+        })
+    )
 
     function submit() {
         $form.post('/reset-password')
@@ -43,12 +45,20 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
-    {#if honeypot.enabled}
-        <div class="hidden">
-            <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
-            <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
-        </div>
-    {/if}
+        {#if honeypot.enabled}
+            <div class="hidden">
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.nameFieldName]}
+                    name="honeypot.nameFieldName"
+                    id="honeypot.nameFieldName"
+                />
+                <input
+                    type="text"
+                    bind:value={$form[honeypot.validFromFieldName]}
+                />
+            </div>
+        {/if}
         <div class="form-control w-full">
             <label class="label" for="password">
                 <span class="label-text">New Password</span>
