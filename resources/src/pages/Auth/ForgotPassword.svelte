@@ -6,12 +6,15 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { useForm, inertia } from '@inertiajs/svelte'
+    import { useForm, inertia, page } from '@inertiajs/svelte'
     import Logo from '@/components/SVG/logo.svg.svelte'
+    import { addHoneypot, type Honeypot } from '@/service/honeypot'
 
-    const form = useForm({
+    $: honeypot = $page?.props?.honeypot as Honeypot
+
+    const form = useForm(addHoneypot(honeypot)({
         email: '',
-    })
+    }))
 
     function submit() {
         $form.post('/forgot-password')
@@ -35,6 +38,12 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
+    {#if honeypot.enabled}
+        <div class="hidden">
+            <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
+            <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
+        </div>
+    {/if}
         <div class="form-control w-full">
             <label class="label" for="email">
                 <span class="label-text">Email</span>

@@ -1,14 +1,19 @@
 <script lang="ts">
-    import { useForm } from '@inertiajs/svelte'
+    import { useForm, page } from '@inertiajs/svelte'
     import image from '@/assets/img/contact.jpeg'
+    import { addHoneypot, type Honeypot } from '@/service/honeypot'
 
-    const form = useForm({
-        name: '',
-        email: '',
-    })
+    $: honeypot = $page?.props?.honeypot as Honeypot
+
+    const form = useForm(
+        addHoneypot(honeypot)({
+            name: '',
+            email: '',
+        })
+    )
 
     function submit() {
-        $form.post('/contact')
+        $form.post('/preorder', { preserveScroll: true })
     }
 </script>
 
@@ -28,6 +33,20 @@
                 class="card-body justify-center gap-4"
                 on:submit|preventDefault={submit}
             >
+                {#if honeypot.enabled}
+                    <div class="hidden">
+                        <input
+                            type="text"
+                            bind:value={$form[honeypot.nameFieldName]}
+                            name="honeypot.nameFieldName"
+                            id="honeypot.nameFieldName"
+                        />
+                        <input
+                            type="text"
+                            bind:value={$form[honeypot.validFromFieldName]}
+                        />
+                    </div>
+                {/if}
                 <h1 class="text-4xl text-primary">
                     Sign Up for <i>Preorder</i>
                 </h1>
@@ -44,9 +63,16 @@
                         type="text"
                         id="name"
                         name="name"
+                        bind:value={$form.name}
                         class="input input-bordered input-ghost"
+                        class:input-error={$form.errors.name}
                         placeholder="Enter Full Name"
                     />
+                    {#if $form.errors.name}
+                        <span class="label-text-alt mt-1 text-left text-error">
+                            {$form.errors.name}
+                        </span>
+                    {/if}
                 </div>
                 <div class="form-control">
                     <label class="label" for="email">
@@ -56,16 +82,23 @@
                         type="email"
                         id="email"
                         name="email"
+                        bind:value={$form.email}
                         class="input input-bordered input-ghost"
+                        class:input-error={$form.errors.email}
                         placeholder="Enter Email Address"
                         required
                     />
+                    {#if $form.errors.email}
+                        <span class="label-text-alt mt-1 text-left text-error">
+                            {$form.errors.email}
+                        </span>
+                    {/if}
                 </div>
                 <div class="card-actions justify-end">
                     <button
                         type="submit"
                         class="btn btn-secondary btn-lg rounded-full"
-                        >Submit</button
+                        disabled={$form.processing}>Submit</button
                     >
                 </div>
             </form>

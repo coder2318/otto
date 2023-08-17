@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\SocialAuthController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
@@ -15,6 +16,8 @@ Route::inertia('/privacy-policy', 'PrivacyPolicy')->name('privacy-policy');
 Route::inertia('/terms-and-conditions', 'TermsAndConditions')->name('terms-and-conditions');
 Route::inertia('/faq', 'FAQ')->name('faq');
 Route::inertia('/contact', 'Contact')->name('contact');
+
+Route::post('/preorder', [PreorderController::class, 'store'])->name('preorder.store')->middleware('anti-spam');
 
 // Auth
 Route::controller(SocialAuthController::class)

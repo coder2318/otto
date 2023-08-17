@@ -5,18 +5,21 @@
 </script>
 
 <script lang="ts">
-    import { useForm, inertia } from '@inertiajs/svelte'
+    import { useForm, inertia, page } from '@inertiajs/svelte'
     import Logo from '@/components/SVG/logo.svg.svelte'
     import InputPassword from '@/components/Auth/InputPassword.svelte'
+    import { addHoneypot, type Honeypot } from '@/service/honeypot'
+
+    $: honeypot = $page?.props?.honeypot as Honeypot
 
     let url = new URL(document.location.toString())
 
-    const form = useForm({
+    const form = useForm(addHoneypot(honeypot)({
         password: '',
         password_confirmation: '',
         email: url.searchParams.get('email'),
         token: url.pathname.split(/[/]/).pop(),
-    })
+    }))
 
     function submit() {
         $form.post('/reset-password')
@@ -40,6 +43,12 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
+    {#if honeypot.enabled}
+        <div class="hidden">
+            <input type="text" bind:value={$form[honeypot.nameFieldName]} name="honeypot.nameFieldName" id="honeypot.nameFieldName" />
+            <input type="text" bind:value={$form[honeypot.validFromFieldName]} />
+        </div>
+    {/if}
         <div class="form-control w-full">
             <label class="label" for="password">
                 <span class="label-text">New Password</span>

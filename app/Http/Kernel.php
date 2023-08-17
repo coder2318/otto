@@ -67,5 +67,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'user-configured' => \App\Http\Middleware\UserConfigured::class,
         'subscribed' => \App\Http\Middleware\HaveSubscriptions::class,
+        'anti-spam' => \Spatie\Honeypot\ProtectAgainstSpam::class,
     ];
 }
