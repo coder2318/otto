@@ -6,6 +6,7 @@
 <script lang="ts">
     import Navbar from '@/components/Static/Navbar.svelte'
     import PageHeader from '@/components/Static/PageHeader.svelte'
+    import AboutContent from '@/components/Static/AboutContent.svelte'
 </script>
 
 <svelte:head>
@@ -15,3 +16,5 @@
 <Navbar />
 
 <PageHeader />
+
+<AboutContent />
