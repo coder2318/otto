@@ -27,7 +27,7 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $honeypot = [ 'honeypot' => fn () => app(Honeypot::class) ];
+        $honeypot = ['honeypot' => fn () => app(Honeypot::class)];
         // Features
         Fortify::createUsersUsing(AuthService::class);
         Fortify::updateUserProfileInformationUsing(AuthService::class);

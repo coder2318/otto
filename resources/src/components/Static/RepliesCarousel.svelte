@@ -104,7 +104,7 @@
                 </div>
             </div>
             <div
-                class="carousel-center carousel rounded-box hidden space-x-4 overflow-hidden lg:inline-flex"
+                class="carousel carousel-center rounded-box hidden space-x-4 overflow-hidden lg:inline-flex"
                 bind:this={carousel}
             >
                 {#each elements as element (element.key)}

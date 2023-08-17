@@ -1,12 +1,11 @@
 <script lang="ts">
     import { useForm, page } from '@inertiajs/svelte'
     import image from '@/assets/img/contact.jpeg'
-    import { addHoneypot, type Honeypot } from '@/service/honeypot'
-
-    $: honeypot = $page?.props?.honeypot as Honeypot
+    import { addHoneypot } from '@/service/honeypot'
+    import Honeypot from '../Honeypot.svelte'
 
     const form = useForm(
-        addHoneypot(honeypot)({
+        addHoneypot($page?.props?.honeypot)({
             name: '',
             email: '',
         })
@@ -33,20 +32,7 @@
                 class="card-body justify-center gap-4"
                 on:submit|preventDefault={submit}
             >
-                {#if honeypot.enabled}
-                    <div class="hidden">
-                        <input
-                            type="text"
-                            bind:value={$form[honeypot.nameFieldName]}
-                            name="honeypot.nameFieldName"
-                            id="honeypot.nameFieldName"
-                        />
-                        <input
-                            type="text"
-                            bind:value={$form[honeypot.validFromFieldName]}
-                        />
-                    </div>
-                {/if}
+                <Honeypot honeypot={$page?.props?.honeypot} {form} />
                 <h1 class="text-4xl text-primary">
                     Sign Up for <i>Preorder</i>
                 </h1>

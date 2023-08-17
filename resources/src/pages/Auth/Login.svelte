@@ -10,12 +10,11 @@
     import Logo from '@/components/SVG/logo.svg.svelte'
     import InputPassword from '@/components/Auth/InputPassword.svelte'
     import SocialLogin from '@/components/Auth/SocialLogin.svelte'
-    import { addHoneypot, type Honeypot } from '@/service/honeypot'
-
-    $: honeypot = $page?.props?.honeypot as Honeypot
+    import { addHoneypot } from '@/service/honeypot'
+    import Honeypot from '@/components/Honeypot.svelte'
 
     const form = useForm(
-        addHoneypot(honeypot)({
+        addHoneypot($page?.props?.honeypot)({
             email: '',
             password: '',
             remember: false,
@@ -44,20 +43,7 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
-        {#if honeypot.enabled}
-            <div class="hidden">
-                <input
-                    type="text"
-                    bind:value={$form[honeypot.nameFieldName]}
-                    name="honeypot.nameFieldName"
-                    id="honeypot.nameFieldName"
-                />
-                <input
-                    type="text"
-                    bind:value={$form[honeypot.validFromFieldName]}
-                />
-            </div>
-        {/if}
+        <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="form-control w-full">
             <label class="label" for="email">
                 <span class="label-text">Email</span>

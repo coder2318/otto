@@ -7,11 +7,10 @@
 <script lang="ts">
     import { inertia, useForm, page } from '@inertiajs/svelte'
     import Logo from '@/components/SVG/logo.svg.svelte'
-    import { addHoneypot, type Honeypot } from '@/service/honeypot'
+    import { addHoneypot } from '@/service/honeypot'
+    import Honeypot from '@/components/Honeypot.svelte'
 
-    $: honeypot = $page?.props?.honeypot as Honeypot
-
-    const form = useForm(addHoneypot(honeypot)())
+    const form = useForm(addHoneypot($page?.props?.honeypot)())
 
     function submit() {
         $form.post('/email/verification-notification')
@@ -35,20 +34,7 @@
         on:submit|preventDefault={submit}
         class="flex w-full flex-col items-center"
     >
-        {#if honeypot.enabled}
-            <div class="hidden">
-                <input
-                    type="text"
-                    bind:value={$form[honeypot.nameFieldName]}
-                    name="honeypot.nameFieldName"
-                    id="honeypot.nameFieldName"
-                />
-                <input
-                    type="text"
-                    bind:value={$form[honeypot.validFromFieldName]}
-                />
-            </div>
-        {/if}
+        <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="mb-8">
             Thanks for signing up! Before getting started, could you verify your
             email address by clicking on the link we just emailed to you? If you
