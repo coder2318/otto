@@ -14,7 +14,8 @@ class NewPreorderNotification extends Notification implements ShouldQueue
 
     public function __construct(
         protected Preorder $preorder
-    ) {}
+    ) {
+    }
 
     public function via(object $notifiable): array
     {
@@ -31,7 +32,7 @@ class NewPreorderNotification extends Notification implements ShouldQueue
             ->greeting('Hello!')
             ->line('I just made a new preorder on your platform!')
             ->line('Here is the information:')
-            ->line('Name: ' . $this->preorder->name)
-            ->line('Email: ' . $this->preorder->email);
+            ->line('Name: '.$this->preorder->name)
+            ->line('Email: '.$this->preorder->email);
     }
 }
