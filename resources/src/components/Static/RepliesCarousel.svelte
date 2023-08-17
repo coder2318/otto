@@ -73,7 +73,7 @@
                     icon={faQuoteLeft}
                     class="absolute -top-12 left-16 text-8xl text-base-300"
                 />
-                <div class="card-body gap-4 p-16">
+                <div class="card-body gap-4 pt-12">
                     {#key elements[0].key}
                         <p class="md:text-md lg:text-lg" in:blur>
                             “{elements[0].text}”

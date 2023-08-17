@@ -7,7 +7,7 @@
 
 <footer class="bg-primary px-4 text-primary-content">
     <div
-        class="container mx-auto flex gap-8 py-8 text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
+        class="container mx-auto flex flex-col gap-8 py-8 text-2xl sm:flex-row sm:items-center md:text-3xl lg:text-4xl"
     >
         <span class="font-serif"
             >Preserve meaningful moments & memories in a beautiful <i

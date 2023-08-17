@@ -17,14 +17,11 @@
     import splash2 from '@/assets/img/splash-2.svg'
     import splash3 from '@/assets/img/splash-3.svg'
     import splash4 from '@/assets/img/splash-4.svg'
-    import plate1 from '@/assets/img/index-plates-1.png'
-    import plate2 from '@/assets/img/index-plates-2.png'
-    import plate3 from '@/assets/img/index-plates-3.png'
-    import plate4 from '@/assets/img/index-plates-4.png'
     import Fa from 'svelte-fa'
     import { faCheck } from '@fortawesome/free-solid-svg-icons'
     import Footer from '@/components/Static/Footer.svelte'
     import Contact from '@/components/Static/Contact.svelte'
+    import Plates from '@/components/Static/Plates.svelte'
 </script>
 
 <svelte:head>
@@ -104,7 +101,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-1">
+        <div class="card order-1 items-center">
             <figure>
                 <img class="rounded-2xl" src={img1} alt="" />
             </figure>
@@ -116,7 +113,7 @@
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="card order-1">
+        <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex">
                     <div class="absolute -left-16 -top-12 -z-10">
@@ -236,7 +233,7 @@
                 </ul>
             </div>
         </div>
-        <div class="card order-1">
+        <div class="card order-1 items-center">
             <figure>
                 <img class="rounded-2xl" src={img3} alt="" />
             </figure>
@@ -248,7 +245,7 @@
     <div
         class="container grid items-center justify-center gap-20 md:grid-cols-2"
     >
-        <div class="card order-1">
+        <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex">
                     <div class="absolute -left-16 -top-12 -z-10">
@@ -311,85 +308,7 @@
 
 <RepliesCarousel />
 
-<section class="flex items-center justify-center py-16">
-    <div
-        class="container mx-auto grid grid-flow-col grid-cols-4 grid-rows-6 gap-4"
-    >
-        <div
-            class="card order-1 row-span-4 mt-[100%] bg-success text-success-content"
-        >
-            <div class="card-body">
-                <h2 class="card-title font-serif text-4xl font-normal italic">
-                    100% Secure & Confidential
-                </h2>
-                <p>
-                    Your memories are safe with us, as OttoStory guarantees
-                    complete security and confidentiality of your personal
-                    narratives and information
-                </p>
-            </div>
-        </div>
-        <div class="card order-2 row-span-2 ml-auto w-1/2 pb-[50%]">
-            <figure>
-                <img class="rounded-2xl" src={plate1} alt="" />
-            </figure>
-        </div>
-        <div
-            class="card order-4 row-span-3 bg-secondary text-secondary-content"
-        >
-            <div class="card-body">
-                <h2 class="card-title font-serif text-4xl font-normal italic">
-                    Photo Inclusion
-                </h2>
-                <p>
-                    Enrich your narrative with personal images, adding a vibrant
-                    visual element to your memoir.
-                </p>
-            </div>
-        </div>
-        <div class="card order-3 row-span-3 mt-auto">
-            <figure>
-                <img class="rounded-2xl" src={plate2} alt="" />
-            </figure>
-        </div>
-        <div class="card order-5 row-span-3 bg-primary text-primary-content">
-            <div class="card-body">
-                <h2 class="card-title font-serif text-4xl font-normal italic">
-                    Emotion Recognition
-                </h2>
-                <p>
-                    Engage with thought-provoking prompts crafted by
-                    psychologists, while Otto, sensitive to your emotional tone,
-                    ensures your storytelling remains authentic and deeply
-                    resonant.
-                </p>
-            </div>
-        </div>
-        <div class="card order-6 row-span-3">
-            <figure>
-                <img class="rounded-2xl" src={plate3} alt="" />
-            </figure>
-        </div>
-        <div
-            class="card order-8 row-span-4 mb-[100%] bg-accent text-accent-content"
-        >
-            <div class="card-body">
-                <h2 class="card-title font-serif text-4xl font-normal italic">
-                    Give the Gift of Your Story
-                </h2>
-                <p>
-                    Share the joy of storytelling by gifting an OttoStory
-                    experience to your loved ones.
-                </p>
-            </div>
-        </div>
-        <div class="card order-7 row-span-2 mt-auto w-1/2">
-            <figure>
-                <img class="rounded-2xl" src={plate4} alt="" />
-            </figure>
-        </div>
-    </div>
-</section>
+<Plates />
 
 <Focus>
     <div class="flex w-full items-center justify-center">
