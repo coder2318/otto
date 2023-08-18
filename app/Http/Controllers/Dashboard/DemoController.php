@@ -10,6 +10,7 @@ use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Models\TimelineQuestion;
+use App\Notifications\DemoFinishedNotification;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -171,6 +172,10 @@ class DemoController extends Controller
     {
         [$chapter, $story] = $this->data($request);
 
+        if ($story->status !== StoryStatus::PUBLISHED) {
+            $request->user()->notify(new DemoFinishedNotification($story));
+        }
+
         $story->update([
             'status' => StoryStatus::PUBLISHED,
         ]);
@@ -190,6 +195,6 @@ class DemoController extends Controller
 
         abort_unless($story, 404);
 
-        return Pdf::loadView('pdf.book', compact('story'))->download('demo.pdf');
+        return Pdf::loadView('pdf.book', compact('story'))->stream('demo.pdf');
     }
 }
