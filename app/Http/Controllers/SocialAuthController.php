@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\CreatedAccountBySocialNotification;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -33,17 +34,20 @@ class SocialAuthController extends Controller
 
     public function redirect(string $provider)
     {
-        $user = Socialite::driver($provider)->user();
+        $userData = Socialite::driver($provider)->user();
 
         /** @var User */
-        $user = User::firstOrCreate([
-            'email' => $user->getEmail(),
-        ], [
-            'email' => $user->getEmail(),
-            'name' => $user->getName(),
-            'avatar' => $user->getAvatar(),
-            'password' => Hash::make(Str::random()),
-        ]);
+        if (! $user = User::where('email', $userData->getEmail())->first()) {
+            /** @var User */
+            $user = User::create([
+                'name' => $userData->getName(),
+                'email' => $userData->getEmail(),
+                'avatar' => $userData->getAvatar(),
+                'password' => Hash::make($password = Str::random()),
+            ]);
+
+            $user->notify(new CreatedAccountBySocialNotification($password));
+        }
 
         if (! $user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();

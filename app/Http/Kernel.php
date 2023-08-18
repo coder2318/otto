@@ -68,5 +68,6 @@ class Kernel extends HttpKernel
         'user-configured' => \App\Http\Middleware\UserConfigured::class,
         'subscribed' => \App\Http\Middleware\HaveSubscriptions::class,
         'anti-spam' => \Spatie\Honeypot\ProtectAgainstSpam::class,
+        'features' => \Laravel\Pennant\Middleware\EnsureFeaturesAreActive::class,
     ];
 }

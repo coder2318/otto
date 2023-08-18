@@ -1,5 +1,6 @@
 <?php
 
+use App\Features\BetaAccess;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\PlanController;
@@ -17,30 +18,27 @@ Route::middleware('user-configured')->group(function () {
         ->name('demo')
         ->middleware(['subscribed:0']);
 
-    // Stories
-    Route::resource('stories', StoryController::class);
-    Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
-        Route::get('/covers', 'covers')->name('covers');
-    });
-    Route::resource('stories.chapters', ChapterController::class)->shallow();
-    Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
-        Route::get('/write', 'write')->name('write');
-        Route::get('/upload', 'upload')->name('upload');
-        Route::get('/record', 'record')->name('record');
-        Route::get('/files', 'attachments')->name('attachments');
-        Route::post('/files', 'transcribe')->name('attachments.transcribe');
-        Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
-        Route::get('/enchance', 'enchance')->name('enchance');
-        Route::get('/finish', 'finish')->name('finish');
-    });
+    Route::middleware('features:beta-access')->group(function () {
+        // Stories
+        Route::resource('stories', StoryController::class);
+        Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
+            Route::get('/covers', 'covers')->name('covers');
+        });
+        Route::resource('stories.chapters', ChapterController::class)->shallow();
+        Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
+            Route::get('/write', 'write')->name('write');
+            Route::get('/upload', 'upload')->name('upload');
+            Route::get('/record', 'record')->name('record');
+            Route::get('/files', 'attachments')->name('attachments');
+            Route::post('/files', 'transcribe')->name('attachments.transcribe');
+            Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
+            Route::get('/enchance', 'enchance')->name('enchance');
+            Route::get('/finish', 'finish')->name('finish');
+        });
 
-    // Test
-    Route::inertia('/preview', 'Dashboard/Preview')
-        ->name('preview')
-        ->middleware(['password.confirm', 'subscribed']);
-
-    // Subscription Plans
-    Route::resource('plans', PlanController::class)
-        ->only(['index', 'show', 'update'])
-        ->middleware(['subscribed:0']);
+        // Subscription Plans
+        Route::resource('plans', PlanController::class)
+            ->only(['index', 'show', 'update'])
+            ->middleware(['subscribed:0']);
+    });
 });

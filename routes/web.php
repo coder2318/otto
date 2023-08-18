@@ -2,26 +2,21 @@
 
 use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\SocialAuthController;
+use App\Http\Controllers\StaticController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 
 // Static Pages
-Route::inertia('/', 'Index', [
-    'honeypot' => fn () => app(\Spatie\Honeypot\Honeypot::class),
-])->name('index');
-
-Route::get('book/{story}', function (App\Models\Story $story) {
-    $pdf = \Barryvdh\DomPDF\Facade\Pdf::loadView('pdf.book', compact('story'));
-
-    return $pdf->stream();
+Route::controller(StaticController::class)->group(function () {
+    Route::get('/', 'index')->name('index');
+    Route::get('/about', 'about')->name('about');
+    Route::get('/privacy-policy', 'privacyPolicy')->name('privacy-policy');
+    Route::get('/terms-and-conditions', 'termsAndConditions')->name('terms-and-conditions');
+    Route::get('/faq', 'faq')->name('faq');
+    Route::get('/contact', 'contact')->name('contact');
 });
 
-Route::inertia('/about', 'About')->name('about');
-Route::inertia('/privacy-policy', 'PrivacyPolicy')->name('privacy-policy');
-Route::inertia('/terms-and-conditions', 'TermsAndConditions')->name('terms-and-conditions');
-Route::inertia('/faq', 'FAQ')->name('faq');
-Route::inertia('/contact', 'Contact')->name('contact');
-
+// Preorder
 Route::post('/preorder', [PreorderController::class, 'store'])->name('preorder.store')->middleware('anti-spam');
 
 // Auth

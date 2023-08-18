@@ -11,11 +11,7 @@
 
 <nav class="navbar sticky top-0 z-20 bg-primary text-primary-content">
     <div class="navbar-start">
-        <a
-            class="btn btn-ghost text-xl normal-case"
-            href="/stories"
-            use:inertia
-        >
+        <a class="btn btn-ghost text-xl normal-case" href="/" use:inertia>
             <Logo class="hidden h-full md:block" />
             <LogoIcon class="h-full md:hidden" />
         </a>
