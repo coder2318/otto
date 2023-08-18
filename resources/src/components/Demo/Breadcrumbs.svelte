@@ -1,8 +1,5 @@
 <script lang="ts">
-    import {
-        faKeyboard,
-        faThumbsUp,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faKeyboard, faThumbsUp } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
     import Otto from '../SVG/otto.svg.svelte'
 

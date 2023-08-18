@@ -29,7 +29,7 @@ declare namespace App {
         id: number
         name: string
         email: string
-        avatar: string
+        details: any
         stories?: Story[]
     }
 

@@ -52,18 +52,20 @@
                     >
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body items-center">
-                    <h2 class="card-title text-4xl font-normal italic">
-                        {$page.props.auth.user.details.first_name}
-                        {$page.props.auth.user.details.last_name}
-                    </h2>
-                    <p>
-                        has just finished his autobiography chapter on: {chapter
-                            .data.title}
-                    </p>
+            {#if $page.props.auth.user}
+                <div class="card">
+                    <div class="card-body items-center">
+                        <h2 class="card-title text-4xl font-normal italic">
+                            {$page.props.auth.user.details.first_name}
+                            {$page.props.auth.user.details.last_name}
+                        </h2>
+                        <p>
+                            has just finished his autobiography chapter on: {chapter
+                                .data.title}
+                        </p>
+                    </div>
                 </div>
-            </div>
+            {/if}
         </div>
     </div>
 </section>
