@@ -36,9 +36,9 @@ class SocialAuthController extends Controller
     {
         $userData = Socialite::driver($provider)->user();
 
-        /** @var User */
+        /** @var User $user */
         if (! $user = User::where('email', $userData->getEmail())->first()) {
-            /** @var User */
+            /** @var User $user */
             $user = User::create([
                 'name' => $userData->getName(),
                 'email' => $userData->getEmail(),

@@ -193,7 +193,7 @@ class DemoController extends Controller
     {
         $story = $request->user()->stories()->first();
 
-        abort_unless($story, 404);
+        abort_if(!$story, 404);
 
         return Pdf::loadView('pdf.book', compact('story'))->stream('demo.pdf');
     }
