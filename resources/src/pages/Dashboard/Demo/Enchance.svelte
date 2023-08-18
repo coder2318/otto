@@ -6,10 +6,8 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
-    import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'

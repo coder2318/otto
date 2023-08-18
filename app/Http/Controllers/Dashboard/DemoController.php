@@ -19,7 +19,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DemoController extends Controller
 {
-    protected function data(Request $request, ?TimelineQuestion $question = null)
+    protected function data(Request $request, TimelineQuestion $question = null)
     {
         /** @var \App\Models\User */
         $user = $request->user();
@@ -47,7 +47,7 @@ class DemoController extends Controller
         return Inertia::render('Dashboard/Demo/Index', [
             'questions' => TimelineQuestionResource::collection(
                 TimelineQuestion::inRandomOrder()->with('cover')->take(3)->get()
-            )
+            ),
         ]);
     }
 
@@ -146,7 +146,7 @@ class DemoController extends Controller
 
     public function enchance(Request $request, OpenAIService $service)
     {
-        if (!$request->user()->enchances) {
+        if (! $request->user()->enchances) {
             return redirect()->route('demo.write')->with('status', 'You can only enchance once for demo!');
         }
 

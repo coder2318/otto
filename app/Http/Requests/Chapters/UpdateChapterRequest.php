@@ -4,7 +4,6 @@ namespace App\Http\Requests\Chapters;
 
 use App\Data\Chapter\Status;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Enum;
 
 class UpdateChapterRequest extends FormRequest

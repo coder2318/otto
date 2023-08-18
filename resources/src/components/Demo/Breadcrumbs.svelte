@@ -1,7 +1,6 @@
 <script lang="ts">
     import {
         faKeyboard,
-        faPencil,
         faThumbsUp,
     } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'

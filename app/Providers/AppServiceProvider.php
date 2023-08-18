@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Features\BetaAccess;
 use Illuminate\Support\ServiceProvider;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
 use Stripe\StripeClient;

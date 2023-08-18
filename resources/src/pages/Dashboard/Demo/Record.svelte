@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { useForm, router } from '@inertiajs/svelte'
+    import { useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
     import AudioRecorder from '@/components/AudioRecorder.svelte'
 

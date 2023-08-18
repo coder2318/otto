@@ -28,7 +28,7 @@ Route::middleware('user-configured')->group(function () {
         Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy')->middleware('demo:published');
     });
 
-    Route::middleware('features:' . BetaAccess::class)->group(function () {
+    Route::middleware('features:'.BetaAccess::class)->group(function () {
         // Stories
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
