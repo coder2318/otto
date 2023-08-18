@@ -28,6 +28,11 @@ Route::middleware('user-configured')->group(function () {
         Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy')->middleware('demo:published');
     });
 
+    // Subscription Plans
+    Route::resource('plans', PlanController::class)
+        ->only(['index', 'show', 'update'])
+        ->middleware(['subscribed:0', 'features:'.BetaAccess::class]);
+
     Route::middleware(['subscribed:1', 'features:'.BetaAccess::class])->group(function () {
         // Stories
         Route::resource('stories', StoryController::class);
@@ -45,10 +50,5 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/enchance', 'enchance')->name('enchance');
             Route::get('/finish', 'finish')->name('finish');
         });
-
-        // Subscription Plans
-        Route::resource('plans', PlanController::class)
-            ->only(['index', 'show', 'update'])
-            ->middleware(['subscribed:0']);
     });
 });
