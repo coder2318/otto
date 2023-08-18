@@ -6,7 +6,7 @@
     <div class="mb-[-30px] ml-[-30px] flex flex-wrap items-center">
         <div class="mb-[30px] w-1/2 pl-[30px] max-md:w-full">
             <h2
-                class="mb-12 text-6xl tracking-[-1.2px] text-primary max-xl:text-5xl max-lg:mb-9 max-lg:text-4xl max-sm:mb-6 max-sm:text-3xl"
+                class="mb-12 text-6xl leading-[1.13] tracking-[-1.2px] text-primary max-xl:text-5xl max-lg:mb-9 max-lg:text-4xl max-sm:mb-6 max-sm:text-3xl"
             >
                 You've shown the world chapters of your life,
                 <span class="italic">now give them the complete book.</span>
