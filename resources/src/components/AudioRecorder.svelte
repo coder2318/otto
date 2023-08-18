@@ -16,6 +16,7 @@
 
     export let max: number = 5 * 60 * 1000
     export let recordings: Array<{ file: File; options: object }>
+    export let maxFiles: number = null
 
     let options: any = {}
 
@@ -91,12 +92,14 @@
                         <button
                             type="button"
                             class="btn btn-circle btn-ghost btn-lg text-4xl"
+                            disabled={maxFiles !== null &&
+                                recordings?.length >= maxFiles}
                             on:click|preventDefault={() =>
                                 mediaRecorder
                                     ? stopRecording()
                                     : startRecording()}
                         >
-                            <label class="swap swap-rotate">
+                            <label class="swap-rotate swap">
                                 <input
                                     type="checkbox"
                                     checked={!!mediaRecorder}

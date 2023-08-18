@@ -25,7 +25,7 @@ class UpdateChapterRequest extends FormRequest
             'attachments.*.options' => ['nullable', 'array'],
             'attachments.*.file' => ['required', 'file', 'mimes:webm,weba,wav,mp3,text,txt,pdf,docx', 'max:10240'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
-            'redirect' => ['sometimes', 'nullable', Rule::in(['chapters.finish'])],
+            'redirect' => ['sometimes', 'nullable'],
         ];
     }
 }

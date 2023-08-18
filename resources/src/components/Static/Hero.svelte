@@ -22,7 +22,7 @@
             <a
                 use:inertia
                 href="/stories"
-                class="btn btn-secondary rounded-full lg:btn-lg"
+                class="btn btn-secondary rounded-full lg:h-20 lg:px-10 lg:text-xl"
             >
                 Start Writing
             </a>

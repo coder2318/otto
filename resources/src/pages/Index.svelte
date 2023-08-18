@@ -3,6 +3,7 @@
 </script>
 
 <script lang="ts">
+    import { inertia } from '@inertiajs/svelte'
     import Navbar from '@/components/Static/Navbar.svelte'
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
@@ -51,7 +52,7 @@
     >
         <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
-                <div class="relative flex">
+                <div class="relative flex items-center justify-between">
                     <div class="absolute -left-16 -top-12 -z-10">
                         <img src={splash1} alt="splash" />
                     </div>
@@ -59,6 +60,13 @@
                         <span class="badge badge-accent h-8 w-8">1</span>
                         <span>Kick-starting Your Story</span>
                     </div>
+                    <a
+                        href="/stories"
+                        use:inertia
+                        class="btn btn-secondary btn-lg rounded-full"
+                    >
+                        Start Writing
+                    </a>
                 </div>
                 <h5
                     class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
@@ -115,7 +123,7 @@
     >
         <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
-                <div class="relative flex">
+                <div class="relative flex items-center justify-between">
                     <div class="absolute -left-16 -top-12 -z-10">
                         <img src={splash2} alt="splash" />
                     </div>
@@ -125,6 +133,13 @@
                         >
                         <span>Intuitive Engagement with Otto</span>
                     </div>
+                    <a
+                        href="/stories"
+                        use:inertia
+                        class="btn btn-secondary btn-lg rounded-full"
+                    >
+                        Start Writing
+                    </a>
                 </div>
                 <h5
                     class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
@@ -182,7 +197,7 @@
     >
         <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
-                <div class="relative flex">
+                <div class="relative flex items-center justify-between">
                     <div class="absolute -left-16 -top-12 -z-10">
                         <img src={splash3} alt="splash" />
                     </div>
@@ -190,6 +205,13 @@
                         <span class="badge badge-success h-8 w-8">3</span>
                         <span>Finalizing Your Masterpiece</span>
                     </div>
+                    <a
+                        href="/stories"
+                        use:inertia
+                        class="btn btn-secondary btn-lg rounded-full"
+                    >
+                        Start Writing
+                    </a>
                 </div>
                 <h5
                     class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
@@ -247,7 +269,7 @@
     >
         <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
-                <div class="relative flex">
+                <div class="relative flex items-center justify-between">
                     <div class="absolute -left-16 -top-12 -z-10">
                         <img src={splash4} alt="splash" />
                     </div>
@@ -255,6 +277,13 @@
                         <span class="badge badge-secondary h-8 w-8">4</span>
                         <span>Share and Sell Your Autobiography</span>
                     </div>
+                    <a
+                        href="/stories"
+                        use:inertia
+                        class="btn btn-secondary btn-lg rounded-full"
+                    >
+                        Start Writing
+                    </a>
                 </div>
                 <h5
                     class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"

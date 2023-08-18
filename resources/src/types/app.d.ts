@@ -82,6 +82,13 @@ declare namespace App {
         description: string
     }
 
+    interface TimelineQuestion {
+        id: number
+        question: string
+        order: number
+        cover: string
+    }
+
     interface Attachment {
         id: number
         url: string

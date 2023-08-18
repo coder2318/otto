@@ -14,11 +14,21 @@ Route::resource('quickstart', QuickstartController::class)
 
 Route::middleware('user-configured')->group(function () {
     // Demo
-    Route::get('demo', [DemoController::class, 'index'])
-        ->name('demo')
-        ->middleware(['subscribed:0']);
+    Route::controller(DemoController::class)->middleware(['subscribed:0'])->prefix('/demo')->name('demo.')->group(function () {
+        Route::get('/', 'index')->name('index')->middleware('demo:pending,published');
+        Route::get('/write', 'write')->name('write')->middleware('demo:published');
+        Route::get('/record', 'record')->name('record')->middleware('demo:published');
+        Route::get('/files', 'attachments')->name('attachments')->middleware('demo:published');
+        Route::get('/enchance', 'enchance')->name('enchance')->middleware('demo:published');
+        Route::get('/finish', 'finish')->name('finish');
+        Route::get('/book', 'book')->name('book');
+        Route::post('/', 'store')->name('store')->middleware('demo:pending');
+        Route::post('/files', 'transcribe')->name('attachments.transcribe')->middleware('demo:published');
+        Route::put('/', 'update')->name('update')->middleware('demo:published');
+        Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy')->middleware('demo:published');
+    });
 
-    Route::middleware('features:beta-access')->group(function () {
+    Route::middleware('features:' . BetaAccess::class)->group(function () {
         // Stories
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {

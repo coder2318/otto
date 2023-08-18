@@ -24,13 +24,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(StripeClient::class, fn () => new StripeClient(config('cashier.secret')));
 
-        $this->features();
-    }
-
-    protected function features()
-    {
         EnsureFeaturesAreActive::whenInactive(fn () => abort(403));
-
-        $this->app->alias(BetaAccess::class, 'beta-access');
     }
 }

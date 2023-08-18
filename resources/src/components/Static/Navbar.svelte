@@ -12,11 +12,6 @@
         </a>
     </div>
     <div class="flex-none gap-2">
-        <a
-            class="btn btn-secondary btn-outline rounded-full"
-            href="/stories"
-            use:inertia>Start Writing</a
-        >
         {#if user}
             <div class="dropdown-end dropdown leading-none">
                 <label
@@ -24,13 +19,13 @@
                     class="avatar btn btn-circle btn-ghost"
                     for="dropdown"
                 >
-                    <div class="w-full rounded-full">
+                    <div class="w-full rounded-full border-2 border-secondary">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar" />
                         {:else}
                             <User
-                                class="bg-secondary"
-                                pathClass="fill-secondary-content"
+                                class="bg-transparent"
+                                pathClass="fill-secondary"
                             />
                         {/if}
                     </div>
