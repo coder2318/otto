@@ -58,7 +58,7 @@ class DemoController extends Controller
             'question' => ['required', 'exists:timeline_questions,id'],
         ]);
 
-        $this->chapter($request, TimelineQuestion::find($request->input('question')));
+        $this->data($request, TimelineQuestion::find($request->input('question')));
 
         return redirect()->route('demo.record');
     }
