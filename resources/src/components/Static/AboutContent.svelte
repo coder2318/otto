@@ -1,8 +1,9 @@
 <script lang="ts">
     import img from '@/assets/img/about-img.jpg'
+    import Splash from '@/components/SVG/splash-about-content.svg.svelte'
 </script>
 
-<section class="max-md:mb-15 container mx-auto mb-20 px-[30px] max-sm:mb-10">
+<section class="max-md:mb-15 container mx-auto mb-20 px-[15px] max-sm:mb-10">
     <div class="mb-[-30px] ml-[-30px] flex flex-wrap items-center">
         <div class="mb-[30px] w-1/2 pl-[30px] max-md:w-full">
             <h2
@@ -40,16 +41,7 @@
         <div
             class="relative mb-[30px] w-1/2 pl-[30px] max-md:order-first max-md:w-full"
         >
-            <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 617 718"
-            >
-                <path
-                    fill="#FFD886"
-                    d="M258.912 85.783C.01 611.693-11.234 613.592 4.679 651.407c48.717 115.927 581.904 112.574 610.656-273.496 14.255-191.68-63.708-279.545-207.091-364.397C342.29-25.507 287.968 26.582 258.883 85.69l.029.094Z"
-                />
-            </svg>
+            <Splash />
 
             <div
                 class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[11px]"

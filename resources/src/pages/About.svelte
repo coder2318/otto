@@ -8,6 +8,8 @@
     import PageHeader from '@/components/Static/PageHeader.svelte'
     import AboutContent from '@/components/Static/AboutContent.svelte'
     import AboutCta from '@/components/Static/AboutCta.svelte'
+    import OurTeam from '@/components/Static/OurTeam.svelte'
+    import Footer from '@/components/Static/Footer.svelte'
 </script>
 
 <svelte:head>
@@ -21,3 +23,7 @@
 <AboutContent />
 
 <AboutCta />
+
+<OurTeam />
+
+<Footer />
