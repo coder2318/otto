@@ -62,7 +62,7 @@
         const file = new File([await builder.getFile(1800, 9 / 6)], 'cover.jpg')
         router.post(
             `/stories/${story.data.id}`,
-            { cover: file, _method: 'PUT', redirect: 'story.contents' },
+            { cover: file, _method: 'PUT', redirect: 'stories.contents' },
             { forceFormData: true }
         )
     }
