@@ -29,7 +29,7 @@
     <title>{import.meta.env.VITE_APP_NAME}</title>
 </svelte:head>
 
-<Navbar />
+<Navbar class="text-neutral" />
 
 <Hero />
 

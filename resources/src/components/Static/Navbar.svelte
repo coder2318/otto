@@ -3,12 +3,16 @@
     import Logo from '../SVG/logo.svg.svelte'
     import User from '../SVG/user.svg.svelte'
     $: user = $page.props.auth.user as App.User | null
+
+    let className = ''
+
+    export { className as class }
 </script>
 
-<nav class="navbar absolute top-0 z-20 transition-all">
+<nav class="navbar absolute top-0 z-20 transition-all {className}">
     <div class="flex-1">
         <a class="btn btn-ghost text-xl normal-case" href="/" use:inertia>
-            <Logo class="h-full" textClass="fill-neutral" />
+            <Logo class="h-full" textClass="fill-current" />
         </a>
     </div>
     <div class="flex-none gap-2">
