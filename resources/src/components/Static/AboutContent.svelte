@@ -44,9 +44,10 @@
             <Splash />
 
             <div
-                class="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[11px]"
+                class="absolute top-1/2 w-[69.37%] -translate-y-1/2 overflow-hidden rounded-[11px]"
+                style="left: calc(6.48% + 30px)"
             >
-                <img src={img} alt={img} />
+                <img src={img} alt={img} class="h-auto w-full" />
             </div>
         </div>
     </div>
