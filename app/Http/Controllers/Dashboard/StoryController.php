@@ -8,6 +8,7 @@ use App\Http\Requests\Stories\StoreStoryRequest;
 use App\Http\Requests\Stories\StoriesRequest;
 use App\Http\Requests\Stories\UpdateStoryRequest;
 use App\Http\Resources\BookCoverTemplateResource;
+use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
@@ -119,6 +120,27 @@ class StoryController extends Controller
             'covers' => BookCoverTemplateResource::collection(
                 BookCoverTemplate::paginate(12)
             ),
+        ]);
+    }
+
+    public function contents(Story $story)
+    {
+        $chapters = $story->chapters()
+            ->orderBy('order', 'asc')
+            ->get([
+                'id', 'title', 'status', 'timeline_id', 'order',
+            ])
+            ->groupBy('timeline_id')
+            ->map(fn ($chapters) => ChapterResource::collection($chapters));
+
+        $timelines = TimelineResource::collection(
+            Timeline::all(['id', 'title'])
+        );
+
+        return Inertia::render('Dashboard/Stories/Contents', [
+            'story' => StoryResource::make($story),
+            'chapters' => $chapters,
+            'timelines' => $timelines,
         ]);
     }
 }

@@ -38,6 +38,7 @@ Route::middleware('user-configured')->group(function () {
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
+            Route::get('/contents', 'contents')->name('contents');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
