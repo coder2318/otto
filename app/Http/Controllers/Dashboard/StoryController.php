@@ -95,7 +95,11 @@ class StoryController extends Controller
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return redirect()->route('stories.index')->with('message', 'Story updated successfully!');
+        ($redirect = $request->input('redirect'))
+            ? $redirect = redirect()->route($redirect, compact('story'))
+            : $redirect = redirect()->back();
+
+        return $redirect->with('message', 'Story updated successfully!');
     }
 
     public function destroy(Story $story)

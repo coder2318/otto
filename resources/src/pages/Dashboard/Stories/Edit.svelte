@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { inertia } from '@inertiajs/svelte'
+    import { inertia, router } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
@@ -15,7 +15,10 @@
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
     import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import {
+        faArrowLeft,
+        faArrowRight,
+    } from '@fortawesome/free-solid-svg-icons'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -23,6 +26,7 @@
     let element: HTMLElement,
         modal: HTMLDialogElement,
         filepond: FilePondType,
+        builder: BookCoverBuilder,
         editor: any
 
     let parameters = {} as any
@@ -53,6 +57,15 @@
         editor.onclose && editor.onclose()
         editor?.clear()
     }
+
+    async function submit() {
+        const file = new File([await builder.getFile(1800, 9 / 6)], 'cover.jpg')
+        router.post(
+            `/stories/${story.data.id}`,
+            { cover: file, _method: 'PUT', redirect: 'story.contents' },
+            { forceFormData: true }
+        )
+    }
 </script>
 
 <svelte:head>
@@ -61,75 +74,86 @@
 
 <Breadcrumbs step={1} />
 
-<section
-    class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
-    in:fade
->
-    <div class="card bg-base-300">
-        <div class="card-body gap-4">
-            {#each template.data.fields as field}
-                <div class="form-control">
-                    <label class="label" for={field.key}>
-                        <span class="label-text">{field.name}</span>
-                    </label>
-                    {#if field.type === 'text'}
-                        <input
-                            class="input input-bordered"
-                            bind:value={parameters[field.key]}
-                            type="text"
-                            name={field.key}
-                            placeholder={field.name}
-                        />
-                    {:else if field.type === 'image'}
-                        <FilePond
-                            bind:pond={filepond}
-                            onpreparefile={(file, blob) =>
-                                (parameters[field.key] =
-                                    URL.createObjectURL(blob))}
-                            onremovefile={() => (parameters[field.key] = null)}
-                            imageEditEditor={editor}
-                            allowMultiple={false}
-                            imageEditInstantEdit={true}
-                            styleImageEditButtonEditItemPosition="top right"
-                            imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                        />
-                    {/if}
-                </div>
-            {/each}
-        </div>
-    </div>
-    <div class="card border-2 border-base-300">
-        <div class="card-body max-h-screen items-center justify-center gap-4">
-            <BookCoverBuilder
-                class="h-full w-full"
-                {parameters}
-                template={template.data}
-            />
-        </div>
-    </div>
-</section>
-
-<section class="container mx-auto mb-8 flex justify-between">
-    <a
-        href="/stories/{story.data.id}"
-        class="btn btn-neutral rounded-full pl-0"
-        use:inertia
+<form on:submit|preventDefault={submit} in:fade>
+    <section
+        class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
     >
-        <span class="badge mask badge-accent mask-circle p-4"
-            ><Fa icon={faArrowLeft} /></span
-        >
-        Back
-    </a>
-    <div class="flex gap-4">
+        <div class="card bg-base-300">
+            <div class="card-body gap-4">
+                {#each template.data.fields as field}
+                    <div class="form-control">
+                        <label class="label" for={field.key}>
+                            <span class="label-text">{field.name}</span>
+                        </label>
+                        {#if field.type === 'text'}
+                            <input
+                                class="input input-bordered"
+                                bind:value={parameters[field.key]}
+                                type="text"
+                                name={field.key}
+                                placeholder={field.name}
+                            />
+                        {:else if field.type === 'image'}
+                            <FilePond
+                                bind:pond={filepond}
+                                onpreparefile={(file, blob) =>
+                                    (parameters[field.key] =
+                                        URL.createObjectURL(blob))}
+                                onremovefile={() =>
+                                    (parameters[field.key] = null)}
+                                imageEditEditor={editor}
+                                allowMultiple={false}
+                                imageEditInstantEdit={true}
+                                styleImageEditButtonEditItemPosition="top right"
+                                imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                            />
+                        {/if}
+                    </div>
+                {/each}
+            </div>
+        </div>
+        <div class="card border-2 border-base-300">
+            <div
+                class="card-body max-h-screen items-center justify-center gap-4"
+            >
+                <BookCoverBuilder
+                    bind:this={builder}
+                    class="h-full w-full"
+                    {parameters}
+                    template={template.data}
+                />
+            </div>
+        </div>
+    </section>
+
+    <section class="container mx-auto mb-8 flex justify-between">
         <a
-            href="/stories/{story.data.id}/covers"
+            href="/stories/{story.data.id}"
+            class="btn btn-neutral rounded-full pl-0"
             use:inertia
-            class="btn btn-neutral rounded-full"
         >
-            More Covers
+            <span class="badge mask badge-accent mask-circle p-4"
+                ><Fa icon={faArrowLeft} /></span
+            >
+            Back
         </a>
-    </div>
-</section>
+        <div class="flex gap-4">
+            <a
+                href="/stories/{story.data.id}/covers"
+                use:inertia
+                class="btn btn-neutral rounded-full"
+            >
+                More Covers
+            </a>
+            <button class="btn btn-secondary rounded-full pr-0" type="submit">
+                Save & Next
+                <span class="badge mask badge-neutral mask-circle p-4"
+                    ><Fa icon={faArrowRight} /></span
+                >
+            </button>
+        </div>
+    </section>
+</form>
 
 <dialog bind:this={modal} class="modal">
     <form

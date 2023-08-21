@@ -19,6 +19,6 @@ class HaveSubscriptions
             return $next($request);
         }
 
-        return redirect()->route($subscribed ? 'demo.index' : 'home');
+        return redirect()->intended(route($subscribed ? 'demo.index' : 'stories.index'));
     }
 }
