@@ -13,12 +13,32 @@
         faPencil,
     } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
+    import { onMount } from 'svelte'
+    import Sortable from 'sortablejs'
 
     export let story: { data: App.Story }
     export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
     export let timelines: { data: App.Timeline[] }
 
-    console.log(story, chapters, timelines)
+    let lists: HTMLOListElement[] = []
+    let inputs: HTMLInputElement[] = []
+
+    onMount(() => {
+        const sortables = []
+        lists.forEach((list) => {
+            sortables.push(
+                new Sortable(list, {
+                    group: 'shared',
+                    animation: 150,
+                    handle: '.cursor-grab',
+                })
+            )
+        })
+
+        return () => {
+            sortables.forEach((sortable) => sortable.destroy())
+        }
+    })
 </script>
 
 <svelte:head>
@@ -35,7 +55,7 @@
         <a
             href="/stories/{story.data.id}/preview"
             use:inertia
-            class="btn btn-secondary rounded-full"
+            class="btn btn-secondary rounded-full pr-0"
         >
             Preview Your Book
             <span class="badge mask badge-neutral mask-circle p-4"
@@ -46,42 +66,37 @@
 </section>
 
 <main class="container mx-auto mb-16 flex flex-col gap-6 px-4">
-    {#each timelines.data as timeline, index (timeline.id)}
-        {#if chapters?.[timeline.id]?.data?.length}
-            <div class="otto-colapse collapse-arrow collapse bg-base-200">
-                <input
-                    type="radio"
-                    name="timeline-collapse"
-                    checked={index == 0}
-                />
-                <div class="collapse-title text-xl font-medium">
-                    {timeline.title}
-                </div>
-                <div class="collapse-content">
-                    <ol class="flex flex-col gap-4">
-                        {#each chapters[timeline.id]?.data as chapter, index (chapter.id)}
-                            <li
-                                class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
-                            >
-                                <Fa
-                                    icon={faGripLines}
-                                    class="cursor-grab rounded-full bg-neutral p-0.5 text-neutral-content"
-                                />
-                                <span class="flex-1"
-                                    >{index + 1}. {chapter.title}</span
-                                >
-                                <a
-                                    href="/chapters/{chapter.id}/edit"
-                                    class="btn btn-circle btn-ghost btn-sm border border-base-content/20"
-                                >
-                                    <Fa icon={faPencil} />
-                                </a>
-                            </li>
-                        {/each}
-                    </ol>
-                </div>
+    {#each timelines.data.filter((t) => chapters?.[t.id]?.data?.length) as timeline, index (timeline.id)}
+        <div class="otto-colapse collapse-arrow collapse bg-base-200">
+            <input type="checkbox" name="timeline-collapse" checked={!index} />
+            <div class="collapse-title text-xl font-medium">
+                {timeline.title}
             </div>
-        {/if}
+            <div class="collapse-content">
+                <ol class="flex flex-col gap-4" bind:this={lists[timeline.id]}>
+                    {#each chapters[timeline.id]?.data as chapter, index (chapter.id)}
+                        <li
+                            class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
+                        >
+                            <span
+                                class="badge badge-neutral h-8 w-8 cursor-grab rounded-full"
+                            >
+                                <Fa icon={faGripLines} />
+                            </span>
+                            <span class="flex-1"
+                                >{index + 1}. {chapter.title}</span
+                            >
+                            <a
+                                href="/chapters/{chapter.id}/edit"
+                                class="btn btn-circle btn-ghost btn-sm border border-base-content/20"
+                            >
+                                <Fa icon={faPencil} />
+                            </a>
+                        </li>
+                    {/each}
+                </ol>
+            </div>
+        </div>
     {/each}
 </main>
 
