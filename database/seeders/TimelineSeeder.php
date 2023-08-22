@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Timeline;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\App;
 
 class TimelineSeeder extends Seeder
 {
@@ -12,6 +13,31 @@ class TimelineSeeder extends Seeder
      */
     public function run(): void
     {
-        Timeline::factory(5)->create();
+        $data = [
+            [
+                'title' => 'Childhood',
+                'description' => 'Childhood',
+            ],
+            [
+                'title' => 'Teens',
+                'description' => 'Teens',
+            ],
+            [
+                'title' => 'Young Adulthood',
+                'description' => 'Young Adulthood',
+            ],
+            [
+                'title' => 'Adulthood',
+                'description' => 'Adulthood',
+            ],
+            [
+                'title' => 'Senior Adulthood',
+                'description' => 'Senior Adulthood',
+            ]
+        ];
+
+        foreach ($data as $datum) {
+            Timeline::create($datum);
+        }
     }
 }

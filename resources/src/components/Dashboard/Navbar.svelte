@@ -33,13 +33,13 @@
         >
             <Fa icon={faBell} class="h-full" />
         </button>
-        <a
+        <!-- <a
             class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
             href="/settrings"
             use:inertia
         >
             <Fa icon={faCog} class="h-full" />
-        </a>
+        </a> -->
         {#if user}
             <div class="dropdown-end dropdown leading-none">
                 <label
@@ -64,8 +64,8 @@
                     class="menu dropdown-content rounded-box z-[1] mt-3 w-48 border border-base-300 bg-base-100 p-2 text-base-content shadow"
                 >
                     <li>
-                        <a href="/profile" use:inertia>Profile</a>
-                        <a href="/guest-chapters" use:inertia>Guest Chapters</a>
+                        <!-- <a href="/profile" use:inertia>Profile</a>
+                        <a href="/guest-chapters" use:inertia>Guest Chapters</a> -->
                         <button
                             href="/logout"
                             use:inertia={{ href: '/logout', method: 'POST' }}

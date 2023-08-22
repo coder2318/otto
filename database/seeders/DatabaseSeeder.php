@@ -15,6 +15,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             PlanSeeder::class,
+            TimelineSeeder::class,
+            QuizQuestionSeeder::class,
+            TimelineQuestionSeeder::class,
         ]);
 
         if (App::isProduction()) {
@@ -23,10 +26,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call([
             UserSeeder::class,
-            QuizQuestionSeeder::class,
             BookCoverTemplateSeeder::class,
-            TimelineSeeder::class,
-            TimelineQuestionSeeder::class,
             StorySeeder::class,
             ChapterSeeder::class,
         ]);

@@ -40,8 +40,8 @@
 
 <section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
     <div class="card-body gap-4">
-        <input
-            class="input card-title input-ghost font-serif"
+        <textarea
+            class="textarea card-title textarea-ghost font-serif"
             bind:value={$form.title}
         />
     </div>
@@ -60,7 +60,7 @@
             data-status="draft"
             type="submit"
         >
-            Transcribe Attachments
+            {#if $form.isDirty}Save &{/if} Transcribe Attachments
         </button>
     </section>
 </form>

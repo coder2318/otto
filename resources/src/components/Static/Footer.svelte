@@ -31,7 +31,7 @@
         </div>
         <div>
             <a class="link-hover link">Features</a>
-            <a class="link-hover link">Our Story</a>
+            <a href="/about" use:inertia class="link-hover link">Our Story</a>
             <a class="link-hover link">Contact</a>
         </div>
         <div>

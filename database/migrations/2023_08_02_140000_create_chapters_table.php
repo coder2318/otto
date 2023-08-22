@@ -17,7 +17,7 @@ return new class extends Migration
         Schema::create('chapters', function (Blueprint $table) {
             $table->id();
 
-            $table->string('title');
+            $table->text('title');
             $table->longText('content')->nullable();
             $table->integer('order')->default(0);
             $table->string('status');
