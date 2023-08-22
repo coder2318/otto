@@ -13,12 +13,13 @@ class TimelineQuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        if ( App::isProduction()) {
+        if (App::isProduction()) {
             TimelineQuestion::factory(10)->withTimeline()->create()->each(function (TimelineQuestion $question) {
                 $question->addMediaFromUrl('https://picsum.photos/640/480')
                     ->withResponsiveImages()
                     ->toMediaCollection('cover');
             });
+
             return;
         }
 

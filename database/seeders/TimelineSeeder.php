@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\Timeline;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\App;
 
 class TimelineSeeder extends Seeder
 {
@@ -33,7 +32,7 @@ class TimelineSeeder extends Seeder
             [
                 'title' => 'Senior Adulthood',
                 'description' => 'Senior Adulthood',
-            ]
+            ],
         ];
 
         foreach ($data as $datum) {

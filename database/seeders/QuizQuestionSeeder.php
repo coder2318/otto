@@ -13,8 +13,9 @@ class QuizQuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        if ( App::isProduction()) {
+        if (App::isProduction()) {
             QuizQuestion::factory(5)->create();
+
             return;
         }
 
@@ -26,7 +27,7 @@ class QuizQuestionSeeder extends Seeder
                     'Share experiences',
                     'Preserve memories',
                     'Connect with others',
-                ]
+                ],
             ],
             [
                 'question' => 'How would you describe your writing style and tone?',
@@ -35,7 +36,7 @@ class QuizQuestionSeeder extends Seeder
                     'Engaging storytelling',
                     'Thoughtful and expressive',
                     'Informal yet engaging',
-                ]
+                ],
             ],
             [
                 'question' => 'What are your goals for sharing your story on our platform?',
@@ -44,7 +45,7 @@ class QuizQuestionSeeder extends Seeder
                     'Share life lessons',
                     'Engage and interact',
                     'Spark conversations',
-                ]
+                ],
             ],
             [
                 'question' => 'Is there a desired timeline or deadline you have in mind for completing and publishing your autobiography?',
@@ -52,8 +53,8 @@ class QuizQuestionSeeder extends Seeder
                     '6 months',
                     '9 months',
                     'Longer than a year',
-                ]
-            ]
+                ],
+            ],
         ];
 
         foreach ($data as $datum) {
