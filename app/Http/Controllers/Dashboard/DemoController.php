@@ -195,6 +195,8 @@ class DemoController extends Controller
 
         abort_if(! $story, 404);
 
-        return Pdf::loadView('pdf.book', compact('story'))->stream('demo.pdf');
+        $chapters = $story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy();
+
+        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
     }
 }

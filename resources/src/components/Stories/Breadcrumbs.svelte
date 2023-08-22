@@ -11,9 +11,7 @@
     export let story: { data: App.Story }
 </script>
 
-<header
-    class="container m-4 mx-auto grid grid-cols-1 gap-8 px-4 md:grid-cols-3"
->
+<header class="container m-4 mx-auto grid grid-cols-1 gap-8 md:grid-cols-3">
     <a
         class="step-breadcrumb"
         class:inactive={step < 1}

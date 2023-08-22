@@ -29,7 +29,10 @@ class DemoFinishedNotification extends Notification
             ->greeting('Hello!')
             ->line('Thank you for using Otto Story! We attached your result to this message.')
             ->attachData(
-                Pdf::loadView('pdf.book', ['story' => $this->story])->output(),
+                Pdf::loadView('pdf.book', [
+                    'story' => $this->story,
+                    'chapters' => $this->story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy(),
+                ])->output(),
                 'demo.pdf',
                 ['mime' => 'application/pdf']
             );

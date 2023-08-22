@@ -15,6 +15,7 @@ use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\Timeline;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
@@ -156,5 +157,18 @@ class StoryController extends Controller
         });
 
         return $this->redirectBackOrRoute($request)->with('message', 'Contents saved successfully!');
+    }
+
+    public function preview(Story $story)
+    {
+        return Inertia::render('Dashboard/Stories/Preview', [
+            'story' => fn () => StoryResource::make($story),
+        ]);
+    }
+
+    public function book(Story $story)
+    {
+        $chapters = $story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy();
+        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
     }
 }

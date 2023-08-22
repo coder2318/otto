@@ -40,6 +40,8 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
             Route::get('/contents', 'contents')->name('contents');
             Route::post('/contents', 'saveContents')->name('contents.save');
+            Route::get('/preview', 'preview')->name('preview');
+            Route::get('/book', 'book')->name('book');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {

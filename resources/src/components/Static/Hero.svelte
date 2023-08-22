@@ -16,7 +16,7 @@
                 class="lg::text-6xl text-3xl text-white sm:text-4xl md:text-5xl xl:text-7xl"
             >
                 Every life is a story. Begin telling
-                <span class="italic text-secondary">yours with Otto</span>.
+                <span class="italic text-secondary">yours with OttoStory</span>.
             </h1>
 
             <a

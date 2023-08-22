@@ -36,7 +36,7 @@
 <body>
     <footer></footer>
 
-    @foreach ($story->chapters()->lazy() as $chapter)
+    @foreach ($chapters as $chapter)
         <h1 @if (!$loop->first) style="page-break-before:always" @endif>{{ $chapter->title }}</h1>
         <section>{!! $chapter->content !!}</section>
     @endforeach
