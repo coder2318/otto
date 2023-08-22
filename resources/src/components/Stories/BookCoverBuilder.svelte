@@ -1,6 +1,5 @@
 <script lang="ts">
     import { onMount } from 'svelte'
-    import { Canvg } from 'canvg'
 
     export let template: App.BookCoverTemplate
     export let parameters: any
@@ -10,7 +9,7 @@
     let defaultParameters: any = {}
 
     export function getFile(width: number = 1800, ratio: number = 1) {
-        return new Promise<Blob>((resolve, reject) => {
+        return new Promise<Blob>((resolve) => {
             const svgData =
                 `<?xml version="1.0" standalone="no"?>\r\n` +
                 new XMLSerializer().serializeToString(svg)
@@ -19,7 +18,6 @@
 
             image.width = width
             image.height = width * ratio
-            console.log(image.width, image.height, ratio)
             image.src = URL.createObjectURL(blob)
 
             image.onload = () => {

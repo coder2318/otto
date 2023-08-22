@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.279.2",
+            "version": "3.279.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "ebd5e47c5be0425bb5cf4f80737850ed74767107"
+                "reference": "13e0142365a1f07cedab01dbbda605dff8b7832f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/ebd5e47c5be0425bb5cf4f80737850ed74767107",
-                "reference": "ebd5e47c5be0425bb5cf4f80737850ed74767107",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/13e0142365a1f07cedab01dbbda605dff8b7832f",
+                "reference": "13e0142365a1f07cedab01dbbda605dff8b7832f",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.279.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.279.3"
             },
-            "time": "2023-08-18T18:13:09+00:00"
+            "time": "2023-08-21T18:04:10+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -10353,16 +10353,16 @@
         },
         {
             "name": "laravel-lang/http-statuses",
-            "version": "v3.4.2",
+            "version": "v3.4.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/http-statuses.git",
-                "reference": "e5183b69e544bcd3641ff3dcd169134cf0b0c4c7"
+                "reference": "0bd05c814ac28e826bb243b4ab5e1a12fd58e0ce"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/http-statuses/zipball/e5183b69e544bcd3641ff3dcd169134cf0b0c4c7",
-                "reference": "e5183b69e544bcd3641ff3dcd169134cf0b0c4c7",
+                "url": "https://api.github.com/repos/Laravel-Lang/http-statuses/zipball/0bd05c814ac28e826bb243b4ab5e1a12fd58e0ce",
+                "reference": "0bd05c814ac28e826bb243b4ab5e1a12fd58e0ce",
                 "shasum": ""
             },
             "require": {
@@ -10417,7 +10417,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Laravel-Lang/http-statuses/issues",
-                "source": "https://github.com/Laravel-Lang/http-statuses/tree/v3.4.2"
+                "source": "https://github.com/Laravel-Lang/http-statuses/tree/v3.4.3"
             },
             "funding": [
                 {
@@ -10425,7 +10425,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-08-15T01:23:24+00:00"
+            "time": "2023-08-22T01:18:47+00:00"
         },
         {
             "name": "laravel-lang/lang",
@@ -12902,16 +12902,16 @@
         },
         {
             "name": "spatie/ignition",
-            "version": "1.10.0",
+            "version": "1.10.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/ignition.git",
-                "reference": "dc0af041dcfaf52b7acfddf5c27657878e510f3d"
+                "reference": "d92b9a081e99261179b63a858c7a4b01541e7dd1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/ignition/zipball/dc0af041dcfaf52b7acfddf5c27657878e510f3d",
-                "reference": "dc0af041dcfaf52b7acfddf5c27657878e510f3d",
+                "url": "https://api.github.com/repos/spatie/ignition/zipball/d92b9a081e99261179b63a858c7a4b01541e7dd1",
+                "reference": "d92b9a081e99261179b63a858c7a4b01541e7dd1",
                 "shasum": ""
             },
             "require": {
@@ -12981,7 +12981,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-21T14:39:58+00:00"
+            "time": "2023-08-21T15:06:37+00:00"
         },
         {
             "name": "spatie/laravel-ignition",

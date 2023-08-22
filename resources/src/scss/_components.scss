@@ -7,7 +7,7 @@
         }
 
         &.inactive {
-            @apply hidden border-b-primary/20 md:block;
+            @apply border-b-primary/20;
 
             .step-icon {
                 @apply badge-neutral;

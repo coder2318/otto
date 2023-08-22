@@ -19,6 +19,7 @@
         faArrowLeft,
         faArrowRight,
     } from '@fortawesome/free-solid-svg-icons'
+    import { fileToBase64 } from '@/service/helpers'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -37,12 +38,13 @@
             viewMode: 2,
             background: false,
             autoCrop: true,
-            ready: () => {
-                modal.showModal()
-            },
+            ready: () => modal.showModal(),
         })
 
-        return () => editor?.clear()
+        return () => {
+            editor.clear()
+            editor = null
+        }
     })
 
     function canvelEdit() {
@@ -72,7 +74,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - {story.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={1} />
+<Breadcrumbs step={1} {story} />
 
 <form on:submit|preventDefault={submit} in:fade>
     <section
@@ -96,12 +98,13 @@
                         {:else if field.type === 'image'}
                             <FilePond
                                 bind:pond={filepond}
-                                onpreparefile={(file, blob) =>
+                                onpreparefile={async (file, blob) =>
                                     (parameters[field.key] =
-                                        URL.createObjectURL(blob))}
+                                        await fileToBase64(blob))}
                                 onremovefile={() =>
                                     (parameters[field.key] = null)}
                                 imageEditEditor={editor}
+                                allowImageEdit={true}
                                 allowMultiple={false}
                                 imageEditInstantEdit={true}
                                 styleImageEditButtonEditItemPosition="top right"

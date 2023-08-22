@@ -22,7 +22,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - {story.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={1} />
+<Breadcrumbs step={1} {story} />
 
 <section
     class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 sm:grid-cols-3 lg:grid-cols-6"

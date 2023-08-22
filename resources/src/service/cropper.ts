@@ -4,30 +4,26 @@ export function createCropperForFilepond(
     element: HTMLElement = document.body,
     options: Cropper.Options<HTMLImageElement> = {}
 ) {
+    const image = document.createElement('img')
+    image.style.display = 'none'
+    element.appendChild(image)
+
     return {
+        image,
         file: null as Blob | null,
-        image: null,
         cropper: null as Cropper | null,
         open(file: Blob) {
             this.file = file
-            this.image = document.createElement('img')
-            this.image.style.display = 'none'
-            element.appendChild(this.image)
             this.image.src = URL.createObjectURL(this.file)
-            this.cropper?.destroy()
-            this.cropper = new Cropper(this.image, {
-                ...options,
-            })
+            this.cropper = new Cropper(this.image, options)
         },
-
         getOptions() {
             return getEditedOptions(this.cropper)
         },
         clear() {
             this.cropper?.destroy()
-            this.cropper = null
-            URL.revokeObjectURL(this.file)
-            this.image?.remove()
+            URL.revokeObjectURL(this.image.src)
+            this.image.src = ''
         },
     }
 }

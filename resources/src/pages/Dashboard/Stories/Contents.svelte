@@ -24,7 +24,7 @@
     let inputs: HTMLInputElement[] = []
 
     onMount(() => {
-        const sortables = []
+        const sortables: Sortable[] = []
         lists.forEach((list) => {
             sortables.push(
                 new Sortable(list, {
@@ -45,7 +45,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - {story.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={2} />
+<Breadcrumbs step={2} {story} />
 
 <section class="container mx-auto mb-4 px-4">
     <div class="flex flex-wrap items-center justify-between gap-2">

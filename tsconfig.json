@@ -13,6 +13,7 @@
         */
         "allowJs": true,
         "checkJs": true,
+        "strict": false,
         "isolatedModules": true,
         "lib": ["ESNext", "DOM", "WebWorker"],
         "types": ["vite/client", "vite-plugin-pwa/client"],
