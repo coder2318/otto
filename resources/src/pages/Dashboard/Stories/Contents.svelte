@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { inertia } from '@inertiajs/svelte'
+    import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import {
         faArrowRight,
@@ -20,17 +20,42 @@
     export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
     export let timelines: { data: App.Timeline[] }
 
-    let lists: HTMLOListElement[] = []
-    let inputs: HTMLInputElement[] = []
+    const form = useForm({
+        timelines: timelines.data.map((timeline) => ({
+            id: timeline.id,
+            chapters:
+                chapters[timeline.id]?.data.map((chapter) => chapter.id) ?? [],
+        })),
+    })
+
+    let lists: HTMLUListElement[] = []
 
     onMount(() => {
-        const sortables: Sortable[] = []
+        const sortables = []
         lists.forEach((list) => {
             sortables.push(
                 new Sortable(list, {
                     group: 'shared',
                     animation: 150,
                     handle: '.cursor-grab',
+                    onEnd(event) {
+                        const { oldIndex, newIndex } = event
+                        const from = $form.timelines.find(
+                            (timeline) =>
+                                timeline.id == event.from.dataset.timeline
+                        )
+                        const to = $form.timelines.find(
+                            (timeline) =>
+                                timeline.id == event.to.dataset.timeline
+                        )
+                        to.chapters.splice(
+                            newIndex,
+                            0,
+                            ...from.chapters.splice(oldIndex, 1)
+                        )
+
+                        $form.timelines = $form.timelines
+                    },
                 })
             )
         })
@@ -39,6 +64,15 @@
             sortables.forEach((sortable) => sortable.destroy())
         }
     })
+
+    function submit() {
+        $form.post(window.location.pathname, {
+            onSuccess: () =>
+                $form.defaults({
+                    timelines: $form.timelines,
+                }),
+        })
+    }
 </script>
 
 <svelte:head>
@@ -47,58 +81,75 @@
 
 <Breadcrumbs step={2} {story} />
 
-<section class="container mx-auto mb-4 px-4">
-    <div class="flex flex-wrap items-center justify-between gap-2">
-        <h1 class="my-4 text-3xl text-primary">
-            Table of <i>Contents</i>
-        </h1>
-        <a
-            href="/stories/{story.data.id}/preview"
-            use:inertia
-            class="btn btn-secondary rounded-full pr-0"
-        >
-            Preview Your Book
-            <span class="badge mask badge-neutral mask-circle p-4"
-                ><Fa icon={faArrowRight} /></span
-            >
-        </a>
-    </div>
-</section>
-
-<main class="container mx-auto mb-16 flex flex-col gap-6 px-4">
-    {#each timelines.data.filter((t) => chapters?.[t.id]?.data?.length) as timeline, index (timeline.id)}
-        <div class="otto-colapse collapse-arrow collapse bg-base-200">
-            <input type="checkbox" name="timeline-collapse" checked={!index} />
-            <div class="collapse-title text-xl font-medium">
-                {timeline.title}
-            </div>
-            <div class="collapse-content">
-                <ol class="flex flex-col gap-4" bind:this={lists[timeline.id]}>
-                    {#each chapters[timeline.id]?.data as chapter, index (chapter.id)}
-                        <li
-                            class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
-                        >
-                            <span
-                                class="badge badge-neutral h-8 w-8 cursor-grab rounded-full"
-                            >
-                                <Fa icon={faGripLines} />
-                            </span>
-                            <span class="flex-1"
-                                >{index + 1}. {chapter.title}</span
-                            >
-                            <a
-                                href="/chapters/{chapter.id}/edit"
-                                class="btn btn-circle btn-ghost btn-sm border border-base-content/20"
-                            >
-                                <Fa icon={faPencil} />
-                            </a>
-                        </li>
-                    {/each}
-                </ol>
-            </div>
+<form on:submit|preventDefault={submit}>
+    <section class="container mx-auto mb-4 px-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+            <h1 class="my-4 text-3xl text-primary">
+                Table of <i>Contents</i>
+            </h1>
+            {#if $form.isDirty}
+                <button
+                    type="submit"
+                    class="btn btn-primary rounded-full"
+                    disabled={$form.processing}
+                >
+                    {#if $form.processing}<span class="loading loading-spinner"
+                        ></span>{/if}
+                    Save Chapter Order
+                </button>
+            {:else}
+                <a
+                    href="/stories/{story.data.id}/preview"
+                    use:inertia
+                    class="btn btn-secondary rounded-full pr-0"
+                >
+                    Preview Your Book
+                    <span class="badge mask badge-neutral mask-circle p-4"
+                        ><Fa icon={faArrowRight} /></span
+                    >
+                </a>
+            {/if}
         </div>
-    {/each}
-</main>
+    </section>
+
+    <main class="container mx-auto mb-16 flex flex-col gap-6 px-4">
+        {#each timelines.data as timeline, index (timeline.id)}
+            <div class="otto-colapse collapse-arrow collapse bg-base-200">
+                <input type="checkbox" />
+                <div class="collapse-title text-xl font-medium">
+                    {timeline.title}
+                </div>
+                <div class="collapse-content">
+                    <ul
+                        class="flex flex-col gap-4"
+                        bind:this={lists[timeline.id]}
+                        data-timeline={timeline.id}
+                    >
+                        {#each chapters[timeline.id]?.data ?? [] as chapter, index (chapter.id)}
+                            <li
+                                data-chapter={chapter.id}
+                                class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
+                            >
+                                <span
+                                    class="badge badge-neutral h-8 w-8 cursor-grab rounded-full"
+                                >
+                                    <Fa icon={faGripLines} />
+                                </span>
+                                <span class="flex-1">{chapter.title}</span>
+                                <a
+                                    href="/chapters/{chapter.id}/edit"
+                                    class="btn btn-circle btn-ghost btn-sm border border-base-content/20"
+                                >
+                                    <Fa icon={faPencil} />
+                                </a>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            </div>
+        {/each}
+    </main>
+</form>
 
 <style lang="scss">
     .otto-colapse {

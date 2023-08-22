@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Dashboard;
 
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Stories\ChapterOrderRequest;
 use App\Http\Requests\Stories\StoreStoryRequest;
 use App\Http\Requests\Stories\StoriesRequest;
 use App\Http\Requests\Stories\UpdateStoryRequest;
@@ -39,7 +40,7 @@ class StoryController extends Controller
     public function create()
     {
         return Inertia::render('Dashboard/Stories/Create', [
-            'timelines' => TimelineResource::collection(
+            'timelines' => fn () => TimelineResource::collection(
                 Timeline::all(['id', 'title'])
             ),
         ]);
@@ -48,22 +49,22 @@ class StoryController extends Controller
     public function write(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Write', [
-            'story' => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story),
         ]);
     }
 
     public function show(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Show', [
-            'story' => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story),
         ]);
     }
 
     public function edit(Story $story, Request $request)
     {
         return Inertia::render('Dashboard/Stories/Edit', [
-            'story' => StoryResource::make($story),
-            'template' => BookCoverTemplateResource::make(
+            'story' => fn () => StoryResource::make($story),
+            'template' => fn () => BookCoverTemplateResource::make(
                 BookCoverTemplate::when(
                     $tmpl = $request->query('template'),
                     fn ($query) => $query->where('id', $tmpl)
@@ -96,11 +97,7 @@ class StoryController extends Controller
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        ($redirect = $request->input('redirect'))
-            ? $redirect = redirect()->route($redirect, compact('story'))
-            : $redirect = redirect()->back();
-
-        return $redirect->with('message', 'Story updated successfully!');
+        return $this->redirectBackOrRoute($request)->with('message', 'Story updated successfully!');
     }
 
     public function destroy(Story $story)
@@ -116,8 +113,8 @@ class StoryController extends Controller
     public function covers(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Covers', [
-            'story' => StoryResource::make($story),
-            'covers' => BookCoverTemplateResource::collection(
+            'story' => fn () => StoryResource::make($story),
+            'covers' => fn () => BookCoverTemplateResource::collection(
                 BookCoverTemplate::paginate(12)
             ),
         ]);
@@ -125,22 +122,39 @@ class StoryController extends Controller
 
     public function contents(Story $story)
     {
-        $chapters = $story->chapters()
-            ->orderBy('order', 'asc')
-            ->get([
-                'id', 'title', 'status', 'timeline_id', 'order',
-            ])
-            ->groupBy('timeline_id')
-            ->map(fn ($chapters) => ChapterResource::collection($chapters));
-
-        $timelines = TimelineResource::collection(
-            Timeline::all(['id', 'title'])
-        );
-
         return Inertia::render('Dashboard/Stories/Contents', [
-            'story' => StoryResource::make($story),
-            'chapters' => $chapters,
-            'timelines' => $timelines,
+            'story' => fn () => StoryResource::make($story),
+            'chapters' => fn () => $story->chapters()
+                ->orderBy('order', 'asc')
+                ->get([
+                    'id', 'title', 'status', 'timeline_id', 'order',
+                ])
+                ->groupBy('timeline_id')
+                ->map(fn ($chapters) => ChapterResource::collection($chapters)),
+            'timelines' => fn () => TimelineResource::collection(
+                Timeline::all(['id', 'title'])
+            ),
         ]);
+    }
+
+    public function saveContents(Story $story, ChapterOrderRequest $request)
+    {
+        DB::transaction(function () use ($story, $request) {
+            foreach ($request->validated('timelines', []) as $data) {
+                if (empty($data['chapters'])) {
+                    continue;
+                }
+
+                $story->chapters()->whereIntegerInRaw('id', $data['chapters'])->update([
+                    'timeline_id' => $data['id'],
+                ]);
+
+                foreach ($data['chapters'] as $order => $chapter) {
+                    $story->chapters()->where('id', $chapter)->update(compact('order'));
+                }
+            }
+        });
+
+        return $this->redirectBackOrRoute($request)->with('message', 'Contents saved successfully!');
     }
 }
