@@ -106,9 +106,9 @@ class ChapterController extends Controller
 
         return Inertia::render('Dashboard/Chapters/Enchance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
-            'otto_edit' => $service->edit(
+            'otto_edit' => $service->chatEdit(
                 $chapter->content,
-                $service->createInstractions($request->user()?->details)
+                $request->user()?->details
             ),
         ]);
     }
