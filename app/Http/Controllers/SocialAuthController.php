@@ -36,9 +36,8 @@ class SocialAuthController extends Controller
     {
         $userData = Socialite::driver($provider)->user();
 
-        /** @var User $user */
         if (! $user = User::where('email', $userData->getEmail())->first()) {
-            /** @var User $user */
+            /** @var User */
             $user = User::create([
                 'name' => $userData->getName(),
                 'email' => $userData->getEmail(),
@@ -49,6 +48,7 @@ class SocialAuthController extends Controller
             $user->notify(new CreatedAccountBySocialNotification($password));
         }
 
+        /** @var User $user */
         if (! $user->hasVerifiedEmail()) {
             $user->markEmailAsVerified();
         }

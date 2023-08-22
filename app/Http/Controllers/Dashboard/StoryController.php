@@ -98,7 +98,7 @@ class StoryController extends Controller
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return $this->redirectBackOrRoute($request)->with('message', 'Story updated successfully!');
+        return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Story updated successfully!');
     }
 
     public function destroy(Story $story)
@@ -156,7 +156,7 @@ class StoryController extends Controller
             }
         });
 
-        return $this->redirectBackOrRoute($request)->with('message', 'Contents saved successfully!');
+        return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Contents saved successfully!');
     }
 
     public function preview(Story $story)
@@ -169,6 +169,7 @@ class StoryController extends Controller
     public function book(Story $story)
     {
         $chapters = $story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy();
+
         return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
     }
 }
