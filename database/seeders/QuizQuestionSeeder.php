@@ -13,7 +13,7 @@ class QuizQuestionSeeder extends Seeder
      */
     public function run(): void
     {
-        if (App::isProduction()) {
+        if (! App::isProduction()) {
             QuizQuestion::factory(5)->create();
 
             return;
