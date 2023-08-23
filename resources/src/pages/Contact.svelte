@@ -15,9 +15,11 @@
     <title>{import.meta.env.VITE_APP_NAME} - Contact</title>
 </svelte:head>
 
-<Navbar />
+<Navbar class="bg-primary text-primary-content" />
 
-<PageHeader>Get in <span class="italic">Touch</span></PageHeader>
+<PageHeader class="mb-16 mt-36 lg:mb-24 lg:mt-48">
+    Get in <i>Touch</i>
+</PageHeader>
 
 <ContactForm />
 
