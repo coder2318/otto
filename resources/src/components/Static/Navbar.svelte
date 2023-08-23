@@ -23,13 +23,13 @@
                     class="avatar btn btn-circle btn-ghost"
                     for="dropdown"
                 >
-                    <div class="w-full rounded-full border-2 border-secondary">
+                    <div class="w-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar" />
                         {:else}
                             <User
-                                class="bg-transparent"
-                                pathClass="fill-secondary"
+                                class="bg-secondary"
+                                pathClass="fill-primary"
                             />
                         {/if}
                     </div>
@@ -40,6 +40,7 @@
                     class="menu dropdown-content rounded-box z-[1] mt-3 w-48 border border-base-300 bg-base-100 p-2 text-base-content shadow"
                 >
                     <li>
+                        <a href="/stories" use:inertia>Dashboard</a>
                         <button
                             href="/logout"
                             use:inertia={{ href: '/logout', method: 'POST' }}

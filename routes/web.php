@@ -1,6 +1,5 @@
 <?php
 
-use App\Http\Controllers\PreorderController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use Illuminate\Routing\Router;
@@ -14,10 +13,12 @@ Route::controller(StaticController::class)->group(function () {
     Route::get('/terms-and-conditions', 'termsAndConditions')->name('terms-and-conditions');
     Route::get('/faq', 'faq')->name('faq');
     Route::get('/contact', 'contact')->name('contact');
+
+    Route::post('/preorder', 'postPreorder')->name('preorder.store')->middleware('anti-spam');
+    Route::post('/contact', 'postContact')->name('contact.store')->middleware('anti-spam');
 });
 
 // Preorder
-Route::post('/preorder', [PreorderController::class, 'store'])->name('preorder.store')->middleware('anti-spam');
 
 // Auth
 Route::controller(SocialAuthController::class)
