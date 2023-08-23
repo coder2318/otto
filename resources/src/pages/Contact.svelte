@@ -8,6 +8,7 @@
     import Footer from '@/components/Static/Footer.svelte'
     import PageHeader from '@/components/Static/PageHeader.svelte'
     import ContactForm from '@/components/Static/ContactForm.svelte'
+    import ContactLinks from '@/components/Static/ContactLinks.svelte'
 </script>
 
 <svelte:head>
@@ -19,5 +20,7 @@
 <PageHeader>Get in <span class="italic">Touch</span></PageHeader>
 
 <ContactForm />
+
+<ContactLinks />
 
 <Footer />

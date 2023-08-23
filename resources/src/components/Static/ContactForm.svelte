@@ -37,7 +37,7 @@
 
             <button
                 type="submit"
-                class="contact-btn max-w-[176px] rounded-[40px] bg-primary px-6 py-4 font-medium text-white"
+                class="contact-btn max-w-[176px] rounded-[40px] bg-primary px-6 py-4 font-medium text-white max-lg:max-w-[132px] max-lg:px-4 max-lg:py-3 max-lg:text-sm"
             >
                 Send Message
             </button>
