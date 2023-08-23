@@ -21,7 +21,9 @@
 
 <Navbar class="bg-primary text-primary-content" />
 
-<PageHeader class="mb-16 mt-36 lg:mb-24 lg:mt-48">
+<PageHeader
+    class="container relative mx-auto mb-16 mt-36 flex justify-center text-center text-primary lg:mb-24 lg:mt-48"
+>
     About <i>Us</i>
 </PageHeader>
 

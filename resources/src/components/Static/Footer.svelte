@@ -41,14 +41,18 @@
             <Logo class="h-16" />
         </div>
         <div>
-            <a class="link-hover link">Features</a>
+            <a href="/" use:inertia class="link-hover link">Features</a>
             <a href="/about" use:inertia class="link-hover link">Our Story</a>
             <a href="/contact" use:inertia class="link-hover link">Contact</a>
         </div>
         <div>
-            <a class="link-hover link">FAQs</a>
-            <a class="link-hover link">Terms & Conditions</a>
-            <a class="link-hover link">Privacy policy</a>
+            <a href="/faq" use:inertia class="link-hover link">FAQs</a>
+            <a href="/terms-and-conditions" use:inertia class="link-hover link"
+                >Terms & Conditions</a
+            >
+            <a href="/privacy-policy" use:inertia class="link-hover link"
+                >Privacy policy</a
+            >
         </div>
     </div>
     <div

@@ -80,8 +80,6 @@ class OpenAIService
             'messages' => $messages,
         ]);
 
-        dd($chat);
-
-        return $chat['choices'][0]['content'];
+        return $chat['choices'][0]['message']['content'];
     }
 }

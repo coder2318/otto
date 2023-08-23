@@ -4,7 +4,7 @@
     import LogoIcon from '../SVG/logo-icon.svg.svelte'
     import User from '../SVG/user.svg.svelte'
     import Fa from 'svelte-fa'
-    import { faSearch, faCog, faBell } from '@fortawesome/free-solid-svg-icons'
+    import { faSearch, faBell } from '@fortawesome/free-solid-svg-icons'
 
     $: user = $page.props.auth.user as App.User | null
 </script>
