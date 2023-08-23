@@ -42,6 +42,7 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
             Route::get('/book', 'book')->name('book');
+            Route::get('/order', 'order')->name('order');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {

@@ -127,6 +127,7 @@ class StoryController extends Controller
             'story' => fn () => StoryResource::make($story),
             'chapters' => fn () => $story->chapters()
                 ->orderBy('order', 'asc')
+                ->where('status', Status::PUBLISHED)
                 ->get([
                     'id', 'title', 'status', 'timeline_id', 'order',
                 ])
@@ -168,8 +169,19 @@ class StoryController extends Controller
 
     public function book(Story $story)
     {
-        $chapters = $story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy();
+        $chapters = $story->chapters()
+            ->where('status', Status::PUBLISHED)
+            ->orderBy('timeline_id', 'asc')
+            ->orderBy('order', 'asc')
+            ->lazy();
 
         return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
+    }
+
+    public function order(Story $story)
+    {
+        return Inertia::render('Dashboard/Stories/Order', [
+            'story' => fn () => StoryResource::make($story),
+        ]);
     }
 }

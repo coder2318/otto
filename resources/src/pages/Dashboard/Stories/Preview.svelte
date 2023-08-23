@@ -1,12 +1,12 @@
 <script context="module" lang="ts">
     import Base from '@/components/Layouts/Base.svelte'
     import Dashboard from '@/components/Layouts/Dashboard.svelte'
-    import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     export const layout = [Base, Dashboard]
 </script>
 
 <script lang="ts">
+    import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import { inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
     export let story: { data: App.Story }
