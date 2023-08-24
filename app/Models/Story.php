@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Data\Story\Status;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,5 +42,17 @@ class Story extends Model implements HasMedia
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    protected function pages(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->chapters()->where('status', Status::PUBLISHED)->selectRaw(<<<'SQL'
+                LENGTH("chapters"."content") -
+                LENGTH(REPLACE("chapters"."content", ' ', '')) + 1
+                AS "words"
+            SQL
+            )->get()->map(fn ($chapter) => ceil($chapter->words / 500))->sum()
+        );
     }
 }

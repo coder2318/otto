@@ -181,7 +181,7 @@ class StoryController extends Controller
     public function order(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Order', [
-            'story' => fn () => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
         ]);
     }
 }

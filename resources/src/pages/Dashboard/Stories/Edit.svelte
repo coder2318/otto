@@ -74,7 +74,9 @@
     <title>{import.meta.env.VITE_APP_NAME} - {story.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={1} {story} />
+<section class="container mx-auto px-4" in:fade>
+    <Breadcrumbs step={1} {story} />
+</section>
 
 <form on:submit|preventDefault={submit} in:fade>
     <section

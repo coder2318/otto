@@ -58,6 +58,7 @@ declare namespace App {
         user?: User
         timeline_id: number
         timeline?: Timeline
+        pages?: number
         created_at: Date | string
         updated_at: Date | string
     }
