@@ -63,4 +63,22 @@ return [
         ],
     ],
 
+    'lulu' => [
+        'key' => env('LULU_API_KEY'),
+        'secret' => env('LULU_SECRET'),
+        'url' => env('LULU_API', 'https://api.lulu.com/'),
+        'encoded_key' => env('LULU_ENCODED'),
+        /**
+         * 0600X0900: trim size 6” x 9”
+         * FC: full color
+         * STD: standard quality
+         * PB: perfect binding
+         * 080CW444: 80# coated white paper with a bulk of 444 ppi
+         * G: gloss cover coating
+         * X: no linen
+         * X: no foil
+         */
+        'product' => '0600X0900FCSTDPB080CW444GXX',
+    ],
+
 ];
