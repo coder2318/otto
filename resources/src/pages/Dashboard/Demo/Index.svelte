@@ -29,7 +29,11 @@
             <div class="card bg-neutral shadow">
                 <div class="card-body gap-4">
                     <figure class="rounded-xl">
-                        <img src={question.cover} alt="" />
+                        <img
+                            src={question.cover ??
+                                'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                            alt=""
+                        />
                     </figure>
                     <p class="font-serif text-xl">
                         {question.question}

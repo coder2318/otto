@@ -6,8 +6,10 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
+    import { inertia, useForm } from '@inertiajs/svelte'
+    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
+    import Fa from 'svelte-fa'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'
@@ -31,7 +33,7 @@
             .trim()
             .split(/\s+/).length ?? 0
     $: wordsEnhanced =
-        $form.original
+        $form.enhanced
             ?.replace(/(<([^>]+)>)/gi, '')
             .replace(/&nbsp;/gi, ' ')
             .trim()
@@ -44,7 +46,7 @@
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))
-            .put(`/demo`)
+            .put(`/chapters/${chapter.data.id}`)
     }
 </script>
 
@@ -144,17 +146,44 @@
         </div>
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-end">
+    <section class="container mx-auto mb-8 flex justify-between">
+        <a
+            href="/chapters/{chapter.data.id}/edit"
+            class="btn btn-neutral rounded-full pl-0"
+            use:inertia
+        >
+            <span class="badge mask badge-accent mask-circle p-4"
+                ><Fa icon={faArrowLeft} /></span
+            >
+            Back
+        </a>
         {#if $form.isDirty && $form.use}
             <div class="flex gap-2">
                 <button
                     type="submit"
+                    class="btn btn-secondary rounded-full"
+                    data-status="draft"
+                >
+                    Save it as Draft
+                </button>
+                <button
+                    type="submit"
                     class="btn btn-primary rounded-full"
                     data-status="published"
-                    data-redirect="demo.finish"
+                    data-redirect="chapters.finish"
                 >
                     Finish this Chapter
                 </button>
+            </div>
+        {:else}
+            <div class="flex gap-4">
+                <a
+                    use:inertia
+                    class="btn btn-primary btn-outline rounded-full"
+                    href="/chapters/{chapter.data.id}/finish"
+                >
+                    Complete &<br /> Finish this Chapter
+                </a>
             </div>
         {/if}
     </section>

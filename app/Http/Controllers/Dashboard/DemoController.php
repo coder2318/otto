@@ -33,6 +33,8 @@ class DemoController extends Controller
         $chapter = $story->chapters()->firstOrCreate(values: [
             'title' => $question->question ?? 'Demo Chapter',
             'status' => ChapterStatus::DRAFT,
+            'timeline_question_id' => $question->id,
+            'timeline_id' => $question->timeline_id,
         ]);
 
         return [$chapter, $story];
@@ -145,10 +147,10 @@ class DemoController extends Controller
         return redirect()->route('demo.attachments')->with('message', 'Attachment deleted successfully!');
     }
 
-    public function enchance(Request $request, OpenAIService $service)
+    public function enhance(Request $request, OpenAIService $service)
     {
-        if (! $request->user()->enchances) {
-            return redirect()->route('demo.write')->with('status', 'You can only enchance once for demo!');
+        if (! $request->user()->enhances) {
+            return redirect()->route('demo.write')->with('status', 'You can only enhance once for demo!');
         }
 
         [$chapter] = $this->data($request);
@@ -157,13 +159,14 @@ class DemoController extends Controller
             return redirect()->back()->with('status', 'Chapter content is empty!');
         }
 
-        $request->user()->decrement('enchances', 1);
+        $request->user()->decrement('enhances', 1);
 
-        return Inertia::render('Dashboard/Demo/Enchance', [
+        return Inertia::render('Dashboard/Demo/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
-            'otto_edit' => $service->edit(
+            'otto_edit' => $service->chatEdit(
                 $chapter->content,
-                $service->createInstractions($request->user()?->details)
+                $chapter->question,
+                $request->user()?->details
             ),
         ]);
     }

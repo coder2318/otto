@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->integer('enchances')->default(1);
+            $table->integer('enhances')->default(1);
 
             // Fortify
             $table->text('two_factor_secret')->nullable();

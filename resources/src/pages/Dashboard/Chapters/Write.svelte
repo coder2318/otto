@@ -144,9 +144,9 @@
                         hideProgress: true,
                     }}
                     class="btn btn-primary rounded-full"
-                    href="/chapters/{chapter.data.id}/enchance"
+                    href="/chapters/{chapter.data.id}/enhance"
                 >
-                    Ask Otto AI to<br />Enchance the Writing
+                    Ask Otto AI to<br />enhance the Writing
                 </a>
             </div>
         {/if}

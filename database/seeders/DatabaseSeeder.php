@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             TimelineSeeder::class,
             QuizQuestionSeeder::class,
             TimelineQuestionSeeder::class,
+            UserSeeder::class,
         ]);
 
         if (App::isProduction()) {
@@ -25,7 +26,6 @@ class DatabaseSeeder extends Seeder
         }
 
         $this->call([
-            UserSeeder::class,
             BookCoverTemplateSeeder::class,
             StorySeeder::class,
             ChapterSeeder::class,

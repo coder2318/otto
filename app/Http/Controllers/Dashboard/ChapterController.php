@@ -26,7 +26,7 @@ class ChapterController extends Controller
     {
         $this->authorizeResource(Chapter::class, 'chapter');
         $this->middleware('can:update,chapter')
-            ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enchance', 'finish']);
+            ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enhance', 'finish']);
     }
 
     public function index(Story $story, ChaptersRequest $request)
@@ -98,16 +98,17 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function enchance(Chapter $chapter, Request $request, OpenAIService $service)
+    public function enhance(Chapter $chapter, Request $request, OpenAIService $service)
     {
         if (! $chapter->content) {
             return redirect()->back()->with('status', 'Chapter content is empty!');
         }
 
-        return Inertia::render('Dashboard/Chapters/Enchance', [
+        return Inertia::render('Dashboard/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
             'otto_edit' => $service->chatEdit(
                 $chapter->content,
+                $chapter->question,
                 $request->user()?->details
             ),
         ]);

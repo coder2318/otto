@@ -24,9 +24,9 @@ class TimelineQuestionSeeder extends Seeder
         }
 
         $data = [
-            'The elders in our life have a tremendous impact on how we grow into our personalities.   What is a memorable moment you had with a grandparent?  How did it impact your personality in the present?',
-            'The first meeting of a romantic partner is always memorable after the fact.  You generally never expect the impact they will have on you.  Tell us about the time you met your romantic partner.  Go into detail describing the setting, the person, and how it made you feel.',
-            'Travel has a way of producing tremendous growth in every day life.  Leaving our homes and visiting a new location always leaves everlasting memories.  What was the most memorable travel story of your childhood.  Go into deep detail about the location, the activities, and how you feel about it today.',
+            'What has been the most memorable relationship of your teenage years - whether romantic or friendly?',
+            'What is your fondest memory with a grandparent?',
+            'How has your philosophy on life changed from your childhood until now?',
         ];
 
         foreach ($data as $datum) {

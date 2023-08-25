@@ -151,7 +151,11 @@
                 in:fade
             >
                 <figure>
-                    <img src={chapter.cover} alt={chapter.title} />
+                    <img
+                        src={chapter.cover ??
+                            'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                        alt={chapter.title}
+                    />
                 </figure>
                 <div class="card-body">
                     <h2 class="card-title">{chapter.title}</h2>

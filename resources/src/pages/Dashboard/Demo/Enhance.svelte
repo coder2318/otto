@@ -6,10 +6,8 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
-    import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import { useForm } from '@inertiajs/svelte'
+    import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'
@@ -33,7 +31,7 @@
             .trim()
             .split(/\s+/).length ?? 0
     $: wordsEnhanced =
-        $form.original
+        $form.enhanced
             ?.replace(/(<([^>]+)>)/gi, '')
             .replace(/&nbsp;/gi, ' ')
             .trim()
@@ -46,7 +44,7 @@
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))
-            .put(`/chapters/${chapter.data.id}`)
+            .put(`/demo`)
     }
 </script>
 
@@ -76,7 +74,7 @@
         <div
             class="form-control join join-vertical transition-all {$form.use ==
             'enhanced'
-                ? 'scale-105 drop-shadow-lg'
+                ? 'scale-[1.01] drop-shadow-lg'
                 : ''}"
         >
             <div class="alert alert-success flex items-center rounded-b-none">
@@ -87,7 +85,7 @@
                 <span>{Math.round(wordsEnhanced / 500)} pages</span>
             </div>
             <TipTap
-                class="max-h-screen rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
                 bind:editor
                 bind:content={$form.enhanced}
                 placeholder="Write your story here..."
@@ -113,7 +111,7 @@
         <div
             class="form-control join join-vertical transition-all {$form.use ==
             'original'
-                ? 'scale-105 drop-shadow-lg'
+                ? 'scale-[1.01] drop-shadow-lg'
                 : ''}"
         >
             <div class="alert alert-info flex items-center rounded-b-none">
@@ -124,7 +122,7 @@
                 <span>{Math.round(wordsOriginal / 500)} pages</span>
             </div>
             <TipTap
-                class="max-h-screen rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
                 bind:editor
                 bind:content={$form.original}
                 placeholder="Write your story here..."
@@ -146,44 +144,17 @@
         </div>
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
-            Back
-        </a>
+    <section class="container mx-auto mb-8 flex justify-end">
         {#if $form.isDirty && $form.use}
             <div class="flex gap-2">
                 <button
                     type="submit"
-                    class="btn btn-secondary rounded-full"
-                    data-status="draft"
-                >
-                    Save it as Draft
-                </button>
-                <button
-                    type="submit"
                     class="btn btn-primary rounded-full"
                     data-status="published"
-                    data-redirect="chapters.finish"
+                    data-redirect="demo.finish"
                 >
                     Finish this Chapter
                 </button>
-            </div>
-        {:else}
-            <div class="flex gap-4">
-                <a
-                    use:inertia
-                    class="btn btn-primary btn-outline rounded-full"
-                    href="/chapters/{chapter.data.id}/finish"
-                >
-                    Complete &<br /> Finish this Chapter
-                </a>
             </div>
         {/if}
     </section>
