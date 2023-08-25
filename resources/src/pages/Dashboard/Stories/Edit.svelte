@@ -7,7 +7,7 @@
 <script lang="ts">
     import { inertia, router } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
-    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilderV2.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import type { FilePond as FilePondType } from 'filepond'
     import { createCropperForFilepond } from '@/service/cropper'
