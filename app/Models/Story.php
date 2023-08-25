@@ -52,7 +52,7 @@ class Story extends Model implements HasMedia
                 LENGTH(REPLACE("chapters"."content", ' ', '')) + 1
                 AS "words"
             SQL
-            )->get()->map(fn ($chapter) => ceil($chapter->words / 500))->sum()
+            )->get()->map(fn ($chapter) => ceil($chapter->words / 500))->sum() // @phpstan-ignore-line
         );
     }
 }

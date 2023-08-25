@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.279.5",
+            "version": "3.279.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "5cd1276c49effad408928e19a44a7d188cb9dedf"
+                "reference": "e83376ac8e88ed99c3d75d1309a2cb1148d31fd9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/5cd1276c49effad408928e19a44a7d188cb9dedf",
-                "reference": "5cd1276c49effad408928e19a44a7d188cb9dedf",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/e83376ac8e88ed99c3d75d1309a2cb1148d31fd9",
+                "reference": "e83376ac8e88ed99c3d75d1309a2cb1148d31fd9",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.279.5"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.279.6"
             },
-            "time": "2023-08-23T18:34:06+00:00"
+            "time": "2023-08-24T18:07:59+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -3396,25 +3396,25 @@
         },
         {
             "name": "mtdowling/jmespath.php",
-            "version": "2.6.1",
+            "version": "2.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/jmespath/jmespath.php.git",
-                "reference": "9b87907a81b87bc76d19a7fb2d61e61486ee9edb"
+                "reference": "bbb69a935c2cbb0c03d7f481a238027430f6440b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/9b87907a81b87bc76d19a7fb2d61e61486ee9edb",
-                "reference": "9b87907a81b87bc76d19a7fb2d61e61486ee9edb",
+                "url": "https://api.github.com/repos/jmespath/jmespath.php/zipball/bbb69a935c2cbb0c03d7f481a238027430f6440b",
+                "reference": "bbb69a935c2cbb0c03d7f481a238027430f6440b",
                 "shasum": ""
             },
             "require": {
-                "php": "^5.4 || ^7.0 || ^8.0",
+                "php": "^7.2.5 || ^8.0",
                 "symfony/polyfill-mbstring": "^1.17"
             },
             "require-dev": {
-                "composer/xdebug-handler": "^1.4 || ^2.0",
-                "phpunit/phpunit": "^4.8.36 || ^7.5.15"
+                "composer/xdebug-handler": "^3.0.3",
+                "phpunit/phpunit": "^8.5.33"
             },
             "bin": [
                 "bin/jp.php"
@@ -3422,7 +3422,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.6-dev"
+                    "dev-master": "2.7-dev"
                 }
             },
             "autoload": {
@@ -3439,6 +3439,11 @@
             ],
             "authors": [
                 {
+                    "name": "Graham Campbell",
+                    "email": "hello@gjcampbell.co.uk",
+                    "homepage": "https://github.com/GrahamCampbell"
+                },
+                {
                     "name": "Michael Dowling",
                     "email": "mtdowling@gmail.com",
                     "homepage": "https://github.com/mtdowling"
@@ -3451,9 +3456,9 @@
             ],
             "support": {
                 "issues": "https://github.com/jmespath/jmespath.php/issues",
-                "source": "https://github.com/jmespath/jmespath.php/tree/2.6.1"
+                "source": "https://github.com/jmespath/jmespath.php/tree/2.7.0"
             },
-            "time": "2021-06-14T00:11:39+00:00"
+            "time": "2023-08-25T10:54:48+00:00"
         },
         {
             "name": "nesbot/carbon",
@@ -5854,16 +5859,16 @@
         },
         {
             "name": "spatie/laravel-medialibrary",
-            "version": "10.11.3",
+            "version": "10.11.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-medialibrary.git",
-                "reference": "293a066890e10c951ff29bc76bfa026a60034edc"
+                "reference": "54d240975662a3d971466434e84625876a0d8b46"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/293a066890e10c951ff29bc76bfa026a60034edc",
-                "reference": "293a066890e10c951ff29bc76bfa026a60034edc",
+                "url": "https://api.github.com/repos/spatie/laravel-medialibrary/zipball/54d240975662a3d971466434e84625876a0d8b46",
+                "reference": "54d240975662a3d971466434e84625876a0d8b46",
                 "shasum": ""
             },
             "require": {
@@ -5946,7 +5951,7 @@
             ],
             "support": {
                 "issues": "https://github.com/spatie/laravel-medialibrary/issues",
-                "source": "https://github.com/spatie/laravel-medialibrary/tree/10.11.3"
+                "source": "https://github.com/spatie/laravel-medialibrary/tree/10.11.4"
             },
             "funding": [
                 {
@@ -5958,7 +5963,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-07T07:30:22+00:00"
+            "time": "2023-08-25T08:54:08+00:00"
         },
         {
             "name": "spatie/laravel-package-tools",
@@ -10429,16 +10434,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "13.1.3",
+            "version": "13.2.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "f84b8732f0ebd44b816c5c1240cff0c9d2ac3a42"
+                "reference": "e0a6f4399a4f0dadbc136f4826eaa3aa3e43ce91"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/f84b8732f0ebd44b816c5c1240cff0c9d2ac3a42",
-                "reference": "f84b8732f0ebd44b816c5c1240cff0c9d2ac3a42",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/e0a6f4399a4f0dadbc136f4826eaa3aa3e43ce91",
+                "reference": "e0a6f4399a4f0dadbc136f4826eaa3aa3e43ce91",
                 "shasum": ""
             },
             "require": {
@@ -10491,7 +10496,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-08-24T02:07:56+00:00"
+            "time": "2023-08-25T10:00:10+00:00"
         },
         {
             "name": "laravel-lang/publisher",
@@ -11326,16 +11331,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.30",
+            "version": "1.10.32",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "2910afdd3fe33e5afd71c09f3fb0d0845b48c410"
+                "reference": "c47e47d3ab03137c0e121e77c4d2cb58672f6d44"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/2910afdd3fe33e5afd71c09f3fb0d0845b48c410",
-                "reference": "2910afdd3fe33e5afd71c09f3fb0d0845b48c410",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/c47e47d3ab03137c0e121e77c4d2cb58672f6d44",
+                "reference": "c47e47d3ab03137c0e121e77c4d2cb58672f6d44",
                 "shasum": ""
             },
             "require": {
@@ -11384,7 +11389,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-08-22T13:48:25+00:00"
+            "time": "2023-08-24T21:54:50+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",

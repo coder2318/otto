@@ -7,7 +7,6 @@ use App\Data\Lulu\ShippingAddress;
 use App\Data\Lulu\ShippingOption;
 use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Validator;
 
 class LuluService
 {
