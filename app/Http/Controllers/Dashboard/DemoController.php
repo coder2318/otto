@@ -31,10 +31,10 @@ class DemoController extends Controller
         ]);
         /** @var \App\Models\Chapter */
         $chapter = $story->chapters()->firstOrCreate(values: [
-            'title' => $question->question ?? 'Demo Chapter',
+            'title' => $question?->question ?? 'Demo Chapter',
             'status' => ChapterStatus::DRAFT,
-            'timeline_question_id' => $question->id,
-            'timeline_id' => $question->timeline_id,
+            'timeline_question_id' => $question?->id,
+            'timeline_id' => $question?->timeline_id,
         ]);
 
         return [$chapter, $story];
