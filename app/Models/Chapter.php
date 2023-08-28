@@ -21,6 +21,8 @@ class Chapter extends Model implements HasMedia
         'order',
         'status',
         'story_id',
+        'timeline_id',
+        'timeline_question_id',
     ];
 
     protected $casts = [
@@ -35,6 +37,11 @@ class Chapter extends Model implements HasMedia
     public function timeline(): BelongsTo
     {
         return $this->belongsTo(Timeline::class);
+    }
+
+    public function question(): BelongsTo
+    {
+        return $this->belongsTo(TimelineQuestion::class);
     }
 
     public function cover(): MorphOne
