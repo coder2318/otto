@@ -19,7 +19,7 @@ class BookCoverTemplateFactory extends Factory
         return [
             'name' => $this->faker->word(),
             'back' => '',
-            'spine' => <<<XML
+            'spine' => <<<'XML'
             <rect x="0" y="0" width="100%" height="100%" fill="white" />
             <text
                 x="50%"
@@ -33,7 +33,7 @@ class BookCoverTemplateFactory extends Factory
                 data-spine="innerText"
             ></text>
             XML,
-            'front' => <<<XML
+            'front' => <<<'XML'
             <text x="50%" y="50" font-size="2rem" text-anchor="middle" data-title-medium="innerText">Title Medium</text>
             <text x="50%" y="150" font-size="5rem" text-anchor="middle" data-title-large="innerText">Title Large</text>
             <g transform="translate(0 -50)">

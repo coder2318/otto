@@ -7,7 +7,6 @@
     import FilePondPluginImageEdit from 'filepond-plugin-image-edit'
     import FilePondPluginImageTransform from 'filepond-plugin-image-transform'
     import FilePondPluginImageCrop from 'filepond-plugin-image-crop'
-    import { onMount } from 'svelte'
 
     // Register the plugins
     registerPlugin(
