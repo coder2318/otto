@@ -9,6 +9,7 @@
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { fade, blur } from 'svelte/transition'
     import Paginator from '@/components/Paginator.svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilderV2.svelte'
 
     export let story: { data: App.Story }
     export let covers: {
@@ -36,8 +37,8 @@
             out:blur={{ duration: 250 }}
             in:blur={{ delay: 250, duration: 250 }}
         >
-            <figure class="p-4">
-                {@html cover.template}
+            <figure>
+                <BookCoverBuilder template={cover} pages={200} />
             </figure>
             <div class="card-body items-center">
                 <h5 class="card-title">{cover.name}</h5>

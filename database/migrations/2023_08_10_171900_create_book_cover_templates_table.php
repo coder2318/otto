@@ -15,7 +15,9 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->json('fields');
-            $table->text('template');
+            $table->text('back');
+            $table->text('spine');
+            $table->text('front');
             $table->timestamps();
         });
     }

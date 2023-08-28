@@ -16,6 +16,8 @@ export function createCropperForFilepond(
             this.file = file
             this.image.src = URL.createObjectURL(this.file)
             this.cropper = new Cropper(this.image, options)
+
+            console.log(this.cropper)
         },
         getOptions() {
             return getEditedOptions(this.cropper)

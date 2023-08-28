@@ -12,7 +12,9 @@ class BookCoverTemplate extends Model
     protected $fillable = [
         'name',
         'fields',
-        'template',
+        'back',
+        'spine',
+        'front',
     ];
 
     protected $casts = [

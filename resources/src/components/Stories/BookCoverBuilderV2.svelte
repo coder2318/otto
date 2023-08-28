@@ -1,18 +1,73 @@
 <script lang="ts">
-    import { onMount } from 'svelte'
+    import cover from '@/assets/img/default-cover.jpg'
 
     export let template: App.BookCoverTemplate
-    export let pages: number = 200
+    export let parameters: any = {}
+    export let pages: number = 32
 
     let svg: SVGElement
-    $: params = getSize(pages)
+    $: sizes = getSize(pages)
+    $: updateSvg(parameters)
 
-    function getSize(pages) {
+    function updateSvg(parameters) {
+        if (!svg) return
+
+        Object.entries(parameters).forEach(([key, value]) => {
+            svg.querySelectorAll(
+                `[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`
+            ).forEach((node: HTMLElement) => {
+                switch (node.dataset[key]) {
+                    case 'innerText':
+                        node.innerHTML = value as string
+                        break
+                    case 'innerHTML':
+                        node.innerHTML = value as string
+                        break
+                    default:
+                        node.setAttribute(node.dataset[key], value as string)
+                        break
+                }
+            })
+        })
+    }
+
+    export function getFile() {
+        return new Promise<Blob>((resolve) => {
+            const svgData =
+                `<?xml version="1.0" standalone="no"?>\r\n` +
+                new XMLSerializer().serializeToString(svg)
+            const blob = new Blob([svgData], { type: 'image/svg+xml' })
+            const image = new Image()
+
+            image.width = sizes.totalWidth * 2
+            image.height = sizes.totalHeight * 2
+            image.src = URL.createObjectURL(blob)
+
+            image.onload = () => {
+                const canvas = document.createElement('canvas')
+                canvas.width = image.width
+                canvas.height = image.height
+                const ctx = canvas.getContext('2d')
+                ctx.drawImage(image, 0, 0)
+                URL.revokeObjectURL(image.src)
+
+                canvas.toBlob(
+                    (blob) => {
+                        resolve(blob)
+                    },
+                    'image/jpg',
+                    80
+                )
+            }
+        })
+    }
+
+    export function getSize(pages) {
         let width = 5.5,
             height = 8.5,
             safetyMargin = 0.25,
             bleedArea = 0.125,
-            spineWidth = pages / 444 + 0.06 // https://blog.lulu.com/book-spine/
+            spineWidth = (pages > 32 ? pages : 32) / 444 + 0.06 // https://blog.lulu.com/book-spine/
 
         const sizes = {
             totalHeight: height + 2 * safetyMargin + 2 * bleedArea,
@@ -32,66 +87,54 @@
 
     export function getCoverAspectRatio() {
         return (
-            (2 * params.width + 4 * params.safetyMargin + params.spineWidth) /
-            (params.height + 2 * params.safetyMargin)
+            (2 * sizes.width + 4 * sizes.safetyMargin + sizes.spineWidth) /
+            (sizes.height + 2 * sizes.safetyMargin)
         )
     }
 </script>
 
 <svg
     bind:this={svg}
-    viewBox="0 0 {params.totalWidth} {params.totalHeight}"
+    viewBox="0 0 {sizes.totalWidth} {sizes.totalHeight}"
     xmlns="http://www.w3.org/2000/svg"
-    style="--spine-width:{params.spineWidth}"
+    style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
     <image
-        href="https://picsum.photos/1920/1080"
+        href={parameters.background ?? cover}
         preserveAspectRatio="xMinYMin slice"
-        x={params.bleedArea}
-        y={params.bleedArea}
-        width={2 * params.width + 4 * params.safetyMargin + params.spineWidth}
-        height={params.height + 2 * params.safetyMargin}
+        x={sizes.bleedArea}
+        y={sizes.bleedArea}
+        width={2 * sizes.width + 4 * sizes.safetyMargin + sizes.spineWidth}
+        height={sizes.height + 2 * sizes.safetyMargin}
     />
 
     <svg
-        x={params.bleedArea}
-        y={params.bleedArea}
-        width={params.width + 2 * params.safetyMargin}
-        height={params.height + 2 * params.safetyMargin}
+        x={sizes.bleedArea}
+        y={sizes.bleedArea}
+        width={sizes.width + 2 * sizes.safetyMargin}
+        height={sizes.height + 2 * sizes.safetyMargin}
     >
-        <rect x="0" y="0" width="100%" height="100%" fill="transparent" />
+        {@html template.back ?? ''}
     </svg>
     <svg
-        x={params.bleedArea + 2 * params.safetyMargin + params.width}
-        y={params.bleedArea}
-        width={params.spineWidth}
-        height={params.height + 2 * params.safetyMargin}
+        x={sizes.bleedArea + 2 * sizes.safetyMargin + sizes.width}
+        y={sizes.bleedArea}
+        width={sizes.spineWidth}
+        height={sizes.height + 2 * sizes.safetyMargin}
     >
-        <rect x="0" y="0" width="100%" height="100%" fill="white" />
-        <text
-            x="50%"
-            y="50%"
-            width="100%"
-            text-anchor="middle"
-            dominant-baseline="middle"
-            height="100%"
-            style="transform-origin:center;transform:rotate(-90deg);"
-            font-size="calc(var(--spine-width) * 0.666)"
-        >
-            Spine
-        </text>
+        {@html template.spine ?? ''}
     </svg>
 
     <svg
-        x={params.bleedArea +
-            2 * params.safetyMargin +
-            params.spineWidth +
-            params.width}
-        y={params.bleedArea}
-        width={params.width + 2 * params.safetyMargin}
-        height={params.height + 2 * params.safetyMargin}
+        x={sizes.bleedArea +
+            2 * sizes.safetyMargin +
+            sizes.spineWidth +
+            sizes.width}
+        y={sizes.bleedArea}
+        width={sizes.width + 2 * sizes.safetyMargin}
+        height={sizes.height + 2 * sizes.safetyMargin}
     >
-        <rect x="0" y="0" width="100%" height="100%" fill="transparent" />
+        {@html template.front ?? ''}
     </svg>
 </svg>

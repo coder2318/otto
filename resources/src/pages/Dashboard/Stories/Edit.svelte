@@ -34,11 +34,13 @@
 
     onMount(() => {
         editor = createCropperForFilepond(element, {
-            aspectRatio: 6 / 9,
+            aspectRatio: builder.getCoverAspectRatio(),
             viewMode: 2,
             background: false,
             autoCrop: true,
-            ready: () => modal.showModal(),
+            ready: () => {
+                modal.showModal()
+            },
         })
 
         return () => {
@@ -61,7 +63,7 @@
     }
 
     async function submit() {
-        const file = new File([await builder.getFile(1800, 9 / 6)], 'cover.jpg')
+        const file = new File([await builder.getFile()], 'cover.jpg')
         router.post(
             `/stories/${story.data.id}`,
             { cover: file, _method: 'PUT', redirect: 'stories.contents' },
@@ -97,8 +99,9 @@
                                 name={field.key}
                                 placeholder={field.name}
                             />
-                        {:else if field.type === 'image'}
+                        {:else if field.type === 'image' && editor}
                             <FilePond
+                                name={field.key}
                                 bind:pond={filepond}
                                 onpreparefile={async (file, blob) =>
                                     (parameters[field.key] =
@@ -123,7 +126,7 @@
             >
                 <BookCoverBuilder
                     bind:this={builder}
-                    class="h-full w-full"
+                    class="h-full w-full select-none"
                     {parameters}
                     template={template.data}
                 />

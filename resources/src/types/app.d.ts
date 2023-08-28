@@ -107,11 +107,13 @@ declare namespace App {
     interface BookCoverTemplate {
         id: number
         name: string
+        back: string
+        spine: string
+        front: string
         fields: Array<{
             name: string
             type: string
             key: string
         }>
-        template: string
     }
 }
