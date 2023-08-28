@@ -1,3 +1,8 @@
+<script context="module" lang="ts">
+    import Base from '@/components/Layouts/Base.svelte'
+    export const layout = [Base]
+</script>
+
 <script lang="ts">
     export let status: number
     export let error: string
