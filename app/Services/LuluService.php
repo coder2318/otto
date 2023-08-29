@@ -6,6 +6,7 @@ use App\Data\Lulu\LineItem;
 use App\Data\Lulu\ShippingAddress;
 use App\Data\Lulu\ShippingOption;
 use Illuminate\Http\Client\PendingRequest;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
 
 class LuluService
@@ -18,15 +19,17 @@ class LuluService
             return $this->token;
         }
 
-        return $this->token = Http::baseUrl(config('services.lulu.url'))
-            ->withHeaders([
-                'Authorization' => config('services.lulu.encoded_key'),
-                'Content-Type' => 'application/x-www-form-urlencoded',
-            ])
-            ->post('auth/realms/glasstree/protocol/openid-connect/token', [
-                'grant_type' => 'client_credentials',
-            ])
-            ->json('access_token');
+        return $this->token = Cache::remember('lulu_token', 3600 - 1, fn () =>
+            Http::baseUrl(config('services.lulu.url'))
+                ->asForm()
+                ->withHeaders([
+                    'Authorization' => config('services.lulu.encoded_key'),
+                ])
+                ->post('auth/realms/glasstree/protocol/openid-connect/token', [
+                    'grant_type' => 'client_credentials',
+                ])
+                ->json('access_token')
+        );
     }
 
     protected function request(): PendingRequest

@@ -38,11 +38,12 @@ Route::middleware('user-configured')->group(function () {
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
-            Route::get('/contents', 'contents')->name('contents');
+            Route::get('/cover', 'cover')->name('cover');
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
             Route::get('/book', 'book')->name('book');
-            Route::get('/order', 'order')->name('order');
+            Route::get('/book-cover', 'bookCover')->name('book-cover');
+            Route::match(['get', 'patch'], '/order', 'order')->name('order');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {

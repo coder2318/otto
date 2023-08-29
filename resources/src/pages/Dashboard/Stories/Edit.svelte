@@ -5,70 +5,74 @@
 </script>
 
 <script lang="ts">
-    import { inertia, router } from '@inertiajs/svelte'
-    import FilePond from '@/components/FilePond.svelte'
-    import BookCoverBuilder from '@/components/Stories/BookCoverBuilderV2.svelte'
-    import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import type { FilePond as FilePondType } from 'filepond'
-    import { createCropperForFilepond } from '@/service/cropper'
     import { fade } from 'svelte/transition'
-    import { onMount } from 'svelte'
-    import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
-    import Fa from 'svelte-fa'
+    import { inertia, useForm } from '@inertiajs/svelte'
+    import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import {
-        faArrowLeft,
         faArrowRight,
+        faGripLines,
+        faPencil,
     } from '@fortawesome/free-solid-svg-icons'
-    import { fileToBase64 } from '@/service/helpers'
+    import Fa from 'svelte-fa'
+    import { onMount } from 'svelte'
+    import Sortable from 'sortablejs'
 
     export let story: { data: App.Story }
-    export let template: { data: App.BookCoverTemplate }
+    export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
+    export let timelines: { data: App.Timeline[] }
 
-    let element: HTMLElement,
-        modal: HTMLDialogElement,
-        filepond: FilePondType,
-        builder: BookCoverBuilder,
-        editor: any
+    const form = useForm({
+        timelines: timelines.data.map((timeline) => ({
+            id: timeline.id,
+            chapters:
+                chapters[timeline.id]?.data.map((chapter) => chapter.id) ?? [],
+        })),
+    })
 
-    let parameters = {} as any
+    let lists: HTMLUListElement[] = []
 
     onMount(() => {
-        editor = createCropperForFilepond(element, {
-            aspectRatio: builder.getCoverAspectRatio(),
-            viewMode: 2,
-            background: false,
-            autoCrop: true,
-            ready: () => {
-                modal.showModal()
-            },
+        const sortables = []
+        lists.forEach((list) => {
+            sortables.push(
+                new Sortable(list, {
+                    group: 'shared',
+                    animation: 150,
+                    handle: '.cursor-grab',
+                    onEnd(event) {
+                        const { oldIndex, newIndex } = event
+                        const from = $form.timelines.find(
+                            (timeline) =>
+                                timeline.id == event.from.dataset.timeline
+                        )
+                        const to = $form.timelines.find(
+                            (timeline) =>
+                                timeline.id == event.to.dataset.timeline
+                        )
+                        to.chapters.splice(
+                            newIndex,
+                            0,
+                            ...from.chapters.splice(oldIndex, 1)
+                        )
+
+                        $form.timelines = $form.timelines
+                    },
+                })
+            )
         })
 
         return () => {
-            editor.clear()
-            editor = null
+            sortables.forEach((sortable) => sortable.destroy())
         }
     })
 
-    function canvelEdit() {
-        editor.oncancel()
-        editor.onclose && editor.onclose()
-        editor?.clear()
-    }
-
-    function saveImage() {
-        modal.close()
-        editor.onconfirm(editor.getOptions())
-        editor.onclose && editor.onclose()
-        editor?.clear()
-    }
-
-    async function submit() {
-        const file = new File([await builder.getFile()], 'cover.jpg')
-        router.post(
-            `/stories/${story.data.id}`,
-            { cover: file, _method: 'PUT', redirect: 'stories.contents' },
-            { forceFormData: true }
-        )
+    function submit() {
+        $form.post(window.location.pathname, {
+            onSuccess: () =>
+                $form.defaults({
+                    timelines: $form.timelines,
+                }),
+        })
     }
 </script>
 
@@ -80,103 +84,94 @@
     <Breadcrumbs step={1} {story} />
 </section>
 
-<form on:submit|preventDefault={submit} in:fade>
-    <section
-        class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
-    >
-        <div class="card bg-base-300">
-            <div class="card-body gap-4">
-                {#each template.data.fields as field}
-                    <div class="form-control">
-                        <label class="label" for={field.key}>
-                            <span class="label-text">{field.name}</span>
-                        </label>
-                        {#if field.type === 'text'}
-                            <input
-                                class="input input-bordered"
-                                bind:value={parameters[field.key]}
-                                type="text"
-                                name={field.key}
-                                placeholder={field.name}
-                            />
-                        {:else if field.type === 'image' && editor}
-                            <FilePond
-                                name={field.key}
-                                bind:pond={filepond}
-                                onpreparefile={async (file, blob) =>
-                                    (parameters[field.key] =
-                                        await fileToBase64(blob))}
-                                onremovefile={() =>
-                                    (parameters[field.key] = null)}
-                                imageEditEditor={editor}
-                                allowImageEdit={true}
-                                allowMultiple={false}
-                                imageEditInstantEdit={true}
-                                styleImageEditButtonEditItemPosition="top right"
-                                imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                            />
-                        {/if}
-                    </div>
-                {/each}
-            </div>
-        </div>
-        <div class="card border-2 border-base-300">
-            <div
-                class="card-body max-h-screen items-center justify-center gap-4"
-            >
-                <BookCoverBuilder
-                    bind:this={builder}
-                    class="h-full w-full select-none"
-                    {parameters}
-                    template={template.data}
-                />
-            </div>
+<form on:submit|preventDefault={submit}>
+    <section class="container mx-auto mb-4 px-4">
+        <div class="flex flex-wrap items-center justify-between gap-2">
+            <h1 class="my-4 text-3xl text-primary">
+                Table of <i>Contents</i>
+            </h1>
+            {#if $form.isDirty}
+                <button
+                    type="submit"
+                    class="btn btn-primary rounded-full"
+                    disabled={$form.processing}
+                >
+                    {#if $form.processing}<span class="loading loading-spinner"
+                        ></span>{/if}
+                    Save Chapter Order
+                </button>
+            {:else}
+                <a
+                    href="/stories/{story.data.id}/preview"
+                    use:inertia
+                    class="btn btn-secondary rounded-full pr-0"
+                >
+                    Preview Your Book
+                    <span class="badge mask badge-neutral mask-circle p-4"
+                        ><Fa icon={faArrowRight} /></span
+                    >
+                </a>
+            {/if}
         </div>
     </section>
 
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/stories/{story.data.id}"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
-            Back
-        </a>
-        <div class="flex gap-4">
-            <a
-                href="/stories/{story.data.id}/covers"
-                use:inertia
-                class="btn btn-neutral rounded-full"
-            >
-                More Covers
-            </a>
-            <button class="btn btn-secondary rounded-full pr-0" type="submit">
-                Save & Next
-                <span class="badge mask badge-neutral mask-circle p-4"
-                    ><Fa icon={faArrowRight} /></span
-                >
-            </button>
-        </div>
-    </section>
+    <main class="container mx-auto mb-16 flex flex-col gap-6 px-4">
+        {#each timelines.data as timeline (timeline.id)}
+            <div class="otto-colapse collapse-arrow collapse bg-base-200">
+                <input type="checkbox" />
+                <div class="collapse-title text-xl font-medium">
+                    {timeline.title}
+                </div>
+                <div class="collapse-content">
+                    <ul
+                        class="flex flex-col gap-4"
+                        bind:this={lists[timeline.id]}
+                        data-timeline={timeline.id}
+                    >
+                        {#each chapters[timeline.id]?.data ?? [] as chapter (chapter.id)}
+                            <li
+                                data-chapter={chapter.id}
+                                class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
+                            >
+                                <span
+                                    class="badge badge-neutral h-8 w-8 cursor-grab rounded-full"
+                                >
+                                    <Fa icon={faGripLines} />
+                                </span>
+                                <span class="flex-1">{chapter.title}</span>
+                                <a
+                                    href="/chapters/{chapter.id}/edit"
+                                    class="btn btn-circle btn-ghost btn-sm border border-base-content/20"
+                                >
+                                    <Fa icon={faPencil} />
+                                </a>
+                            </li>
+                        {/each}
+                    </ul>
+                </div>
+            </div>
+        {/each}
+    </main>
 </form>
 
-<dialog bind:this={modal} class="modal">
-    <form
-        method="dialog"
-        class="modal-box w-11/12 max-w-5xl"
-        on:submit={canvelEdit}
-    >
-        <div bind:this={element} class="min-h-[500px]" />
-        <div class="modal-action">
-            <button
-                type="button"
-                class="btn btn-primary"
-                on:click|preventDefault={saveImage}>Confirm</button
-            >
-            <button type="submit" class="btn">Close</button>
-        </div>
-    </form>
-</dialog>
+<style lang="scss">
+    .otto-colapse {
+        @apply border border-primary text-primary transition-colors duration-300;
+
+        .collapse-title {
+            @apply font-serif text-2xl;
+        }
+
+        .collapse-content {
+            @apply bg-base-300 text-base-content;
+        }
+
+        &:has(input:checked) {
+            @apply bg-primary text-primary-content;
+
+            .collapse-content {
+                @apply pt-4;
+            }
+        }
+    }
+</style>

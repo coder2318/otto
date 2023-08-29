@@ -13,6 +13,7 @@ class UpdateStoryRequest extends FormRequest
         return [
             'title' => ['sometimes', 'required', 'string'],
             'cover' => ['sometimes', 'nullable', 'image'],
+            'book_cover' => ['sometimes', 'nullable', 'image'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
             'redirect' => ['sometimes', 'nullable'],
         ];

@@ -19,20 +19,20 @@
         use:inertia
     >
         <span class="step-icon">
-            <Fa icon={faBook} />
+            <Fa icon={faList} />
         </span>
-        Make a book cover
+        Table of contents
     </a>
     <a
         class="step-breadcrumb"
         class:inactive={step < 2}
-        href="/stories/{story.data.id}/contents"
+        href="/stories/{story.data.id}/cover"
         use:inertia
     >
         <span class="step-icon">
-            <Fa icon={faList} />
+            <Fa icon={faBook} />
         </span>
-        Table of contents
+        Make a book cover
     </a>
     <a
         class="step-breadcrumb"

@@ -2,9 +2,13 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Data\Lulu\LineItem;
+use App\Data\Lulu\ShippingAddress;
+use App\Data\Lulu\ShippingOption;
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Stories\ChapterOrderRequest;
+use App\Http\Requests\Stories\OrderCostRequest;
 use App\Http\Requests\Stories\StoreStoryRequest;
 use App\Http\Requests\Stories\StoriesRequest;
 use App\Http\Requests\Stories\UpdateStoryRequest;
@@ -15,10 +19,12 @@ use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\Timeline;
+use App\Services\LuluService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
+use Intervention\Image\Facades\Image;
 
 class StoryController extends Controller
 {
@@ -61,10 +67,10 @@ class StoryController extends Controller
         ]);
     }
 
-    public function edit(Story $story, Request $request)
+    public function cover(Story $story, Request $request)
     {
-        return Inertia::render('Dashboard/Stories/Edit', [
-            'story' => fn () => StoryResource::make($story),
+        return Inertia::render('Dashboard/Stories/Cover', [
+            'story' => fn () => StoryResource::make($story->append('pages')),
             'template' => fn () => BookCoverTemplateResource::make(
                 BookCoverTemplate::when(
                     $tmpl = $request->query('template'),
@@ -98,6 +104,11 @@ class StoryController extends Controller
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
+        if ($request->hasFile('book_cover')) {
+            $story->book?->delete();
+            $story->addMediaFromRequest('book_cover')->toMediaCollection('book-cover');
+        }
+
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Story updated successfully!');
     }
 
@@ -121,9 +132,9 @@ class StoryController extends Controller
         ]);
     }
 
-    public function contents(Story $story)
+    public function edit(Story $story)
     {
-        return Inertia::render('Dashboard/Stories/Contents', [
+        return Inertia::render('Dashboard/Stories/Edit', [
             'story' => fn () => StoryResource::make($story),
             'chapters' => fn () => $story->chapters()
                 ->orderBy('order', 'asc')
@@ -178,10 +189,27 @@ class StoryController extends Controller
         return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
     }
 
-    public function order(Story $story)
+    public function bookCover(Story $story)
+    {
+        $image = Image::make($stream = $story->cover->stream());
+        $cover = 'data:image/'.$story->cover->type.';base64,'.base64_encode(stream_get_contents($story->cover->stream()));
+
+        return Pdf::setPaper([0, 0, $image->width(), $image->height()])->loadView('pdf.book-cover', compact('cover'))->stream();
+    }
+
+    public function order(Story $story, LuluService $lulu, OrderCostRequest $request)
     {
         return Inertia::render('Dashboard/Stories/Order', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
+            'price' => fn () => ($address = $request->shippingAddress()) ? $lulu->cost(
+                LineItem::from([
+                    'page_count' => $story->pages,
+                    'pod_package_id' => '0600X0900BWSTDPB060UW444MXX',
+                    'quantity' => 1,
+                ]),
+                $address,
+                ShippingOption::EXPRESS
+            ) : null
         ]);
     }
 }

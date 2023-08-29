@@ -6,7 +6,10 @@
 
 <script lang="ts">
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import {
+        faArrowLeft,
+        faArrowRight,
+    } from '@fortawesome/free-solid-svg-icons'
     import { inertia } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
     export let story: { data: App.Story }
@@ -19,7 +22,7 @@
 <section
     class="container mx-auto flex min-h-[calc(100vh-66px)] flex-col items-stretch px-4 pb-4"
 >
-    <Breadcrumbs step={2} {story} />
+    <Breadcrumbs step={1} {story} />
     <h1 class="my-4 text-3xl text-primary">
         Book Preview - <i>{story.data.title}</i>
     </h1>
@@ -31,7 +34,7 @@
     />
     <div class="mt-4 flex items-center justify-between">
         <a
-            href="/stories/{story.data.id}/contents"
+            href="/stories/{story.data.id}/edit"
             use:inertia
             class="btn btn-neutral rounded-full pl-0"
         >
@@ -41,11 +44,14 @@
             Go Back
         </a>
         <a
-            href="/stories/{story.data.id}/order"
+            href="/stories/{story.data.id}/cover"
+            class="btn btn-secondary rounded-full pr-0"
             use:inertia
-            class="btn btn-primary rounded-full"
         >
-            Finalize Your Order
+            Save & Next
+            <span class="badge mask badge-neutral mask-circle p-4"
+                ><Fa icon={faArrowRight} /></span
+            >
         </a>
     </div>
 </section>

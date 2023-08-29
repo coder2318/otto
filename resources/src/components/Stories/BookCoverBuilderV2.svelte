@@ -39,8 +39,8 @@
             const blob = new Blob([svgData], { type: 'image/svg+xml' })
             const image = new Image()
 
-            image.width = sizes.totalWidth * 2
-            image.height = sizes.totalHeight * 2
+            image.width = sizes.totalWidth
+            image.height = sizes.totalHeight
             image.src = URL.createObjectURL(blob)
 
             image.onload = () => {

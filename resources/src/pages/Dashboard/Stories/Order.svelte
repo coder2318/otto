@@ -9,6 +9,8 @@
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { usd } from '@/service/helpers'
     import { dayjs } from '@/service/dayjs'
+
+    export let price: number | null
     export let story: { data: App.Story }
 
     const form = useForm({
@@ -22,7 +24,9 @@
     })
 
     function submit() {
-        $form.post(window.location.pathname)
+        $form.patch(window.location.pathname, {
+            only: ['price'],
+        })
     }
 </script>
 
@@ -231,10 +235,12 @@
                             <td>Binding Type</td>
                             <td>Hard Cover</td>
                         </tr>
-                        <tr>
-                            <th>Total</th>
-                            <th>{usd(200)}</th>
-                        </tr>
+                        {#if price}
+                            <tr>
+                                <th>Total</th>
+                                <th>{usd(price)}</th>
+                            </tr>
+                        {/if}
                     </tbody>
                 </table>
                 <div class="card-actions">
@@ -242,7 +248,7 @@
                         type="submit"
                         class="btn btn-primary w-full rounded-full"
                     >
-                        Purchase
+                        Calculate Price
                     </button>
                 </div>
             </div>
