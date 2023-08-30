@@ -22,15 +22,15 @@ class OrderCostRequest extends FormRequest
         ];
     }
 
-    public function shippingAddress(): ?ShippingAddress
+    public function shippingAddress(): ShippingAddress
     {
-        return rescue(fn () => ShippingAddress::from([
+        return ShippingAddress::from([
             'phone_number' => $this->validated('phone'),
             'city' => $this->validated('city'),
             'country_code' => $this->validated('country_code'),
             'postcode' => $this->validated('postal_code'),
             'state_code' => $this->validated('state_code'),
             'street1' => $this->validated('address'),
-        ]), report: false);
+        ]);
     }
 }

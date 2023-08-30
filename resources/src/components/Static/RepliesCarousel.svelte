@@ -1,9 +1,9 @@
 <script lang="ts">
     import { blur } from 'svelte/transition'
-    import replyImg1 from '@/assets/img/reply-1.png'
-    import replyImg2 from '@/assets/img/reply-2.png'
-    import replyImg3 from '@/assets/img/reply-3.png'
-    import replyImg4 from '@/assets/img/reply-4.png'
+    import replyImg1 from '@/assets/img/reply-1.jpg'
+    import replyImg2 from '@/assets/img/reply-2.jpg'
+    import replyImg3 from '@/assets/img/reply-3.jpg'
+    import replyImg4 from '@/assets/img/reply-4.jpg'
     import Fa from 'svelte-fa'
     import {
         faCaretLeft,

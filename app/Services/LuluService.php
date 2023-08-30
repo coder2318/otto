@@ -40,10 +40,16 @@ class LuluService
 
     public function cost(LineItem $item, ShippingAddress $shipping_address, ShippingOption $shipping_option)
     {
-        return $this->request()->post('print-job-cost-calculations', [
+        $response = $this->request()->post('print-job-cost-calculations', [
             'line_items' => [$item->toArray()],
             'shipping_address' => $shipping_address->toArray(),
             'shipping_option' => $shipping_option->value,
-        ])->json('total_cost_incl_tax');
+        ]);
+
+        if ($response->failed()) {
+            throw new \Exception($response->body());
+        }
+
+        return $response->json('total_cost_incl_tax');
     }
 }

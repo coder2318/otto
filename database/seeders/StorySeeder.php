@@ -13,7 +13,7 @@ class StorySeeder extends Seeder
      */
     public function run(): void
     {
-        Story::factory(10)->create([
+        Story::factory(1)->create([
             'user_id' => User::value('id'),
         ])->each(function (Story $story) {
             $story->addMediaFromUrl('https://picsum.photos/640/480')

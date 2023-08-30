@@ -68,15 +68,18 @@
         return () => clearInterval(interval)
     })
 
-    page.subscribe((page) => {
-        const message =
-            page.props?.flash?.status ??
-            page.props?.flash?.error ??
-            page.props?.flash?.message
+    page.subscribe((_page) => {
+        const flash = _page.props?.flash
+
+        if (!flash) {
+            return
+        }
+
+        const message = flash.status ?? flash.error ?? flash.message
         const type =
-            (page.props?.flash?.status && 'alert-info') ||
-            (page.props?.flash?.error && 'alert-warning') ||
-            (page.props?.flash?.message && 'alert-success')
+            (flash.status && 'alert-info') ||
+            (flash.error && 'alert-warning') ||
+            (flash.message && 'alert-success')
 
         if (!message || !type) {
             return
@@ -88,14 +91,19 @@
             timestamp: new Date(),
             autohide: true,
         })
+
+        flash.status = flash.error = flash.message = null
     })
 </script>
 
 <div class="toast toast-end toast-bottom">
     {#each $messages as message, i (i)}
-        <div class="alert grid-flow-col {message.type}" out:fly={{ x: '100%' }}>
+        <div
+            class="alert max-w-screen-sm grid-flow-col {message.type}"
+            out:fly={{ x: '100%' }}
+        >
             <Fa icon={icon(message.type)} />
-            <span>{message.message}</span>
+            <span class="whitespace-break-spaces">{message.message}</span>
             <div>
                 <button
                     class="btn btn-circle btn-ghost btn-xs"

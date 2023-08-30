@@ -29,4 +29,9 @@ class ShippingAddress extends Data
     public ?string $street2;
 
     public ?string $title;
+
+    public function toArray(): array
+    {
+        return collect(parent::toArray())->filter()->all();
+    }
 }

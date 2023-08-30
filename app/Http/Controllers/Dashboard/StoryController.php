@@ -22,8 +22,12 @@ use App\Services\LuluService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Intervention\Image\Facades\Image;
+use Sokil\IsoCodes\Database\Countries\Country;
+use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
+use Sokil\IsoCodes\IsoCodesFactory;
 
 class StoryController extends Controller
 {
@@ -196,19 +200,41 @@ class StoryController extends Controller
         return Pdf::setPaper([0, 0, $image->width(), $image->height()])->loadView('pdf.book-cover', compact('cover'))->stream();
     }
 
-    public function order(Story $story, LuluService $lulu, OrderCostRequest $request)
+    public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
     {
         return Inertia::render('Dashboard/Stories/Order', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
-            'price' => fn () => ($address = $request->shippingAddress()) ? $lulu->cost(
-                LineItem::from([
-                    'page_count' => $story->pages,
-                    'pod_package_id' => '0600X0900BWSTDPB060UW444MXX',
-                    'quantity' => 1,
-                ]),
-                $address,
-                ShippingOption::EXPRESS
-            ) : null,
+            'countries' => fn () => collect($iso->getCountries())->map(fn (Country $country) => [
+                'name' => $country->getName(),
+                'code' => $country->getAlpha2(),
+            ]),
+            'states' => fn () => $request->has('country_code') ? collect($iso->getSubdivisions()->getAllByCountryCode($request->validated('country_code')))
+                ->map(fn (Subdivision $subdivision) => [
+                    'name' => $subdivision->getName(),
+                    'code' => explode('-', $subdivision->getCode())[1],
+                ])->values() : [],
+        ]);
+    }
+
+    public function orderCost(Story $story, LuluService $lulu, OrderCostRequest $request)
+    {
+        if ($story->pages < 32) {
+            return redirect()->back()->with('error', trans('A book must have at least 32 pages!'));
+        }
+
+        $cost = rescue(fn () => $lulu->cost(
+            LineItem::from([
+                'page_count' => 32, //$story->pages,
+                'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
+                'quantity' => 1,
+            ]),
+            $request->shippingAddress(),
+            ShippingOption::EXPRESS,
+        ), fn ($e) => Session::flash('error', $e->getMessage()));
+
+        return Inertia::render('Dashboard/Stories/Order', [
+            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
+            'price' => fn () => $cost,
         ]);
     }
 }

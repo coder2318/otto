@@ -5,13 +5,15 @@
 </script>
 
 <script lang="ts">
-    import { useForm, page } from '@inertiajs/svelte'
+    import { useForm, page, router } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { usd } from '@/service/helpers'
     import { dayjs } from '@/service/dayjs'
 
-    export let price: number | null
+    export let price: number | null = null
     export let story: { data: App.Story }
+    export let countries = []
+    export let states = []
 
     const form = useForm({
         first_name: '',
@@ -20,13 +22,37 @@
         email: '',
         address: '',
         city: '',
+        country_code:
+            new URLSearchParams(window.location.search).get('country_code') ??
+            '',
+        state_code: '',
         postal_code: '',
     })
 
     function submit() {
         $form.patch(window.location.pathname, {
-            only: ['price'],
+            only: ['price', 'flash', 'errors'],
         })
+    }
+
+    function getStates() {
+        if (!$form.country_code) {
+            return
+        }
+
+        router.get(
+            window.location.pathname,
+            {
+                country_code: $form.country_code,
+            },
+            {
+                only: ['states'],
+                onBefore: () => {
+                    $form.state_code = ''
+                    states = []
+                },
+            }
+        )
     }
 </script>
 
@@ -55,6 +81,7 @@
                             id="first_name"
                             placeholder="First Name"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.first_name}
                             <span
@@ -75,6 +102,7 @@
                             id="last_name"
                             placeholder="Last Name"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.last_name}
                             <span
@@ -95,6 +123,7 @@
                             id="phone"
                             placeholder="Phone Number"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.phone}
                             <span
@@ -115,6 +144,7 @@
                             id="email"
                             placeholder="Email Address"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.email}
                             <span
@@ -135,12 +165,60 @@
                             id="address"
                             placeholder="Address"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.address}
                             <span
                                 class="label-text-alt mt-1 text-left text-error"
                             >
                                 {$form.errors.address}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="country_code">
+                            <span class="label-text">Country</span>
+                        </label>
+                        <select
+                            class="select select-bordered select-ghost"
+                            bind:value={$form.country_code}
+                            on:change={getStates}
+                            disabled={!!price}
+                        >
+                            <option value="" disabled>Country</option>
+                            {#each countries as country}
+                                <option value={country.code}
+                                    >{country.name}</option
+                                >
+                            {/each}
+                        </select>
+                        {#if $form.errors.country_code}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors.country_code}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="state_code">
+                            <span class="label-text">State</span>
+                        </label>
+                        <select
+                            class="select select-bordered select-ghost"
+                            bind:value={$form.state_code}
+                            disabled={!!price}
+                        >
+                            <option value="" disabled>State</option>
+                            {#each states as state}
+                                <option value={state.code}>{state.name}</option>
+                            {/each}
+                        </select>
+                        {#if $form.errors.state_code}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors.state_code}
                             </span>
                         {/if}
                     </div>
@@ -155,6 +233,7 @@
                             id="city"
                             placeholder="City"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.city}
                             <span
@@ -175,6 +254,7 @@
                             id="postal_code"
                             placeholder="Postal Code"
                             class="input input-bordered input-ghost"
+                            disabled={!!price}
                         />
                         {#if $form.errors.postal_code}
                             <span
@@ -244,12 +324,27 @@
                     </tbody>
                 </table>
                 <div class="card-actions">
-                    <button
-                        type="submit"
-                        class="btn btn-primary w-full rounded-full"
-                    >
-                        Calculate Price
-                    </button>
+                    {#if !price}
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-full rounded-full"
+                            disabled={$form.processing}
+                        >
+                            {#if $form.processing}
+                                <span class="loading loading-spinner" />
+                            {/if} Calculate Price
+                        </button>
+                    {:else}
+                        <button
+                            type="submit"
+                            class="btn btn-secondary w-full rounded-full"
+                            disabled={$form.processing}
+                        >
+                            {#if $form.processing}
+                                <span class="loading loading-spinner" />
+                            {/if} Order Your Book
+                        </button>
+                    {/if}
                 </div>
             </div>
         </div>
