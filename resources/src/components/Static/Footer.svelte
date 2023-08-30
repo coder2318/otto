@@ -21,8 +21,8 @@
         class="container mx-auto flex flex-col gap-8 py-8 text-2xl sm:flex-row sm:items-center md:text-3xl lg:text-4xl"
     >
         <span class="font-serif"
-            >Preserve meaningful moments & memories in a beautiful <i
-                >OttoBook</i
+            >Preserve meaningful moments & memories in a beautiful book with <i
+                >OttoStory</i
             >.</span
         >
 

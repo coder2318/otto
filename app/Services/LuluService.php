@@ -19,16 +19,15 @@ class LuluService
             return $this->token;
         }
 
-        return $this->token = Cache::remember('lulu_token', 3600 - 1, fn () =>
-            Http::baseUrl(config('services.lulu.url'))
-                ->asForm()
-                ->withHeaders([
-                    'Authorization' => config('services.lulu.encoded_key'),
-                ])
-                ->post('auth/realms/glasstree/protocol/openid-connect/token', [
-                    'grant_type' => 'client_credentials',
-                ])
-                ->json('access_token')
+        return $this->token = Cache::remember('lulu_token', 3600 - 1, fn () => Http::baseUrl(config('services.lulu.url'))
+            ->asForm()
+            ->withHeaders([
+                'Authorization' => config('services.lulu.encoded_key'),
+            ])
+            ->post('auth/realms/glasstree/protocol/openid-connect/token', [
+                'grant_type' => 'client_credentials',
+            ])
+            ->json('access_token')
         );
     }
 

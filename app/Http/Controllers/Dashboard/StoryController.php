@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Data\Lulu\LineItem;
-use App\Data\Lulu\ShippingAddress;
 use App\Data\Lulu\ShippingOption;
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
@@ -209,7 +208,7 @@ class StoryController extends Controller
                 ]),
                 $address,
                 ShippingOption::EXPRESS
-            ) : null
+            ) : null,
         ]);
     }
 }

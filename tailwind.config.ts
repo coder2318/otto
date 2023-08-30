@@ -13,8 +13,8 @@ export default {
     ],
     theme: {
         fontFamily: {
-            'serif': ['Libre Baskerville', ...fontFamily.serif],
-            'sans': ['Cabin', ...fontFamily.sans],
+            'serif': ['Baskerville', 'Baskerville BT', ...fontFamily.serif],
+            'sans': ['ABC Diatype', ...fontFamily.sans],
             'mono': fontFamily.mono
         }
     },

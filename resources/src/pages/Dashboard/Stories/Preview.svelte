@@ -20,7 +20,7 @@
 </svelte:head>
 
 <section
-    class="container mx-auto flex min-h-[calc(100vh-66px)] flex-col items-stretch px-4 pb-4"
+    class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col items-stretch px-4 pb-4"
 >
     <Breadcrumbs step={1} {story} />
     <h1 class="my-4 text-3xl text-primary">
@@ -29,7 +29,7 @@
     <embed
         src="/stories/{story.data.id}/book"
         width="100%"
-        class="flex-1 bg-base-300"
+        class="min-h-[500px] flex-1 bg-base-300"
         type="application/pdf"
     />
     <div class="mt-4 flex items-center justify-between">

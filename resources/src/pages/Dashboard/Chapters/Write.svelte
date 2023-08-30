@@ -70,26 +70,28 @@
 </section>
 <form on:submit|preventDefault={submit} in:fade>
     {#if transcriptions}
-        <div
-            class="tooltip tooltip-info"
-            data-tip="Click on filename to paste it's transcription to the editor"
-        >
-            <ul
-                class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
+        <div class="container mx-auto">
+            <div
+                class="tooltip tooltip-info"
+                data-tip="Click on filename to paste it's transcription to the editor"
             >
-                {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
-                    <li>
-                        <button
-                            type="button"
-                            on:click|preventDefault={() =>
-                                pasteTranscription(transcription)}
-                        >
-                            <Fa icon={faFile} />
-                            {file}
-                        </button>
-                    </li>
-                {/each}
-            </ul>
+                <ul
+                    class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
+                >
+                    {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
+                        <li>
+                            <button
+                                type="button"
+                                on:click|preventDefault={() =>
+                                    pasteTranscription(transcription)}
+                            >
+                                <Fa icon={faFile} />
+                                {file}
+                            </button>
+                        </li>
+                    {/each}
+                </ul>
+            </div>
         </div>
     {/if}
     <main class="container card m-4 mx-auto">

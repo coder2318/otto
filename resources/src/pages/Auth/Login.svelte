@@ -36,7 +36,7 @@
     </a>
 
     <div class="my-8 font-serif text-3xl italic text-primary">
-        Back to Your <span class="text-secondary-focus">Digital Book!!!</span>
+        Start Your <span class="text-secondary-focus">Story Now!!!</span>
     </div>
 
     <form

@@ -3,7 +3,8 @@
     <title>{{ $story->title }}</title>
     <style>
         @page {
-            size: a5 portrait;
+            size: 6.25in 9.25in;
+            margin: 0.625in;
         }
 
         section {
