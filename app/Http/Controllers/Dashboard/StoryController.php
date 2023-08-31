@@ -28,6 +28,7 @@ use Intervention\Image\Facades\Image;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StoryController extends Controller
 {
@@ -105,11 +106,6 @@ class StoryController extends Controller
         if ($request->hasFile('cover')) {
             $story->cover?->delete();
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
-        }
-
-        if ($request->hasFile('book_cover')) {
-            $story->book?->delete();
-            $story->addMediaFromRequest('book_cover')->toMediaCollection('book-cover');
         }
 
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Story updated successfully!');
@@ -194,8 +190,10 @@ class StoryController extends Controller
 
     public function bookCover(Story $story)
     {
-        $image = Image::make($stream = $story->cover->stream());
-        $cover = 'data:image/'.$story->cover->type.';base64,'.base64_encode(stream_get_contents($story->cover->stream()));
+        /** @var Media */
+        $cover = $story->cover;
+        $image = Image::make($stream = $cover->stream());
+        $cover = 'data:image/'.$cover->type.';base64,'.base64_encode(stream_get_contents($stream));
 
         return Pdf::setPaper([0, 0, $image->width(), $image->height()])->loadView('pdf.book-cover', compact('cover'))->stream();
     }

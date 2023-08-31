@@ -15,6 +15,9 @@ use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Storage;
 
+/**
+ * @property ?integer $pages
+ */
 class Story extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia;
