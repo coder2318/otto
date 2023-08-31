@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.280.0",
+            "version": "3.280.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bf4f3079bc59af44a752677cfbcd43f7953c4343"
+                "reference": "2b2bb8cc5be21e252fb5803d229f1d7fbbec0222"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bf4f3079bc59af44a752677cfbcd43f7953c4343",
-                "reference": "bf4f3079bc59af44a752677cfbcd43f7953c4343",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/2b2bb8cc5be21e252fb5803d229f1d7fbbec0222",
+                "reference": "2b2bb8cc5be21e252fb5803d229f1d7fbbec0222",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.280.0"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.280.1"
             },
-            "time": "2023-08-30T18:19:33+00:00"
+            "time": "2023-08-31T18:56:31+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -11494,16 +11494,16 @@
         },
         {
             "name": "phpunit/php-code-coverage",
-            "version": "10.1.3",
+            "version": "10.1.4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-code-coverage.git",
-                "reference": "be1fe461fdc917de2a29a452ccf2657d325b443d"
+                "reference": "cd59bb34756a16ca8253ce9b2909039c227fff71"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/be1fe461fdc917de2a29a452ccf2657d325b443d",
-                "reference": "be1fe461fdc917de2a29a452ccf2657d325b443d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-code-coverage/zipball/cd59bb34756a16ca8253ce9b2909039c227fff71",
+                "reference": "cd59bb34756a16ca8253ce9b2909039c227fff71",
                 "shasum": ""
             },
             "require": {
@@ -11560,7 +11560,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-code-coverage/issues",
                 "security": "https://github.com/sebastianbergmann/php-code-coverage/security/policy",
-                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.3"
+                "source": "https://github.com/sebastianbergmann/php-code-coverage/tree/10.1.4"
             },
             "funding": [
                 {
@@ -11568,7 +11568,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-07-26T13:45:28+00:00"
+            "time": "2023-08-31T14:04:38+00:00"
         },
         {
             "name": "phpunit/php-file-iterator",
@@ -11696,16 +11696,16 @@
         },
         {
             "name": "phpunit/php-text-template",
-            "version": "3.0.0",
+            "version": "3.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/php-text-template.git",
-                "reference": "9f3d3709577a527025f55bcf0f7ab8052c8bb37d"
+                "reference": "0c7b06ff49e3d5072f057eb1fa59258bf287a748"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/9f3d3709577a527025f55bcf0f7ab8052c8bb37d",
-                "reference": "9f3d3709577a527025f55bcf0f7ab8052c8bb37d",
+                "url": "https://api.github.com/repos/sebastianbergmann/php-text-template/zipball/0c7b06ff49e3d5072f057eb1fa59258bf287a748",
+                "reference": "0c7b06ff49e3d5072f057eb1fa59258bf287a748",
                 "shasum": ""
             },
             "require": {
@@ -11743,7 +11743,8 @@
             ],
             "support": {
                 "issues": "https://github.com/sebastianbergmann/php-text-template/issues",
-                "source": "https://github.com/sebastianbergmann/php-text-template/tree/3.0.0"
+                "security": "https://github.com/sebastianbergmann/php-text-template/security/policy",
+                "source": "https://github.com/sebastianbergmann/php-text-template/tree/3.0.1"
             },
             "funding": [
                 {
@@ -11751,7 +11752,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-02-03T06:56:46+00:00"
+            "time": "2023-08-31T14:07:24+00:00"
         },
         {
             "name": "phpunit/php-timer",
