@@ -175,16 +175,6 @@
                     Finish this Chapter
                 </button>
             </div>
-        {:else}
-            <div class="flex gap-4">
-                <a
-                    use:inertia
-                    class="btn btn-primary btn-outline rounded-full"
-                    href="/chapters/{chapter.data.id}/finish"
-                >
-                    Complete &<br /> Finish this Chapter
-                </a>
-            </div>
         {/if}
     </section>
 </form>

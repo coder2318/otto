@@ -36,7 +36,7 @@
     </a>
 
     <div class="my-8 font-serif text-3xl italic text-primary">
-        Start Your <span class="text-secondary-focus">Story Now!</span>
+        Start Your Story Now!
     </div>
 
     <form

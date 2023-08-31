@@ -88,9 +88,9 @@ class DemoController extends Controller
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        foreach ($request->validated('attachments') ?? [] as $attachment) {
-            $chapter->addMedia($attachment)
-                ->withCustomProperties(['mime-type' => $attachment->getMimeType()])
+        foreach ($request->validated('attachments', []) as $attachment) {
+            $chapter->addMedia($attachment['file'])
+                ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
                 ->toMediaCollection('attachments', 's3');
         }
 

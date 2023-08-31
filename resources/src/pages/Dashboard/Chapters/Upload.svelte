@@ -31,7 +31,10 @@
             return
         }
 
-        const files = filepond.getFiles().map((file) => file.file)
+        const files = filepond.getFiles().map((file) => ({
+            file: file.file,
+            options: [],
+        }))
 
         $form.attachments = files.length ? files : null
     }
@@ -80,6 +83,7 @@
                 acceptedFileTypes={[
                     'audio/webm',
                     'audio/x-wav',
+                    'audio/wav',
                     'audio/mpeg',
                     'text/plain',
                     'application/pdf',
