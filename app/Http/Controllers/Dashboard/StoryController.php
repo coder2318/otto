@@ -194,11 +194,12 @@ class StoryController extends Controller
     public function bookCover(Story $story)
     {
         /** @var Media */
-        $cover = $story->cover;
-        $image = Image::make($stream = $cover->stream());
-        $cover = 'data:image/'.$cover->type.';base64,'.base64_encode(stream_get_contents($stream));
+        abort_unless($cover = $story->cover, 404);
+        $image = Image::make($cover->stream());
 
-        return Pdf::setPaper([0, 0, $image->width(), $image->height()])->loadView('pdf.book-cover', compact('cover'))->stream();
+        return Pdf::setPaper([0, 0, $image->width(), $image->height()])
+            ->loadView('pdf.book-cover', ['cover' => $image->encode('data-url')])
+            ->stream();
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
@@ -264,8 +265,8 @@ class StoryController extends Controller
                 'printable_normalization' => PrintableNormalization::from([
                     'external_id' => $payment->external_id,
                     'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
-                    'cover' => [ 'source_url' => route('stories.book-cover', compact('story')) ],
-                    'interior' => [ 'source_url' => route('stories.book', compact('story')) ],
+                    'cover' => ['source_url' => route('stories.book-cover', compact('story'))],
+                    'interior' => ['source_url' => route('stories.book', compact('story'))],
                 ]),
                 'quantity' => 1,
                 'title' => $story->title,

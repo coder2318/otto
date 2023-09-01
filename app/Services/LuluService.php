@@ -53,6 +53,11 @@ class LuluService
         return $response->json('total_cost_incl_tax');
     }
 
+    public function webhook(string $url, array $topics): bool
+    {
+        return $this->request()->post('webhooks', compact('url', 'topics'))->json('is_active', false);
+    }
+
     public function print(
         string $email,
         LineItem $item,
