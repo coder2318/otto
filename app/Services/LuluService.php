@@ -38,7 +38,7 @@ class LuluService
             ->withToken($this->token());
     }
 
-    public function cost(LineItem $item, ShippingAddress $shipping_address, ShippingOption $shipping_option)
+    public function cost(LineItem $item, ShippingAddress $shipping_address, ShippingOption $shipping_option): float
     {
         $response = $this->request()->post('print-job-cost-calculations', [
             'line_items' => [$item->toArray()],
@@ -51,5 +51,25 @@ class LuluService
         }
 
         return $response->json('total_cost_incl_tax');
+    }
+
+    public function print(
+        string $email,
+        LineItem $item,
+        ShippingAddress $shipping_address,
+        ShippingOption $shipping_option
+    ): array {
+        $response = $this->request()->post('print-jobs', [
+            'contact_email' => $email,
+            'line_items' => [$item->toArray()],
+            'shipping_address' => $shipping_address->toArray(),
+            'shipping_level' => $shipping_option->value,
+        ]);
+
+        if (! $response->successful()) {
+            throw new \Exception($response->body());
+        }
+
+        return $response->json();
     }
 }

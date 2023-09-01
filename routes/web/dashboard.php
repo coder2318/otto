@@ -45,6 +45,7 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/book-cover', 'bookCover')->name('book-cover');
             Route::get('/order', 'order')->name('order');
             Route::patch('/order', 'orderCost')->name('order.cost');
+            Route::post('/order', 'orderPurchase')->name('order.purchase');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {

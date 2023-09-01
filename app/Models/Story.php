@@ -25,6 +25,7 @@ class Story extends Model implements HasMedia
     protected $fillable = [
         'title',
         'status',
+        'print_job_id',
         'user_id',
     ];
 
@@ -43,6 +44,11 @@ class Story extends Model implements HasMedia
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);
+    }
+
+    public function printJobs(): HasMany
+    {
+        return $this->hasMany(PrintJob::class);
     }
 
     public function user(): BelongsTo

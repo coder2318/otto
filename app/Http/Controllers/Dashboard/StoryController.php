@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Data\Lulu\LineItem;
+use App\Data\Lulu\PrintableNormalization;
+use App\Data\Lulu\PrintJobDetails;
 use App\Data\Lulu\ShippingOption;
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
@@ -18,6 +20,7 @@ use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\Timeline;
+use App\Models\User;
 use App\Services\LuluService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
@@ -222,7 +225,7 @@ class StoryController extends Controller
 
         $cost = rescue(fn () => $lulu->cost(
             LineItem::from([
-                'page_count' => 32, //$story->pages,
+                'page_count' => $story->pages,
                 'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
                 'quantity' => 1,
             ]),
@@ -230,9 +233,54 @@ class StoryController extends Controller
             ShippingOption::EXPRESS,
         ), fn ($e) => Session::flash('error', $e->getMessage()));
 
+        if ($cost) {
+            Session::put("print-cost-{$story->id}", $cost);
+        }
+
         return Inertia::render('Dashboard/Stories/Order', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
             'price' => fn () => $cost,
         ]);
+    }
+
+    public function orderPurchase(Story $story, LuluService $lulu, OrderCostRequest $request)
+    {
+        abort_unless(Session::has("print-cost-{$story->id}"), 403);
+
+        $cost = Session::get("print-cost-{$story->id}");
+
+        /** @var User */
+        $user = $request->user();
+
+        try {
+            $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', $e->getMessage());
+        }
+
+        $print = $lulu->print(
+            config('mail.from.address'),
+            LineItem::from([
+                'printable_normalization' => PrintableNormalization::from([
+                    'external_id' => $payment->external_id,
+                    'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
+                    'cover' => [ 'source_url' => route('stories.book-cover', compact('story')) ],
+                    'interior' => [ 'source_url' => route('stories.book', compact('story')) ],
+                ]),
+                'quantity' => 1,
+                'title' => $story->title,
+            ]),
+            $request->shippingAddress(),
+            ShippingOption::EXPRESS,
+        );
+
+        $story->printJobs()->create([
+            'lulu_id' => $print['id'],
+            'details' => $details = PrintJobDetails::from($print),
+        ]);
+
+        Session::forget("print-cost-{$story->id}");
+
+        return redirect()->back()->with('message', 'Print job created successfully!');
     }
 }

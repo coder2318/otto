@@ -26,6 +26,7 @@ class OrderCostRequest extends FormRequest
     {
         return ShippingAddress::from([
             'phone_number' => $this->validated('phone'),
+            'name' => $this->validated('first_name').' '.$this->validated('last_name'),
             'city' => $this->validated('city'),
             'country_code' => $this->validated('country_code'),
             'postcode' => $this->validated('postal_code'),

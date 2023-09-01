@@ -15,7 +15,7 @@ class HaveSubscriptions
      */
     public function handle(Request $request, Closure $next, bool $subscribed = true): Response
     {
-        if ($subscribed === $request->user()->subscribed()) {
+        if ($subscribed === $request->user()->subscribed() || $request->user()->can('free-access')) {
             return $next($request);
         }
 

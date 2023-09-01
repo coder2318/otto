@@ -29,8 +29,8 @@
         postal_code: '',
     })
 
-    function submit() {
-        $form.patch(window.location.pathname, {
+    function submit(event: SubmitEvent) {
+        $form.submit(event.submitter.dataset.method, window.location.pathname, {
             only: ['price', 'flash', 'errors'],
         })
     }
@@ -329,6 +329,7 @@
                             type="submit"
                             class="btn btn-primary w-full rounded-full"
                             disabled={$form.processing}
+                            data-method="patch"
                         >
                             {#if $form.processing}
                                 <span class="loading loading-spinner" />
@@ -339,6 +340,7 @@
                             type="submit"
                             class="btn btn-secondary w-full rounded-full"
                             disabled={$form.processing}
+                            data-method="post"
                         >
                             {#if $form.processing}
                                 <span class="loading loading-spinner" />
