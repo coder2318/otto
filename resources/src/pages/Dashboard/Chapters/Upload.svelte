@@ -75,6 +75,7 @@
         <div class="card-body gap-4">
             <FilePond
                 bind:pond={filepond}
+                server={false}
                 allowMultiple={true}
                 allowProcess={false}
                 instantUpload={false}

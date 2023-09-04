@@ -53,6 +53,7 @@
                 </label>
                 <FilePond
                     maxFiles="1"
+                    server={false}
                     storeAsFile={true}
                     name="cover"
                     onaddfile={(err, data) => ($form.cover = data.file)}

@@ -85,6 +85,7 @@
                 <div class={$form.errors.cover ? 'border border-error' : ''}>
                     <FilePond
                         maxFiles="1"
+                        server={false}
                         storeAsFile={true}
                         name="cover"
                         onaddfile={(err, data) => ($form.cover = data.file)}

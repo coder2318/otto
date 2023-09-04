@@ -102,6 +102,7 @@
                         {:else if field.type === 'image' && editor}
                             <FilePond
                                 name={field.key}
+                                server={false}
                                 bind:pond={filepond}
                                 onpreparefile={async (file, blob) =>
                                     (parameters[field.key] =
