@@ -21,7 +21,10 @@ class MediaService
         }
 
         $transcript = rescue(fn () => match ($media->getCustomProperty('mime-type', $media->mime_type)) {
-            'audio/webm', 'video/webm', 'audio/x-wav', 'audio/mpeg' => $this->transcribeAudio($media),
+            'audio/webm', 'audio/wav', 'audio/mpeg',
+            'audio/mpeg3', 'audio/x-mpeg-3', 'audio/m4a',
+            'audio/mp4', 'audio/flac', 'audio/aac',
+            'audio/x-wav', 'audio/x-m4a' => $this->transcribeAudio($media),
             'application/pdf' => $this->transcribePdf($media),
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => $this->transcribeDocx($media),
             'text/plain' => $this->transcribeText($media),

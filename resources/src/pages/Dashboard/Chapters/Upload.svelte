@@ -83,14 +83,32 @@
                 onremovefile={syncFiles}
                 acceptedFileTypes={[
                     'audio/webm',
-                    'audio/x-wav',
                     'audio/wav',
                     'audio/mpeg',
+                    'audio/mpeg3',
+                    'audio/x-mpeg-3',
+                    'audio/m4a',
+                    'audio/mp4',
+                    'audio/flac',
+                    'audio/aac',
+                    'audio/x-wav',
+                    'audio/x-m4a',
                     'text/plain',
                     'application/pdf',
                     `application/vnd.openxmlformats-officedocument.wordprocessingml.document`,
                 ]}
             />
+            {#if $form.errors}
+                <span class="label-text-alt mt-1 text-left text-error">
+                    <ul class="list-inside list-disc">
+                        {#each Object.entries($form.errors) as [field, error]}
+                            {#if field.startsWith('attachments')}
+                                <li>{error}</li>
+                            {/if}
+                        {/each}
+                    </ul>
+                </span>
+            {/if}
         </div>
     </main>
 

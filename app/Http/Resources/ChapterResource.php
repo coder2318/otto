@@ -24,10 +24,19 @@ class ChapterResource extends JsonResource
                     'name' => $record->file_name,
                     'size' => $record->size,
                     'transcribed' => $record->hasCustomProperty('transcript'),
-                    'is_media' => in_array(
-                        $record->getCustomProperty('mime-type', $record->mime_type),
-                        ['audio/webm', 'video/webm', 'audio/x-wav', 'audio/mpeg']
-                    ),
+                    'is_media' => in_array($record->getCustomProperty('mime-type', $record->mime_type), [
+                        'audio/webm',
+                        'audio/wav',
+                        'audio/mpeg',
+                        'audio/mpeg3',
+                        'audio/x-mpeg-3',
+                        'audio/m4a',
+                        'audio/mp4',
+                        'audio/flac',
+                        'audio/aac',
+                        'audio/x-wav',
+                        'audio/x-m4a',
+                    ]),
                     'created_at' => $record->created_at,
                 ]
             )),
