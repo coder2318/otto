@@ -20,7 +20,7 @@ class ChapterPolicy
      */
     public function view(User $user, Chapter $chapter): bool
     {
-        return $chapter->story()->value('user_id') === $user->id;
+        return $user->id === $chapter->story()->value('user_id');
     }
 
     /**
@@ -36,7 +36,7 @@ class ChapterPolicy
      */
     public function update(User $user, Chapter $chapter): bool
     {
-        return $chapter->story()->value('user_id') === $user->id;
+        return $user->id === $chapter->story()->value('user_id');
     }
 
     /**
@@ -44,7 +44,7 @@ class ChapterPolicy
      */
     public function delete(User $user, Chapter $chapter): bool
     {
-        return $chapter->story()->value('user_id') === $user->id;
+        return $user->id === $chapter->story()->value('user_id');
     }
 
     /**
@@ -52,7 +52,7 @@ class ChapterPolicy
      */
     public function restore(User $user, Chapter $chapter): bool
     {
-        return $chapter->story()->value('user_id') === $user->id;
+        return $user->id === $chapter->story()->value('user_id');
     }
 
     /**
@@ -60,6 +60,6 @@ class ChapterPolicy
      */
     public function forceDelete(User $user, Chapter $chapter): bool
     {
-        return $chapter->story()->value('user_id') === $user->id;
+        return $user->id === $chapter->story()->value('user_id');
     }
 }

@@ -176,7 +176,7 @@ class ChapterController extends Controller
                 ->toMediaCollection('attachments', 's3');
         }
 
-        if ($request->validated('status') == Status::PUBLISHED->value) {
+        if (Status::PUBLISHED->value == $request->validated('status')) {
             return redirect()->route('chapters.finish', compact('chapter'))->with('message', 'Chapter published successfully!');
         }
 
