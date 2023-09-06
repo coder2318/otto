@@ -6,6 +6,8 @@ use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\QuickstartController;
 use App\Http\Controllers\Dashboard\StoryController;
+use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\SettingsController;
 use Illuminate\Support\Facades\Route;
 
 // Quickstart Quiz
@@ -26,6 +28,26 @@ Route::middleware('user-configured')->group(function () {
         Route::post('/files', 'transcribe')->name('attachments.transcribe')->middleware('demo:published');
         Route::put('/', 'update')->name('update')->middleware('demo:published');
         Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy')->middleware('demo:published');
+    });
+
+    // Users
+    Route::controller(UserController::class)->middleware('features:'.BetaAccess::class)->name('users.')->group(function () {
+        Route::get('/u/{user}', 'show')->name('show');
+        Route::get('/profile', 'edit')->name('edit');
+        Route::match(['put', 'patch'], '/profile', 'update')->name('update');
+    });
+
+    // Settings
+    Route::controller(SettingsController::class)->middleware('features:'.BetaAccess::class)->name('settings.')->group(function () {
+        Route::get('/notifications', 'notifications')->name('notifications');
+        Route::get('/integrations', 'integrations')->name('integrations');
+        Route::get('/password', 'password')->name('password');
+        Route::get('/billing', 'billing')->name('billing');
+
+        Route::put('/notifications', 'updateNotifications')->name('notifications.update');
+        Route::put('/integrations', 'updateIntegrations')->name('integrations.update');
+        Route::put('/password', 'updatePassword')->name('password.update');
+        Route::put('/billing', 'updateBilling')->name('billing.update');
     });
 
     // Subscription Plans

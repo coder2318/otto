@@ -32,10 +32,10 @@ Route::controller(SocialAuthController::class)
 
 // User Dashboard
 Route::group(['middleware' => ['auth', 'verified'], 'name' => 'dashboard.'], function () {
-    require_once __DIR__.'/web/dashboard.php';
+    include_once __DIR__.'/web/dashboard.php';
 })->middleware('features:beta-access');
 
 // Admin Panel
 Route::group(['middleware' => ['auth', 'verified'], 'name' => 'admin.'], function () {
-    require_once __DIR__.'/web/admin.php';
+    include_once __DIR__.'/web/admin.php';
 })->middleware('features:beta-access');
