@@ -11,6 +11,7 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import FilePond from '@/components/FilePond.svelte'
+    import { start, done } from '@/components/Loading.svelte'
     import type {
         FilePondErrorDescription,
         FilePond as FilePondType,
@@ -45,9 +46,12 @@
                 _method: 'PUT',
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
+                redirect: 'chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
+                onStart: start,
+                onFinish: done,
                 onSuccess: () => {
                     filepond.removeFiles()
                 },
@@ -129,18 +133,8 @@
                 class="btn btn-secondary rounded-full"
                 data-status="draft"
             >
-                Save it as Draft
+                Transcribe
             </button>
-        {:else}
-            <div>
-                <a
-                    class="btn btn-primary btn-outline rounded-full"
-                    href="/chapters/{chapter.data.id}/files"
-                    use:inertia
-                >
-                    Transcribe Attachments
-                </a>
-            </div>
         {/if}
     </section>
 </form>

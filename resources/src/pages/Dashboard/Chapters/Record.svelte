@@ -11,6 +11,7 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import AudioRecorder from '@/components/AudioRecorder.svelte'
+    import { start, done } from '@/components/Loading.svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -26,12 +27,12 @@
                 _method: 'PUT',
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
+                redirect: 'chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
-                onSuccess: () => {
-                    $form.reset()
-                },
+                onStart: start,
+                onFinish: done,
             })
     }
 </script>
@@ -72,19 +73,11 @@
         {#if $form.isDirty}
             <button
                 type="submit"
-                class="btn btn-secondary rounded-full"
+                class="btn btn-primary btn-outline rounded-full"
                 data-status="draft"
             >
-                Save it as Draft
+                Transcribe
             </button>
-        {:else}
-            <a
-                class="btn btn-primary btn-outline rounded-full"
-                href="/chapters/{chapter.data.id}/files"
-                use:inertia
-            >
-                Transcribe Attachments
-            </a>
         {/if}
     </section>
 </form>

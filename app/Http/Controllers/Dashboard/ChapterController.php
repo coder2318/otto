@@ -10,13 +10,16 @@ use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
+use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
+use App\Models\TimelineQuestion;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -122,6 +125,10 @@ class ChapterController extends Controller
 
         return Inertia::render('Dashboard/Chapters/Finish', [
             'chapter' => fn () => ChapterResource::make($chapter),
+            'questions' => fn () => TimelineQuestionResource::collection((
+                $chapter?->timeline->questions()->where('id', '!=', $chapter?->timeline_question_id) ?? // @phpstan-ignore-line
+                TimelineQuestion::query()
+            )->inRandomOrder()->limit(3)->get()),
         ]);
     }
 
@@ -161,7 +168,7 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function update(UpdateChapterRequest $request, Chapter $chapter)
+    public function update(UpdateChapterRequest $request, Chapter $chapter, MediaService $service)
     {
         $chapter->update($request->validated());
 
@@ -171,13 +178,21 @@ class ChapterController extends Controller
         }
 
         foreach ($request->validated('attachments') ?? [] as $attachment) {
-            $chapter->addMedia($attachment['file'])
+            $record = $chapter->addMedia($attachment['file'])
                 ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
                 ->toMediaCollection('attachments', 's3');
+
+            if ($transcription = $service->transcribe($record)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
         }
 
-        if (Status::PUBLISHED->value == $request->validated('status')) {
-            return redirect()->route('chapters.finish', compact('chapter'))->with('message', 'Chapter published successfully!');
+        if (isset($transcriptions)) {
+            Session::flash('transcriptions', $transcriptions);
+        }
+
+        if ($redirect = $request->validated('redirect')) {
+            return redirect()->route($redirect, compact('chapter'));
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');

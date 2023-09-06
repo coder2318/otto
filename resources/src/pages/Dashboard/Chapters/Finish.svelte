@@ -12,6 +12,7 @@
     import { dayjs } from '@/service/dayjs'
 
     export let chapter: { data: App.Chapter }
+    export let questions: { data: App.TimelineQuestion[] }
 
     let pages = Math.round(
         (chapter.data.content?.split(' ').filter((v) => v).length ?? 0) / 500 +
@@ -74,29 +75,15 @@
         <h2 class="card-title text-4xl font-normal italic text-primary">
             Related Questions
         </h2>
-        <div class="card bg-neutral">
-            <div class="card-body flex-row items-center justify-between">
-                <span class="text-xl"> Lorem ipsum dolor sit amet. </span>
-                <button class="btn btn-primary rounded-full">
-                    Create Chapter
-                </button>
+        {#each questions.data as question}
+            <div class="card bg-neutral">
+                <div class="card-body flex-row items-center justify-between">
+                    <span class="text-xl">{question.question}</span>
+                    <button class="btn btn-primary rounded-full">
+                        Create Chapter
+                    </button>
+                </div>
             </div>
-        </div>
-        <div class="card bg-neutral">
-            <div class="card-body flex-row items-center justify-between">
-                <span class="text-xl"> Lorem ipsum dolor sit amet. </span>
-                <button class="btn btn-primary rounded-full">
-                    Create Chapter
-                </button>
-            </div>
-        </div>
-        <div class="card bg-neutral">
-            <div class="card-body flex-row items-center justify-between">
-                <span class="text-xl"> Lorem ipsum dolor sit amet. </span>
-                <button class="btn btn-primary rounded-full">
-                    Create Chapter
-                </button>
-            </div>
-        </div>
+        {/each}
     </div>
 </section>

@@ -52,15 +52,13 @@
     }
 
     function pasteTranscription(transcription: string) {
-        editor.commands.insertContent({
-            type: 'paragraph',
-            content: [
-                {
-                    type: 'text',
-                    text: transcription,
-                },
-            ],
-        })
+        editor.commands.insertContent(
+            transcription
+                .trim()
+                .split(/[\n]{2,}/g)
+                .map((p) => `<p>${p.trim().replaceAll('\n', '<br />')}</p>`)
+                .join('')
+        )
     }
 </script>
 

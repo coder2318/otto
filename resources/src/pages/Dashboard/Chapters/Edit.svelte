@@ -111,7 +111,7 @@
                     href="/chapters/{chapter.data.id}/files"
                     use:inertia
                 >
-                    Transcribe Attachments
+                    Memory Box
                 </a>
             </div>
         {/if}
