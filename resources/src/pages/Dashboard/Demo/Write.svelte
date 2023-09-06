@@ -20,7 +20,9 @@
     let editor: Editor
 
     const form = useForm({
-        content: chapter.data.content,
+        content:
+            chapter.data.content ??
+            (transcriptions ? Object.values(transcriptions).join('\n') : ''),
         title: chapter.data.title,
         status: chapter.data.status,
     })
@@ -68,15 +70,15 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
-    <div class="card-body gap-4">
+<section class="container card m-4 mx-auto" in:fade>
+    <div class="card-body gap-4 rounded-xl bg-base-300">
         <textarea
-            class="textarea card-title textarea-ghost font-serif"
+            class="textarea card-title textarea-ghost font-serif hover:textarea-bordered"
             bind:value={$form.title}
         />
     </div>
 </section>
-<form on:submit|preventDefault={submit} in:fade>
+<form on:submit|preventDefault={submit} in:fade class="px-4">
     {#if transcriptions}
         <div class="container mx-auto">
             <div
@@ -125,7 +127,7 @@
         </div>
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-between">
+    <section class="container mx-auto mb-8 flex flex-wrap justify-between">
         <a
             href="/demo/files"
             class="btn btn-neutral rounded-full pl-0"
@@ -139,7 +141,7 @@
         {#if $form.isDirty}
             <button
                 type="submit"
-                class="btn btn-secondary rounded-full"
+                class="btn btn-secondary rounded-full lg:btn-lg"
                 data-status="draft"
             >
                 Save it as Draft
@@ -148,7 +150,7 @@
             <div class="flex gap-4">
                 <a
                     use:inertia
-                    class="btn btn-primary btn-outline rounded-full"
+                    class="btn btn-primary btn-outline rounded-full lg:btn-lg"
                     href="/demo/finish"
                 >
                     Complete &<br /> Finish this Chapter
@@ -160,7 +162,7 @@
                         onFinish: done,
                         hideProgress: true,
                     }}
-                    class="btn btn-primary rounded-full"
+                    class="btn btn-primary rounded-full lg:btn-lg"
                     href="/demo/enhance"
                 >
                     Ask Otto AI to<br />enhance the Writing

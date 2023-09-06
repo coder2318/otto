@@ -9,6 +9,7 @@
     import { useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
     import AudioRecorder from '@/components/AudioRecorder.svelte'
+    import { start, done } from '@/components/Loading.svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -23,11 +24,13 @@
             .transform((data) => ({
                 _method: 'PUT',
                 ...data,
-                redirect: 'demo.attachments',
+                redirect: 'demo.write',
                 status: event.submitter.dataset?.status ?? data.status,
             }))
             .post(`/demo`, {
                 forceFormData: true,
+                onStart: start,
+                onFinish: done,
             })
     }
 </script>
@@ -54,13 +57,15 @@
         </div>
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-end">
-        <button
-            class="btn btn-primary btn-outline rounded-full"
-            data-status="draft"
-            type="submit"
-        >
-            {#if $form.isDirty}Save &{/if} Transcribe Attachments
-        </button>
-    </section>
+    {#if $form.isDirty}
+        <section class="container mx-auto mb-8 flex justify-end">
+            <button
+                class="btn btn-primary btn-outline rounded-full"
+                data-status="draft"
+                type="submit"
+            >
+                Transcribe
+            </button>
+        </section>
+    {/if}
 </form>

@@ -36,7 +36,7 @@
             {#each question.answers as answer (answer)}
                 <button
                     on:click={() => toggleAnswer(answer)}
-                    class="btn btn-primary btn-outline w-40 rounded-full {answer ===
+                    class="btn btn-primary btn-outline btn-lg w-40 rounded-full {answer ===
                     $form.quiz?.[question.id]
                         ? 'btn-active'
                         : ''}">{answer}</button

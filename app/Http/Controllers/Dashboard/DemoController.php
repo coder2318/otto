@@ -9,35 +9,42 @@ use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TimelineQuestionResource;
+use App\Models\Chapter;
+use App\Models\Story;
 use App\Models\TimelineQuestion;
+use App\Models\User;
 use App\Notifications\DemoFinishedNotification;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class DemoController extends Controller
 {
+    protected User $user;
+
+    protected Story $story;
+
+    protected Chapter $chapter;
+
     protected function data(Request $request, TimelineQuestion $question = null)
     {
-        /** @var \App\Models\User */
-        $user = $request->user();
-        /** @var \App\Models\Story */
-        $story = $user->stories()->firstOrCreate(values: [
+        $this->user ??= $request->user();
+        $this->story ??= $this->user->stories()->firstOrCreate(values: [
             'title' => 'Demo Story',
             'status' => StoryStatus::PENDING,
         ]);
-        /** @var \App\Models\Chapter */
-        $chapter = $story->chapters()->firstOrCreate(values: [
+        $this->chapter ??= $this->story->chapters()->firstOrCreate(values: [
             'title' => $question?->question ?? 'Demo Chapter',
             'status' => ChapterStatus::DRAFT,
             'timeline_question_id' => $question?->id,
             'timeline_id' => $question?->timeline_id,
         ]);
 
-        return [$chapter, $story];
+        return [$this->chapter, $this->story];
     }
 
     protected function hasStory(Request $request)
@@ -70,7 +77,7 @@ class DemoController extends Controller
         [$chapter] = $this->data($request);
 
         if ($chapter->attachments()->count() > 0) {
-            return redirect()->route('demo.attachments')->with('status', 'You can have only one attachment for demo! Delete it first to record new.');
+            return redirect()->route('demo.attachments')->with('status', 'You can not transcribe more than one record for demo!');
         }
 
         return Inertia::render('Dashboard/Demo/Record', [
@@ -78,8 +85,9 @@ class DemoController extends Controller
         ]);
     }
 
-    public function update(UpdateChapterRequest $request)
+    public function update(UpdateChapterRequest $request, MediaService $service)
     {
+        /** @var Chapter */
         [$chapter] = $this->data($request);
         $chapter->update($request->validated());
 
@@ -89,9 +97,17 @@ class DemoController extends Controller
         }
 
         foreach ($request->validated('attachments') ?? [] as $attachment) {
-            $chapter->addMedia($attachment['file'])
+            $record = $chapter->addMedia($attachment['file'])
                 ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
                 ->toMediaCollection('attachments', 's3');
+
+            if ($transcription = $service->transcribe($record)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
+        }
+
+        if (isset($transcriptions)) {
+            Session::flash('transcriptions', $transcriptions);
         }
 
         if ($redirect = $request->validated('redirect')) {
