@@ -13,6 +13,7 @@
     import TipTap from '@/components/TipTap.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'
+    import { onMount } from 'svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -50,6 +51,12 @@
                 .join('')
         )
     }
+
+    onMount(() => {
+        if (! $form.content) {
+            $form.content = (transcriptions ? Object.values(transcriptions).join('\n') : '')
+        }
+    })
 </script>
 
 <svelte:head>
