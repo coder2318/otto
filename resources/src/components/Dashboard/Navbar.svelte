@@ -4,7 +4,7 @@
     import LogoIcon from '../SVG/logo-icon.svg.svelte'
     import User from '../SVG/user.svg.svelte'
     import Fa from 'svelte-fa'
-    import { faSearch, faBell } from '@fortawesome/free-solid-svg-icons'
+    import { faSearch, faBell, faCog } from '@fortawesome/free-solid-svg-icons'
 
     $: user = $page.props.auth.user as App.User | null
 </script>
@@ -33,13 +33,13 @@
         >
             <Fa icon={faBell} class="h-full" />
         </button>
-        <!-- <a
+        <a
             class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
-            href="/settrings"
+            href="/settings"
             use:inertia
         >
             <Fa icon={faCog} class="h-full" />
-        </a> -->
+        </a>
         {#if user}
             <div class="dropdown-end dropdown leading-none">
                 <label

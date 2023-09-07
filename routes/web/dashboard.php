@@ -39,6 +39,8 @@ Route::middleware('user-configured')->group(function () {
 
     // Settings
     Route::controller(SettingsController::class)->prefix('settings')->middleware('features:'.BetaAccess::class)->name('settings.')->group(function () {
+        Route::redirect('/', '/settings/notifications', 303);
+
         Route::get('/notifications', 'notifications')->name('notifications');
         Route::get('/integrations', 'integrations')->name('integrations');
         Route::get('/password', 'password')->name('password');
