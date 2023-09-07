@@ -29,7 +29,7 @@
     <h1 class="z-10 text-4xl md:text-5xl lg:text-6xl">Settings</h1>
 </section>
 
-<section class="container drawer mx-auto px-4 lg:drawer-open">
+<section class="container drawer mx-auto px-4 lg:drawer-open lg:gap-8">
     <input
         id="settings-drawer"
         type="checkbox"

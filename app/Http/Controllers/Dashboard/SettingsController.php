@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Dashboard;
 
+use App\Http\Controllers\Controller;
+use App\Services\AuthService;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 
@@ -32,9 +34,11 @@ class SettingsController extends Controller
         return Inertia::render('Dashboard/Settings/Password');
     }
 
-    public function updatePassword(Request $request)
+    public function updatePassword(Request $request, AuthService $service)
     {
-        return redirect()->back();
+        $service->update($request->user(), $request->all());
+
+        return redirect()->back()->with('message', 'Your password has been updated!');
     }
 
     public function billing()
