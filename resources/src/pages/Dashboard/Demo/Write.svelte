@@ -13,7 +13,6 @@
     import TipTap from '@/components/TipTap.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'
-    import { onMount } from 'svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -25,6 +24,8 @@
         title: chapter.data.title,
         status: chapter.data.status,
     })
+
+    $form.content = Object.values(transcriptions ?? {}).join('\n')
 
     $: words =
         $form.content
@@ -49,22 +50,6 @@
                     }),
             })
     }
-
-    function pasteTranscription(transcription: string) {
-        editor.commands.insertContent(
-            transcription
-                .trim()
-                .split(/[\n]{2,}/g)
-                .map((p) => `<p>${p.trim().replaceAll('\n', '<br />')}</p>`)
-                .join('')
-        )
-    }
-
-    onMount(() => {
-        if (! $form.content) {
-            $form.content = (transcriptions ? Object.values(transcriptions).join('\n') : '')
-        }
-    })
 </script>
 
 <svelte:head>
@@ -82,51 +67,40 @@
     </div>
 </section>
 <form on:submit|preventDefault={submit} in:fade class="px-4">
-    {#if transcriptions}
-        <div class="container mx-auto">
-            <div
-                class="tooltip tooltip-info"
-                data-tip="Click on filename to paste it's transcription to the editor"
-            >
-                <ul
-                    class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
-                >
-                    {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
-                        <li>
-                            <button
-                                type="button"
-                                on:click|preventDefault={() =>
-                                    pasteTranscription(transcription)}
-                            >
-                                <Fa icon={faFile} />
-                                {file}
-                            </button>
-                        </li>
-                    {/each}
-                </ul>
-            </div>
-        </div>
-    {/if}
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
             <div
                 class:alert-success={pages <= 1}
                 class:alert-error={pages > 1}
-                class="alert sticky top-12 z-20 flex items-center rounded-b-none"
+                class="alert sticky top-12 z-20 flex flex-wrap items-center rounded-b-none"
             >
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>
-                <span>{pages} pages</span>
-                {#if pages > 1}
-                    (You can share only 1 page for demo.)
-                {/if}
+                <span class="flex-1"
+                    >{pages} pages {#if pages > 1}
+                        (You can share only 1 page for demo.)
+                    {/if}</span
+                >
+                <span class="italic"
+                    >Please check transcription for any possible errors before
+                    continue.</span
+                >
             </div>
             <TipTap
-                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                class="rounded-t-none border {$form.errors.content
+                    ? 'border-error'
+                    : 'border-neutral-content/20'} bg-neutral p-4 font-serif"
                 bind:editor
                 bind:content={$form.content}
+                autofocus
                 placeholder="Write your story here..."
             />
+
+            {#if $form.errors.content}
+                <span class="label-text-alt mt-1 text-left text-error">
+                    {$form.errors.content}
+                </span>
+            {/if}
         </div>
     </main>
 

@@ -1,11 +1,13 @@
 <script lang="ts">
     import { Editor } from '@tiptap/core'
     import StarterKit from '@tiptap/starter-kit'
+    import Focus from '@tiptap/extension-focus'
     import { onMount } from 'svelte'
 
     let element: HTMLElement
     export let editor: Editor = null
     export let content = ''
+    export let autofocus = false
 
     onMount(() => {
         editor = new Editor({
@@ -15,10 +17,15 @@
                 },
             },
             element: element,
-            extensions: [StarterKit],
+            extensions: [StarterKit, Focus],
             content: content || '',
             onTransaction: () => (editor = editor),
             onUpdate: ({ editor }) => (content = editor.getHTML()),
+            onCreate: ({ editor }) => {
+                if (autofocus) {
+                    editor.chain().focus('end').run()
+                }
+            },
         })
 
         return () => editor?.destroy()
