@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Dashboard;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\PlanResource;
+use App\Models\Plan;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 class SettingsController extends Controller
@@ -41,9 +44,18 @@ class SettingsController extends Controller
         return redirect()->back()->with('message', 'Your password has been updated!');
     }
 
-    public function billing()
+    public function billing(Request $request)
     {
-        return Inertia::render('Dashboard/Settings/Billing');
+        /** @var \App\Models\User */
+        $user = $request->user();
+
+        return Inertia::render('Dashboard/Settings/Billing', [
+            'current' => fn () => $user->subscription(),
+            'period_end' => fn () => Carbon::createFromTimestamp(
+                $user->subscription()->asStripeSubscription()->current_period_end
+            ),
+            'plans' => fn () => PlanResource::collection(Plan::all())
+        ]);
     }
 
     public function updateBilling(Request $request)
