@@ -54,7 +54,7 @@ class SettingsController extends Controller
             'period_end' => fn () => Carbon::createFromTimestamp(
                 $user->subscription()->asStripeSubscription()->current_period_end
             ),
-            'plans' => fn () => PlanResource::collection(Plan::all())
+            'plans' => fn () => PlanResource::collection(Plan::all()),
         ]);
     }
 

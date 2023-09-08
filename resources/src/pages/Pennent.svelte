@@ -9,9 +9,6 @@
     import { addHoneypot } from '@/service/honeypot'
     import Honeypot from '@/components/Honeypot.svelte'
 
-    export let error: string
-    export let description: string
-
     const form = useForm(
         addHoneypot($page?.props?.honeypot)({
             name: '',
@@ -25,7 +22,7 @@
 </script>
 
 <svelte:head>
-    <title>{import.meta.env.VITE_APP_NAME} - {error}</title>
+    <title>{import.meta.env.VITE_APP_NAME} - Access not allowed</title>
 </svelte:head>
 
 <div class="z-10 flex flex-1 flex-col items-center">
@@ -33,7 +30,8 @@
         <h1
             class="whitespace-pre-wrap text-center text-2xl font-bold text-primary md:px-20"
         >
-            {description}
+            The page you are looking for is available only to a limited number
+            of testers. Sign up for the pre-order to request the access!
         </h1>
         <form
             on:submit|preventDefault={submit}

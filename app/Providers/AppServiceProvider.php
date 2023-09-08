@@ -25,11 +25,9 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(StripeClient::class, fn () => new StripeClient(config('cashier.secret')));
 
-        EnsureFeaturesAreActive::whenInactive(
-            fn (Request $request) => Inertia::render('Pennent', [
-                'error' => trans("I'm a teapot"),
-                'description' => trans('The page you are looking for is available only to a limited number of testers.'.PHP_EOL.'Sign up for the pre-order to request the access!'),
-            ])->toResponse($request)
+        EnsureFeaturesAreActive::whenInactive(fn (Request $request) => $request->wantsJson()
+            ? response()->json(['message' => 'This feature is not available'], 418)
+            : Inertia::render('Pennent')
         );
     }
 }
