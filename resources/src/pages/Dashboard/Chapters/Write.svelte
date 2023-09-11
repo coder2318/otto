@@ -53,8 +53,10 @@
     }
 
     onMount(() => {
-        if (! $form.content) {
-            $form.content = (transcriptions ? Object.values(transcriptions).join('\n') : '')
+        if (!$form.content) {
+            $form.content = transcriptions
+                ? Object.values(transcriptions).join('\n')
+                : ''
         }
     })
 </script>
