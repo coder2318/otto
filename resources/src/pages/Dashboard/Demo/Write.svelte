@@ -9,7 +9,7 @@
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft, faFile } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'

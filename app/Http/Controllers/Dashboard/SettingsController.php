@@ -51,15 +51,35 @@ class SettingsController extends Controller
 
         return Inertia::render('Dashboard/Settings/Billing', [
             'current' => fn () => $user->subscription(),
-            'period_end' => fn () => Carbon::createFromTimestamp(
-                $user->subscription()->asStripeSubscription()->current_period_end
-            ),
+            'invoices' => fn () => $user->invoices(),
+            'upcoming' => fn () => $user->subscription()->upcomingInvoice(),
             'plans' => fn () => PlanResource::collection(Plan::all()),
         ]);
     }
 
-    public function updateBilling(Request $request)
+    public function postBilling(Request $request)
     {
-        return redirect()->back();
+        /** @var \App\Models\User */
+        $user = $request->user();
+        $subscription = $user?->subscription();
+
+        abort_unless($subscription, 404);
+
+        $subscription->ends_at
+            ? $subscription->resume()
+            : $subscription->cancel();
+
+        return redirect()->back()->with('message', 'Your subscription has been updated!');
+    }
+
+    public function putBilling(Request $request)
+    {
+        /** @var \App\Models\User */
+        $user = $request->user();
+        $subscription = $user?->subscription();
+
+        $subscription->swapAndInvoice($request->price);
+
+        return redirect()->back()->with('message', 'Your subscription has been updated!');
     }
 }

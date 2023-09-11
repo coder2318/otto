@@ -39,7 +39,7 @@
     <div class="drawer-content">
         <slot />
     </div>
-    <div class="drawer-side z-30 lg:h-auto">
+    <div class="drawer-side max-lg:z-30 lg:h-auto">
         <label for="settings-drawer" class="drawer-overlay"></label>
         <ul
             class="menu menu-lg min-h-full w-80 gap-4 text-base-content max-lg:bg-base-200 lg:p-0"

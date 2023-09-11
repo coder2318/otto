@@ -8,6 +8,7 @@ use App\Http\Controllers\Dashboard\QuickstartController;
 use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\Dashboard\UserController;
+use App\Http\Controllers\InvoiceController;
 use Illuminate\Support\Facades\Route;
 
 // Quickstart Quiz
@@ -46,11 +47,13 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/password', 'password')->name('password');
         Route::get('/billing', 'billing')->name('billing');
 
-        Route::put('/notifications', 'updateNotifications')->name('notifications.update');
-        Route::put('/integrations', 'updateIntegrations')->name('integrations.update');
         Route::put('/password', 'updatePassword')->name('password.update');
-        Route::put('/billing', 'updateBilling')->name('billing.update');
+        Route::post('/billing', 'postBilling')->name('billing.post');
+        Route::put('/billing', 'putBilling')->name('billing.put');
     });
+
+    // Invoices
+    Route::get('/user/invoice/{invoice}', InvoiceController::class)->name('invoice.show');
 
     // Subscription Plans
     Route::resource('plans', PlanController::class)
