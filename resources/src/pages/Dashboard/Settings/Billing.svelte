@@ -99,7 +99,7 @@
             </div>
             <div class="divider" />
         {/if}
-        {#if current?.ends_at}
+        {#if !current?.ends_at}
             <span class="card-title text-2xl text-primary lg:text-3xl">
                 Cancel Subscription
             </span>
