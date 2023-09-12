@@ -7,7 +7,6 @@ use App\Http\Resources\PlanResource;
 use App\Models\Plan;
 use App\Services\AuthService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Carbon;
 use Inertia\Inertia;
 
 class SettingsController extends Controller
