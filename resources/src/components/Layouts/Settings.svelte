@@ -11,7 +11,6 @@
 
     const links = [
         { href: '/settings/notifications', label: 'Notifications' },
-        { href: '/settings/integrations', label: 'Integrations' },
         { href: '/settings/password', label: 'Change Password' },
         { href: '/settings/billing', label: 'Billing' },
     ]
