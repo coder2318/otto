@@ -7,6 +7,7 @@
     } from '@fortawesome/free-solid-svg-icons'
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
+    import { flash } from './Toast.svelte'
 
     let dialog: HTMLDialogElement
     let player: HTMLAudioElement
@@ -14,6 +15,7 @@
     let interval: number
     let timer: number
 
+    export let min: number = 1 * 60 * 1000
     export let max: number = 5 * 60 * 1000
     export let recordings: Array<{ file: File; options: object }>
     export let maxFiles: number = null
@@ -60,6 +62,12 @@
     }
 
     function stopRecording() {
+        if (timer < min) {
+            return flash({
+                message: `Minimum recording time is ${msToTime(min)}`,
+                type: 'alert-warning',
+            })
+        }
         timer = null
         clearInterval(interval)
         mediaRecorder.stop()
@@ -99,7 +107,7 @@
                                     ? stopRecording()
                                     : startRecording()}
                         >
-                            <label class="swap swap-rotate">
+                            <label class="swap-rotate swap">
                                 <input
                                     type="checkbox"
                                     checked={!!mediaRecorder}
