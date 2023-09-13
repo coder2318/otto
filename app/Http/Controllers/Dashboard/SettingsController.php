@@ -60,9 +60,8 @@ class SettingsController extends Controller
     {
         /** @var \App\Models\User */
         $user = $request->user();
-        $subscription = $user?->subscription();
 
-        abort_unless($subscription, 404);
+        abort_unless((bool) $subscription = $user->subscription(), 404);
 
         $subscription->ends_at
             ? $subscription->resume()
@@ -75,7 +74,8 @@ class SettingsController extends Controller
     {
         /** @var \App\Models\User */
         $user = $request->user();
-        $subscription = $user?->subscription();
+
+        abort_unless((bool) $subscription = $user->subscription(), 404);
 
         $subscription->swapAndInvoice($request->price);
 
