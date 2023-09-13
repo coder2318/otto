@@ -13,7 +13,7 @@
     export let user: { data: App.User }
     export let stories: { data: App.Story[] }
 
-    $: authId = $page.props?.auth?.user?.id
+    $: authId = $page.props?.auth?.user?.data?.id
 </script>
 
 <svelte:head>

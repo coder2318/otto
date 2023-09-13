@@ -2,7 +2,7 @@
     import { inertia, page } from '@inertiajs/svelte'
     import Logo from '../SVG/logo.svg.svelte'
     import User from '../SVG/user.svg.svelte'
-    $: user = $page.props.auth.user as App.User | null
+    $: user = $page.props?.auth?.user?.data as App.User | null
 
     let className = ''
 

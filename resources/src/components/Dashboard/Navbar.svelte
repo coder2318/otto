@@ -6,7 +6,7 @@
     import Fa from 'svelte-fa'
     import { faSearch, faBell, faCog } from '@fortawesome/free-solid-svg-icons'
 
-    $: user = $page.props.auth.user as App.User | null
+    $: user = $page.props?.auth?.user?.data as App.User | null
 </script>
 
 <nav class="navbar sticky top-0 z-20 bg-primary text-primary-content">

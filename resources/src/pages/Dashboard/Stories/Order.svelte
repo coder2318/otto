@@ -282,8 +282,8 @@
                     </div>
                     <div class="col-span-3 text-primary">
                         <h4>
-                            {$page.props.auth.user.details.first_name}
-                            {$page.props.auth.user.details.last_name}
+                            {$page.props?.auth?.user?.data.details.first_name}
+                            {$page.props?.auth?.user?.data.details.last_name}
                         </h4>
                         <h3 class="card-title">{story.data.title}</h3>
                     </div>

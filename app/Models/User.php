@@ -7,16 +7,19 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Cashier\Billable;
 use Laravel\Pennant\Concerns\HasFeatures;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\MediaLibrary\HasMedia;
+use Spatie\MediaLibrary\InteractsWithMedia;
 use Spatie\Permission\Traits\HasRoles;
 
-class User extends Authenticatable implements MustVerifyEmail
+class User extends Authenticatable implements HasMedia, MustVerifyEmail
 {
-    use Billable, HasApiTokens, HasFactory, HasFeatures, HasRoles, Notifiable;
+    use Billable, HasApiTokens, HasFactory, HasFeatures, HasRoles, InteractsWithMedia, Notifiable;
 
     protected $fillable = [
         'email',
@@ -44,5 +47,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function chapters(): HasManyThrough
     {
         return $this->hasManyThrough(Chapter::class, Story::class);
+    }
+
+    public function avatar(): MorphOne
+    {
+        return $this->media()->one()->ofMany(
+            ['id' => 'MAX'],
+            fn ($query) => $query->where('collection_name', 'avatar')
+        );
     }
 }

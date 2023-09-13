@@ -28,6 +28,7 @@ declare namespace App {
     interface User {
         id: number
         name: string
+        avatar?: string
         email: string
         details: any
         stories?: Story[]

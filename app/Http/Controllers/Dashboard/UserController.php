@@ -15,17 +15,17 @@ class UserController extends Controller
     public function show(User $user)
     {
         return Inertia::render('Dashboard/Users/Show', [
-            'user' => fn () => UserResource::make($user),
+            'user' => fn () => UserResource::make($user->load('avatar')),
             'stories' => fn () => StoryResource::collection(
                 $user->stories()->where('status', Status::PUBLISHED)->with('cover')->get()
-            )
+            ),
         ]);
     }
 
     public function edit(Request $request)
     {
         return Inertia::render('Dashboard/Users/Edit', [
-            'user' => fn () => $request->user(),
+            'user' => fn () => UserResource::make($request->user()->load('avatar')),
         ]);
     }
 
@@ -36,6 +36,11 @@ class UserController extends Controller
 
         $user->update($request->all());
 
-        return redirect()->back()->with('success', 'Personal information updated successfully.');
+        if ($request->hasFile('avatar')) {
+            $user->avatar?->delete();
+            $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
+        }
+
+        return redirect()->back()->with('message', 'Personal information updated successfully.');
     }
 }
