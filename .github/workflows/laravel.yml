@@ -17,6 +17,10 @@ jobs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: '8.2'
+    - name: Setup Bun
+      uses: oven-sh/setup-bun@v1
+      with:
+        bun-version: '1.0.0'
     - name: Copy .env
       run: php -r "file_exists('.env') || copy('.env.example', '.env');"
     - name: Cache Composer dependencies
@@ -32,10 +36,10 @@ jobs:
     - name: Cache Node dependencies
       uses: actions/cache@v3
       with:
-        path: ~/.npm
-        key: ${{ runner.os }}-${{ hashFiles('**/package-lock.json') }}
+        path: ~/.bun/install/cache
+        key: ${{ runner.os }}-${{ hashFiles('**/bun.lockb') }}
     - name: Build Front-end
-      run: npm ci && npm run build
+      run: bun install && bun run build
     - name: Generate key
       run: php artisan key:generate
     - name: Directory Permissions
