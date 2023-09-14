@@ -57,7 +57,6 @@
     "sortablejs": "^1.15.0",
     "svelte": "^3.59.2",
     "svelte-fa": "^3.0.4",
-    "svelte-filepond": "^0.2.0",
     "svelte-preprocess": "^5.0.4",
     "svelte-stripe": "^0.0.22",
     "tailwindcss": "^3.3.3",

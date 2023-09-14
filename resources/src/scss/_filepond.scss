@@ -3,20 +3,18 @@
 @import '~filepond-plugin-image-edit/dist/filepond-plugin-image-edit.css';
 @import '~cropperjs/dist/cropper.css';
 
-.filepond--wrapper {
-    .filepond--root {
-        @apply mb-0;
-    }
+.filepond--root {
+    @apply mb-0;
 
     .filepond--image-preview {
         @apply bg-base-300;
     }
 
     .filepond--drop-label {
-        @apply bg-base-100 text-base-content;
+        @apply bg-base-100 text-base-content rounded-lg;
 
         .filepond--label-action {
-            @apply link link-primary decoration-current;
+            @apply link link-primary link-hover decoration-current;
         }
     }
 

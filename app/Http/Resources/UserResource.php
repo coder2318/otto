@@ -8,6 +8,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 class UserResource extends JsonResource
 {
     /**
+     * Indicates if the resource's collection keys should be preserved.
+     */
+    public bool $preserveKeys = true;
+
+    /**
      * Transform the resource into an array.
      *
      * @return array<string, mixed>

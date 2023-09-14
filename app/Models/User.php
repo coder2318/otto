@@ -23,6 +23,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
 
     protected $fillable = [
         'email',
+        'name',
         'password',
         'details',
         'enhances',

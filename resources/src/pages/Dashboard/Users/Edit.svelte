@@ -9,52 +9,88 @@
     import FilePond from '@/components/FilePond.svelte'
     import PageHeader from '@/components/Static/PageHeader.svelte'
     import { fade } from 'svelte/transition'
-    import type { FilePond as FilePondType } from 'svelte-filepond'
-    import type { FilePondErrorDescription, FilePondFile } from 'filepond'
+    import type { FilePond as FilePondType, FilePondFile } from 'filepond'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
     import { onMount } from 'svelte'
     import { createCropperForFilepond } from '@/service/cropper'
+    import axios from 'axios'
+    import { imask } from '@imask/svelte'
+    import dayjs from 'dayjs'
 
     export let user: { data: App.User }
+    export let countries: App.Country[] = []
+    export let languages: App.Language[] = []
+    export let questions: { data: any[] }
 
     const form = useForm({
         avatar: undefined,
+        name: user.data.name,
+        email: user.data.email,
+        details: {
+            ...user.data.details,
+            social: { ...user.data.details.social },
+            birth_date: dayjs(user.data.details.birth_date).format(
+                'DD/MM/YYYY'
+            ),
+        },
     })
+
+    $: console.log($form, user.data)
 
     let element: HTMLElement
     let modal: HTMLDialogElement
     let pond: FilePondType
-    let initialFile: FilePondFile | null = null
-    let editor: any
+    let editor: any = null
+    let initialFile: File
+    let skipUpdate: boolean = false
 
     onMount(() => {
         editor = createCropperForFilepond(element, {
             aspectRatio: 1,
             viewMode: 2,
+            autoCropArea: 1,
             background: false,
             autoCrop: true,
-            ready: () => {
-                modal.showModal()
-            },
+            ready: () => modal.showModal(),
+        })
+
+        const interval = setInterval(async () => {
+            if (!pond) return
+            clearInterval(interval)
+
+            const response = await axios.get(user.data.avatar, {
+                responseType: 'blob',
+            })
+
+            // Remember a file so we do not upload it again
+            initialFile = new File(
+                [response.data],
+                user.data.avatar.split('/').pop(),
+                {
+                    type: response.headers['content-type'],
+                }
+            )
+
+            skipUpdate = true
+            pond.addFile(initialFile, { type: 'local' })
         })
     })
-
-    $: {
-        if (pond && user.data.avatar) {
-            pond.addFile(user.data.avatar, { type: 'input' })
-        }
-    }
 
     function reset() {
         $form.reset()
         pond.removeFiles()
 
         if (initialFile) {
-            pond.addFile(initialFile, { type: 'input' })
+            skipUpdate = true
+            pond.addFile(initialFile, { type: 'local' })
         }
     }
 
     function addFile(file: FilePondFile, blob: Blob) {
+        if (skipUpdate) {
+            // On second edit same file can only be added only after edit, so we remove it to allow upload
+            return (skipUpdate = false)
+        }
         $form.avatar = new File([blob], file.filename)
     }
 
@@ -94,7 +130,7 @@
     </PageHeader>
 
     <main class="card border border-base-300 bg-neutral text-neutral-content">
-        <div class="card-body">
+        <div class="card-body gap-8">
             <div class="form-control">
                 <label class="label" for="avatar">
                     <i class="label-text font-serif text-3xl text-primary">
@@ -105,13 +141,13 @@
                     <FilePond
                         id="avatar"
                         name="avatar"
-                        bind:pond
-                        maxFiles={1}
+                        bind:instance={pond}
                         server={false}
+                        allowMultiple={false}
                         allowImagePreview={true}
                         acceptedFileTypes={['image/*']}
                         imageEditEditor={editor}
-                        allowImageEdit={true}
+                        allowImageEdit={!!editor}
                         imageEditInstantEdit={true}
                         styleImageEditButtonEditItemPosition="top right"
                         imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
@@ -125,10 +161,344 @@
                     </span>
                 {/if}
             </div>
+
+            <div class="form-control">
+                <div class="font-serif text-3xl text-primary">Profile</div>
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="form-control">
+                        <label class="label" for="full_name">
+                            <span class="label-text">Full Name</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors['details.name']}
+                            bind:value={$form.details.name}
+                            type="text"
+                            name="name"
+                            placeholder="Full Name"
+                        />
+                        {#if $form.errors['details.full_name']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.full_name']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="username">
+                            <span class="label-text">User Name</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors.name}
+                            bind:value={$form.name}
+                            type="text"
+                            name="username"
+                            placeholder="User Name"
+                        />
+                        {#if $form.errors.name}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors.name}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <div class="font-serif text-3xl text-primary">
+                    Personal <i>Information</i>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="form-control">
+                        <label class="label" for="email">
+                            <span class="label-text">Email</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors.email}
+                            bind:value={$form.email}
+                            type="email"
+                            name="email"
+                            placeholder="Email"
+                        />
+                        {#if $form.errors.email}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors.email}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="phone">
+                            <span class="label-text">Phone</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors['details.phone']}
+                            bind:value={$form.details.phone}
+                            type="tel"
+                            name="phone"
+                            placeholder="Phone"
+                        />
+                        {#if $form.errors['details.phone']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.phone']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="language">
+                            <span class="label-text">Language</span>
+                        </label>
+                        <select
+                            class="select select-bordered"
+                            class:select-error={$form.errors[
+                                'details.language'
+                            ]}
+                            name="language"
+                            bind:value={$form.details.language}
+                        >
+                            <option value={null} disabled selected>
+                                Select Language...
+                            </option>
+                            {#each languages as language}
+                                <option value={language.code}>
+                                    {language.name}
+                                </option>
+                            {/each}
+                        </select>
+                        {#if $form.errors['details.language']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.language']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="country">
+                            <span class="label-text">Country</span>
+                        </label>
+                        <select
+                            class="select select-bordered"
+                            class:select-error={$form.errors['details.country']}
+                            name="country"
+                            bind:value={$form.details.country}
+                        >
+                            <option value={null} disabled selected
+                                >Select Country...</option
+                            >
+                            {#each countries as country}
+                                <option value={country.code}>
+                                    {country.name}
+                                </option>
+                            {/each}
+                        </select>
+                        {#if $form.errors['details.country']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.country']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control col-span-2">
+                        <label class="label" for="bio">
+                            <span class="label-text">Bio</span>
+                        </label>
+                        <textarea
+                            class="textarea textarea-bordered"
+                            class:textarea-error={$form.errors['details.bio']}
+                            bind:value={$form.details.bio}
+                            name="bio"
+                            placeholder="Bio"
+                        />
+                        {#if $form.errors['details.bio']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.bio']}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-control">
+                <div class="font-serif text-3xl text-primary">
+                    Onboarding <i>Information</i>
+                </div>
+
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="form-control col-span-2">
+                        <label class="label" for="birth_date">
+                            <span class="label-text">Date of Birth</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors[
+                                'details.birth_date'
+                            ]}
+                            bind:value={$form.details.birth_date}
+                            use:imask={{ mask: '00/00/0000' }}
+                            pattern="\d&lcub;1,2&rcub;/\d&lcub;1,2&rcub;/\d&lcub;4&rcub;"
+                            placeholder="DD/MM/YYYY"
+                            type="text"
+                            name="birth_date"
+                        />
+                        {#if $form.errors['details.birth_date']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.birth_date']}
+                            </span>
+                        {/if}
+                    </div>
+
+                    {#each questions.data as question}
+                        <div class="form-control">
+                            <label class="label" for="question-{question.id}">
+                                <span class="label-text">
+                                    {question.question}
+                                </span>
+                            </label>
+                            <select
+                                class="select select-bordered"
+                                class:select-error={$form.errors[
+                                    `quiz.${question.id}`
+                                ]}
+                                bind:value={$form.details.quiz[question.id]}
+                                name={`question.${question.id}`}
+                            >
+                                <option value={null} disabled
+                                    >Select Answer...</option
+                                >
+                                {#each question.answers as answer}
+                                    <option>{answer}</option>
+                                {/each}
+                            </select>
+                            {#if $form.errors[`details.quiz.${question.id}`]}
+                                <span
+                                    class="label-text-alt mt-1 text-left text-error"
+                                >
+                                    {$form.errors[
+                                        `details.quiz.${question.id}`
+                                    ]}
+                                </span>
+                            {/if}
+                        </div>
+                    {/each}
+                </div>
+            </div>
+
+            <div class="form-control">
+                <div class="font-serif text-3xl text-primary">
+                    Social <i>Links</i>
+                </div>
+                <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+                    <div class="form-control">
+                        <label class="label" for="facebook">
+                            <span class="label-text">Facebook</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors[
+                                'details.social.facebook'
+                            ]}
+                            bind:value={$form.details.social.facebook}
+                            type="text"
+                            name="facebook"
+                            placeholder="Facebook"
+                        />
+                        {#if $form.errors['details.social.facebook']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.social.facebook']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="telegram">
+                            <span class="label-text">Telegram</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors[
+                                'details.social.telegram'
+                            ]}
+                            bind:value={$form.details.social.telegram}
+                            type="text"
+                            name="telegram"
+                            placeholder="Telegram"
+                        />
+                        {#if $form.errors['details.social.telegram']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.social.telegram']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="instagram">
+                            <span class="label-text">Instagram</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors[
+                                'details.social.instagram'
+                            ]}
+                            bind:value={$form.details.social.instagram}
+                            type="text"
+                            name="instagram"
+                            placeholder="Instagram"
+                        />
+                        {#if $form.errors['details.social.instagram']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.social.instagram']}
+                            </span>
+                        {/if}
+                    </div>
+                    <div class="form-control">
+                        <label class="label" for="linkedin">
+                            <span class="label-text">LinkedIn</span>
+                        </label>
+                        <input
+                            class="input input-bordered"
+                            class:input-error={$form.errors[
+                                'details.social.linkedin'
+                            ]}
+                            bind:value={$form.details.social.linkedin}
+                            type="text"
+                            name="linkedin"
+                            placeholder="LinkedIn"
+                        />
+                        {#if $form.errors['details.social.linkedin']}
+                            <span
+                                class="label-text-alt mt-1 text-left text-error"
+                            >
+                                {$form.errors['details.social.linkedin']}
+                            </span>
+                        {/if}
+                    </div>
+                </div>
+            </div>
         </div>
     </main>
 
-    <div class="flex w-full items-center justify-end gap-4">
+    <div class="mb-4 flex w-full items-center justify-end gap-4">
         <button
             type="button"
             class="btn btn-primary btn-outline rounded-full"

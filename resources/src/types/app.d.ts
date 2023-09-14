@@ -117,4 +117,11 @@ declare namespace App {
             key: string
         }>
     }
+
+    interface Language {
+        name: string
+        code: string
+    }
+
+    interface Country extends Language {}
 }
