@@ -13,7 +13,6 @@
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
     import { onMount } from 'svelte'
     import { createCropperForFilepond } from '@/service/cropper'
-    import axios from 'axios'
     import { imask } from '@imask/svelte'
     import dayjs from 'dayjs'
 
@@ -52,26 +51,26 @@
             ready: () => modal.showModal(),
         })
 
-        const interval = setInterval(async () => {
-            if (!pond) return
-            clearInterval(interval)
+        fetch(user.data.avatar)
+            .then(async (response) => {
+                initialFile = new File(
+                    [await response.blob()],
+                    user.data.avatar.split('/').pop(),
+                    {
+                        type: response.headers.get('content-type'),
+                    }
+                )
 
-            const response = await axios.get(user.data.avatar, {
-                responseType: 'blob',
+                const interval = setInterval(async () => {
+                    if (!pond) return
+                    clearInterval(interval)
+
+                    // Remember a file so we do not upload it again
+                    skipUpdate = true
+                    pond.addFile(initialFile, { type: 'local' })
+                })
             })
-
-            // Remember a file so we do not upload it again
-            initialFile = new File(
-                [response.data],
-                user.data.avatar.split('/').pop(),
-                {
-                    type: response.headers['content-type'],
-                }
-            )
-
-            skipUpdate = true
-            pond.addFile(initialFile, { type: 'local' })
-        })
+            .catch(() => {})
     })
 
     function reset() {

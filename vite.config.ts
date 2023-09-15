@@ -90,6 +90,10 @@ export default ({ mode }) => {
                 host: 'localhost',
             }
         },
+        ssr: {
+            noExternal: true,
+            external: ['@inertiajs/core', 'util'],
+        },
         resolve: {
             alias: [
                 { find: "@", replacement: path.resolve(__dirname, 'resources/src') },

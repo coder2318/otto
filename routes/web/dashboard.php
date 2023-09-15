@@ -62,9 +62,9 @@ Route::middleware('user-configured')->group(function () {
     // Subscription Plans
     Route::resource('plans', PlanController::class)
         ->only(['index', 'show', 'update'])
-        ->middleware(['subscribed:0', 'features:'.BetaAccess::class]);
+        ->middleware(['subscribed:0']);
 
-    Route::middleware(['subscribed:1', 'features:'.BetaAccess::class])->group(function () {
+    Route::middleware(['subscribed:1'])->group(function () {
         // Stories
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {

@@ -81,13 +81,15 @@
                     </h2>
                     <div class="flex gap-2">
                         {#each Object.entries(user.data.details?.social ?? {}) as [key, value]}
-                            <a
-                                href={value}
-                                target="_blank"
-                                class="btn btn-circle btn-primary btn-outline text-xl"
-                            >
-                                <Fa icon={icon(key)} />
-                            </a>
+                            {#if value}
+                                <a
+                                    href={value}
+                                    target="_blank"
+                                    class="btn btn-circle btn-primary btn-outline text-xl"
+                                >
+                                    <Fa icon={icon(key)} />
+                                </a>
+                            {/if}
                         {/each}
                     </div>
                 </div>
@@ -102,28 +104,30 @@
     </div>
 </main>
 
-<section class="container mx-auto my-8 flex flex-col gap-8 px-4" in:fade>
-    <h1 class="text-4xl text-primary">View <i>OTTO Biography</i></h1>
+{#if stories.data.length > 0}
+    <section class="container mx-auto my-8 flex flex-col gap-8 px-4" in:fade>
+        <h1 class="text-4xl text-primary">View <i>OTTO Biography</i></h1>
 
-    {#each stories.data as story}
-        <div class="card border-4 border-base-300 bg-base-200">
-            <div class="card-body flex-row items-center gap-4 p-4 md:p-8">
-                <img
-                    src={story.cover}
-                    alt="cover"
-                    class="float-left max-h-32 rounded-xl"
-                />
-                <div class="flex flex-col items-start gap-4">
-                    <h2 class="card-title">{story.title}</h2>
-                    <a
-                        href="/books/{story.id}"
-                        use:inertia
-                        class="btn btn-primary rounded-full px-8"
-                    >
-                        View Book
-                    </a>
+        {#each stories.data as story}
+            <div class="card border-4 border-base-300 bg-base-200">
+                <div class="card-body flex-row items-center gap-4 p-4 md:p-8">
+                    <img
+                        src={story.cover}
+                        alt="cover"
+                        class="float-left max-h-32 rounded-xl"
+                    />
+                    <div class="flex flex-col items-start gap-4">
+                        <h2 class="card-title">{story.title}</h2>
+                        <a
+                            href="/books/{story.id}"
+                            use:inertia
+                            class="btn btn-primary rounded-full px-8"
+                        >
+                            View Book
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
-    {/each}
-</section>
+        {/each}
+    </section>
+{/if}

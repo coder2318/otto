@@ -107,7 +107,7 @@
                                     ? stopRecording()
                                     : startRecording()}
                         >
-                            <label class="swap-rotate swap">
+                            <label class="swap swap-rotate">
                                 <input
                                     type="checkbox"
                                     checked={!!mediaRecorder}
