@@ -30,7 +30,12 @@ declare namespace App {
         name: string
         avatar?: string
         email: string
-        details: any
+        details: {
+            [key: string]: any
+            social: {
+                [key: string]: string
+            }
+        }
         stories?: Story[]
     }
 
@@ -62,6 +67,7 @@ declare namespace App {
         pages?: number
         created_at: Date | string
         updated_at: Date | string
+        chapters?: Chapter[]
     }
 
     interface Chapter {

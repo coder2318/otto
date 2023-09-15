@@ -27,8 +27,8 @@ class UpdateUserRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'name' => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,' . Auth::id()],
-            'email' => ['sometimes','required', 'string', 'email', 'max:255', 'unique:users,email,' . Auth::id()],
+            'name' => ['sometimes', 'required', 'string', 'max:255', 'unique:users,name,'.Auth::id()],
+            'email' => ['sometimes', 'required', 'string', 'email', 'max:255', 'unique:users,email,'.Auth::id()],
             'details' => ['sometimes', 'required', 'array'],
             'avatar' => ['sometimes', 'nullable', 'file', 'mimetypes:image/*', 'max:2048'],
         ];

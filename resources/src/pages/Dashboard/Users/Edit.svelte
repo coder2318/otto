@@ -35,8 +35,6 @@
         },
     })
 
-    $: console.log($form, user.data)
-
     let element: HTMLElement
     let modal: HTMLDialogElement
     let pond: FilePondType

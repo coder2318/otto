@@ -99,6 +99,9 @@ export default ({ mode }) => {
                 { find: "@", replacement: path.resolve(__dirname, 'resources/src') },
                 { find: /~(.+)/, replacement: path.join(process.cwd(), 'node_modules/$1') },
             ]
-        }
+        },
+        build: {
+            chunkSizeWarningLimit: 1024,
+        },
     });
 }

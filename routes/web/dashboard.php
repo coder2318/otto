@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\BetaAccess;
+use App\Http\Controllers\Dashboard\BookController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\PlanController;
@@ -37,6 +38,9 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/profile', 'edit')->name('edit');
         Route::match(['put', 'patch'], '/profile', 'update')->name('update');
     });
+
+    // Books
+    Route::resource('books', BookController::class)->middleware('features:'.BetaAccess::class)->only('show');
 
     // Settings
     Route::controller(SettingsController::class)->prefix('settings')->middleware('features:'.BetaAccess::class)->name('settings.')->group(function () {

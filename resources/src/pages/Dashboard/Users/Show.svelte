@@ -9,11 +9,30 @@
     import { fade } from 'svelte/transition'
     import bg from '@/assets/img/profile-bg.jpg'
     import User from '@/components/SVG/user.svg.svelte'
+    import Fa from 'svelte-fa'
+    import {
+        faFacebook,
+        faTelegram,
+        faInstagram,
+        faLinkedin,
+        type IconDefinition,
+    } from '@fortawesome/free-brands-svg-icons'
 
     export let user: { data: App.User }
     export let stories: { data: App.Story[] }
 
     $: authId = $page.props?.auth?.user?.data?.id
+
+    function icon(code: string): IconDefinition {
+        return (
+            {
+                facebook: faFacebook,
+                telegram: faTelegram,
+                instagram: faInstagram,
+                linkedin: faLinkedin,
+            }[code] ?? null
+        )
+    }
 </script>
 
 <svelte:head>
@@ -53,10 +72,25 @@
                 {/if}
             </div>
             <div class="pt-20">
-                <h2 class="card-title text-3xl text-primary">
-                    {user.data.details.first_name}
-                    {user.data.details.last_name}
-                </h2>
+                <div
+                    class="mb-4 flex flex-col justify-between gap-4 md:flex-row"
+                >
+                    <h2 class="card-title text-3xl text-primary">
+                        {user.data.details.first_name}
+                        {user.data.details.last_name}
+                    </h2>
+                    <div class="flex gap-2">
+                        {#each Object.entries(user.data.details.social) as [key, value]}
+                            <a
+                                href={value}
+                                target="_blank"
+                                class="btn btn-circle btn-primary btn-outline text-xl"
+                            >
+                                <Fa icon={icon(key)} />
+                            </a>
+                        {/each}
+                    </div>
+                </div>
                 <a href="mailto:{user.data.email}" class="link-hover link">
                     {user.data.email}
                 </a>
@@ -82,7 +116,7 @@
                 <div class="flex flex-col items-start gap-4">
                     <h2 class="card-title">{story.title}</h2>
                     <a
-                        href="/stories/{story.id}"
+                        href="/books/{story.id}"
                         use:inertia
                         class="btn btn-primary rounded-full px-8"
                     >
