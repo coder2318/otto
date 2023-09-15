@@ -15,59 +15,59 @@ class Details extends Data
      * User first name
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $first_name;
+    public ?string $first_name = null;
 
     /**
      * User last name
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $last_name;
+    public ?string $last_name = null;
 
     /**
      * User full name
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $name;
+    public ?string $name = null;
 
     /**
      * User birth date
      */
     #[Date, Sometimes]
-    public ?Carbon $birth_date;
+    public ?Carbon $birth_date = null;
 
     /**
      * User phone
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $phone;
+    public ?string $phone = null;
 
     /**
      * User language
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $language;
+    public ?string $language = null;
 
     /**
      * User country
      */
     #[StringType, Max(255), Sometimes]
-    public ?string $country;
+    public ?string $country = null;
 
     /**
      * User bio
      */
     #[StringType, Sometimes]
-    public ?string $bio;
+    public ?string $bio = null;
 
     /**
      * Quiz answers
      */
     #[Sometimes]
-    public ?array $quiz;
+    public ?array $quiz = null;
 
     /**
      * Social URLs
      */
     #[Sometimes]
-    public ?DetailsSocial $social;
+    public ?DetailsSocial $social = null;
 }
