@@ -37,8 +37,8 @@
 
 <svelte:head>
     <title
-        >{import.meta.env.VITE_APP_NAME} - {user.data.details.first_name}
-        {user.data.details.last_name}</title
+        >{import.meta.env.VITE_APP_NAME} - {user.data.details?.first_name}
+        {user.data.details?.last_name}</title
     >
 </svelte:head>
 
@@ -76,11 +76,11 @@
                     class="mb-4 flex flex-col justify-between gap-4 md:flex-row"
                 >
                     <h2 class="card-title text-3xl text-primary">
-                        {user.data.details.first_name}
-                        {user.data.details.last_name}
+                        {user.data.details?.first_name}
+                        {user.data.details?.last_name}
                     </h2>
                     <div class="flex gap-2">
-                        {#each Object.entries(user.data.details.social) as [key, value]}
+                        {#each Object.entries(user.data.details?.social) as [key, value]}
                             <a
                                 href={value}
                                 target="_blank"
@@ -94,8 +94,8 @@
                 <a href="mailto:{user.data.email}" class="link-hover link">
                     {user.data.email}
                 </a>
-                {#if user.data.details.bio}
-                    <p>{@html user.data.details.bio}</p>
+                {#if user.data.details?.bio}
+                    <p>{@html user.data.details?.bio}</p>
                 {/if}
             </div>
         </div>
