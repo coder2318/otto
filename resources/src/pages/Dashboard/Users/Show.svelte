@@ -80,7 +80,7 @@
                         {user.data.details?.last_name}
                     </h2>
                     <div class="flex gap-2">
-                        {#each Object.entries(user.data.details?.social) as [key, value]}
+                        {#each Object.entries(user.data.details?.social ?? {}) as [key, value]}
                             <a
                                 href={value}
                                 target="_blank"
