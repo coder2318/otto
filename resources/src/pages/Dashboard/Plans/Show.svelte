@@ -25,8 +25,10 @@
     let elements: StripeElements
     let stripe: Stripe | null = null
 
-    onMount(async () => {
-        stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY)
+    onMount(() => {
+        loadStripe(import.meta.env.VITE_STRIPE_KEY).then(
+            (res) => (stripe = res)
+        )
         period =
             new URLSearchParams(window.location.search).get('period') || 'month'
     })

@@ -61,7 +61,7 @@
                     }
                 )
 
-                const interval = setInterval(async () => {
+                const interval = setInterval(() => {
                     if (!pond) return
                     clearInterval(interval)
 
