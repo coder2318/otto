@@ -44,7 +44,7 @@ return [
         'web-guest' => [
             'driver' => 'session',
             'provider' => 'guests',
-        ]
+        ],
     ],
 
     /*
@@ -73,7 +73,7 @@ return [
         'guests' => [
             'driver' => 'eloquent',
             'model' => App\Models\Guest::class,
-        ]
+        ],
 
         // 'users' => [
         //     'driver' => 'database',

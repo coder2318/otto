@@ -77,14 +77,14 @@ class ChapterController extends Controller
             }
         }
 
-        return redirect()->route('chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
+        return redirect()->route('dashboard.chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
     }
 
     public function deleteAttachments(Chapter $chapter, Media $attachment)
     {
         $attachment->delete();
 
-        return redirect()->route('chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
+        return redirect()->route('dashboard.chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
     }
 
     public function record(Chapter $chapter)
@@ -151,7 +151,7 @@ class ChapterController extends Controller
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return redirect()->route('chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
+        return redirect()->route('dashboard.chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
     }
 
     public function show(Chapter $chapter)
@@ -202,6 +202,6 @@ class ChapterController extends Controller
     {
         $chapter->delete();
 
-        return redirect()->route('stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
+        return redirect()->route('dashboard.stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
     }
 }

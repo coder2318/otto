@@ -69,7 +69,7 @@ class DemoController extends Controller
 
         $this->data($request, TimelineQuestion::find($request->input('question')));
 
-        return redirect()->route('demo.record');
+        return redirect()->route('dashboard.demo.record');
     }
 
     public function record(Request $request)
@@ -77,7 +77,7 @@ class DemoController extends Controller
         [$chapter] = $this->data($request);
 
         if ($chapter->attachments()->count() > 0) {
-            return redirect()->route('demo.attachments')->with('status', 'You can not transcribe more than one record for demo!');
+            return redirect()->route('dashboard.demo.attachments')->with('status', 'You can not transcribe more than one record for demo!');
         }
 
         return Inertia::render('Dashboard/Demo/Record', [
@@ -143,7 +143,7 @@ class DemoController extends Controller
             }
         }
 
-        return redirect()->route('demo.write')->with('transcriptions', $transcriptions);
+        return redirect()->route('dashboard.demo.write')->with('transcriptions', $transcriptions);
     }
 
     public function write(Request $request)
@@ -160,13 +160,13 @@ class DemoController extends Controller
     {
         $attachment->delete();
 
-        return redirect()->route('demo.attachments')->with('message', 'Attachment deleted successfully!');
+        return redirect()->route('dashboard.demo.attachments')->with('message', 'Attachment deleted successfully!');
     }
 
     public function enhance(Request $request, OpenAIService $service)
     {
         if (! $request->user()->enhances) {
-            return redirect()->route('demo.write')->with('status', 'You can only enhance once for demo!');
+            return redirect()->route('dashboard.demo.write')->with('status', 'You can only enhance once for demo!');
         }
 
         [$chapter] = $this->data($request);

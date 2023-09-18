@@ -41,7 +41,7 @@ class PlanController extends Controller
             // @phpstan-ignore-next-line
             $user->newSubscription('default', $request->validated('price_id'))->create($paymentMethod->id);
 
-            return redirect()->intended(route('stories.index'))->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
+            return redirect()->intended(route('dashboard.stories.index'))->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
         }, function (Throwable $exception) {
             return redirect()->back()->with('error', $exception->getMessage());
         });

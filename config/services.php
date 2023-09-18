@@ -83,6 +83,6 @@ return [
 
     'sqids' => [
         'dictionary' => env('SQIDS_DICTIONARY', \Sqids\Sqids::DEFAULT_ALPHABET),
-    ]
+    ],
 
 ];

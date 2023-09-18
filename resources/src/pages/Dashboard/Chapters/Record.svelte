@@ -27,7 +27,7 @@
                 _method: 'PUT',
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
-                redirect: 'chapters.write',
+                redirect: 'dashboard.chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,

@@ -6,17 +6,17 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class HaveNotUsedDemo
+class GuestConfigured
 {
     /**
      * Handle an incoming request.
      *
      * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
-    public function handle(Request $request, Closure $next, string ...$status): Response
+    public function handle(Request $request, Closure $next): Response
     {
-        if ($request->user()->stories()->whereIn('status', $status)->exists()) {
-            return redirect()->route(in_array('published', $status) ? 'dashboard.demo.finish' : 'dashboard.demo.record');
+        if (! $request->user('web-guest')?->details) {
+            return redirect()->route('guests.setup');
         }
 
         return $next($request);

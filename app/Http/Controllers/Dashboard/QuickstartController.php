@@ -14,7 +14,7 @@ class QuickstartController extends Controller
     public function index(Request $request)
     {
         if ($request->user()->details) {
-            return redirect()->route('demo.index');
+            return redirect()->route('dashboard.demo.index');
         }
 
         return Inertia::render('Dashboard/Quickstart', [
@@ -34,6 +34,6 @@ class QuickstartController extends Controller
 
         $user->save();
 
-        return redirect()->route('demo.index');
+        return redirect()->route('dashboard.demo.index');
     }
 }

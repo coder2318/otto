@@ -1,7 +1,7 @@
 <?php
 
 use App\Features\BetaAccess;
-use App\Http\Controllers\Dashboard\GuestController;
+use App\Http\Controllers\Guests\AuthController as GuestAuthController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use Illuminate\Routing\Router;
@@ -30,19 +30,21 @@ Route::controller(SocialAuthController::class)
         $router->get('/', 'login')->name('login.socialite');
         $router->get('/redirect', 'redirect')->name('login.socialite.redirect');
     });
+Route::get('/guests/{guest:sqid}/login', GuestAuthController::class)
+    ->name('login.guests')
+    ->middleware(['guest:web-guest', 'signed']);
 
-// Guests
-Route::controller(GuestController::class)->group(function () {
-    Route::get('/guests/{guest:sqid}/login', 'authenticate')->name('guests.authenticate')
-        ->middleware('signed');
+// Guests Dashboard
+Route::group(['middleware' => ['auth:web-guest'], 'as' => 'guests.', 'prefix' => 'guests'], function () {
+    include_once __DIR__.'/web/guests.php';
 });
 
 // User Dashboard
-Route::group(['middleware' => ['auth', 'verified'], 'name' => 'dashboard.'], function () {
+Route::group(['middleware' => ['auth', 'verified'], 'as' => 'dashboard.'], function () {
     include_once __DIR__.'/web/dashboard.php';
 })->middleware('features:beta-access');
 
 // Admin Panel
-Route::group(['middleware' => ['auth', 'verified'], 'name' => 'admin.'], function () {
+Route::group(['middleware' => ['auth', 'verified'], 'as' => 'admin.'], function () {
     include_once __DIR__.'/web/admin.php';
 })->middleware('features:beta-access');

@@ -37,20 +37,17 @@ class Guest extends Authenticatable implements HasMedia
 
     public function resolveRouteBinding($value, $field = null): static
     {
-        if ($field === 'sqid') {
-            return $this->find(app(Sqids::class)->decode($value)[0]);
-        }
-
-        return parent::resolveRouteBinding($value, $field);
+        return match ($field) {
+            'sqid' => $this->where('id', app(Sqids::class)->decode($value)[0])->first(),
+            default => parent::resolveRouteBinding($value, $field),
+        };
     }
 
     protected function sqid(): Attribute
     {
-        return Attribute::make(
-            get: fn () => app(Sqids::class)->encode([
-                $this->id,
-                ...str_split((string) random_int(100000, 999999)), // Randomize for unique signature on URL
-            ])
-        );
+        return Attribute::get(fn () => app(Sqids::class)->encode([
+            $this->id,
+            ...str_split((string) random_int(100000, 999999)),
+        ]))->shouldCache();
     }
 }

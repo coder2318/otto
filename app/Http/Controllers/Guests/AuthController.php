@@ -1,15 +1,14 @@
 <?php
 
-namespace App\Http\Controllers\Dashboard;
+namespace App\Http\Controllers\Guests;
 
 use App\Http\Controllers\Controller;
 use App\Models\Guest;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class GuestController extends Controller
+class AuthController extends Controller
 {
-    public function authenticate(Guest $guest)
+    public function __invoke(Guest $guest)
     {
         Auth::guard('web-guest')->login($guest);
     }
