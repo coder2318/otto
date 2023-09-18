@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\BetaAccess;
+use App\Http\Controllers\Dashboard\GuestController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use Illuminate\Routing\Router;
@@ -29,6 +30,12 @@ Route::controller(SocialAuthController::class)
         $router->get('/', 'login')->name('login.socialite');
         $router->get('/redirect', 'redirect')->name('login.socialite.redirect');
     });
+
+// Guests
+Route::controller(GuestController::class)->group(function () {
+    Route::get('/guests/{guest:sqid}/login', 'authenticate')->name('guests.authenticate')
+        ->middleware('signed');
+});
 
 // User Dashboard
 Route::group(['middleware' => ['auth', 'verified'], 'name' => 'dashboard.'], function () {
