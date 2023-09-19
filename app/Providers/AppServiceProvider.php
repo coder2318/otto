@@ -28,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind(StripeClient::class, fn () => new StripeClient(config('cashier.secret')));
 
-        $this->app->bind(OpenAIService::class, OpenAiCustomService::class);
-
         $this->app->bind(Sqids::class, fn () => new Sqids(config('services.sqids.dictionary')));
 
         EnsureFeaturesAreActive::whenInactive(fn (Request $request) => $request->wantsJson()
