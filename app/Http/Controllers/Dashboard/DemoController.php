@@ -47,6 +47,7 @@ class DemoController extends Controller
         ]);
 
         if ($cover = $question->cover) {
+            /** @var Media $cover */
             $cover->copy($this->chapter, 'cover');
         }
 

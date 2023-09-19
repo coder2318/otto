@@ -5,7 +5,6 @@ namespace App\Http\Requests\Chapters;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
-use Illuminate\Contracts\Database\Query\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\DB;
@@ -17,7 +16,7 @@ use Spatie\QueryBuilder\QueryBuilder;
  */
 class ChaptersRequest extends FormRequest
 {
-    protected function builder(Builder $builder): QueryBuilder
+    protected function builder($builder): QueryBuilder
     {
         return QueryBuilder::for($builder, $this)
             ->allowedFilters([
@@ -50,7 +49,7 @@ class ChaptersRequest extends FormRequest
                 DB::raw("'chapter' as type"),
                 'chapters.created_at',
             ])->union(
-                $this->builder($story->storyType->questions()
+                $this->builder($story->storyType->questions() // @phpstan-ignore-line
                     ->select([
                         'timeline_questions.id',
                         'timeline_questions.timeline_id',

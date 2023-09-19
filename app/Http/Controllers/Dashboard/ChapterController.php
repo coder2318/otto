@@ -145,6 +145,7 @@ class ChapterController extends Controller
             ]);
 
             if ($cover = $question->cover) {
+                /** @var Media $cover */
                 $cover->copy($chapter, 'cover');
             }
 
