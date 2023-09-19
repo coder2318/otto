@@ -35,7 +35,7 @@ class Guest extends Authenticatable implements HasMedia
         return $this->hasMany(Chapter::class);
     }
 
-    public function resolveRouteBinding($value, $field = null): static
+    public function resolveRouteBinding($value, $field = null)
     {
         return match ($field) {
             'sqid' => $this->where('id', app(Sqids::class)->decode($value)[0])->first(),
