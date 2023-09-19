@@ -9,9 +9,14 @@
     import { useForm } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
 
+    export let story_types: { data: App.StoryType[] }
+
+    $: console.log(story_types)
+
     const form = useForm({
         title: '',
         cover: '',
+        story_type_id: null,
     })
 </script>
 
@@ -61,6 +66,31 @@
                 {#if $form.errors.cover}
                     <span class="label-text-alt mt-1 text-left text-error">
                         {$form.errors.cover}
+                    </span>
+                {/if}
+            </div>
+            <div class="form-control">
+                <label class="label" for="story_type_id">
+                    <span class="label-text">Story Type</span>
+                </label>
+                <select
+                    class="select select-bordered"
+                    class:select-error={$form.errors.story_type_id}
+                    bind:value={$form.story_type_id}
+                    name="story_type_id"
+                >
+                    <option value={null} selected disabled class="hidden">
+                        Select Story Type
+                    </option>
+                    {#each story_types.data as story_type}
+                        <option value={story_type.id}>
+                            {story_type.name}
+                        </option>
+                    {/each}
+                </select>
+                {#if $form.errors.story_type_id}
+                    <span class="label-text-alt mt-1 text-left text-error">
+                        {$form.errors.story_type_id}
                     </span>
                 {/if}
             </div>

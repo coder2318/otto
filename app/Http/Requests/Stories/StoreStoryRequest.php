@@ -11,6 +11,7 @@ class StoreStoryRequest extends FormRequest
         return [
             'title' => ['required', 'string', 'max:255'],
             'cover' => ['required', 'image', 'max:4096'],
+            'story_type_id' => ['required', 'integer', 'exists:story_types,id'],
         ];
     }
 }

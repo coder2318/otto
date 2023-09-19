@@ -16,9 +16,11 @@ use App\Http\Requests\Stories\UpdateStoryRequest;
 use App\Http\Resources\BookCoverTemplateResource;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
+use App\Http\Resources\StoryTypeResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
+use App\Models\StoryType;
 use App\Models\Timeline;
 use App\Models\User;
 use App\Services\LuluService;
@@ -54,9 +56,9 @@ class StoryController extends Controller
     public function create()
     {
         return Inertia::render('Dashboard/Stories/Create', [
-            'timelines' => fn () => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
-            ),
+            'story_types' => fn () => StoryTypeResource::collection(
+                StoryType::all(['id', 'name'])
+            )
         ]);
     }
 
