@@ -10,7 +10,7 @@ class StoreStoryRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'cover' => ['required', 'image', 'max:2048'],
+            'cover' => ['required', 'image', 'max:4096'],
         ];
     }
 }
