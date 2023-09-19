@@ -150,15 +150,17 @@
                 use:inertia
                 in:fade
             >
-                <figure>
-                    <img
-                        src={chapter.cover ??
-                            'https://placehold.co/600x400?text=Your+cover+should+be+there'}
-                        alt={chapter.title}
-                    />
-                </figure>
                 <div class="card-body">
-                    <h2 class="card-title">{chapter.title}</h2>
+                    <figure class="mb-2 rounded-xl">
+                        <img
+                            src={chapter.cover ??
+                                'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                            alt={chapter.title}
+                        />
+                    </figure>
+                    <h2 class="card-title text-2xl font-normal">
+                        {chapter.title}
+                    </h2>
                     <p />
                     <div class="card-actions justify-between">
                         <div>
