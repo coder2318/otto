@@ -66,7 +66,7 @@ class ChaptersRequest extends FormRequest
                         ->distinct()
                         ->pluck('timeline_question_id')
                     )
-            ))->with(['cover', 'question'])->orderBy('created_at', 'desc')
+                ))->with(['cover', 'question'])->orderBy('created_at', 'desc')
         );
     }
 }

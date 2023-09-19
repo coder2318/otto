@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Services\OpenAiCustomService;
+use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->bind(StripeClient::class, fn () => new StripeClient(config('cashier.secret')));
+
+        $this->app->bind(OpenAIService::class, OpenAiCustomService::class);
 
         $this->app->bind(Sqids::class, fn () => new Sqids(config('services.sqids.dictionary')));
 
