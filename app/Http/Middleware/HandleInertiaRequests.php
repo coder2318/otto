@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Http\Resources\GuestResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
@@ -37,6 +38,9 @@ class HandleInertiaRequests extends Middleware
         return array_merge(parent::share($request), [
             'auth.user' => fn () => ($user = $request->user())
                 ? UserResource::make($user->load('avatar'))
+                : null,
+            'auth.guest' => fn () => ($user = $request->user('web-guest'))
+                ? GuestResource::make($user->load('avatar'))
                 : null,
             'flash' => fn () => [
                 'message' => $request->session()->get('message'),

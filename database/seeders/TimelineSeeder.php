@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use App\Models\Timeline;
+use App\Models\StoryType;
 use Illuminate\Database\Seeder;
 
 class TimelineSeeder extends Seeder
@@ -35,8 +35,13 @@ class TimelineSeeder extends Seeder
             ],
         ];
 
+        /** @var StoryType */
+        $storyType = StoryType::create([
+            'name' => 'Autobiography',
+        ]);
+
         foreach ($data as $datum) {
-            Timeline::create($datum);
+            $storyType->timelines()->create($datum);
         }
     }
 }

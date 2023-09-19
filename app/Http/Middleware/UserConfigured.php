@@ -16,7 +16,7 @@ class UserConfigured
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user()?->details) {
-            return redirect()->route('quickstart.index');
+            return redirect()->route('dashboard.quickstart.index');
         }
 
         return $next($request);

@@ -6,7 +6,7 @@
 </script>
 
 <script lang="ts">
-    import { router } from '@inertiajs/svelte'
+    import { router, inertia } from '@inertiajs/svelte'
     import { usd } from '@/service/helpers'
     import { faDownload, faX } from '@fortawesome/free-solid-svg-icons'
     import { dayjs } from '@/service/dayjs'
@@ -99,7 +99,7 @@
             </div>
             <div class="divider" />
         {/if}
-        {#if !current?.ends_at}
+        {#if current && !current.ends_at}
             <span class="card-title text-2xl text-primary lg:text-3xl">
                 Cancel Subscription
             </span>
@@ -120,7 +120,7 @@
             </div>
 
             <div class="divider" />
-        {:else}
+        {:else if current}
             <span class="card-title text-2xl text-primary lg:text-3xl">
                 Resume Subscription
             </span>
@@ -143,75 +143,97 @@
             </div>
 
             <div class="divider" />
+        {:else}
+            <span class="card-title text-2xl text-primary lg:text-3xl">
+                Subscribe to a Plan
+            </span>
+
+            <div class="rounded-lg bg-base-200 p-4">
+                <p>
+                    You are currently not subscribed to any plan. Please follow
+                    the link below to unlock all platform features.
+                </p>
+                <a
+                    class="btn btn-primary btn-outline btn-sm mt-4"
+                    href="/plans"
+                    use:inertia
+                >
+                    Subscription Plans
+                </a>
+            </div>
         {/if}
 
-        <span class="card-title text-2xl text-primary lg:text-3xl">
-            Receipts
-        </span>
+        {#if invoices.length}
+            <span class="card-title text-2xl text-primary lg:text-3xl">
+                Receipts
+            </span>
 
-        <div class="rounded-lg bg-base-200">
-            <div class="overflow-x-auto">
-                <table class="table">
-                    <tbody>
-                        {#each invoices as invoice}
-                            <tr class="hover hover:!bg-base-300">
-                                <td
-                                    >{dayjs
-                                        .unix(invoice.created)
-                                        .format('ll')}</td
-                                >
-                                <td>{usd(invoice.total / 100)}</td>
-                                <td
-                                    ><span class="badge badge-sm"
-                                        >{invoice.status}</span
-                                    ></td
-                                >
-                                <a
-                                    href="/user/invoice/{invoice.id}"
-                                    class="btn btn-square btn-ghost"
-                                >
-                                    <Fa icon={faDownload} />
-                                </a>
-                            </tr>
-                        {/each}
-                    </tbody>
-                </table>
+            <div class="rounded-lg bg-base-200">
+                <div class="overflow-x-auto">
+                    <table class="table">
+                        <tbody>
+                            {#each invoices as invoice}
+                                <tr class="hover hover:!bg-base-300">
+                                    <td
+                                        >{dayjs
+                                            .unix(invoice.created)
+                                            .format('ll')}</td
+                                    >
+                                    <td>{usd(invoice.total / 100)}</td>
+                                    <td
+                                        ><span class="badge badge-sm"
+                                            >{invoice.status}</span
+                                        ></td
+                                    >
+                                    <a
+                                        href="/user/invoice/{invoice.id}"
+                                        class="btn btn-square btn-ghost"
+                                    >
+                                        <Fa icon={faDownload} />
+                                    </a>
+                                </tr>
+                            {/each}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
+        {/if}
     </div>
 </main>
 
-<dialog bind:this={confirmCancelModal} class="modal">
-    <div class="modal-box w-11/12 max-w-5xl">
-        <div class="text-lg font-bold">Confirm Billing Action</div>
-        <p class="py-4">
-            Are you sure you want to {current.ends_at ? 'resume' : 'cancel'} your
-            subscription?
-        </p>
-        <div class="modal-action">
-            <button
-                type="button"
-                class="btn btn-outline btn-sm"
-                on:click|preventDefault={() => confirmCancelModal.close()}
-            >
-                Nevermind
-            </button>
-            <button
-                type="button"
-                class="btn btn-primary btn-sm"
-                on:click|preventDefault={() => cancelSubscription()}
-            >
-                Confirm
-            </button>
+{#if current}
+    <dialog bind:this={confirmCancelModal} class="modal">
+        <div class="modal-box w-11/12 max-w-5xl">
+            <div class="text-lg font-bold">Confirm Billing Action</div>
+            <p class="py-4">
+                Are you sure you want to {current.ends_at ? 'resume' : 'cancel'}
+                your subscription?
+            </p>
+            <div class="modal-action">
+                <button
+                    type="button"
+                    class="btn btn-outline btn-sm"
+                    on:click|preventDefault={() => confirmCancelModal.close()}
+                >
+                    Nevermind
+                </button>
+                <button
+                    type="button"
+                    class="btn btn-primary btn-sm"
+                    on:click|preventDefault={() => cancelSubscription()}
+                >
+                    Confirm
+                </button>
+            </div>
         </div>
-    </div>
-    <div class="modal-backdrop bg-base-content/20">
-        <button
-            type="button"
-            on:click|preventDefault={() => confirmCancelModal.close()}
-        />
-    </div>
-</dialog>
+        <div class="modal-backdrop bg-base-content/20">
+            <button
+                type="button"
+                on:click|preventDefault={() => confirmCancelModal.close()}
+            />
+        </div>
+    </dialog>
+{/if}
 
 <dialog bind:this={plansModal} class="modal">
     <div class="modal-box w-11/12 max-w-5xl">

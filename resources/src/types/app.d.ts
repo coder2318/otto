@@ -70,6 +70,11 @@ declare namespace App {
         chapters?: Chapter[]
     }
 
+    interface StoryType {
+        id: number
+        name: string
+    }
+
     interface Chapter {
         id: number
         title: string

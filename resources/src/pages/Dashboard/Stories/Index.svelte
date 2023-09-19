@@ -134,7 +134,9 @@
                     />
                 </figure>
                 <div class="card-body">
-                    <h2 class="card-title">{story.title}</h2>
+                    <h2 class="card-title text-2xl font-normal">
+                        {story.title}
+                    </h2>
                     <p />
                     <div class="card-actions justify-between">
                         <div>

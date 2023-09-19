@@ -170,7 +170,7 @@
                     type="submit"
                     class="btn btn-primary rounded-full"
                     data-status="published"
-                    data-redirect="chapters.finish"
+                    data-redirect="dashboard.chapters.finish"
                 >
                     Finish this Chapter
                 </button>

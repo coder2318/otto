@@ -79,6 +79,7 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/order', 'orderPurchase')->name('order.purchase');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
+        Route::resource('stories.questions.chapters', ChapterController::class)->shallow()->only('create');
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
             Route::get('/write', 'write')->name('write');
             Route::get('/upload', 'upload')->name('upload');

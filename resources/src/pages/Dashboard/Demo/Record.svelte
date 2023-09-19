@@ -24,7 +24,7 @@
             .transform((data) => ({
                 _method: 'PUT',
                 ...data,
-                redirect: 'demo.write',
+                redirect: 'dashboard.demo.write',
                 status: event.submitter.dataset?.status ?? data.status,
             }))
             .post(`/demo`, {

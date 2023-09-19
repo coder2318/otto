@@ -14,6 +14,8 @@ class Timeline extends Model
     protected $fillable = [
         'title',
         'description',
+        'order',
+        'story_type_id',
     ];
 
     public function user(): BelongsTo
@@ -29,5 +31,10 @@ class Timeline extends Model
     public function questions(): HasMany
     {
         return $this->hasMany(TimelineQuestion::class);
+    }
+
+    public function storyType(): BelongsTo
+    {
+        return $this->belongsTo(StoryType::class);
     }
 }

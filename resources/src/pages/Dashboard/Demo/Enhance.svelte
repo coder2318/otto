@@ -151,7 +151,7 @@
                     type="submit"
                     class="btn btn-primary rounded-full"
                     data-status="published"
-                    data-redirect="demo.finish"
+                    data-redirect="dashboard.demo.finish"
                 >
                     Finish this Chapter
                 </button>

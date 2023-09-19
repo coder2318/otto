@@ -46,7 +46,7 @@
                 _method: 'PUT',
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
-                redirect: 'chapters.write',
+                redirect: 'dashboard.chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
@@ -78,7 +78,7 @@
     <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
         <div class="card-body gap-4">
             <FilePond
-                bind:pond={filepond}
+                bind:instance={filepond}
                 server={false}
                 allowMultiple={true}
                 allowProcess={false}
@@ -102,7 +102,7 @@
                     `application/vnd.openxmlformats-officedocument.wordprocessingml.document`,
                 ]}
             />
-            {#if $form.errors}
+            {#if Object.keys($form.errors).length > 0}
                 <span class="label-text-alt mt-1 text-left text-error">
                     <ul class="list-inside list-disc">
                         {#each Object.entries($form.errors) as [field, error]}

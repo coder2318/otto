@@ -27,6 +27,7 @@ class Story extends Model implements HasMedia
         'status',
         'print_job_id',
         'user_id',
+        'story_type_id',
     ];
 
     protected $casts = [
@@ -56,33 +57,36 @@ class Story extends Model implements HasMedia
         return $this->belongsTo(User::class);
     }
 
+    public function storyType(): BelongsTo
+    {
+        return $this->belongsTo(StoryType::class);
+    }
+
     protected function pages(): Attribute
     {
-        return Attribute::make(
-            get: function () {
-                Storage::disk('local')->put($file = 'temp.pdf', Pdf::loadView('pdf.book', [
-                    'story' => $this,
-                    'chapters' => $this->chapters()
-                        ->where('status', ChapterStatus::PUBLISHED)
-                        ->orderBy('timeline_id', 'asc')
-                        ->orderBy('order', 'asc')
-                        ->lazy(),
-                ])->output());
+        return Attribute::get(function () {
+            Storage::disk('local')->put($file = 'temp.pdf', Pdf::loadView('pdf.book', [
+                'story' => $this,
+                'chapters' => $this->chapters()
+                    ->where('status', ChapterStatus::PUBLISHED)
+                    ->orderBy('timeline_id', 'asc')
+                    ->orderBy('order', 'asc')
+                    ->lazy(),
+            ])->output());
 
-                exec('pdfinfo '.Storage::disk('local')->path($file), $output);
-                Storage::disk('local')->delete($file);
+            exec('pdfinfo '.Storage::disk('local')->path($file), $output);
+            Storage::disk('local')->delete($file);
 
-                $pages = null;
+            $pages = null;
 
-                foreach ($output as $line) {
-                    if (preg_match("/Pages:\s*(\d+)/i", $line, $matches)) {
-                        $pages = $matches[1];
-                        break;
-                    }
+            foreach ($output as $line) {
+                if (preg_match("/Pages:\s*(\d+)/i", $line, $matches)) {
+                    $pages = $matches[1];
+                    break;
                 }
-
-                return $pages;
             }
-        );
+
+            return $pages;
+        })->shouldCache();
     }
 }

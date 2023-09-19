@@ -16,9 +16,11 @@ use App\Http\Requests\Stories\UpdateStoryRequest;
 use App\Http\Resources\BookCoverTemplateResource;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
+use App\Http\Resources\StoryTypeResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
+use App\Models\StoryType;
 use App\Models\Timeline;
 use App\Models\User;
 use App\Services\LuluService;
@@ -54,8 +56,8 @@ class StoryController extends Controller
     public function create()
     {
         return Inertia::render('Dashboard/Stories/Create', [
-            'timelines' => fn () => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
+            'story_types' => fn () => StoryTypeResource::collection(
+                StoryType::all(['id', 'name'])
             ),
         ]);
     }
@@ -99,7 +101,7 @@ class StoryController extends Controller
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return redirect()->route('stories.show', compact('story'))->with('message', 'Story created successfully!');
+        return redirect()->route('dashboard.stories.show', compact('story'))->with('message', 'Story created successfully!');
     }
 
     public function update(UpdateStoryRequest $request, Story $story)
@@ -121,7 +123,7 @@ class StoryController extends Controller
             $story->delete();
         });
 
-        return redirect()->route('stories.index')->with('message', 'Story deleted successfully!');
+        return redirect()->route('dashboard.stories.index')->with('message', 'Story deleted successfully!');
     }
 
     public function covers(Story $story)
@@ -265,8 +267,8 @@ class StoryController extends Controller
                 'printable_normalization' => PrintableNormalization::from([
                     'external_id' => $payment->external_id, // @phpstan-ignore-line
                     'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
-                    'cover' => ['source_url' => route('stories.book-cover', compact('story'))],
-                    'interior' => ['source_url' => route('stories.book', compact('story'))],
+                    'cover' => ['source_url' => route('dashboard.dashboard.stories.book-cover', compact('story'))],
+                    'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
                 ]),
                 'quantity' => 1,
                 'title' => $story->title,

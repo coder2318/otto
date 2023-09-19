@@ -16,7 +16,7 @@ class HaveNotUsedDemo
     public function handle(Request $request, Closure $next, string ...$status): Response
     {
         if ($request->user()->stories()->whereIn('status', $status)->exists()) {
-            return redirect()->route(in_array('published', $status) ? 'demo.finish' : 'demo.record');
+            return redirect()->route(in_array('published', $status) ? 'dashboard.demo.finish' : 'dashboard.demo.record');
         }
 
         return $next($request);

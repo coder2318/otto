@@ -39,6 +39,11 @@ class Chapter extends Model implements HasMedia
         return $this->belongsTo(Timeline::class);
     }
 
+    public function guest(): BelongsTo
+    {
+        return $this->belongsTo(Guest::class);
+    }
+
     public function question(): BelongsTo
     {
         return $this->belongsTo(TimelineQuestion::class);

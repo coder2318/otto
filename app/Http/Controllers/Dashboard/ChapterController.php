@@ -9,6 +9,7 @@ use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
@@ -36,13 +37,13 @@ class ChapterController extends Controller
     {
         return Inertia::render('Dashboard/Chapters/Index', [
             'story' => fn () => StoryResource::make($story->load('cover')),
-            'chapters' => fn () => ChapterResource::collection(
-                $request->chapters($story->chapters()->with('cover'))
-                    ->paginate(6)
+            'questions_chapters' => fn () => QuestionsChaptersResource::collection(
+                $request->chaptersQuestions($story)
+                    ->paginate(5)
                     ->appends($request->query())
             ),
             'timelines' => fn () => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
+                $story->storyType->timelines()->get(['id', 'title'])
             ),
         ]);
     }
@@ -77,14 +78,14 @@ class ChapterController extends Controller
             }
         }
 
-        return redirect()->route('chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
+        return redirect()->route('dashboard.chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
     }
 
     public function deleteAttachments(Chapter $chapter, Media $attachment)
     {
         $attachment->delete();
 
-        return redirect()->route('chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
+        return redirect()->route('dashboard.chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
     }
 
     public function record(Chapter $chapter)
@@ -132,8 +133,25 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function create(Story $story)
+    public function create(Story $story, ?TimelineQuestion $question)
     {
+        if ($question) {
+            /** @var Chapter */
+            $chapter = $story->chapters()->firstOrCreate(['timeline_question_id' => $question->id], [
+                'title' => $question->question,
+                'timeline_question_id' => $question->id,
+                'timeline_id' => $question->timeline_id,
+                'status' => Status::DRAFT,
+            ]);
+
+            if ($cover = $question->cover) {
+                /** @var Media $cover */
+                $cover->copy($chapter, 'cover');
+            }
+
+            return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'Chapter created successfully!');
+        }
+
         return Inertia::render('Dashboard/Chapters/Create', [
             'timelines' => fn () => TimelineResource::collection(Timeline::all(['id', 'title'])),
             'story' => fn () => StoryResource::make($story),
@@ -143,15 +161,15 @@ class ChapterController extends Controller
     public function store(Story $story, StoreChapterRequest $request)
     {
         /** @var Chapter */
-        $chapter = $story->chapters()->create($request->validated() + [
+        $chapter = $story->chapters()->create(array_merge($request->validated(), [
             'status' => Status::DRAFT,
-        ]);
+        ]));
 
         if ($request->hasFile('cover')) {
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return redirect()->route('chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
+        return redirect()->route('dashboard.chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
     }
 
     public function show(Chapter $chapter)
@@ -202,6 +220,6 @@ class ChapterController extends Controller
     {
         $chapter->delete();
 
-        return redirect()->route('stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
+        return redirect()->route('dashboard.stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
     }
 }

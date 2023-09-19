@@ -81,4 +81,8 @@ return [
         'product' => '0600X0900FCSTDPB080CW444GXX',
     ],
 
+    'sqids' => [
+        'dictionary' => env('SQIDS_DICTIONARY', \Sqids\Sqids::DEFAULT_ALPHABET),
+    ],
+
 ];

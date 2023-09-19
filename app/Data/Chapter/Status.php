@@ -6,4 +6,5 @@ enum Status: string
 {
     case PUBLISHED = 'published';
     case DRAFT = 'draft';
+    case UNDONE = 'undone';
 }
