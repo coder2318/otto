@@ -157,12 +157,10 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function store(Story $story, ?TimelineQuestion $question, StoreChapterRequest $request)
+    public function store(Story $story, StoreChapterRequest $request)
     {
         /** @var Chapter */
         $chapter = $story->chapters()->create(array_merge($request->validated(), [
-            'timeline_question_id' => $question?->id,
-            'timeline_id' => $question?->timeline_id,
             'status' => Status::DRAFT,
         ]));
 
