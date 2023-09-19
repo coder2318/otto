@@ -60,7 +60,7 @@ class ChaptersRequest extends FormRequest
                         DB::raw("'question' as type"),
                         'timeline_questions.created_at',
                     ])
-                    ->whereNotIn('id', $story
+                    ->whereNotIn('timeline_questions.id', $story
                         ->chapters()
                         ->whereNotNull('timeline_question_id')
                         ->distinct()

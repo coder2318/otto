@@ -133,20 +133,38 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function create(Story $story)
+    public function create(Story $story, ?TimelineQuestion $question)
     {
+        if ($question) {
+            /** @var Chapter */
+            $chapter = $story->chapters()->firstOrCreate(['timeline_question_id' => $question->id], [
+                'title' => $question->question,
+                'timeline_question_id' => $question->id,
+                'timeline_id' => $question->timeline_id,
+                'status' => Status::DRAFT,
+            ]);
+
+            if ($cover = $question->cover) {
+                $cover->copy($chapter, 'cover');
+            }
+
+            return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'Chapter created successfully!');
+        }
+
         return Inertia::render('Dashboard/Chapters/Create', [
             'timelines' => fn () => TimelineResource::collection(Timeline::all(['id', 'title'])),
             'story' => fn () => StoryResource::make($story),
         ]);
     }
 
-    public function store(Story $story, StoreChapterRequest $request)
+    public function store(Story $story, ?TimelineQuestion $question, StoreChapterRequest $request)
     {
         /** @var Chapter */
-        $chapter = $story->chapters()->create($request->validated() + [
+        $chapter = $story->chapters()->create(array_merge($request->validated(), [
+            'timeline_question_id' => $question?->id,
+            'timeline_id' => $question?->timeline_id,
             'status' => Status::DRAFT,
-        ]);
+        ]));
 
         if ($request->hasFile('cover')) {
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');

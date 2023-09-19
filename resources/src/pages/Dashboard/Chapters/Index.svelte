@@ -164,7 +164,9 @@
         {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
-                href="/chapters/{chapter.id}/edit"
+                href={chapter.type === 'question'
+                    ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
+                    : `/chapters/${chapter.id}/edit`}
                 use:inertia
                 in:fade
             >

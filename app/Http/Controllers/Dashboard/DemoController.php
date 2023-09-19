@@ -33,16 +33,22 @@ class DemoController extends Controller
     protected function data(Request $request, TimelineQuestion $question = null)
     {
         $this->user ??= $request->user();
+
         $this->story ??= $this->user->stories()->firstOrCreate(values: [
             'title' => 'Demo Story',
             'status' => StoryStatus::PENDING,
         ]);
+
         $this->chapter ??= $this->story->chapters()->firstOrCreate(values: [
             'title' => $question?->question ?? 'Demo Chapter',
             'status' => ChapterStatus::DRAFT,
             'timeline_question_id' => $question?->id,
             'timeline_id' => $question?->timeline_id,
         ]);
+
+        if ($cover = $question->cover) {
+            $cover->copy($this->chapter, 'cover');
+        }
 
         return [$this->chapter, $this->story];
     }
