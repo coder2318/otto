@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class StoryType extends Model
 {
@@ -22,5 +23,10 @@ class StoryType extends Model
     public function timelines(): HasMany
     {
         return $this->hasMany(Timeline::class);
+    }
+
+    public function questions(): HasManyThrough
+    {
+        return $this->through('timelines')->has('questions');
     }
 }

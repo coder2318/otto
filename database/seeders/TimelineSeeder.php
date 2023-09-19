@@ -3,7 +3,6 @@
 namespace Database\Seeders;
 
 use App\Models\StoryType;
-use App\Models\Timeline;
 use Illuminate\Database\Seeder;
 
 class TimelineSeeder extends Seeder

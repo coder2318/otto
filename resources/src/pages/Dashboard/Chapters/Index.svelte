@@ -14,14 +14,15 @@
     import { dayjs } from '@/service/dayjs'
     import { truncate } from '@/service/helpers'
     import { faPlus } from '@fortawesome/free-solid-svg-icons'
+    import customChapter from '@/assets/img/custom-chapter.jpg'
 
-    export let timelines: { data: App.Timeline[] }
-    export let story: { data: App.Story }
-    export let chapters: {
-        data: Array<App.Story>
+    export let questions_chapters: {
+        data: (App.TimelineQuestion | App.Chapter)[]
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
+    export let timelines: { data: App.Timeline[] }
+    export let story: { data: App.Story }
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -35,7 +36,7 @@
     filter.subscribe((value) => {
         router.visit(
             window.location.pathname + '?' + qs.stringify({ filter: value }),
-            { only: ['chapters'] }
+            { only: ['questions_chapters'] }
         )
     })
 
@@ -71,22 +72,15 @@
             <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
                 {story.data.title}
             </h1>
-            <a
-                href="/stories/{story.data.id}/chapters/create"
-                use:inertia
-                class="btn btn-secondary"
-            >
-                <Fa icon={faPlus} /> Create Chapter
-            </a>
         </div>
     </div>
 </header>
 
 <section
-    class="container m-4 mx-auto flex border-b-2 border-base-content/20 lg:my-8"
+    class="gird-cols-1 container m-4 mx-auto grid place-content-between gap-4 border-b-2 border-base-content/20 px-4 pb-4 md:grid-cols-2 md:pb-0 lg:my-8"
     in:fade
 >
-    <div class="tabs flex-1">
+    <div class="tabs">
         <button
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == undefined}
@@ -97,11 +91,19 @@
         </button>
         <button
             class="tab -mb-0.5"
+            class:tab-active={query?.filter?.status == 'undone'}
+            class:tab-bordered={query?.filter?.status == 'undone'}
+            on:click|preventDefault={() => ($filter.status = 'undone')}
+        >
+            Undone
+        </button>
+        <button
+            class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == 'draft'}
             class:tab-bordered={query?.filter?.status == 'draft'}
             on:click|preventDefault={() => ($filter.status = 'draft')}
         >
-            Draft
+            In Progress
         </button>
         <button
             class="tab -mb-0.5"
@@ -109,11 +111,11 @@
             class:tab-bordered={query?.filter?.status == 'published'}
             on:click|preventDefault={() => ($filter.status = 'published')}
         >
-            Published
+            Completed
         </button>
     </div>
 
-    <span class="flex gap-2">
+    <span class="flex gap-2 md:ml-auto">
         Timeline:
         <select
             class="select select-bordered select-ghost select-xs w-48"
@@ -141,9 +143,25 @@
     in:fade
 >
     <div
-        class="grid grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
+        class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
-        {#each chapters.data as chapter (chapter.id)}
+        <div
+            class="card min-h-[32rem]"
+            style="background-image: url({customChapter})"
+        >
+            <div class="card-body items-center justify-end">
+                <div class="card-actions justify-between">
+                    <a
+                        href="/stories/{story.data.id}/chapters/create"
+                        use:inertia
+                        class="btn btn-neutral btn-lg rounded-full"
+                    >
+                        Create Custom Question
+                    </a>
+                </div>
+            </div>
+        </div>
+        {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
                 class="card bg-neutral transition-transform hover:scale-105"
                 href="/chapters/{chapter.id}/edit"
@@ -168,12 +186,17 @@
                                 'MMM DD, YYYY'
                             )}
                         </div>
-                        <div class="badge badge-outline">{chapter.status}</div>
+                        <div class="badge badge-outline">
+                            {chapter.status}
+                        </div>
                     </div>
                 </div>
             </a>
         {/each}
     </div>
 
-    <Paginator meta={chapters.meta} />
+    <Paginator
+        class="flex-wrap items-center justify-center gap-y-2"
+        meta={questions_chapters.meta}
+    />
 </main>

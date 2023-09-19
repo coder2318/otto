@@ -58,7 +58,7 @@ class StoryController extends Controller
         return Inertia::render('Dashboard/Stories/Create', [
             'story_types' => fn () => StoryTypeResource::collection(
                 StoryType::all(['id', 'name'])
-            )
+            ),
         ]);
     }
 

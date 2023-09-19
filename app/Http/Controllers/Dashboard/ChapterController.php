@@ -9,6 +9,7 @@ use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
@@ -36,13 +37,13 @@ class ChapterController extends Controller
     {
         return Inertia::render('Dashboard/Chapters/Index', [
             'story' => fn () => StoryResource::make($story->load('cover')),
-            'chapters' => fn () => ChapterResource::collection(
-                $request->chapters($story->chapters()->with('cover'))
-                    ->paginate(6)
+            'questions_chapters' => fn () => QuestionsChaptersResource::collection(
+                $request->chaptersQuestions($story)
+                    ->paginate(5)
                     ->appends($request->query())
             ),
             'timelines' => fn () => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
+                $story->storyType->timelines()->get(['id', 'title'])
             ),
         ]);
     }

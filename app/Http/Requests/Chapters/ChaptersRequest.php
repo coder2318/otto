@@ -3,19 +3,70 @@
 namespace App\Http\Requests\Chapters;
 
 use App\Models\Chapter;
+use App\Models\Story;
+use App\Models\TimelineQuestion;
 use Illuminate\Contracts\Database\Query\Builder;
+use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
+/**
+ * TODO: Rewrite this whole shit if lags out.
+ */
 class ChaptersRequest extends FormRequest
 {
-    public function chapters(Builder|string $builder = Chapter::class): QueryBuilder
+    protected function builder(Builder $builder): QueryBuilder
     {
-        return QueryBuilder::for($builder)
+        return QueryBuilder::for($builder, $this)
             ->allowedFilters([
                 AllowedFilter::exact('timeline_id'),
-                AllowedFilter::exact('status'),
+                AllowedFilter::callback('status', function (EloquentBuilder $query, $value) {
+                    if ($query->getModel() instanceof Chapter) {
+                        $query->where('status', $value);
+                    }
+
+                    // Crutch to remove questions from draft/published statuses
+                    if ($query->getModel() instanceof TimelineQuestion) {
+                        match ($value) {
+                            'draft', 'published' => $query->whereNull('timeline_questions.id'),
+                            default => $query,
+                        };
+                    }
+                }),
             ]);
+    }
+
+    public function chaptersQuestions(Story &$story)
+    {
+        return $this->builder($story->chapters()
+            ->select([
+                'chapters.id',
+                'chapters.timeline_id',
+                'title',
+                'status',
+                'timeline_question_id',
+                DB::raw("'chapter' as type"),
+                'chapters.created_at',
+            ])->union(
+                $this->builder($story->storyType->questions()
+                    ->select([
+                        'timeline_questions.id',
+                        'timeline_questions.timeline_id',
+                        DB::raw('question as title'),
+                        DB::raw("'undone' as status"),
+                        DB::raw('null as timeline_question_id'),
+                        DB::raw("'question' as type"),
+                        'timeline_questions.created_at',
+                    ])
+                    ->whereNotIn('id', $story
+                        ->chapters()
+                        ->whereNotNull('timeline_question_id')
+                        ->distinct()
+                        ->pluck('timeline_question_id')
+                    )
+            ))->with(['cover', 'question'])->orderBy('created_at', 'desc')
+        );
     }
 }
