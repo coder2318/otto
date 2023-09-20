@@ -1,11 +1,15 @@
 <script lang="ts">
-    import cover from '@/assets/img/default-cover.jpg'
+    import { toBlob } from 'html-to-image'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
     export let pages: number = 32
 
-    let svg: SVGElement
+    let svg: HTMLElement | SVGElement
+
+    $: cover =
+        template.cover ??
+        import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
     $: sizes = getSize(pages)
     $: updateSvg(parameters)
 
@@ -31,34 +35,10 @@
         })
     }
 
-    export function getFile() {
-        return new Promise<Blob>((resolve) => {
-            const svgData =
-                `<?xml version="1.0" standalone="no"?>\r\n` +
-                new XMLSerializer().serializeToString(svg)
-            const blob = new Blob([svgData], { type: 'image/svg+xml' })
-            const image = new Image()
-
-            image.width = sizes.totalWidth
-            image.height = sizes.totalHeight
-            image.src = URL.createObjectURL(blob)
-
-            image.onload = () => {
-                const canvas = document.createElement('canvas')
-                canvas.width = image.width
-                canvas.height = image.height
-                const ctx = canvas.getContext('2d')
-                ctx.drawImage(image, 0, 0)
-                URL.revokeObjectURL(image.src)
-
-                canvas.toBlob(
-                    (blob) => {
-                        resolve(blob)
-                    },
-                    'image/jpg',
-                    80
-                )
-            }
+    export async function getFile() {
+        return await toBlob(svg as HTMLElement, {
+            canvasHeight: sizes.totalHeight,
+            canvasWidth: sizes.totalWidth,
         })
     }
 

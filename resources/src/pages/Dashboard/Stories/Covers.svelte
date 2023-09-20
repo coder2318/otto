@@ -32,7 +32,7 @@
     {#each covers.data as cover (cover.id)}
         <a
             class="card card-bordered border-neutral bg-neutral transition-transform hover:scale-105"
-            href="/stories/{story.data.id}/edit?cover={cover.id}"
+            href="/stories/{story.data.id}/cover?template={cover.id}"
             use:inertia
             out:blur={{ duration: 250 }}
             in:blur={{ delay: 250, duration: 250 }}

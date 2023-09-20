@@ -1,0 +1,84 @@
+name: Legend
+
+fields:
+  # Background Cover
+  ## Cover should be included at every template otherwise it will not be editable from editor
+  ## Fields should be present in the template in a format
+  ## `data-[key]="[attribute to be set]"`
+  - name: Cover Background
+    key: background
+    type: image
+
+  - name: Author
+    key: author
+    type: text
+
+  - name: Title
+    key: title
+    type: text
+
+  - name: Spine
+    key: spine
+    type: text
+
+  - name: Text Color
+    key: textColor
+    type: color
+
+# Template parameters (back, spine, front)
+## Template parameters are 3 components of SVG elements representing book spine, back and front.
+## Any valid SVG works
+## You can access CSS variable `var(--spine-width)` to adjust styles based on spine width
+## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
+back: ''
+
+spine: |
+  <style>
+    @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
+  </style>
+  <rect x="0" y="0" width="100%" height="100%" fill="white" />
+  <text
+      x="50%"
+      y="50%"
+      width="100%"
+      text-anchor="middle"
+      dominant-baseline="middle"
+      height="100%"
+      font-family="Corbel"
+      style="transform-origin:center;transform:rotate(-90deg);"
+      font-size="calc(var(--spine-width) * 0.666)"
+      data-spine="innerText"
+  ></text>
+
+front: |
+  <style>
+    @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
+    @import url('https://fonts.cdnfonts.com/css/lunchtype22');
+  </style>
+  <text
+    x="50%" y="75"
+    font-size="3rem"
+    text-anchor="middle"
+    font-family="Corbel"
+    text-shadow="#FC0 1px 0 10px"
+    data-author="innerText"
+    data-text-color="fill"
+    letter-spacing="0.1em"
+    fill="black"
+    style="text-transform:uppercase"
+  >Author</text>
+  <g transform="translate(0 -50)">
+    <text
+      x="50%" y="100%"
+      font-size="5rem"
+      text-anchor="middle"
+      data-title="innerText"
+      data-text-color="fill"
+      text-shadow="#FC0 1px 0 10px"
+      font-family="Lunchtype22"
+      font-weight="bold"
+      letter-spacing="0.1em"
+      fill="black"
+      style="text-transform:uppercase"
+    >Title</text>
+  </g>

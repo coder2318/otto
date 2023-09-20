@@ -63,10 +63,16 @@
     }
 
     async function submit() {
-        const file = new File([await builder.getFile()], 'cover.jpg')
+        const file = new File([await builder.getFile()], 'cover.png', {
+            type: 'image/png',
+        })
         router.post(
             `/stories/${story.data.id}`,
-            { cover: file, _method: 'PUT', redirect: 'stories.order' },
+            {
+                cover: file,
+                _method: 'PUT',
+                redirect: 'dashboard.stories.order',
+            },
             { forceFormData: true }
         )
     }
@@ -80,7 +86,7 @@
     <Breadcrumbs step={2} {story} />
 </section>
 
-<form on:submit|preventDefault={submit} in:fade>
+<form on:submit|preventDefault={submit} in:fade id="book-cover">
     <section
         class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
     >
@@ -92,10 +98,18 @@
                             <span class="label-text">{field.name}</span>
                         </label>
                         {#if field.type === 'text'}
-                            <input
-                                class="input input-bordered"
+                            <textarea
+                                class="textarea textarea-bordered"
                                 bind:value={parameters[field.key]}
-                                type="text"
+                                name={field.key}
+                                placeholder={field.name}
+                                rows="1"
+                            />
+                        {:else if field.type === 'color'}
+                            <input
+                                class="input input-bordered w-full"
+                                bind:value={parameters[field.key]}
+                                type="color"
                                 name={field.key}
                                 placeholder={field.name}
                             />
@@ -178,7 +192,7 @@
                 class="btn btn-primary"
                 on:click|preventDefault={saveImage}>Confirm</button
             >
-            <button type="submit" class="btn">Close</button>
+            <button type="submit" class="btn" form="book-cover">Close</button>
         </div>
     </form>
 </dialog>
