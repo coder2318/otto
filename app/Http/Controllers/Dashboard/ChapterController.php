@@ -112,8 +112,7 @@ class ChapterController extends Controller
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
             'otto_edit' => $service->chatEdit(
                 $chapter->content,
-                $chapter->question,
-                $request->user()?->details
+                $chapter->title,
             ),
         ]);
     }
@@ -210,7 +209,9 @@ class ChapterController extends Controller
         }
 
         if ($redirect = $request->validated('redirect')) {
-            return redirect()->route($redirect, compact('chapter'));
+            $story = $chapter->story;
+
+            return redirect()->route($redirect, compact('chapter', 'story'))->with('message', 'Chapter updated successfully!');
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');

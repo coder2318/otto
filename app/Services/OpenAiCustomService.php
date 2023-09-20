@@ -2,14 +2,12 @@
 
 namespace App\Services;
 
-use App\Data\User\Details;
-use App\Models\TimelineQuestion;
 use Illuminate\Support\Facades\Http;
 use Soundasleep\Html2Text;
 
 class OpenAiCustomService extends OpenAIService
 {
-    public function chatEdit(string $input, ?TimelineQuestion $question, ?Details $details): string
+    public function chatEdit(string $input, string $question): string
     {
         if ($this->fake) {
             return $input;

@@ -163,6 +163,7 @@
                     type="submit"
                     class="btn btn-secondary rounded-full"
                     data-status="draft"
+                    data-redirect="dashboard.stories.chapters.index"
                 >
                     Save & Next
                 </button>

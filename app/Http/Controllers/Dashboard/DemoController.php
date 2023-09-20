@@ -188,8 +188,7 @@ class DemoController extends Controller
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
             'otto_edit' => $service->chatEdit(
                 $chapter->content,
-                $chapter->question,
-                $request->user()?->details
+                $chapter->title,
             ),
         ]);
     }
