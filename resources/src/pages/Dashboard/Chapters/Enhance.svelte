@@ -164,7 +164,7 @@
                     class="btn btn-secondary rounded-full"
                     data-status="draft"
                 >
-                    Save it as Draft
+                    Save & Next
                 </button>
                 <button
                     type="submit"

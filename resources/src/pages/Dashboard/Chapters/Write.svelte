@@ -9,11 +9,10 @@
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft, faFile } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'
-    import { onMount } from 'svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -21,10 +20,14 @@
     let editor: Editor
 
     const form = useForm({
-        content: chapter.data.content,
+        content: chapter.data.content ?? '',
         title: chapter.data.title,
         status: chapter.data.status,
     })
+
+    $form.content += transcriptions
+        ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n')
+        : ''
 
     $: words =
         $form.content
@@ -32,6 +35,7 @@
             .replace(/&nbsp;/gi, ' ')
             .trim()
             .split(/\s+/).length ?? 0
+    $: pages = Math.ceil(words / 500)
 
     function submit(event: SubmitEvent) {
         $form
@@ -41,24 +45,6 @@
             }))
             .put(`/chapters/${chapter.data.id}`)
     }
-
-    function pasteTranscription(transcription: string) {
-        editor.commands.insertContent(
-            transcription
-                .trim()
-                .split(/[\n]{2,}/g)
-                .map((p) => `<p>${p.trim().replaceAll('\n', '<br />')}</p>`)
-                .join('')
-        )
-    }
-
-    onMount(() => {
-        if (!$form.content) {
-            $form.content = transcriptions
-                ? Object.values(transcriptions).join('\n')
-                : ''
-        }
-    })
 </script>
 
 <svelte:head>
@@ -76,37 +62,21 @@
     </div>
 </section>
 <form on:submit|preventDefault={submit} in:fade>
-    {#if transcriptions}
-        <div class="container mx-auto">
-            <div
-                class="tooltip tooltip-info"
-                data-tip="Click on filename to paste it's transcription to the editor"
-            >
-                <ul
-                    class="container menu rounded-box menu-horizontal mx-auto w-full bg-info"
-                >
-                    {#each Object.entries(transcriptions ?? {}) as [file, transcription] (file)}
-                        <li>
-                            <button
-                                type="button"
-                                on:click|preventDefault={() =>
-                                    pasteTranscription(transcription)}
-                            >
-                                <Fa icon={faFile} />
-                                {file}
-                            </button>
-                        </li>
-                    {/each}
-                </ul>
-            </div>
-        </div>
-    {/if}
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
-            <div class="alert alert-success flex items-center rounded-b-none">
+            <div
+                class="alert alert-success sticky top-12 z-20 flex flex-wrap items-center rounded-b-none"
+            >
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>
-                <span>{Math.round(words / 500)} pages</span>
+                <span class="flex-1">{pages} pages</span>
+
+                {#if transcriptions}
+                    <span class="italic">
+                        Please check transcription for any possible errors
+                        before continue.
+                    </span>
+                {/if}
             </div>
             <TipTap
                 class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
@@ -114,6 +84,11 @@
                 bind:content={$form.content}
                 placeholder="Write your story here..."
             />
+            {#if $form.errors.content}
+                <span class="label-text-alt mt-1 text-left text-error">
+                    {$form.errors.content}
+                </span>
+            {/if}
         </div>
     </main>
 
@@ -134,7 +109,7 @@
                 class="btn btn-secondary rounded-full"
                 data-status="draft"
             >
-                Save it as Draft
+                Save & Next
             </button>
         {:else}
             <div class="flex gap-4">

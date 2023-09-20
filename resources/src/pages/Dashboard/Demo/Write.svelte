@@ -20,12 +20,14 @@
     let editor: Editor
 
     const form = useForm({
-        content: chapter.data.content,
+        content: chapter.data.content ?? '',
         title: chapter.data.title,
         status: chapter.data.status,
     })
 
-    $form.content = Object.values(transcriptions ?? {}).join('\n')
+    $form.content += transcriptions
+        ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n')
+        : ''
 
     $: words =
         $form.content
@@ -121,7 +123,7 @@
                 class="btn btn-secondary rounded-full lg:btn-lg"
                 data-status="draft"
             >
-                Save it as Draft
+                Save & Next
             </button>
         {:else}
             <div class="flex gap-4">
