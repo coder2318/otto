@@ -11,8 +11,6 @@
 
     export let story_types: { data: App.StoryType[] }
 
-    $: console.log(story_types)
-
     const form = useForm({
         title: '',
         cover: '',

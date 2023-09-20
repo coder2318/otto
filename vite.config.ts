@@ -20,7 +20,7 @@ export default ({ mode }) => {
             }),
             svelte({
                 extensions: [".svelte", ".svx", ".md"],
-                hot: process.env.APP_ENV !== 'production',
+                hot: mode !== 'production',
                 preprocess: [
                     sveltePreprocess({
                         typescript: true,

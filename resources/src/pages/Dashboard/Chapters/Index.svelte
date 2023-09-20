@@ -5,7 +5,6 @@
 </script>
 
 <script lang="ts">
-    import Fa from 'svelte-fa'
     import qs from 'qs'
     import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
@@ -13,7 +12,6 @@
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
     import { truncate } from '@/service/helpers'
-    import { faPlus } from '@fortawesome/free-solid-svg-icons'
     import customChapter from '@/assets/img/custom-chapter.jpg'
 
     export let questions_chapters: {

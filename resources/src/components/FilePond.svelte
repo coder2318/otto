@@ -26,7 +26,7 @@
 
     let element: HTMLInputElement
 
-    export let instance: FilePondType
+    export let instance: FilePondType = undefined
 
     onMount(() => supported() && (instance = create(element, { ...$$props })))
 

@@ -2,8 +2,6 @@
 
 namespace App\Providers;
 
-use App\Services\OpenAiCustomService;
-use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
