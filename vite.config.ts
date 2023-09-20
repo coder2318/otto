@@ -103,6 +103,8 @@ export default ({ mode }) => {
         },
         build: {
             chunkSizeWarningLimit: 1024,
+            minify: false,
+            sourcemap: false,
         },
     });
 }
