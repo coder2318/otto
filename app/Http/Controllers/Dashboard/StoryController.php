@@ -149,7 +149,7 @@ class StoryController extends Controller
                 ->groupBy('timeline_id')
                 ->map(fn ($chapters) => ChapterResource::collection($chapters)),
             'timelines' => fn () => TimelineResource::collection(
-                Timeline::all(['id', 'title'])
+                $story->storyType->timelines()->get(['id', 'title'])
             ),
         ]);
     }
