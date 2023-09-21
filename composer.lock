@@ -62,16 +62,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.281.10",
+            "version": "3.281.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "049604298f769fa218549d8ff5cac1981f0a349a"
+                "reference": "9d466efae67d5016ed132fd4ffa1566a7d4cab98"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/049604298f769fa218549d8ff5cac1981f0a349a",
-                "reference": "049604298f769fa218549d8ff5cac1981f0a349a",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/9d466efae67d5016ed132fd4ffa1566a7d4cab98",
+                "reference": "9d466efae67d5016ed132fd4ffa1566a7d4cab98",
                 "shasum": ""
             },
             "require": {
@@ -151,9 +151,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.281.10"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.281.11"
             },
-            "time": "2023-09-19T18:33:42+00:00"
+            "time": "2023-09-20T19:16:24+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -1918,16 +1918,16 @@
         },
         {
             "name": "laravel/horizon",
-            "version": "v5.21.0",
+            "version": "v5.21.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/horizon.git",
-                "reference": "3a1474a398c90d1bf7bc07eff25ef912143452dd"
+                "reference": "ded3632dca7fd66618d5b712b4a0c6c1c77ecb3f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/horizon/zipball/3a1474a398c90d1bf7bc07eff25ef912143452dd",
-                "reference": "3a1474a398c90d1bf7bc07eff25ef912143452dd",
+                "url": "https://api.github.com/repos/laravel/horizon/zipball/ded3632dca7fd66618d5b712b4a0c6c1c77ecb3f",
+                "reference": "ded3632dca7fd66618d5b712b4a0c6c1c77ecb3f",
                 "shasum": ""
             },
             "require": {
@@ -1990,9 +1990,9 @@
             ],
             "support": {
                 "issues": "https://github.com/laravel/horizon/issues",
-                "source": "https://github.com/laravel/horizon/tree/v5.21.0"
+                "source": "https://github.com/laravel/horizon/tree/v5.21.1"
             },
-            "time": "2023-09-18T16:00:51+00:00"
+            "time": "2023-09-19T22:42:19+00:00"
         },
         {
             "name": "laravel/pennant",
