@@ -14,16 +14,22 @@
 
 <main class="antialiased">
     <div
-        class="items-top relative flex min-h-screen justify-center sm:items-center sm:pt-0"
+        class="flex h-screen w-full items-center justify-center bg-base-100 px-16 md:px-0"
     >
-        <div class="mx-auto max-w-xl sm:px-6 lg:px-8">
-            <div class="flex items-center pt-8 sm:justify-start sm:pt-0">
-                <div class="border-r-2 border-base-content px-4 text-lg">
+        <div
+            class="card min-w-[400px] bg-neutral text-neutral-content shadow-2xl"
+        >
+            <div class="card-body items-center">
+                <p
+                    class="font-sans text-6xl font-bold tracking-wider text-primary md:text-7xl lg:text-9xl"
+                >
                     {status}
-                </div>
-                <div class="ml-4 text-lg uppercase tracking-wider">
+                </p>
+                <p
+                    class="font-serif text-2xl italic text-primary md:text-3xl lg:text-5xl"
+                >
                     {error}
-                </div>
+                </p>
             </div>
         </div>
     </div>
