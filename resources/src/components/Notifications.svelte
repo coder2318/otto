@@ -1,6 +1,6 @@
 <script lang="ts" context="module">
     import { onMount } from 'svelte'
-    import { readable, writable } from 'svelte/store'
+    import { writable } from 'svelte/store'
 
     export const opened = writable(false)
 
