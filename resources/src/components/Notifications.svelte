@@ -10,11 +10,18 @@
 <script lang="ts">
     import { fly } from 'svelte/transition'
     import { page, inertia, router } from '@inertiajs/svelte'
-    import { echo } from '@/service/echo'
     import { dayjs } from '@/service/dayjs'
     import sound from '@/assets/sounds/notification.mp3'
     import Fa from 'svelte-fa'
     import { faClose } from '@fortawesome/free-solid-svg-icons'
+
+    let echo = null
+
+    if (!import.meta.env.SSR) {
+        import('@/service/echo').then((Echo) => {
+            echo = Echo.echo
+        })
+    }
 
     const notifications = writable([])
 
@@ -25,7 +32,7 @@
 
         $notifications = [...(user?.unreadNotifications ?? [])]
 
-        echo.private(`App.Models.User.${user?.id}`).notification(
+        echo?.private(`App.Models.User.${user?.id}`).notification(
             (notification) => {
                 $notifications = [notification, ...$notifications]
                 const audio = new Audio(sound)

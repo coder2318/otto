@@ -73,7 +73,7 @@ class OpenAIService
 
                 $messages[] = [
                     'role' => 'user',
-                    'content' => $segment,
+                    'content' => Html2Text::convert($segment),
                 ];
 
                 $chat = OpenAI::chat()->create([
@@ -82,14 +82,14 @@ class OpenAIService
                     'temperature' => 0.5,
                 ]);
 
-                $result .= $chat['choices'][0]['message']['content'];
+                $result .= ' '.$chat['choices'][0]['message']['content'];
             }
 
             return $result;
         });
     }
 
-    public static function segmentate(string $input, int $maxWords = 700)
+    public static function segmentate(string $input, int $maxWords = 1300)
     {
         $currentLength = 0;
         $result = '';

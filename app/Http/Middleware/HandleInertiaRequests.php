@@ -40,7 +40,6 @@ class HandleInertiaRequests extends Middleware
         }
 
         return array_merge(parent::share($request), [
-            'csrf_token' => fn () => csrf_token(),
             'auth.user' => fn () => ($user = $request->user())
                 ? UserResource::make($user->load('avatar'))
                 : null,

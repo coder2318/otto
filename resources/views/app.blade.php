@@ -13,8 +13,8 @@
         <meta name="msapplication-TileColor" content="#F1EDE7">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        @vite('resources/src/app.ts')
         @inertiaHead
+        @vite('resources/src/app.ts')
     </head>
     <body>
         @inertia

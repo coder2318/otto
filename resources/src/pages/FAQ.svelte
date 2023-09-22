@@ -44,7 +44,7 @@
 
 <main class="container mx-auto mb-20 flex flex-col gap-8 px-4">
     {#each questions as { question, answer }}
-        <div class="collapse-arrow group collapse rounded-xl shadow">
+        <div class="group collapse collapse-arrow rounded-xl shadow">
             <input type="radio" name="faq-accordion" class="peer" />
 
             <div
