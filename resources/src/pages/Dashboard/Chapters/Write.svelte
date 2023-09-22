@@ -11,7 +11,6 @@
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
-    import { start, done } from '@/components/Loading.svelte'
     import type { Editor } from '@tiptap/core'
 
     export let transcriptions: App.TranscriptionsData | null = null

@@ -105,8 +105,8 @@ class ChapterController extends Controller
 
     public function process(Chapter $chapter)
     {
-        if ($chapter->processing) {
-            return redirect()->back()->with('status', 'Chapter is being processed already!');
+        if ($chapter->processing || (bool) $chapter->edit) {
+            return redirect()->back()->with('error', 'Chapter already processing!');
         }
 
         $chapter->update(['processing' => true]);
