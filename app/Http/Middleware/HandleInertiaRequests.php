@@ -35,7 +35,7 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        if ($request->header('X-Inertia', false) == false) {
+        if (!$request->header('X-Inertia')) {
             $request->user()->load('unreadNotifications');
         }
 

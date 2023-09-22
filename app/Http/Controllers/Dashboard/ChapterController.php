@@ -19,8 +19,6 @@ use App\Models\Story;
 use App\Models\Timeline;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
-use App\Services\OpenAIService;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;

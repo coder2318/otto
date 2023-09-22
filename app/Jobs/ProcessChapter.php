@@ -12,7 +12,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 
-class ProcessChapter implements ShouldQueue, ShouldBeUnique
+class ProcessChapter implements ShouldBeUnique, ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
@@ -23,7 +23,7 @@ class ProcessChapter implements ShouldQueue, ShouldBeUnique
 
     public function uniqueId(): string
     {
-        return $this->chapter->id;
+        return Chapter::class . '.' . $this->chapter->id;
     }
 
     public function handle(OpenAIService $service): void
