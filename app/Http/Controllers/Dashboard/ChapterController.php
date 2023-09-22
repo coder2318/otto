@@ -143,7 +143,7 @@ class ChapterController extends Controller
                 'status' => Status::DRAFT,
             ]);
 
-            if ($cover = $question->cover) {
+            if ($cover = $question?->cover) {
                 /** @var Media $cover */
                 $cover->copy($chapter, 'cover');
             }

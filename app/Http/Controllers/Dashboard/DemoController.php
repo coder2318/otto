@@ -46,7 +46,7 @@ class DemoController extends Controller
             'timeline_id' => $question?->timeline_id,
         ]);
 
-        if ($cover = $question->cover) {
+        if ($cover = $question?->cover) {
             /** @var Media $cover */
             $cover->copy($this->chapter, 'cover');
         }
