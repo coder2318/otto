@@ -11,6 +11,7 @@
         <meta name="msapplication-TileImage" content="{{ asset('build/assets/logo.svg') }}">
         <meta name="apple-touch-icon" content="{{ asset('build/assets/logo.svg') }}">
         <meta name="msapplication-TileColor" content="#F1EDE7">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
 
         @vite('resources/src/app.ts')
         @inertiaHead

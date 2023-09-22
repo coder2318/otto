@@ -4,6 +4,7 @@ use App\Features\BetaAccess;
 use App\Http\Controllers\Dashboard\BookController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
+use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\QuickstartController;
 use App\Http\Controllers\Dashboard\SettingsController;
@@ -37,6 +38,11 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/u/{user}', 'show')->name('show');
         Route::get('/profile', 'edit')->name('edit');
         Route::match(['put', 'patch'], '/profile', 'update')->name('update');
+    });
+
+    // Notifications
+    Route::controller(NotificationController::class)->prefix('/notifications')->middleware('auth')->name('notifications.')->group(function () {
+        Route::post('/read/{notification?}', 'read')->name('read');
     });
 
     // Books

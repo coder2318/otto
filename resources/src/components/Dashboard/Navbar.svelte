@@ -5,6 +5,7 @@
     import User from '../SVG/user.svg.svelte'
     import Fa from 'svelte-fa'
     import { faSearch, faBell, faCog } from '@fortawesome/free-solid-svg-icons'
+    import { opened, count } from '../Notifications.svelte'
 
     $: user = $page.props?.auth?.user?.data as App.User | null
 </script>
@@ -28,11 +29,25 @@
                 class="search input input-ghost rounded-full border-neutral pl-10"
             />
         </div>
-        <button
-            class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
-        >
-            <Fa icon={faBell} class="h-full" />
-        </button>
+        <div class="indicator">
+            {#if $count}
+                <span
+                    class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0"
+                >
+                    <span
+                        class="absolute inset-0 animate-ping rounded-full bg-accent"
+                    />
+                    {$count}
+                </span>
+            {/if}
+            <button
+                type="button"
+                class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
+                on:click|preventDefault={() => ($opened = !$opened)}
+            >
+                <Fa icon={faBell} class="h-full" />
+            </button>
+        </div>
         <a
             class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
             href="/settings"

@@ -21,6 +21,7 @@ class UserResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'avatar' => $this->whenLoaded('avatar', fn () => $this->resource->avatar->getUrl()),
+            'unreadNotifications' => $this->whenLoaded('unreadNotifications', fn () => $this->resource->unreadNotifications),
         ]);
     }
 }

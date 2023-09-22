@@ -105,8 +105,12 @@ class ChapterController extends Controller
 
     public function process(Chapter $chapter)
     {
-        if ($chapter->processing || (bool) $chapter->edit) {
+        if ($chapter->processing) {
             return redirect()->back()->with('error', 'Chapter already processing!');
+        }
+
+        if ($chapter->edit) {
+            return redirect()->route('dashboard.chapters.enhance', compact('chapter'));
         }
 
         $chapter->update(['processing' => true]);
@@ -118,6 +122,10 @@ class ChapterController extends Controller
 
     public function enhance(Chapter $chapter)
     {
+        if (! $chapter->edit) {
+            return redirect()->route('dashboard.chapters.write', compact('chapter'))->with('message', 'Chapter have no pending enhancement!');
+        }
+
         return Inertia::render('Dashboard/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
         ]);

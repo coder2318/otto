@@ -33,6 +33,9 @@ class ChapterEditReadyNotification extends Notification implements ShouldQueue
 
     public function toBroadcast(object $notifiable): BroadcastMessage
     {
-        return new BroadcastMessage($this->toArray($notifiable));
+        return new BroadcastMessage([
+            'data' => $this->toArray($notifiable),
+            'created_at' => now(),
+        ]);
     }
 }

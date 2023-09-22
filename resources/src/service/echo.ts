@@ -12,20 +12,7 @@ const config: Options | any = {
     encrypted: true,
     disableStats: true,
     enabledTransports: ['ws', 'wss'],
-    // authorizer: (channel) => ({
-    //     authorize: (socketId, callback) => {
-    //         axios.post('/broadcasting/auth', {
-    //             socket_id: socketId,
-    //             channel_name: channel.name
-    //         })
-    //             .then((response) => {
-    //                 callback(false, response.data)
-    //             })
-    //             .catch((error) => {
-    //                 callback(true, error)
-    //             })
-    //     },
-    // }),
+    authEndpoint: '/broadcasting/auth',
 }
 
 export const pusher = new Pusher(config.key, config)
