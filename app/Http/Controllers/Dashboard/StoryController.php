@@ -21,7 +21,6 @@ use App\Http\Resources\TimelineResource;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
-use App\Models\Timeline;
 use App\Models\User;
 use App\Services\LuluService;
 use Barryvdh\DomPDF\Facade\Pdf;
