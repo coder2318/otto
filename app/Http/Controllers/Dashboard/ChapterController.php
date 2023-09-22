@@ -13,6 +13,7 @@ use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
+use App\Jobs\ProcessChapter;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
@@ -102,18 +103,23 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function enhance(Chapter $chapter, Request $request, OpenAIService $service)
+    public function process(Chapter $chapter)
     {
-        if (! $chapter->content) {
-            return redirect()->back()->with('status', 'Chapter content is empty!');
+        if ($chapter->processing) {
+            return redirect()->back()->with('status', 'Chapter is being processed already!');
         }
 
+        $chapter->update(['processing' => true]);
+
+        dispatch(new ProcessChapter($chapter))->onQueue('enhance');
+
+        return redirect()->back()->with('message', 'We are processing your chapter! We will notify you when it is done.');
+    }
+
+    public function enhance(Chapter $chapter)
+    {
         return Inertia::render('Dashboard/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
-            'otto_edit' => $service->chatEdit(
-                $chapter->content,
-                $chapter->title,
-            ),
         ]);
     }
 
@@ -143,7 +149,7 @@ class ChapterController extends Controller
                 'status' => Status::DRAFT,
             ]);
 
-            if ($cover = $question?->cover) {
+            if ($cover = $question->cover) {
                 /** @var Media $cover */
                 $cover->copy($chapter, 'cover');
             }

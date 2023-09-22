@@ -88,6 +88,7 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/files', 'transcribe')->name('attachments.transcribe');
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
+            Route::post('/enhance', 'process')->name('enhance.post');
             Route::get('/finish', 'finish')->name('finish');
         });
     });

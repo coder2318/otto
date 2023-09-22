@@ -14,14 +14,13 @@
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'
 
-    export let otto_edit: string = ''
     export let chapter: { data: App.Chapter }
 
     let editor: Editor
 
     const form = useForm({
         original: chapter.data.content,
-        enhanced: otto_edit,
+        enhanced: chapter.data.edit,
         use: null,
         status: chapter.data.status,
     })
@@ -43,6 +42,7 @@
         $form
             .transform((data) => ({
                 content: data[data.use],
+                edit: null,
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))

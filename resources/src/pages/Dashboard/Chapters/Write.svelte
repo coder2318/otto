@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { inertia, useForm, router } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -36,6 +36,10 @@
             .trim()
             .split(/\s+/).length ?? 0
     $: pages = Math.ceil(words / 500)
+
+    function enhance() {
+        router.post(`/chapters/${chapter.data.id}/enhance`)
+    }
 
     function submit(event: SubmitEvent) {
         $form
@@ -121,17 +125,13 @@
                     Complete &<br /> Finish this Chapter
                 </a>
 
-                <a
-                    use:inertia={{
-                        onStart: start,
-                        onFinish: done,
-                        hideProgress: true,
-                    }}
+                <button
                     class="btn btn-primary rounded-full"
-                    href="/chapters/{chapter.data.id}/enhance"
+                    type="button"
+                    on:click|preventDefault={enhance}
                 >
                     Ask Otto AI to<br />enhance the Writing
-                </a>
+                </button>
             </div>
         {/if}
     </section>

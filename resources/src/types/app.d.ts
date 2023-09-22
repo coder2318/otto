@@ -78,7 +78,8 @@ declare namespace App {
     interface Chapter {
         id: number
         title: string
-        content: string
+        content: string | null
+        edit: string | null
         order: number
         cover: string | null
         attachments: Attachment[] | null
