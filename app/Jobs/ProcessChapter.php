@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Models\Chapter;
+use App\Notifications\ChapterEditErrorNotification;
 use App\Notifications\ChapterEditReadyNotification;
 use App\Services\OpenAIService;
 use Illuminate\Bus\Queueable;
@@ -11,6 +12,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Throwable;
 
 class ProcessChapter implements ShouldBeUnique, ShouldQueue
 {
@@ -40,5 +42,14 @@ class ProcessChapter implements ShouldBeUnique, ShouldQueue
         $this->chapter->save();
 
         $this->chapter->story->user->notify(new ChapterEditReadyNotification($this->chapter));
+    }
+
+    public function failed(Throwable $exception): void
+    {
+        $this->chapter->processing = false;
+
+        $this->chapter->save();
+
+        $this->chapter->story->user->notify(new ChapterEditErrorNotification($this->chapter));
     }
 }
