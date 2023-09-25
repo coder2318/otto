@@ -13,6 +13,7 @@
     import { dayjs } from '@/service/dayjs'
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
+    import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -21,6 +22,8 @@
     }
     export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
+
+    let modal: InviteGuestModal
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -179,6 +182,17 @@
                     <h2 class="card-title text-2xl font-normal">
                         {chapter.title}
                     </h2>
+                    {#if chapter.type === 'question'}
+                        <div class="card-actions">
+                            <button
+                                class="btn btn-secondary btn-sm"
+                                on:click|preventDefault={() =>
+                                    modal.invite(chapter)}
+                            >
+                                Invite Guest
+                            </button>
+                        </div>
+                    {/if}
                     <p />
                     <div class="card-actions justify-between">
                         <div>
@@ -200,3 +214,5 @@
         meta={questions_chapters.meta}
     />
 </main>
+
+<InviteGuestModal story_id={story.data.id} bind:this={modal} />

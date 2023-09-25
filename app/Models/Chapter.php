@@ -25,6 +25,7 @@ class Chapter extends Model implements HasMedia
         'story_id',
         'timeline_id',
         'timeline_question_id',
+        'guest_id',
     ];
 
     protected $casts = [

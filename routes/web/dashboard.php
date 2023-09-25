@@ -4,6 +4,7 @@ use App\Features\BetaAccess;
 use App\Http\Controllers\Dashboard\BookController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
+use App\Http\Controllers\Dashboard\GuestChaptersController;
 use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\QuickstartController;
@@ -97,5 +98,8 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/enhance', 'process')->name('enhance.post');
             Route::get('/finish', 'finish')->name('finish');
         });
+
+        // Guest features
+        Route::post('/stories/{story}/questions/{question}/invite', [GuestChaptersController::class, 'invite'])->name('guest.chapters.invite');
     });
 });
