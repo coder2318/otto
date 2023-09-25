@@ -65,11 +65,12 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
+<section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
     <div class="card-body gap-4">
-        <input
-            class="input card-title input-ghost font-serif"
+        <textarea
+            class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
             bind:value={$form.title}
+            rows="1"
         />
     </div>
 </section>

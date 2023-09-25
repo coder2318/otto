@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { page } from '@inertiajs/svelte'
+    import { page, inertia } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Stamp from '@/components/SVG/stamp.svg.svelte'
     import { dayjs } from '@/service/dayjs'
@@ -70,20 +70,30 @@
     </div>
 </section>
 
-<section class="container mx-auto my-8">
-    <div class="card items-stretch gap-4">
-        <h2 class="card-title text-4xl font-normal italic text-primary">
-            Related Questions
-        </h2>
-        {#each questions.data as question}
-            <div class="card bg-neutral">
-                <div class="card-body flex-row items-center justify-between">
-                    <span class="text-xl">{question.question}</span>
-                    <button class="btn btn-primary rounded-full">
-                        Create Chapter
-                    </button>
+{#if questions?.data?.length}
+    <section class="container mx-auto my-8">
+        <div class="card items-stretch gap-4">
+            <h2 class="card-title text-4xl font-normal italic text-primary">
+                Related Questions
+            </h2>
+            {#each questions.data as question}
+                <div class="card bg-neutral">
+                    <div
+                        class="card-body flex-row items-center justify-between"
+                    >
+                        <span class="text-xl">{question.question}</span>
+                        <a
+                            class="btn btn-primary rounded-full"
+                            use:inertia
+                            href="/stories/{chapter.data
+                                .story_id}/questions/{chapter.data
+                                    .id}/chapters/create"
+                        >
+                            Create Chapter
+                        </a>
+                    </div>
                 </div>
-            </div>
-        {/each}
-    </div>
-</section>
+            {/each}
+        </div>
+    </section>
+{/if}

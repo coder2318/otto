@@ -30,7 +30,9 @@
         >
             <figure><img src={writing} alt="writing room" /></figure>
             <div class="card-body items-center">
-                <h2 class="card-title md:text-2xl">Writing Room</h2>
+                <h2 class="card-title font-normal text-primary md:text-3xl">
+                    Writing <i>Room</i>
+                </h2>
             </div>
         </a>
         <a
@@ -40,7 +42,9 @@
         >
             <figure><img src={editing} alt="editing room" /></figure>
             <div class="card-body items-center">
-                <h2 class="card-title md:text-2xl">Editing Room</h2>
+                <h2 class="card-title font-normal text-primary md:text-3xl">
+                    Editing <i>Room</i>
+                </h2>
             </div>
         </a>
     </div>

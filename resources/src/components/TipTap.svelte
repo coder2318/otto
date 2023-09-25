@@ -18,9 +18,13 @@
             },
             element: element,
             extensions: [StarterKit, Focus],
-            content: content || '',
+            content:
+                content
+                    ?.replace(/\n([ \t]*\n)+/g, '</p><p>')
+                    ?.replace('\n', '<br />') || '',
             onTransaction: () => (editor = editor),
-            onUpdate: ({ editor }) => (content = editor.getHTML()),
+            onUpdate: ({ editor }) =>
+                (content = editor.getText({ blockSeparator: '\n\n' })),
             onCreate: ({ editor }) => {
                 if (autofocus) {
                     editor.chain().focus('end').run()

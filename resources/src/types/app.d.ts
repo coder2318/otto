@@ -86,6 +86,7 @@ declare namespace App {
         status: string
         story_id: number | null
         story?: Story
+        type?: string
         created_at: Date | string
         updated_at: Date | string
     }

@@ -56,11 +56,12 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
+<section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
     <div class="card-body gap-4">
-        <input
-            class="input card-title input-ghost font-serif"
+        <textarea
+            class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
             bind:value={$form.title}
+            rows="1"
         />
     </div>
 </section>
@@ -68,7 +69,7 @@
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
             <div
-                class="alert alert-success sticky top-12 z-20 flex flex-wrap items-center rounded-b-none"
+                class="alert alert-success flex flex-wrap items-center rounded-b-none"
             >
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>

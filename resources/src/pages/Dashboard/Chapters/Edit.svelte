@@ -38,10 +38,11 @@
 <Breadcrumbs step={1} />
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
+    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
         <div class="card-body gap-4">
-            <input
-                class="input card-title input-ghost font-serif text-2xl text-primary"
+            <textarea
+                class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
+                rows="1"
                 bind:value={$form.title}
             />
             <div class="grid grid-cols-1 gap-8 p-4 md:grid-cols-3">
@@ -53,8 +54,12 @@
                     <figure>
                         <img src={record} alt="record" />
                     </figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Record your Answer</h2>
+                    <div class="card-body items-center">
+                        <h2
+                            class="card-title text-2xl font-normal text-primary"
+                        >
+                            Record your Answer
+                        </h2>
                     </div>
                 </a>
                 <a
@@ -65,8 +70,12 @@
                     <figure>
                         <img src={upload} alt="upload" />
                     </figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Upload File</h2>
+                    <div class="card-body items-center">
+                        <h2
+                            class="card-title text-2xl font-normal text-primary"
+                        >
+                            Upload File
+                        </h2>
                     </div>
                 </a>
                 <a
@@ -77,8 +86,12 @@
                     <figure>
                         <img src={write} alt="write" />
                     </figure>
-                    <div class="card-body">
-                        <h2 class="card-title">Type your Story</h2>
+                    <div class="card-body items-center">
+                        <h2
+                            class="card-title text-2xl font-normal text-primary"
+                        >
+                            Type your Story
+                        </h2>
                     </div>
                 </a>
             </div>

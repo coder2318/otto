@@ -15,24 +15,20 @@
     import Fa from 'svelte-fa'
     import { faClose } from '@fortawesome/free-solid-svg-icons'
 
-    let echo = null
-
-    if (!import.meta.env.SSR) {
-        import('@/service/echo').then((Echo) => {
-            echo = Echo.echo
-        })
-    }
-
     const notifications = writable([])
 
     notifications.subscribe((value) => ($count = value.length))
 
-    onMount(() => {
+    onMount(async () => {
         const user = $page?.props?.auth?.user?.data
 
         $notifications = [...(user?.unreadNotifications ?? [])]
 
-        echo?.private(`App.Models.User.${user?.id}`).notification(
+        if (import.meta.env.SSR) return
+
+        const { echo } = await import('@/service/echo')
+
+        echo.private(`App.Models.User.${user?.id}`).notification(
             (notification) => {
                 $notifications = [notification, ...$notifications]
                 const audio = new Audio(sound)
@@ -40,6 +36,10 @@
                 audio.play()
             }
         )
+
+        return () => {
+            echo.leave(`App.Models.User.${user?.id}`)
+        }
     })
 
     function markAsRead(notification = null, close = true) {

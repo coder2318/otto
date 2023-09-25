@@ -15,7 +15,7 @@
     import customChapter from '@/assets/img/custom-chapter.jpg'
 
     export let questions_chapters: {
-        data: (App.TimelineQuestion | App.Chapter)[]
+        data: App.Chapter[]
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
@@ -144,7 +144,7 @@
         class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
         <div
-            class="card min-h-[32rem]"
+            class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
             style="background-image: url({customChapter})"
         >
             <div class="card-body items-center justify-end">
@@ -161,7 +161,7 @@
         </div>
         {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
-                class="card bg-neutral transition-transform hover:scale-105"
+                class="card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
                 href={chapter.type === 'question'
                     ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
                     : `/chapters/${chapter.id}/edit`}
