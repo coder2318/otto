@@ -22,6 +22,10 @@ class Guest extends Authenticatable implements HasMedia
         'details',
     ];
 
+    protected $casts = [
+        'details' => 'array',
+    ];
+
     public function avatar(): MorphOne
     {
         return $this->media()->one()->ofMany(

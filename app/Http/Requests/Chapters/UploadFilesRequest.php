@@ -15,7 +15,7 @@ class UploadFilesRequest extends FormRequest
     {
         return [
             'files' => ['required', 'array'],
-            'files.*' => ['required', 'file', 'mimetypes:audio/*,text/plain,document/*', 'max:2048'],
+            'files.*' => ['required', 'file', 'mimetypes:audio/*,text/plain,document/*', 'max:20480'],
         ];
     }
 }

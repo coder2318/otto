@@ -25,7 +25,7 @@ class GuestChapterInviteNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         $user = $this->chapter->story->user;
-        $name = $user->details->full_name ?? $user->details->first_name . ' ' . $user->details->last_name;
+        $name = $user->details->full_name ?? $user->details->first_name.' '.$user->details->last_name;
 
         return (new MailMessage)
             ->subject('Guest Chapter Invite')
