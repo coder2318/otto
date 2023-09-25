@@ -36,11 +36,11 @@ class HandleInertiaRequests extends Middleware
     public function share(Request $request): array
     {
         if (! $request->header('X-Inertia')) {
-            $request->user()?->load('unreadNotifications');
+            $request->user('web')?->load('unreadNotifications');
         }
 
         return array_merge(parent::share($request), [
-            'auth.user' => fn () => ($user = $request->user())
+            'auth.user' => fn () => ($user = $request->user('web'))
                 ? UserResource::make($user->load('avatar'))
                 : null,
             'auth.guest' => fn () => ($user = $request->user('web-guest'))

@@ -10,10 +10,12 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Znck\Eloquent\Relations\BelongsToThrough;
+use Znck\Eloquent\Traits\BelongsToThrough as HasBelongsToThrough;
 
 class Chapter extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasBelongsToThrough, HasFactory, InteractsWithMedia;
 
     protected $fillable = [
         'title',
@@ -35,6 +37,11 @@ class Chapter extends Model implements HasMedia
     public function story(): BelongsTo
     {
         return $this->belongsTo(Story::class);
+    }
+
+    public function user(): BelongsToThrough
+    {
+        return $this->belongsToThrough(User::class, Story::class);
     }
 
     public function timeline(): BelongsTo

@@ -19,6 +19,7 @@ use App\Models\Story;
 use App\Models\Timeline;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
@@ -30,6 +31,35 @@ class ChapterController extends Controller
         $this->authorizeResource(Chapter::class, 'chapter');
         $this->middleware('can:update,chapter')
             ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enhance', 'finish']);
+
+        $this->middleware(fn (...$args) => $this->preventAccessFromProcessing(...$args))
+            ->only([
+                'write',
+                'attachments',
+                'transcribe',
+                'deleteAttachments',
+                'record',
+                'upload',
+                'process',
+                'finish',
+                'destroy',
+            ]);
+    }
+
+    protected function preventAccessFromProcessing(Request $request, callable $next)
+    {
+        /** @var Chapter */
+        $chapter = $request->route('chapter');
+
+        if ($chapter->edit) {
+            return redirect()->route('dashboard.chapters.enhance', compact('chapter'))->with('message', 'Please review your chapter enhancement first!');
+        }
+
+        if ($chapter->processing) {
+            return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('error', 'Chapter is being processed, please wait!');
+        }
+
+        return $next($request);
     }
 
     public function index(Story $story, ChaptersRequest $request)
@@ -103,19 +133,11 @@ class ChapterController extends Controller
 
     public function process(Chapter $chapter)
     {
-        if ($chapter->processing) {
-            return redirect()->back()->with('error', 'Chapter already processing!');
-        }
-
-        if ($chapter->edit) {
-            return redirect()->route('dashboard.chapters.enhance', compact('chapter'));
-        }
-
         $chapter->update(['processing' => true]);
 
         dispatch(new ProcessChapter($chapter))->onQueue('enhance');
 
-        return redirect()->back()->with('message', 'We are processing your chapter! We will notify you when it is done.');
+        return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'We are processing your chapter! We will notify you when it is done.');
     }
 
     public function enhance(Chapter $chapter)

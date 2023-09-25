@@ -87,6 +87,9 @@ declare namespace App {
         story_id: number | null
         story?: Story
         type?: string
+        guest?: User | null
+        processing: boolean
+        user?: User | null
         created_at: Date | string
         updated_at: Date | string
     }

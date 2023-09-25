@@ -28,6 +28,7 @@ class ChapterEditReadyNotification extends Notification implements ShouldQueue
             'id' => $this->chapter->id,
             'url' => route('dashboard.chapters.enhance', ['chapter' => $this->chapter->id]),
             'title' => 'Your chapter enhancement is ready!',
+            'message' => $this->chapter->title,
         ];
     }
 

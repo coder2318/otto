@@ -4,12 +4,15 @@ namespace App\Http\Controllers\Guests;
 
 use App\Data\Chapter\Status;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
+use App\Models\User;
 use App\Notifications\GuestChapterInviteNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -45,12 +48,35 @@ class ChapterController extends Controller
 
         return redirect()->back()->with('message', 'Guest invited successfully!');
     }
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return Inertia::render('Guests/Chapters/Index');
+        /** @var Guest|User|null */
+        $user = match ($type = $request->query('type', 'sent')) {
+            'sent' => Auth::guard('web')->user(),
+            'received' => Auth::guard('web-guest')->user(),
+            default => abort(404),
+        };
+
+        if (! $user) {
+            $type = $type === 'sent' ? 'received' : 'sent';
+
+            return redirect()->route('guests.chapters.index', compact('type'));
+        }
+
+        return Inertia::render('Guests/Chapters/Index', [
+            'chapters' => fn () => ChapterResource::collection(
+                $user->chapters()
+                    ->whereNotNull('guest_id')
+                    ->with(['guest', 'user'])
+                    ->select(['chapters.id', 'chapters.title', 'chapters.status', 'guest_id', 'story_id'])
+                    ->paginate()
+                    ->appends($request->query())
+            ),
+        ]);
     }
 
     /**

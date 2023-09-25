@@ -39,6 +39,12 @@
 
 <form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
+        {#if chapter.data.processing}
+            <figure class="-mx-4 flex-col gap-2 text-base-content/50">
+                <progress class="progress progress-secondary w-full" />
+                <figcaption>Chapter is being processed</figcaption>
+            </figure>
+        {/if}
         <div class="card-body gap-4">
             <textarea
                 class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"

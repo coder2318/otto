@@ -29,33 +29,33 @@
                 class="search input input-ghost rounded-full border-neutral pl-10"
             />
         </div>
-        <div class="indicator">
-            {#if $count}
-                <span
-                    class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0"
-                >
-                    <span
-                        class="absolute inset-0 animate-ping rounded-full bg-accent"
-                    />
-                    {$count}
-                </span>
-            {/if}
-            <button
-                type="button"
-                class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
-                on:click|preventDefault={() => ($opened = !$opened)}
-            >
-                <Fa icon={faBell} class="h-full" />
-            </button>
-        </div>
-        <a
-            class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
-            href="/settings"
-            use:inertia
-        >
-            <Fa icon={faCog} class="h-full" />
-        </a>
         {#if user}
+            <div class="indicator">
+                {#if $count}
+                    <span
+                        class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0"
+                    >
+                        <span
+                            class="absolute inset-0 animate-ping rounded-full bg-accent"
+                        />
+                        {$count}
+                    </span>
+                {/if}
+                <button
+                    type="button"
+                    class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
+                    on:click|preventDefault={() => ($opened = !$opened)}
+                >
+                    <Fa icon={faBell} class="h-full" />
+                </button>
+            </div>
+            <a
+                class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
+                href="/settings"
+                use:inertia
+            >
+                <Fa icon={faCog} class="h-full" />
+            </a>
             <div class="dropdown-end dropdown leading-none">
                 <label
                     tabindex="-1"

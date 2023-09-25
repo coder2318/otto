@@ -32,10 +32,10 @@ Route::controller(SocialAuthController::class)
     });
 Route::get('/guests/{guest:sqid}/login', GuestAuthController::class)
     ->name('login.guests')
-    ->middleware(['guest:web-guest', 'signed']);
+    ->middleware(['signed']);
 
 // Guests Dashboard
-Route::group(['middleware' => ['auth:web-guest'], 'as' => 'guests.', 'prefix' => 'guests'], function () {
+Route::group(['middleware' => ['auth:web,web-guest'], 'as' => 'guests.', 'prefix' => 'guests'], function () {
     include_once __DIR__.'/web/guests.php';
 });
 
