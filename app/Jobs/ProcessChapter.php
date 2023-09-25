@@ -27,7 +27,7 @@ class ProcessChapter implements ShouldBeUnique, ShouldQueue
 
     public function uniqueId(): string
     {
-        return Chapter::class . '.' . $this->chapter->id;
+        return Chapter::class.'.'.$this->chapter->id;
     }
 
     public function handle(OpenAIService $service): void
