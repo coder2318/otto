@@ -86,8 +86,7 @@
                             class="btn btn-primary rounded-full"
                             use:inertia
                             href="/stories/{chapter.data
-                                .story_id}/questions/{chapter.data
-                                    .id}/chapters/create"
+                                .story_id}/questions/{question.id}/chapters/create"
                         >
                             Create Chapter
                         </a>
