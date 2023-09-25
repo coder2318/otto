@@ -82,6 +82,14 @@
                         <a href="/u/{user.id}" use:inertia>Profile</a>
                     </li>
                     <li>
+                        <a href="/stories" use:inertia> Stories </a>
+                    </li>
+                    <li>
+                        <a href="/guests/chapters" use:inertia>
+                            Guest Chapters
+                        </a>
+                    </li>
+                    <li>
                         <!-- <a href="/profile" use:inertia>Profile</a>
                         <a href="/guest-chapters" use:inertia>Guest Chapters</a> -->
                         <button
