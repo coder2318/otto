@@ -57,7 +57,7 @@
     <section class="flex flex-1 flex-col gap-4 overflow-x-auto">
         <table class="table w-full rounded-lg bg-neutral text-neutral-content">
             <thead>
-                <th>{type === 'sent' ? 'To' : 'From'}</th>
+                <th>{type === 'sent' || !type ? 'To' : 'From'}</th>
                 <th>Email</th>
                 <th>Question</th>
                 <th>Status</th>
@@ -67,14 +67,14 @@
                 {#each chapters.data as chapter (chapter.id + type)}
                     <tr in:fade class="hover whitespace-nowrap">
                         <td
-                            >{type === 'sent'
+                            >{type === 'sent' || !type
                                 ? chapter.guest?.name
                                 : chapter.user?.details.first_name +
                                   ' ' +
                                   chapter.user?.details.last_name}</td
                         >
                         <td
-                            >{type === 'sent'
+                            >{type === 'sent' || !type
                                 ? chapter.guest?.email
                                 : chapter.user?.email}</td
                         >

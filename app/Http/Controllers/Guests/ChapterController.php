@@ -61,10 +61,10 @@ class ChapterController extends Controller
             default => abort(404),
         };
 
-        if (! $user) {
-            $type = $type === 'sent' ? 'received' : 'sent';
-
-            return redirect()->route('guests.chapters.index', compact('type'));
+        if (!$user) {
+            return redirect()->route('guests.chapters.index', [
+                'type' => $type === 'sent' ? 'received' : 'sent'
+            ]);
         }
 
         return Inertia::render('Guests/Chapters/Index', [
