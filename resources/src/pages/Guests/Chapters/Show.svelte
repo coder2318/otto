@@ -6,14 +6,9 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { useForm, inertia } from '@inertiajs/svelte'
-    import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
-    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import User from '@/components/SVG/user.svg.svelte'
 
     export let chapter: { data: App.Chapter }
-    $: console.log(chapter)
 </script>
 
 <svelte:head>
@@ -71,7 +66,11 @@
 
     <section class="container card mx-auto mb-8 flex justify-end bg-neutral">
         <div class="card-body whitespace-pre-wrap">
-            {@html chapter.data.content}
+            {#if chapter.data.content}
+                {@html chapter.data.content}
+            {:else}
+                <p class="text-base-content/40">No content</p>
+            {/if}
         </div>
     </section>
 </main>
