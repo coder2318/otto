@@ -49,6 +49,13 @@ class ChapterController extends Controller
         return redirect()->back()->with('message', 'Guest invited successfully!');
     }
 
+    public function resend(Chapter $chapter)
+    {
+        $chapter->guest->notify(new GuestChapterInviteNotification($chapter));
+
+        return redirect()->back()->with('message', 'Guest reinvited successfully!');
+    }
+
     /**
      * Display a listing of the resource.
      */
@@ -61,9 +68,9 @@ class ChapterController extends Controller
             default => abort(404),
         };
 
-        if (!$user) {
+        if (! $user) {
             return redirect()->route('guests.chapters.index', [
-                'type' => $type === 'sent' ? 'received' : 'sent'
+                'type' => $type === 'sent' ? 'received' : 'sent',
             ]);
         }
 

@@ -15,7 +15,9 @@ class GuestConfigured
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if (! $request->user('web-guest')?->details) {
+        $user = $request->user('web-guest');
+
+        if ($user && ! $user->details) {
             return redirect()->route('guests.setup');
         }
 

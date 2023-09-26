@@ -11,5 +11,6 @@ Route::controller(SetupController::class)->group(function () {
 });
 
 // Chapters
+Route::post('/chapters/{chapter}/resend', [ChapterController::class, 'resend'])->name('chapters.resend');
 Route::resource('chapters', ChapterController::class)
     ->middleware(GuestConfigured::class);

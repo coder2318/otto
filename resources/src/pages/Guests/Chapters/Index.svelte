@@ -6,10 +6,11 @@
 </script>
 
 <script lang="ts">
-    import { inertia, page } from '@inertiajs/svelte'
+    import { inertia, page, router } from '@inertiajs/svelte'
     import { fade } from 'svelte/transition'
 
-    $: type = new URLSearchParams($page.url.split('?')?.[1]).get('type')
+    $: type =
+        new URLSearchParams($page.url.split('?')?.[1]).get('type') ?? 'sent'
     $: user = $page.props?.auth?.user
     $: guest = $page.props?.auth?.guest
 
@@ -22,6 +23,10 @@
     const types = {
         sent: 'Sent Requests',
         received: 'Received Requests',
+    }
+
+    function resend(chapter: App.Chapter) {
+        router.post(`/guests/chapters/${chapter.id}/resend`)
     }
 </script>
 
@@ -42,8 +47,7 @@
                 {#each Object.entries(types) as [key, value]}
                     <a
                         class="tab tab-bordered"
-                        class:tab-active={type === key ||
-                            (!type && key === 'sent')}
+                        class:tab-active={type === key}
                         href="?type={key}"
                         use:inertia
                     >
@@ -67,14 +71,14 @@
                 {#each chapters.data as chapter (chapter.id + type)}
                     <tr in:fade class="hover whitespace-nowrap">
                         <td
-                            >{type === 'sent' || !type
+                            >{type === 'sent'
                                 ? chapter.guest?.name
                                 : chapter.user?.details.first_name +
                                   ' ' +
                                   chapter.user?.details.last_name}</td
                         >
                         <td
-                            >{type === 'sent' || !type
+                            >{type === 'sent'
                                 ? chapter.guest?.email
                                 : chapter.user?.email}</td
                         >
@@ -88,6 +92,13 @@
                             >
                                 Review
                             </a>
+                            {#if type === 'sent'}
+                                <button
+                                    on:click={() => resend(chapter)}
+                                    class="btn btn-primary rounded-full"
+                                    >Resend</button
+                                >
+                            {/if}
                         </td>
                     </tr>
                 {/each}
