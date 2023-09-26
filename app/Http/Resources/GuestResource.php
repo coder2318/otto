@@ -14,6 +14,8 @@ class GuestResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        return array_merge(parent::toArray($request), [
+            'avatar' => $this->whenLoaded('avatar', fn () => $this->resource->avatar->getUrl()),
+        ]);
     }
 }

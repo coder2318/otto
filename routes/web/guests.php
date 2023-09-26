@@ -11,6 +11,14 @@ Route::controller(SetupController::class)->group(function () {
 });
 
 // Chapters
-Route::post('/chapters/{chapter}/resend', [ChapterController::class, 'resend'])->name('chapters.resend');
-Route::resource('chapters', ChapterController::class)
-    ->middleware(GuestConfigured::class);
+Route::resource('chapters', ChapterController::class)->middleware(GuestConfigured::class);
+Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->middleware(GuestConfigured::class)->group(function () {
+    Route::post('/resend', 'resend')->name('resend');
+    Route::get('/write', 'write')->name('write');
+    Route::get('/upload', 'upload')->name('upload');
+    Route::get('/record', 'record')->name('record');
+    Route::get('/files', 'attachments')->name('attachments');
+    Route::post('/files', 'transcribe')->name('attachments.transcribe');
+    Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
+    Route::get('/finish', 'finish')->name('finish');
+});

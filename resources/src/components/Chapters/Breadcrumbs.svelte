@@ -8,10 +8,13 @@
     import Otto from '../SVG/otto.svg.svelte'
 
     export let step: number = 0
+    export let guest: boolean = false
 </script>
 
 <header
-    class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 lg:grid-cols-4"
+    class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 {guest
+        ? 'md:grid-cols-3'
+        : 'lg:grid-cols-4'}"
 >
     <div class="step-breadcrumb" class:inactive={step < 1}>
         <span class="step-icon">
@@ -25,12 +28,14 @@
         </span>
         Tell your story
     </div>
-    <div class="step-breadcrumb" class:inactive={step < 3}>
-        <span class="step-icon">
-            <Otto class="w-4 leading-none" />
-        </span>
-        Colaborate with OTTO
-    </div>
+    {#if !guest}
+        <div class="step-breadcrumb" class:inactive={step < 3}>
+            <span class="step-icon">
+                <Otto class="w-4 leading-none" />
+            </span>
+            Colaborate with OTTO
+        </div>
+    {/if}
     <div class="step-breadcrumb" class:inactive={step < 4}>
         <span class="step-icon">
             <Fa icon={faThumbsUp} />

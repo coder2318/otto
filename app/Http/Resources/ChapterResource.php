@@ -41,6 +41,7 @@ class ChapterResource extends JsonResource
                     'created_at' => $record->created_at,
                 ]
             )),
+            'guest' => $this->whenLoaded('guest', fn () => GuestResource::make($this->resource->guest)),
         ]);
     }
 }

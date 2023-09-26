@@ -85,19 +85,28 @@
                         <td>{chapter.title}</td>
                         <td>{chapter.status}</td>
                         <td>
-                            <a
-                                href="/guest/chapters/{chapter.id}"
-                                use:inertia
-                                class="btn btn-secondary rounded-full"
-                            >
-                                Review
-                            </a>
                             {#if type === 'sent'}
+                                <a
+                                    href="/guests/chapters/{chapter.id}"
+                                    use:inertia
+                                    class="btn btn-secondary rounded-full"
+                                >
+                                    Review
+                                </a>
                                 <button
                                     on:click={() => resend(chapter)}
                                     class="btn btn-primary rounded-full"
                                     >Resend</button
                                 >
+                            {/if}
+                            {#if type === 'received'}
+                                <a
+                                    href="/guests/chapters/{chapter.id}/edit"
+                                    use:inertia
+                                    class="btn btn-accent rounded-full"
+                                >
+                                    Edit
+                                </a>
                             {/if}
                         </td>
                     </tr>

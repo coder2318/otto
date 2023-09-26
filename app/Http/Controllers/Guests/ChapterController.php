@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Guests;
 
 use App\Data\Chapter\Status;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Chapters\TranscribeRequest;
+use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use App\Models\Guest;
@@ -11,8 +13,10 @@ use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
 use App\Notifications\GuestChapterInviteNotification;
+use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
@@ -86,51 +90,121 @@ class ChapterController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function write(Chapter $chapter)
     {
-        //
+        return Inertia::render('Guests/Chapters/Write', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+            'transcriptions' => fn () => session('transcriptions'),
+        ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function attachments(Chapter $chapter)
     {
-        //
+        return Inertia::render('Guests/Chapters/Attachments', [
+            'chapter' => fn () => ChapterResource::make(
+                $chapter->load('attachments')
+            ),
+        ]);
     }
 
-    /**
-     * Display the specified resource.
-     */
+    public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
+    {
+        /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> */
+        $media = $chapter->attachments()->whereIn('id', $request->validated('attachments'))->get();
+
+        $transcriptions = null;
+
+        foreach ($media as $record) {
+            if ($transcription = $service->transcribe($record)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
+        }
+
+        return redirect()->route('guests.chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
+    }
+
+    public function deleteAttachments(Chapter $chapter, Media $attachment)
+    {
+        $attachment->delete();
+
+        return redirect()->route('guests.chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
+    }
+
+    public function record(Chapter $chapter)
+    {
+        return Inertia::render('Guests/Chapters/Record', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
+    public function upload(Chapter $chapter)
+    {
+        return Inertia::render('Guests/Chapters/Upload', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
     public function show(Chapter $chapter)
     {
-        //
+        return Inertia::render('Guests/Chapters/Show', [
+            'chapter' => fn () => ChapterResource::make($chapter->load('guest.avatar')),
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Chapter $chapter)
     {
-        //
+        return Inertia::render('Guests/Chapters/Edit', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Chapter $chapter)
+    public function finish(Chapter $chapter)
     {
-        //
+        $chapter->update([
+            'status' => Status::PUBLISHED,
+        ]);
+
+        return Inertia::render('Guests/Chapters/Finish', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function update(UpdateChapterRequest $request, Chapter $chapter, MediaService $service)
+    {
+        $chapter->update($request->validated());
+
+        if ($request->hasFile('cover')) {
+            $chapter->cover()->delete();
+            $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
+        }
+
+        foreach ($request->validated('attachments') ?? [] as $attachment) {
+            $record = $chapter->addMedia($attachment['file'])
+                ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
+                ->toMediaCollection('attachments', 's3');
+
+            if ($transcription = $service->transcribe($record)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
+        }
+
+        if (isset($transcriptions)) {
+            Session::flash('transcriptions', $transcriptions);
+        }
+
+        if ($redirect = $request->validated('redirect')) {
+            $story = $chapter->story;
+
+            return redirect()->route($redirect, compact('chapter', 'story'))->with('message', 'Chapter updated successfully!');
+        }
+
+        return redirect()->back()->with('message', 'Chapter updated successfully!');
+    }
+
     public function destroy(Chapter $chapter)
     {
-        //
+        $chapter->delete();
+
+        return redirect()->route('guests.chapters.index')->with('message', 'Chapter deleted successfully!');
     }
 }
