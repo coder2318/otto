@@ -9,7 +9,7 @@
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { fade, blur } from 'svelte/transition'
     import Paginator from '@/components/Paginator.svelte'
-    import BookCoverBuilder from '@/components/Stories/BookCoverBuilderV2.svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
 
     export let story: { data: App.Story }
     export let covers: {

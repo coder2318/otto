@@ -7,7 +7,7 @@
 <script lang="ts">
     import { inertia, router } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
-    import BookCoverBuilder from '@/components/Stories/BookCoverBuilderV2.svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import type { FilePond as FilePondType } from 'filepond'
     import { createCropperForFilepond } from '@/service/cropper'
@@ -90,7 +90,7 @@
     <section
         class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
     >
-        <div class="card bg-base-300">
+        <div class="card bg-base-200">
             <div class="card-body gap-4">
                 {#each template.data.fields as field}
                     <div class="form-control">
@@ -114,22 +114,26 @@
                                 placeholder={field.name}
                             />
                         {:else if field.type === 'image' && editor}
-                            <FilePond
-                                name={field.key}
-                                server={false}
-                                bind:pond={filepond}
-                                onpreparefile={async (file, blob) =>
-                                    (parameters[field.key] =
-                                        await fileToBase64(blob))}
-                                onremovefile={() =>
-                                    (parameters[field.key] = null)}
-                                imageEditEditor={editor}
-                                allowImageEdit={true}
-                                allowMultiple={false}
-                                imageEditInstantEdit={true}
-                                styleImageEditButtonEditItemPosition="top right"
-                                imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                            />
+                            <div
+                                class="rounded-lg border border-base-content/20"
+                            >
+                                <FilePond
+                                    name={field.key}
+                                    server={false}
+                                    bind:pond={filepond}
+                                    onpreparefile={async (file, blob) =>
+                                        (parameters[field.key] =
+                                            await fileToBase64(blob))}
+                                    onremovefile={() =>
+                                        (parameters[field.key] = null)}
+                                    imageEditEditor={editor}
+                                    allowImageEdit={true}
+                                    allowMultiple={false}
+                                    imageEditInstantEdit={true}
+                                    styleImageEditButtonEditItemPosition="top right"
+                                    imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                />
+                            </div>
                         {/if}
                     </div>
                 {/each}
@@ -141,7 +145,7 @@
             >
                 <BookCoverBuilder
                     bind:this={builder}
-                    class="h-full w-full select-none"
+                    class="select-none"
                     pages={story.data.pages ?? 0}
                     {parameters}
                     template={template.data}

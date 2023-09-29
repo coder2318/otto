@@ -198,7 +198,9 @@ class StoryController extends Controller
         /** @var Media $cover */
         $image = Image::make($cover->stream());
 
-        return Pdf::setPaper([0, 0, $image->width(), $image->height()])
+        $spineWidth = (($story->pages > 32 ? $story->pages : 32) / 444 + 0.06) * 96;
+
+        return Pdf::setPaper([0, 0, 2 * $image->width() + $spineWidth, $image->height()])
             ->loadView('pdf.book-cover', ['cover' => $image->encode('data-url')])
             ->stream();
     }

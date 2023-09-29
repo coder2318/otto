@@ -1,11 +1,11 @@
 <html>
 <head>
     <style>
-        @page { margin: 0; }
-        body { margin: 0; }
+        @page { margin: 12px; }
+        body { margin: 12px; }
     </style>
 </head>
 <body>
-    <img src="{{ $cover }}" width="100%" height="100%"/>
+    <img src="{{ $cover }}" style="position:absolute;bottom:0;right:0" height="100%" />
 </body>
 </html>
