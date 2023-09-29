@@ -166,7 +166,7 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function create(Story $story, ?TimelineQuestion $question = null)
+    public function create(Story $story, TimelineQuestion $question = null)
     {
         if ($question) {
             /** @var Chapter */
