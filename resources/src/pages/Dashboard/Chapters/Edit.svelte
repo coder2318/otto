@@ -44,6 +44,19 @@
                 <progress class="progress progress-secondary w-full" />
                 <figcaption>Chapter is being processed</figcaption>
             </figure>
+        {:else if chapter.data.edit}
+            <figure class="-mx-4 flex-col gap-2 text-base-content/50">
+                <progress
+                    class="progress progress-success w-full"
+                    value="100"
+                    max="100"
+                />
+                <figcaption>
+                    <a href="/chapters/{chapter.data.id}/enhance" use:inertia>
+                        Your chapter enhancement is ready!
+                    </a>
+                </figcaption>
+            </figure>
         {/if}
         <div class="card-body gap-4">
             <textarea
