@@ -43,14 +43,7 @@
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(`/demo`, {
-                onSuccess: () =>
-                    $form.defaults({
-                        content: chapter.data.content,
-                        title: chapter.data.title,
-                        status: chapter.data.status,
-                    }),
-            })
+            .put(`/demo`)
     }
 </script>
 
@@ -117,7 +110,7 @@
             >
             Back
         </a>
-        {#if $form.isDirty}
+        {#if $form.content != chapter.data.content}
             <button
                 type="submit"
                 class="btn btn-secondary rounded-full lg:btn-lg"

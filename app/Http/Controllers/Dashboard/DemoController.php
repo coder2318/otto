@@ -37,6 +37,7 @@ class DemoController extends Controller
         $this->story ??= $this->user->stories()->firstOrCreate(values: [
             'title' => 'Demo Story',
             'status' => StoryStatus::PENDING,
+            'story_type_id' => $question?->timeline?->story_type_id,
         ]);
 
         $this->chapter ??= $this->story->chapters()->firstOrCreate(values: [
