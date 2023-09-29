@@ -18,9 +18,14 @@
 <main
     class="container mx-auto flex flex-1 flex-col items-center justify-center gap-8 p-4 py-8"
 >
-    <h1 class="text-center text-2xl text-primary lg:text-4xl">
-        Crafting Your Narrative:<br /><i>{story.data.title}</i>
-    </h1>
+    <div class="relative">
+        <div
+            class="absolute left-[70px] top-[10px] z-10 z-[1] h-[46px] w-[72px] rotate-[-35deg] rounded-t-[10px] rounded-bl-[8000px] rounded-br-full rounded-tl-[3000px] rounded-tr-[3000px] bg-[#A9D392]"
+        ></div>
+        <h1 class="relative z-20 text-center text-[44px] text-primary">
+            Crafting Your Narrative: <i>{story.data.title}</i>
+        </h1>
+    </div>
 
     <div class="grid grid-cols-2 gap-4 lg:gap-8">
         <a
@@ -28,7 +33,9 @@
             href="/stories/{story.data.id}/chapters"
             class="card bg-neutral transition-transform hover:scale-105"
         >
-            <figure><img src={writing} alt="writing room" /></figure>
+            <figure class="m-3 rounded-lg">
+                <img src={writing} alt="writing room" />
+            </figure>
             <div class="card-body items-center">
                 <h2 class="card-title font-normal text-primary md:text-3xl">
                     Writing <i>Room</i>
@@ -40,7 +47,9 @@
             href="/stories/{story.data.id}/edit"
             class="card bg-neutral transition-transform hover:scale-105"
         >
-            <figure><img src={editing} alt="editing room" /></figure>
+            <figure class="m-3 rounded-lg">
+                <img src={editing} alt="editing room" />
+            </figure>
             <div class="card-body items-center">
                 <h2 class="card-title font-normal text-primary md:text-3xl">
                     Editing <i>Room</i>
