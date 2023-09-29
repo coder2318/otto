@@ -126,10 +126,11 @@
                 use:inertia
                 in:fade
             >
-                <figure>
+                <figure class="max-h-[300px] bg-base-200">
                     <img
                         src={story.cover ??
                             'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                        class="h-full object-contain"
                         alt={story.title}
                     />
                 </figure>

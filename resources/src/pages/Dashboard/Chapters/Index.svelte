@@ -172,11 +172,12 @@
                 in:fade
             >
                 <div class="card-body">
-                    <figure class="mb-2 rounded-xl">
+                    <figure class="mb-2 max-h-[300px]">
                         <img
                             src={chapter.cover ??
                                 'https://placehold.co/600x400?text=Your+cover+should+be+there'}
                             alt={chapter.title}
+                            class="h-full rounded-xl object-contain"
                         />
                     </figure>
                     <h2 class="card-title text-2xl font-normal">
