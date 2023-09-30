@@ -191,7 +191,7 @@
             >
                 Are you sure <i>want to delete this story?</i>
             </h3>
-            <div class="modal-action flex mt-12 justify-around">
+            <div class="modal-action mt-12 flex justify-around">
                 <button
                     class="btn btn-primary btn-sm w-[150px] rounded-full"
                     on:click|preventDefault={confirmDelete}>Yes</button

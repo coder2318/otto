@@ -14,7 +14,7 @@
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
-    import { faClose } from '@fortawesome/free-solid-svg-icons'
+    import { faClose, faSliders } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
 
     export let questions_chapters: {
@@ -28,6 +28,8 @@
     let modal: InviteGuestModal
     let dialog: HTMLDialogElement
     let chapterId: number = null
+    let isShowTimeLine: boolean = false
+    let selected: number = null
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -61,6 +63,16 @@
         dialog.close()
         router.delete(`/chapters/${chapterId}`)
     }
+
+    function toggleTimeLine() {
+        isShowTimeLine = !isShowTimeLine
+    }
+
+    function selectOption(e) {
+        e.currentTarget.value !== ''
+            ? ($filter.timeline_id = e.currentTarget.value)
+            : removeFilter('timeline_id')
+    }
 </script>
 
 <svelte:head>
@@ -92,10 +104,10 @@
 </header>
 
 <section
-    class="gird-cols-1 container m-4 mx-auto grid place-content-between gap-4 border-b-2 border-base-content/20 px-4 pb-4 md:grid-cols-2 md:pb-0 lg:my-8"
+    class="container m-4 mx-auto flex justify-between px-4 pb-4 md:pb-0 lg:my-8"
     in:fade
 >
-    <div class="tabs">
+    <div class="tabs w-[90%] border-b-2 border-base-content/20">
         <button
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == undefined}
@@ -130,27 +142,32 @@
         </button>
     </div>
 
-    <span class="flex gap-2 md:ml-auto">
-        Timeline:
-        <select
-            class="select select-bordered select-ghost select-xs w-48"
-            on:change={(e) =>
-                e.currentTarget.value !== ''
-                    ? ($filter.timeline_id = e.currentTarget.value)
-                    : removeFilter('timeline_id')}
-        >
-            <option value="" selected={query?.filter?.timeline_id == undefined}
-                >All</option
-            >
-            {#each timelines.data as timeline}
-                <option
-                    value={timeline.id}
-                    selected={query?.filter?.timeline_id == timeline.id}
-                    >{timeline.title}</option
-                >
-            {/each}
-        </select>
-    </span>
+    <div>
+        <button on:click={toggleTimeLine} class="btn btn-circle bg-white">
+            <Fa style="height: 1.5rem" icon={faSliders} />
+        </button>
+        {#if isShowTimeLine}
+            <div class="relative">
+                <ul class="absolute right-0 top-[5px] z-50 flex flex-col">
+                    {#each timelines.data as timeline}
+                        <li
+                            class="btn mb-2 w-[200px] justify-start rounded-full border-none bg-[#4b4b4b] font-serif text-[18px] font-normal italic text-white"
+                            class:selected={query?.filter?.timeline_id ==
+                                timeline.id}
+                            on:click={(e) =>
+                                e.currentTarget.value !== ''
+                                    ? ($filter.timeline_id =
+                                          e.currentTarget.value)
+                                    : removeFilter('timeline_id')}
+                            value={timeline.id}
+                        >
+                            {timeline.title}
+                        </li>
+                    {/each}
+                </ul>
+            </div>
+        {/if}
+    </div>
 </section>
 
 <main
@@ -199,14 +216,18 @@
                     <h2 class="card-title text-2xl font-normal">
                         {chapter.title}
                     </h2>
-                    <div class="flex justify-center">
-                        <button
-                            class="btn btn-error btn-sm w-[200px]"
-                            on:click|preventDefault={deleteChapter(chapter.id)}
-                        >
-                            Delete
-                        </button>
-                    </div>
+                    {#if chapter.status !== 'undone'}
+                        <div class="flex justify-center">
+                            <button
+                                class="btn btn-error btn-sm w-[200px]"
+                                on:click|preventDefault={deleteChapter(
+                                    chapter.id
+                                )}
+                            >
+                                Delete
+                            </button>
+                        </div>
+                    {/if}
                     {#if chapter.type === 'question'}
                         <div class="card-actions">
                             <button
@@ -271,3 +292,9 @@
 </main>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
+
+<style>
+    .selected {
+        background: #ffbe32;
+    }
+</style>
