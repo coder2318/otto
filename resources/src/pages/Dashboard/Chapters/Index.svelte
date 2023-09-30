@@ -14,6 +14,8 @@
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
+    import { faClose } from '@fortawesome/free-solid-svg-icons'
+    import Fa from 'svelte-fa'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -24,6 +26,8 @@
     export let story: { data: App.Story }
 
     let modal: InviteGuestModal
+    let dialog: HTMLDialogElement
+    let chapterId: number = null
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -46,6 +50,16 @@
             delete value[key]
             return value
         })
+    }
+
+    function deleteChapter(id: number) {
+        chapterId = id
+        dialog.showModal()
+    }
+
+    function confirmDelete() {
+        dialog.close()
+        router.delete(`/chapters/${chapterId}`)
     }
 </script>
 
@@ -185,6 +199,14 @@
                     <h2 class="card-title text-2xl font-normal">
                         {chapter.title}
                     </h2>
+                    <div class="flex justify-center">
+                        <button
+                            class="btn btn-error btn-sm w-[200px]"
+                            on:click|preventDefault={deleteChapter(chapter.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
                     {#if chapter.type === 'question'}
                         <div class="card-actions">
                             <button
@@ -211,6 +233,36 @@
             </a>
         {/each}
     </div>
+
+    <dialog bind:this={dialog} class="modal">
+        <form method="dialog" class="modal-box">
+            <div class="flex justify-end">
+                <button
+                    class="btn btn-circle btn-sm bg-white"
+                    on:click={() => dialog.close()}
+                >
+                    <Fa icon={faClose} />
+                </button>
+            </div>
+            <h3
+                class="text-center text-[30px] text-xl font-normal leading-[33px]"
+            >
+                Are you sure <i>want to delete this chapter?</i>
+            </h3>
+            <div class="modal-action mt-12 flex justify-around">
+                <button
+                    class="btn btn-primary btn-sm w-[150px] rounded-full"
+                    on:click|preventDefault={confirmDelete}>Yes</button
+                >
+                <button
+                    class="btn btn-sm w-[150px] rounded-full py-1"
+                    on:click={() => dialog.close()}
+                >
+                    No
+                </button>
+            </div>
+        </form>
+    </dialog>
 
     <Paginator
         class="flex-wrap items-center justify-center gap-y-2"

@@ -12,7 +12,7 @@
     import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
-    import { faPlus } from '@fortawesome/free-solid-svg-icons'
+    import { faClose, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'
     import { onMount } from 'svelte'
 
@@ -24,6 +24,9 @@
 
     let query: { filter?: { [key: string]: string } }
     let filter: Writable<{ [key: string]: string }>
+
+    let modal: HTMLDialogElement
+    let storyId: number = null
 
     onMount(() => {
         filter = writable(
@@ -52,6 +55,16 @@
             delete value[key]
             return value
         })
+    }
+
+    function deleteStory(id: number) {
+        storyId = id
+        modal.showModal()
+    }
+
+    function confirmDelete() {
+        modal.close()
+        router.delete(`stories/${storyId}`)
     }
 </script>
 
@@ -142,7 +155,14 @@
                     <h2 class="card-title text-2xl font-normal">
                         {story.title}
                     </h2>
-                    <p />
+                    <div class="flex justify-center">
+                        <button
+                            class="btn btn-error btn-sm w-[200px]"
+                            on:click|preventDefault={deleteStory(story.id)}
+                        >
+                            Delete
+                        </button>
+                    </div>
                     <div class="card-actions justify-between">
                         <div>
                             Started: {dayjs(story.created_at).format(
@@ -155,6 +175,36 @@
             </a>
         {/each}
     </div>
+
+    <dialog bind:this={modal} class="modal">
+        <form method="dialog" class="modal-box">
+            <div class="flex justify-end">
+                <button
+                    class="btn btn-circle btn-sm bg-white"
+                    on:click={() => modal.close()}
+                >
+                    <Fa icon={faClose} />
+                </button>
+            </div>
+            <h3
+                class="text-center text-[30px] text-xl font-normal leading-[33px]"
+            >
+                Are you sure <i>want to delete this story?</i>
+            </h3>
+            <div class="modal-action flex mt-12 justify-around">
+                <button
+                    class="btn btn-primary btn-sm w-[150px] rounded-full"
+                    on:click|preventDefault={confirmDelete}>Yes</button
+                >
+                <button
+                    class="btn btn-sm w-[150px] rounded-full py-1"
+                    on:click={() => modal.close()}
+                >
+                    No
+                </button>
+            </div>
+        </form>
+    </dialog>
 
     <Paginator meta={stories.meta} />
 </main>
