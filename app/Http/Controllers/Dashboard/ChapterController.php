@@ -142,7 +142,7 @@ class ChapterController extends Controller
                 ob_flush();
                 flush();
             }
-        });
+        }, headers: ['X-Accel-Buffering' => 'no']);
     }
 
     public function enhance(Chapter $chapter)
