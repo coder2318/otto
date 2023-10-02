@@ -13,7 +13,6 @@ use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
-use App\Jobs\ProcessChapter;
 use App\Models\Chapter;
 use App\Models\Story;
 use App\Models\Timeline;
