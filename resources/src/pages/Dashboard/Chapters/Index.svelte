@@ -33,8 +33,6 @@
     let dialog: HTMLDialogElement
     let dropdownDialog: HTMLDialogElement
     let chapterId: number = null
-    let isShowTimeLine: boolean = false
-    let selected: number = null
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -70,10 +68,11 @@
     }
 
     function selectOption(e) {
-        console.log(e.currentTarget.value)
-        e.currentTarget.value !== ''
-            ? ($filter.timeline_id = e.currentTarget.value)
-            : removeFilter('timeline_id')
+        if ($filter.timeline_id == e.currentTarget.value) {
+            removeFilter('timeline_id')
+        } else {
+            $filter.timeline_id = e.currentTarget.value
+        }
 
         dropdownDialog.close()
     }
@@ -96,46 +95,54 @@
                         >{truncate(story.data.title, 20)}</a
                     >
                 </li>
-                <li>Writing Room</li>
+                <li>
+                    <a href="/stories/{story.data.id}" use:inertia
+                        >Writing Room</a
+                    >
+                </li>
             </ul>
         </div>
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-                <span class="font-normal text-white">Explore Your</span>
+                <span class="font-normal text-neutral">Explore Your</span>
                 <button
-                    on:click={dropdownDialog.showModal()}
-                    class="inline-flex rounded-full border-none bg-white/20 px-[22px] py-[32px] hover:clear-none"
+                    on:click={() => dropdownDialog.showModal()}
+                    class="inline-flex rounded-full border-none bg-neutral/30 p-8 hover:clear-none"
                 >
-                    <i class="mr-20 font-normal text-white"
+                    <i class="mr-8 font-normal text-neutral"
                         >{timelines.data[query?.filter?.timeline_id - 1]
-                            ?.title ?? 'Childhood'}</i
+                            ?.title ?? 'Timeline'}</i
                     >
                     <Fa
-                        class="text-[2.5rem] text-white"
+                        class="text-[2.5rem] text-neutral"
                         icon={faArrowDownLong}
                     />
                 </button>
-                <dialog
-                    bind:this={dropdownDialog}
-                    class="modal bg-[#0C345C]/70"
-                >
+                <dialog bind:this={dropdownDialog} class="modal">
+                    <form method="dialog" class="modal-backdrop">
+                        <button />
+                    </form>
                     <div class="modal-box bg-transparent shadow-none">
-                        <ul class="flex flex-col">
+                        <ul class="flex flex-col gap-4">
                             {#each timelines.data as timeline}
-                                <li
-                                    class="btn mb-4 w-[400px] content-center justify-start rounded-full border-none bg-white/20 py-[32px] font-serif text-[25px] font-normal italic text-white"
-                                    class:selected={query?.filter
-                                        ?.timeline_id == timeline.id}
-                                    on:click={selectOption}
-                                    value={timeline.id}
-                                >
-                                    {timeline.title}
+                                <li>
+                                    <button
+                                        class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 font-serif text-4xl font-normal italic text-neutral hover:clear-none"
+                                        class:!bg-secondary={query?.filter
+                                            ?.timeline_id == timeline.id}
+                                        on:click={selectOption}
+                                        value={timeline.id}
+                                    >
+                                        {timeline.title}
+                                    </button>
                                 </li>
                             {/each}
                         </ul>
                     </div>
                 </dialog>
-                <span class="font-normal text-white">With These Questions</span>
+                <span class="font-normal text-neutral"
+                    >With These Questions</span
+                >
             </h1>
         </div>
     </div>
@@ -206,7 +213,7 @@
         </div>
         {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
-                class="card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
+                class="group card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
                 href={chapter.type === 'question'
                     ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
                     : `/chapters/${chapter.id}/edit`}
@@ -249,12 +256,11 @@
                         </div>
                     </div>
                     {#if chapter.status !== 'undone'}
-                        <div class="absolute bottom-[30px] right-[30px]">
+                        <div class="absolute right-4 top-4">
                             <button
-                                class="btn btn-circle btn-error"
-                                on:click|preventDefault={deleteChapter(
-                                    chapter.id
-                                )}
+                                class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+                                on:click|preventDefault={() =>
+                                    deleteChapter(chapter.id)}
                             >
                                 <Fa icon={faTrash} />
                             </button>
@@ -266,6 +272,9 @@
     </div>
 
     <dialog bind:this={dialog} class="modal">
+        <form method="dialog" class="modal-backdrop">
+            <button />
+        </form>
         <form method="dialog" class="modal-box">
             <div class="flex justify-end">
                 <button
@@ -302,9 +311,3 @@
 </main>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
-
-<style>
-    .selected {
-        background: #ffbe32;
-    }
-</style>

@@ -134,7 +134,7 @@
     >
         {#each stories.data as story (story.id)}
             <a
-                class="card bg-neutral transition-transform hover:scale-105"
+                class="group card bg-neutral transition-transform hover:scale-105"
                 href="/stories/{story.id}"
                 use:inertia
                 in:fade
@@ -163,22 +163,24 @@
                         </div>
                         <div class="badge badge-outline">{story.status}</div>
                     </div>
-                    {#if story.status !== 'undone'}
-                        <div class="absolute right-[20px] top-[20px]">
-                            <button
-                                class="btn btn-circle btn-error"
-                                on:click|preventDefault={deleteStory(story.id)}
-                            >
-                                <Fa icon={faTrash} />
-                            </button>
-                        </div>
-                    {/if}
+                    <div class="absolute right-4 top-4">
+                        <button
+                            class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+                            on:click|preventDefault={() =>
+                                deleteStory(story.id)}
+                        >
+                            <Fa icon={faTrash} />
+                        </button>
+                    </div>
                 </div>
             </a>
         {/each}
     </div>
 
     <dialog bind:this={modal} class="modal">
+        <form method="dialog" class="modal-backdrop">
+            <button />
+        </form>
         <form method="dialog" class="modal-box">
             <div class="flex justify-end">
                 <button

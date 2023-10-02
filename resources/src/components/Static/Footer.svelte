@@ -16,70 +16,41 @@
     }
 </script>
 
-<footer class="bg-primary px-8 text-primary-content">
+<footer class="bg-primary px-4 text-primary-content">
     <div
-        class="container relative mx-auto flex flex-col gap-8 py-8 text-2xl sm:flex-row sm:items-center md:text-3xl lg:text-4xl"
+        class="container mx-auto flex flex-col gap-8 py-8 text-2xl sm:flex-row sm:items-center md:text-3xl lg:text-4xl"
     >
-        <div
-            class="absolute left-[-10px] top-[20px] z-10 z-[1] h-[48px] w-[77px] rotate-[-35deg] rounded-t-[10px] rounded-bl-[8000px] rounded-br-full rounded-tl-[3000px] rounded-tr-[3000px] bg-[#124D87]"
-        ></div>
-        <span class="z-20 font-serif">
-            Preserve meaningful moments & memories in a beautiful book with<i
+        <span class="font-serif"
+            >Preserve meaningful moments & memories in a beautiful book with <i
                 >OttoStory</i
-            >.
-        </span>
+            >.</span
+        >
 
         <a
             href="/stories"
             use:inertia
-            class="btn btn-secondary rounded-full font-normal lg:btn-lg"
+            class="btn btn-secondary rounded-full lg:btn-lg"
         >
             Start Writing
         </a>
     </div>
     <div
-        class="container footer mx-auto border-t border-primary-content/20 font-serif text-sm"
+        class="container footer mx-auto border-t border-primary-content/20 py-8 font-serif text-lg"
     >
-        <div class="py-8">
-            <Logo class="h-10" />
+        <div>
+            <Logo class="h-16" />
         </div>
-        <div class="border-l border-primary-content/20 py-8 pl-10">
-            <a
-                href="/"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
-                >Features</a
-            >
-            <a
-                href="/about"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
-                >Our Story</a
-            >
-            <a
-                href="/contact"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
-                >Contact</a
-            >
+        <div>
+            <a href="/" use:inertia class="link-hover link">Features</a>
+            <a href="/about" use:inertia class="link-hover link">Our Story</a>
+            <a href="/contact" use:inertia class="link-hover link">Contact</a>
         </div>
-        <div class="border-l border-primary-content/20 py-8 pl-10">
-            <a
-                href="/faq"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
-                >FAQs</a
-            >
-            <a
-                href="/terms-and-conditions"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
+        <div>
+            <a href="/faq" use:inertia class="link-hover link">FAQs</a>
+            <a href="/terms-and-conditions" use:inertia class="link-hover link"
                 >Terms & Conditions</a
             >
-            <a
-                href="/privacy-policy"
-                use:inertia
-                class="link-hover link opacity-20 hover:text-[#ffbe32] hover:opacity-100"
+            <a href="/privacy-policy" use:inertia class="link-hover link"
                 >Privacy policy</a
             >
         </div>
@@ -87,7 +58,7 @@
     <div
         class="container footer mx-auto justify-between border-t border-primary-content/20 py-8"
     >
-        <div class="opacity-20">
+        <div>
             &copy; {footerDate()} OttoStory. All rights reserved
         </div>
         <div class="flex gap-2">
