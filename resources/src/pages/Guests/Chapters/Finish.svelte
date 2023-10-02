@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { page, inertia } from '@inertiajs/svelte'
+    import { page } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Stamp from '@/components/SVG/stamp.svg.svelte'
     import { dayjs } from '@/service/dayjs'
