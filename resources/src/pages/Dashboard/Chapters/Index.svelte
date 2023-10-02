@@ -14,6 +14,12 @@
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
+    import {
+        faClose,
+        faArrowDownLong,
+        faTrash,
+    } from '@fortawesome/free-solid-svg-icons'
+    import Fa from 'svelte-fa'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -24,6 +30,9 @@
     export let story: { data: App.Story }
 
     let modal: InviteGuestModal
+    let dialog: HTMLDialogElement
+    let dropdownDialog: HTMLDialogElement
+    let chapterId: number = null
 
     $: query = qs.parse(
         $page.url.replace(window.location.pathname, '').slice(1)
@@ -47,6 +56,26 @@
             return value
         })
     }
+
+    function deleteChapter(id: number) {
+        chapterId = id
+        dialog.showModal()
+    }
+
+    function confirmDelete() {
+        dialog.close()
+        router.delete(`/chapters/${chapterId}`)
+    }
+
+    function selectOption(e) {
+        if ($filter.timeline_id == e.currentTarget.value) {
+            removeFilter('timeline_id')
+        } else {
+            $filter.timeline_id = e.currentTarget.value
+        }
+
+        dropdownDialog.close()
+    }
 </script>
 
 <svelte:head>
@@ -66,12 +95,54 @@
                         >{truncate(story.data.title, 20)}</a
                     >
                 </li>
-                <li>Writing Room</li>
+                <li>
+                    <a href="/stories/{story.data.id}" use:inertia
+                        >Writing Room</a
+                    >
+                </li>
             </ul>
         </div>
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-                {story.data.title}
+                <span class="font-normal text-neutral">Explore Your</span>
+                <button
+                    on:click={() => dropdownDialog.showModal()}
+                    class="inline-flex rounded-full border-none bg-neutral/30 p-8 hover:clear-none"
+                >
+                    <i class="mr-8 font-normal text-neutral"
+                        >{timelines.data[query?.filter?.timeline_id - 1]
+                            ?.title ?? 'Timeline'}</i
+                    >
+                    <Fa
+                        class="text-[2.5rem] text-neutral"
+                        icon={faArrowDownLong}
+                    />
+                </button>
+                <dialog bind:this={dropdownDialog} class="modal">
+                    <form method="dialog" class="modal-backdrop">
+                        <button />
+                    </form>
+                    <div class="modal-box bg-transparent shadow-none">
+                        <ul class="flex flex-col gap-4">
+                            {#each timelines.data as timeline}
+                                <li>
+                                    <button
+                                        class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 font-serif text-4xl font-normal italic text-neutral hover:clear-none"
+                                        class:!bg-secondary={query?.filter
+                                            ?.timeline_id == timeline.id}
+                                        on:click={selectOption}
+                                        value={timeline.id}
+                                    >
+                                        {timeline.title}
+                                    </button>
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                </dialog>
+                <span class="font-normal text-neutral"
+                    >With These Questions</span
+                >
             </h1>
         </div>
     </div>
@@ -115,28 +186,6 @@
             Completed
         </button>
     </div>
-
-    <span class="flex gap-2 md:ml-auto">
-        Timeline:
-        <select
-            class="select select-bordered select-ghost select-xs w-48"
-            on:change={(e) =>
-                e.currentTarget.value !== ''
-                    ? ($filter.timeline_id = e.currentTarget.value)
-                    : removeFilter('timeline_id')}
-        >
-            <option value="" selected={query?.filter?.timeline_id == undefined}
-                >All</option
-            >
-            {#each timelines.data as timeline}
-                <option
-                    value={timeline.id}
-                    selected={query?.filter?.timeline_id == timeline.id}
-                    >{timeline.title}</option
-                >
-            {/each}
-        </select>
-    </span>
 </section>
 
 <main
@@ -164,7 +213,7 @@
         </div>
         {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
-                class="card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
+                class="group card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
                 href={chapter.type === 'question'
                     ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
                     : `/chapters/${chapter.id}/edit`}
@@ -196,7 +245,6 @@
                             </button>
                         </div>
                     {/if}
-                    <p />
                     <div class="card-actions justify-between">
                         <div>
                             Started: {dayjs(chapter.created_at).format(
@@ -207,10 +255,54 @@
                             {chapter.status}
                         </div>
                     </div>
+                    {#if chapter.status !== 'undone'}
+                        <div class="absolute right-4 top-4">
+                            <button
+                                class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+                                on:click|preventDefault={() =>
+                                    deleteChapter(chapter.id)}
+                            >
+                                <Fa icon={faTrash} />
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             </a>
         {/each}
     </div>
+
+    <dialog bind:this={dialog} class="modal">
+        <form method="dialog" class="modal-backdrop">
+            <button />
+        </form>
+        <form method="dialog" class="modal-box">
+            <div class="flex justify-end">
+                <button
+                    class="btn btn-circle btn-sm bg-white"
+                    on:click={() => dialog.close()}
+                >
+                    <Fa icon={faClose} />
+                </button>
+            </div>
+            <h3
+                class="text-center text-[30px] text-xl font-normal leading-[33px]"
+            >
+                Are you sure <i>want to delete this chapter?</i>
+            </h3>
+            <div class="modal-action mt-12 flex justify-around">
+                <button
+                    class="btn btn-primary btn-sm w-[150px] rounded-full"
+                    on:click|preventDefault={confirmDelete}>Yes</button
+                >
+                <button
+                    class="btn btn-sm w-[150px] rounded-full py-1"
+                    on:click={() => dialog.close()}
+                >
+                    No
+                </button>
+            </div>
+        </form>
+    </dialog>
 
     <Paginator
         class="flex-wrap items-center justify-center gap-y-2"
