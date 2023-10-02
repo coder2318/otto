@@ -47,6 +47,6 @@ class DeepgramService
                 ->withBody($storage->get($path), $storage->mimeType($path))
                 ->withQueryParameters($options ?? $this->query)
                 ->post('listen')
-                ->json('results.channels.0.alternatives.0.transcript');
+                ->json('results.channels.0.alternatives.0.paragraphs.transcript');
     }
 }
