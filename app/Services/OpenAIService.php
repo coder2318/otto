@@ -102,7 +102,7 @@ class OpenAIService
 
         foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
             $messages = [
-                    ['role' => 'system', 'content' => <<<'TXT'
+                ['role' => 'system', 'content' => <<<'TXT'
                     You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
                     The ghostwriting must be narrated in the First Person.
                     It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
