@@ -1,0 +1,144 @@
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120Pro-Italic.eot');
+    src: local('Baskerville 120 Pro Italic'), local('Baskerville120Pro-Italic'),
+        url('Baskerville120Pro-Italic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120Pro-Italic.woff2') format('woff2'),
+        url('Baskerville120Pro-Italic.woff') format('woff'),
+        url('Baskerville120Pro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10ProMedium-Italic.eot');
+    src: local('Baskerville 10 Pro Medium Italic'), local('Baskerville10ProMedium-Italic'),
+        url('Baskerville10ProMedium-Italic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10ProMedium-Italic.woff2') format('woff2'),
+        url('Baskerville10ProMedium-Italic.woff') format('woff'),
+        url('Baskerville10ProMedium-Italic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120Pro-BoldItalic.eot');
+    src: local('Baskerville 120 Pro Bold Italic'), local('Baskerville120Pro-BoldItalic'),
+        url('Baskerville120Pro-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120Pro-BoldItalic.woff2') format('woff2'),
+        url('Baskerville120Pro-BoldItalic.woff') format('woff'),
+        url('Baskerville120Pro-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120Pro-Bold.eot');
+    src: local('Baskerville 120 Pro Bold'), local('Baskerville120Pro-Bold'),
+        url('Baskerville120Pro-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120Pro-Bold.woff2') format('woff2'),
+        url('Baskerville120Pro-Bold.woff') format('woff'),
+        url('Baskerville120Pro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120ProMedium-Italic.eot');
+    src: local('Baskerville 120 Pro Medium Italic'), local('Baskerville120ProMedium-Italic'),
+        url('Baskerville120ProMedium-Italic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120ProMedium-Italic.woff2') format('woff2'),
+        url('Baskerville120ProMedium-Italic.woff') format('woff'),
+        url('Baskerville120ProMedium-Italic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10Pro-BoldItalic.eot');
+    src: local('Baskerville 10 Pro Bold Italic'), local('Baskerville10Pro-BoldItalic'),
+        url('Baskerville10Pro-BoldItalic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10Pro-BoldItalic.woff2') format('woff2'),
+        url('Baskerville10Pro-BoldItalic.woff') format('woff'),
+        url('Baskerville10Pro-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10ProMedium.eot');
+    src: local('Baskerville 10 Pro Medium'), local('Baskerville10ProMedium'),
+        url('Baskerville10ProMedium.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10ProMedium.woff2') format('woff2'),
+        url('Baskerville10ProMedium.woff') format('woff'),
+        url('Baskerville10ProMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10Pro-Bold.eot');
+    src: local('Baskerville 10 Pro Bold'), local('Baskerville10Pro-Bold'),
+        url('Baskerville10Pro-Bold.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10Pro-Bold.woff2') format('woff2'),
+        url('Baskerville10Pro-Bold.woff') format('woff'),
+        url('Baskerville10Pro-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10Pro-Italic.eot');
+    src: local('Baskerville 10 Pro Italic'), local('Baskerville10Pro-Italic'),
+        url('Baskerville10Pro-Italic.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10Pro-Italic.woff2') format('woff2'),
+        url('Baskerville10Pro-Italic.woff') format('woff'),
+        url('Baskerville10Pro-Italic.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Baskerville 10 Pro';
+    src: url('Baskerville10Pro.eot');
+    src: local('Baskerville 10 Pro'), local('Baskerville10Pro'),
+        url('Baskerville10Pro.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville10Pro.woff2') format('woff2'),
+        url('Baskerville10Pro.woff') format('woff'),
+        url('Baskerville10Pro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120ProMedium.eot');
+    src: local('Baskerville 120 Pro Medium'), local('Baskerville120ProMedium'),
+        url('Baskerville120ProMedium.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120ProMedium.woff2') format('woff2'),
+        url('Baskerville120ProMedium.woff') format('woff'),
+        url('Baskerville120ProMedium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Baskerville 120 Pro';
+    src: url('Baskerville120Pro.eot');
+    src: local('Baskerville 120 Pro'), local('Baskerville120Pro'),
+        url('Baskerville120Pro.eot?#iefix') format('embedded-opentype'),
+        url('Baskerville120Pro.woff2') format('woff2'),
+        url('Baskerville120Pro.woff') format('woff'),
+        url('Baskerville120Pro.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+

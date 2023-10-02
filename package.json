@@ -54,7 +54,7 @@
     "qs": "^6.11.2",
     "sass": "^1.68.0",
     "sortablejs": "^1.15.0",
-    "svelte": "4.1.0",
+    "svelte": "^3.59.2",
     "svelte-fa": "^3.0.4",
     "svelte-preprocess": "^5.0.4",
     "svelte-stripe": "^0.0.22",
