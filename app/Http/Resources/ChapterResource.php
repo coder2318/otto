@@ -42,6 +42,7 @@ class ChapterResource extends JsonResource
                 ]
             )),
             'guest' => $this->whenLoaded('guest', fn () => GuestResource::make($this->resource->guest)),
+            'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question))
         ]);
     }
 }

@@ -54,7 +54,7 @@ class Chapter extends Model implements HasMedia
 
     public function question(): BelongsTo
     {
-        return $this->belongsTo(TimelineQuestion::class);
+        return $this->belongsTo(TimelineQuestion::class, 'timeline_question_id', 'id');
     }
 
     public function cover(): MorphOne

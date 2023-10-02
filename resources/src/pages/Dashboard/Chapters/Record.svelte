@@ -53,11 +53,33 @@
 </section>
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-neutral px-4">
-        <div class="card-body gap-4">
-            <AudioRecorder bind:recordings={$form.attachments} />
-        </div>
-    </main>
+    <div class="flex flex-row">
+        {#if chapter.data?.question?.sub_questions && chapter.data?.question?.sub_questions.length > 0}
+            <main
+                class="container card m-4 mx-auto w-[47%] rounded-xl bg-base-200 px-4"
+            >
+                <div class="carousel h-full">
+                    {#each chapter.data?.question?.sub_questions as quastion}
+                        <p
+                            class="carousel-item flex h-full w-full flex-wrap content-center justify-center font-serif text-xl font-normal italic"
+                        >
+                            {quastion}
+                        </p>
+                    {/each}
+                </div>
+            </main>
+        {/if}
+
+        <main
+            class:w-[47%]={chapter.data.question.sub_questions &&
+                chapter.data.question.sub_questions.length > 0}
+            class="container card m-4 mx-auto rounded-xl bg-neutral px-4"
+        >
+            <div class="card-body gap-4">
+                <AudioRecorder bind:recordings={$form.attachments} />
+            </div>
+        </main>
+    </div>
 
     <section class="container mx-auto mb-8 flex justify-between">
         <a
