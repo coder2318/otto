@@ -107,19 +107,16 @@
                 <span class="font-normal text-neutral">Explore Your</span>
                 <button
                     on:click={() => dropdownDialog.showModal()}
-                    class="inline-flex rounded-full border-none bg-neutral/30 p-8 hover:clear-none"
+                    class="inline-flex items-center rounded-full border-none bg-neutral/30 p-8 backdrop-blur hover:clear-none"
                 >
-                    <i class="mr-8 font-normal text-neutral"
+                    <i class="mr-20 font-normal text-neutral"
                         >{timelines.data[query?.filter?.timeline_id - 1]
                             ?.title ?? 'Timeline'}</i
                     >
-                    <Fa
-                        class="text-[2.5rem] text-neutral"
-                        icon={faArrowDownLong}
-                    />
+                    <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
                 </button>
                 <dialog bind:this={dropdownDialog} class="modal">
-                    <form method="dialog" class="modal-backdrop">
+                    <form method="dialog" class="modal-backdrop bg-primary/60">
                         <button />
                     </form>
                     <div class="modal-box bg-transparent shadow-none">
@@ -127,7 +124,7 @@
                             {#each timelines.data as timeline}
                                 <li>
                                     <button
-                                        class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 font-serif text-4xl font-normal italic text-neutral hover:clear-none"
+                                        class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 font-serif text-4xl font-normal italic text-neutral backdrop-blur hover:clear-none"
                                         class:!bg-secondary={query?.filter
                                             ?.timeline_id == timeline.id}
                                         on:click={selectOption}
