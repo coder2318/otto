@@ -108,7 +108,7 @@
                 >
                     <i class="mr-20 font-normal text-white"
                         >{timelines.data[query?.filter?.timeline_id - 1]
-                            .title}</i
+                            ?.title ?? 'Childhood'}</i
                     >
                     <Fa
                         class="text-[2.5rem] text-white"
