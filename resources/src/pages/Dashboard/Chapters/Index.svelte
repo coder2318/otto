@@ -14,7 +14,11 @@
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
-    import { faClose, faSliders } from '@fortawesome/free-solid-svg-icons'
+    import {
+        faClose,
+        faArrowDownLong,
+        faTrash,
+    } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
 
     export let questions_chapters: {
@@ -27,6 +31,7 @@
 
     let modal: InviteGuestModal
     let dialog: HTMLDialogElement
+    let dropdownDialog: HTMLDialogElement
     let chapterId: number = null
     let isShowTimeLine: boolean = false
     let selected: number = null
@@ -64,14 +69,13 @@
         router.delete(`/chapters/${chapterId}`)
     }
 
-    function toggleTimeLine() {
-        isShowTimeLine = !isShowTimeLine
-    }
-
     function selectOption(e) {
+        console.log(e.currentTarget.value)
         e.currentTarget.value !== ''
             ? ($filter.timeline_id = e.currentTarget.value)
             : removeFilter('timeline_id')
+
+        dropdownDialog.close()
     }
 </script>
 
@@ -97,17 +101,51 @@
         </div>
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-                {story.data.title}
+                <span class="font-normal text-white">Explore Your</span>
+                <button
+                    on:click={dropdownDialog.showModal()}
+                    class="inline-flex rounded-full border-none bg-white/20 px-[22px] py-[32px] hover:clear-none"
+                >
+                    <i class="mr-20 font-normal text-white"
+                        >{timelines.data[query?.filter?.timeline_id - 1]
+                            .title}</i
+                    >
+                    <Fa
+                        class="text-[2.5rem] text-white"
+                        icon={faArrowDownLong}
+                    />
+                </button>
+                <dialog
+                    bind:this={dropdownDialog}
+                    class="modal bg-[#0C345C]/70"
+                >
+                    <div class="modal-box bg-transparent shadow-none">
+                        <ul class="flex flex-col">
+                            {#each timelines.data as timeline}
+                                <li
+                                    class="btn mb-4 w-[400px] content-center justify-start rounded-full border-none bg-white/20 py-[32px] font-serif text-[25px] font-normal italic text-white"
+                                    class:selected={query?.filter
+                                        ?.timeline_id == timeline.id}
+                                    on:click={selectOption}
+                                    value={timeline.id}
+                                >
+                                    {timeline.title}
+                                </li>
+                            {/each}
+                        </ul>
+                    </div>
+                </dialog>
+                <span class="font-normal text-white">With These Questions</span>
             </h1>
         </div>
     </div>
 </header>
 
 <section
-    class="container m-4 mx-auto flex justify-between px-4 pb-4 md:pb-0 lg:my-8"
+    class="gird-cols-1 container m-4 mx-auto grid place-content-between gap-4 border-b-2 border-base-content/20 px-4 pb-4 md:grid-cols-2 md:pb-0 lg:my-8"
     in:fade
 >
-    <div class="tabs w-[90%] border-b-2 border-base-content/20">
+    <div class="tabs">
         <button
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == undefined}
@@ -140,33 +178,6 @@
         >
             Completed
         </button>
-    </div>
-
-    <div>
-        <button on:click={toggleTimeLine} class="btn btn-circle bg-white">
-            <Fa style="height: 1.5rem" icon={faSliders} />
-        </button>
-        {#if isShowTimeLine}
-            <div class="relative">
-                <ul class="absolute right-0 top-[5px] z-50 flex flex-col">
-                    {#each timelines.data as timeline}
-                        <li
-                            class="btn mb-2 w-[200px] justify-start rounded-full border-none bg-[#4b4b4b] font-serif text-[18px] font-normal italic text-white"
-                            class:selected={query?.filter?.timeline_id ==
-                                timeline.id}
-                            on:click={(e) =>
-                                e.currentTarget.value !== ''
-                                    ? ($filter.timeline_id =
-                                          e.currentTarget.value)
-                                    : removeFilter('timeline_id')}
-                            value={timeline.id}
-                        >
-                            {timeline.title}
-                        </li>
-                    {/each}
-                </ul>
-            </div>
-        {/if}
     </div>
 </section>
 
@@ -216,18 +227,6 @@
                     <h2 class="card-title text-2xl font-normal">
                         {chapter.title}
                     </h2>
-                    {#if chapter.status !== 'undone'}
-                        <div class="flex justify-center">
-                            <button
-                                class="btn btn-error btn-sm w-[200px]"
-                                on:click|preventDefault={deleteChapter(
-                                    chapter.id
-                                )}
-                            >
-                                Delete
-                            </button>
-                        </div>
-                    {/if}
                     {#if chapter.type === 'question'}
                         <div class="card-actions">
                             <button
@@ -239,7 +238,6 @@
                             </button>
                         </div>
                     {/if}
-                    <p />
                     <div class="card-actions justify-between">
                         <div>
                             Started: {dayjs(chapter.created_at).format(
@@ -250,6 +248,18 @@
                             {chapter.status}
                         </div>
                     </div>
+                    {#if chapter.status !== 'undone'}
+                        <div class="absolute bottom-[30px] right-[30px]">
+                            <button
+                                class="btn btn-circle btn-error"
+                                on:click|preventDefault={deleteChapter(
+                                    chapter.id
+                                )}
+                            >
+                                <Fa icon={faTrash} />
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             </a>
         {/each}

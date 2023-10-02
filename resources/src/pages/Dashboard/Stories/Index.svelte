@@ -155,14 +155,6 @@
                     <h2 class="card-title text-2xl font-normal">
                         {story.title}
                     </h2>
-                    <div class="flex justify-center">
-                        <button
-                            class="btn btn-error btn-sm w-[200px]"
-                            on:click|preventDefault={deleteStory(story.id)}
-                        >
-                            Delete
-                        </button>
-                    </div>
                     <div class="card-actions justify-between">
                         <div>
                             Started: {dayjs(story.created_at).format(
@@ -171,6 +163,16 @@
                         </div>
                         <div class="badge badge-outline">{story.status}</div>
                     </div>
+                    {#if story.status !== 'undone'}
+                        <div class="absolute right-[20px] top-[20px]">
+                            <button
+                                class="btn btn-circle btn-error"
+                                on:click|preventDefault={deleteStory(story.id)}
+                            >
+                                <Fa icon={faTrash} />
+                            </button>
+                        </div>
+                    {/if}
                 </div>
             </a>
         {/each}
