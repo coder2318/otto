@@ -12,6 +12,6 @@ class BookCoverTemplateSeeder extends Seeder
      */
     public function run(): void
     {
-        BookCoverTemplate::factory(50)->create();
+        BookCoverTemplate::factory()->create();
     }
 }
