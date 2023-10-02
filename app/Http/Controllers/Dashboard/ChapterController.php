@@ -19,10 +19,12 @@ use App\Models\Story;
 use App\Models\Timeline;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
+use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ChapterController extends Controller
 {
@@ -32,18 +34,18 @@ class ChapterController extends Controller
         $this->middleware('can:update,chapter')
             ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enhance', 'finish']);
 
-        $this->middleware(fn (...$args) => $this->preventAccessFromProcessing(...$args))
-            ->only([
-                'write',
-                'attachments',
-                'transcribe',
-                'deleteAttachments',
-                'record',
-                'upload',
-                'process',
-                'finish',
-                'destroy',
-            ]);
+        // $this->middleware(fn (...$args) => $this->preventAccessFromProcessing(...$args))
+        //     ->only([
+        //         'write',
+        //         'attachments',
+        //         'transcribe',
+        //         'deleteAttachments',
+        //         'record',
+        //         'upload',
+        //         'process',
+        //         'finish',
+        //         'destroy',
+        //     ]);
     }
 
     protected function preventAccessFromProcessing(Request $request, callable $next)
@@ -140,12 +142,20 @@ class ChapterController extends Controller
         return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'We are processing your chapter! We will notify you when it is done.');
     }
 
+    public function processStreamed(Chapter $chapter, OpenAIService $service)
+    {
+        return new StreamedResponse(function () use ($chapter, $service) {
+            foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
+                echo $chunk;
+
+                ob_flush();
+                flush();
+            }
+        });
+    }
+
     public function enhance(Chapter $chapter)
     {
-        if (! $chapter->edit) {
-            return redirect()->route('dashboard.chapters.write', compact('chapter'))->with('message', 'Chapter have no pending enhancement!');
-        }
-
         return Inertia::render('Dashboard/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
         ]);

@@ -20,8 +20,6 @@ class Chapter extends Model implements HasMedia
     protected $fillable = [
         'title',
         'content',
-        'edit',
-        'processing',
         'order',
         'status',
         'story_id',

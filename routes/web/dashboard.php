@@ -96,6 +96,7 @@ Route::middleware('user-configured')->group(function () {
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
             Route::post('/enhance', 'process')->name('enhance.post');
+            Route::get('/enhance/stream', 'processStreamed')->name('enhance.stream');
             Route::get('/finish', 'finish')->name('finish');
         });
 

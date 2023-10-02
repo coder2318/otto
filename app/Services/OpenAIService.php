@@ -53,8 +53,8 @@ class OpenAIService
                     ['role' => 'system', 'content' => <<<'TXT'
                     You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
                     The ghostwriting must be narrated in the First Person.
-                    Please write in the styles and rules below for writing my autobiography. The chapter is about my reflections on my most memorable relationship of your teenage years - whether romantic or friendly?  .   It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
                     It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
+                    Please write in the styles and rules below for writing my autobiography.
 
                     Rules:
                     Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
@@ -79,7 +79,7 @@ class OpenAIService
                 $chat = OpenAI::chat()->create([
                     'model' => config('services.openai.models.chat'),
                     'messages' => $messages,
-                    'temperature' => 0.5,
+                    'temperature' => 0.2,
                 ]);
 
                 $result .= ' '.$chat['choices'][0]['message']['content'];
@@ -87,6 +87,61 @@ class OpenAIService
 
             return $result;
         });
+    }
+
+    public function chatEditStreamed(string $input, string $question)
+    {
+        if ($this->fake) {
+            foreach (str_split($input) as $segment) {
+                yield $segment;
+                usleep(20000);
+            }
+
+            return true;
+        }
+
+        foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
+            $messages = [
+                    ['role' => 'system', 'content' => <<<'TXT'
+                    You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
+                    The ghostwriting must be narrated in the First Person.
+                    It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
+                    Please write in the styles and rules below for writing my autobiography.
+
+                    Rules:
+                    Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
+                    Write in the uplifting inspiration style of Richard Branson when he wrote "Losing my Virginity"
+                    Accuracy is paramount. Output the exact same information you receive from the input with a high-quality, well-written tone.
+                    Ensure the rewrite is highly engaging to readers and high quality.
+                    Use college-level language and thought-provoking statements.
+                    Write in the first person, documenting my story accurately as a first person narrator.
+                    TXT],
+            ];
+
+            $messages[] = [
+                'role' => 'assistant',
+                'content' => $question,
+            ];
+
+            $messages[] = [
+                'role' => 'user',
+                'content' => Html2Text::convert($segment),
+            ];
+
+            $stream = OpenAI::chat()->createStreamed([
+                'model' => config('services.openai.models.chat'),
+                'messages' => $messages,
+                'temperature' => 0.2,
+            ]);
+
+            foreach ($stream as $response) {
+                yield $response['choices'][0]['delta']['content'] ?? '';
+            }
+
+            yield PHP_EOL.PHP_EOL;
+        }
+
+        return true;
     }
 
     public static function segmentate(string $input, int $maxWords = 1300)

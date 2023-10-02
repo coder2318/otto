@@ -6,21 +6,23 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { inertia, useForm, router } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import Otto from '@/components/SVG/otto.svg.svelte'
+    import { onMount } from 'svelte'
 
     export let chapter: { data: App.Chapter }
 
-    let editor: Editor
+    let enhance: Editor
+    let original: Editor
 
     const form = useForm({
         original: chapter.data.content,
-        enhanced: chapter.data.edit,
+        enhanced: '',
         use: null,
         status: chapter.data.status,
     })
@@ -48,6 +50,28 @@
             }))
             .put(`/chapters/${chapter.data.id}`)
     }
+
+    onMount(() => {
+        fetch(`/chapters/${chapter.data.id}/enhance/stream`)
+            .then((res) =>
+                res.body.pipeThrough(new TextDecoderStream()).getReader()
+            )
+            .then((reader) =>
+                reader.read().then(function pump({ done, value }) {
+                    if (done) {
+                        original.setOptions({ editable: true })
+                        enhance.setOptions({ editable: true })
+                        return
+                    }
+
+                    original.setOptions({ editable: false })
+                    enhance.setOptions({ editable: false })
+                    $form.enhanced += value
+
+                    return reader.read().then(pump)
+                })
+            )
+    })
 </script>
 
 <svelte:head>
@@ -88,7 +112,7 @@
             </div>
             <TipTap
                 class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
-                bind:editor
+                bind:editor={enhance}
                 bind:content={$form.enhanced}
                 placeholder="Write your story here..."
             >
@@ -125,7 +149,7 @@
             </div>
             <TipTap
                 class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
-                bind:editor
+                bind:editor={original}
                 bind:content={$form.original}
                 placeholder="Write your story here..."
             >

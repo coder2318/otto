@@ -125,13 +125,13 @@
                     Complete &<br /> Finish this Chapter
                 </a>
 
-                <button
+                <a
+                    href="/chapters/{chapter.data.id}/enhance"
                     class="btn btn-primary rounded-full"
-                    type="button"
-                    on:click|preventDefault={enhance}
+                    use:inertia
                 >
                     Ask Otto AI to<br />enhance the Writing
-                </button>
+                </a>
             </div>
         {/if}
     </section>
