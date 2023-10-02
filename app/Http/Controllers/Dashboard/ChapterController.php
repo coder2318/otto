@@ -48,21 +48,21 @@ class ChapterController extends Controller
         //     ]);
     }
 
-    protected function preventAccessFromProcessing(Request $request, callable $next)
-    {
-        /** @var Chapter */
-        $chapter = $request->route('chapter');
+    // protected function preventAccessFromProcessing(Request $request, callable $next)
+    // {
+    //     /** @var Chapter */
+    //     $chapter = $request->route('chapter');
 
-        if ($chapter->edit) {
-            return redirect()->route('dashboard.chapters.enhance', compact('chapter'))->with('message', 'Please review your chapter enhancement first!');
-        }
+    //     if ($chapter->edit) {
+    //         return redirect()->route('dashboard.chapters.enhance', compact('chapter'))->with('message', 'Please review your chapter enhancement first!');
+    //     }
 
-        if ($chapter->processing) {
-            return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('error', 'Chapter is being processed, please wait!');
-        }
+    //     if ($chapter->processing) {
+    //         return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('error', 'Chapter is being processed, please wait!');
+    //     }
 
-        return $next($request);
-    }
+    //     return $next($request);
+    // }
 
     public function index(Story $story, ChaptersRequest $request)
     {
@@ -133,16 +133,7 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function process(Chapter $chapter)
-    {
-        $chapter->update(['processing' => true]);
-
-        dispatch(new ProcessChapter($chapter))->onQueue('enhance');
-
-        return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'We are processing your chapter! We will notify you when it is done.');
-    }
-
-    public function processStreamed(Chapter $chapter, OpenAIService $service)
+    public function process(Chapter $chapter, OpenAIService $service)
     {
         return new StreamedResponse(function () use ($chapter, $service) {
             foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
