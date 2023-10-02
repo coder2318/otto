@@ -7,13 +7,11 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { useForm } from '@inertiajs/svelte'
-    import FilePond from '@/components/FilePond.svelte'
 
     export let story_types: { data: App.StoryType[] }
 
     const form = useForm({
         title: '',
-        cover: '',
         story_type_id: null,
     })
 </script>
@@ -42,28 +40,11 @@
                     bind:value={$form.title}
                     type="text"
                     name="title"
-                    placeholder="Title"
+                    placeholder="Enter story title..."
                 />
                 {#if $form.errors.title}
                     <span class="label-text-alt mt-1 text-left text-error">
                         {$form.errors.title}
-                    </span>
-                {/if}
-            </div>
-            <div class="form-control">
-                <label class="label" for="cover">
-                    <span class="label-text">Cover</span>
-                </label>
-                <FilePond
-                    maxFiles="1"
-                    server={false}
-                    storeAsFile={true}
-                    name="cover"
-                    onaddfile={(err, data) => ($form.cover = data.file)}
-                />
-                {#if $form.errors.cover}
-                    <span class="label-text-alt mt-1 text-left text-error">
-                        {$form.errors.cover}
                     </span>
                 {/if}
             </div>

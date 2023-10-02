@@ -175,7 +175,9 @@
                     <figure class="mb-2 max-h-[300px]">
                         <img
                             src={chapter.cover ??
-                                'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                                `https://placehold.co/600x400?${new URLSearchParams(
+                                    { text: chapter.title }
+                                ).toString()}`}
                             alt={chapter.title}
                             class="h-full rounded-xl object-contain"
                         />

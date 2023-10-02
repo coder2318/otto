@@ -129,7 +129,11 @@
                 <figure class="max-h-[300px] bg-base-200">
                     <img
                         src={story.cover ??
-                            'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                            `https://placehold.co/600x400?${new URLSearchParams(
+                                {
+                                    text: story.title,
+                                }
+                            )}`}
                         class="h-full object-contain"
                         alt={story.title}
                     />

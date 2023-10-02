@@ -12,10 +12,6 @@ class ChapterSeeder extends Seeder
      */
     public function run(): void
     {
-        Chapter::factory(100)->withStory()->withTimeline()->create()->each(function (Chapter $chapter) {
-            $chapter->addMediaFromUrl('https://picsum.photos/640/480')
-                ->withResponsiveImages()
-                ->toMediaCollection('cover');
-        });
+        Chapter::factory(100)->withStory()->withTimeline()->create();
     }
 }
