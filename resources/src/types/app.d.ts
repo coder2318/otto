@@ -83,6 +83,7 @@ declare namespace App {
         order: number
         cover: string | null
         attachments: Attachment[] | null
+        question?: TimelineQuestion | null
         status: string
         story_id: number | null
         story?: Story
@@ -105,6 +106,7 @@ declare namespace App {
         question: string
         order: number
         cover: string
+        sub_questions: string[] | null
     }
 
     interface Attachment {

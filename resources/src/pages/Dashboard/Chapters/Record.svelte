@@ -43,7 +43,7 @@
 
 <Breadcrumbs step={2} />
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
+<section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
     <div class="card-body gap-4">
         <input
             class="input card-title input-ghost font-serif"
@@ -53,33 +53,30 @@
 </section>
 
 <form on:submit|preventDefault={submit} in:fade>
-    <div class="flex flex-row">
-        {#if chapter.data?.question?.sub_questions && chapter.data?.question?.sub_questions.length > 0}
-            <main
-                class="container card m-4 mx-auto w-[47%] rounded-xl bg-base-200 px-4"
-            >
+    <main
+        class:lg:grid-cols-2={chapter.data?.question?.sub_questions?.length}
+        class="container m-4 mx-auto grid grid-cols-1 gap-8"
+    >
+        {#if chapter.data?.question?.sub_questions?.length}
+            <div class="card min-h-[200px] rounded-xl bg-base-200 px-4">
                 <div class="carousel h-full">
                     {#each chapter.data?.question?.sub_questions as quastion}
                         <p
-                            class="carousel-item flex h-full w-full flex-wrap content-center justify-center font-serif text-xl font-normal italic"
+                            class="carousel-item flex h-full w-full flex-wrap content-center justify-center text-center font-serif text-2xl font-normal italic"
                         >
                             {quastion}
                         </p>
                     {/each}
                 </div>
-            </main>
+            </div>
         {/if}
 
-        <main
-            class:w-[47%]={chapter.data.question.sub_questions &&
-                chapter.data.question.sub_questions.length > 0}
-            class="container card m-4 mx-auto rounded-xl bg-neutral px-4"
-        >
+        <div class="card rounded-xl bg-neutral">
             <div class="card-body gap-4">
                 <AudioRecorder bind:recordings={$form.attachments} />
             </div>
-        </main>
-    </div>
+        </div>
+    </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
         <a

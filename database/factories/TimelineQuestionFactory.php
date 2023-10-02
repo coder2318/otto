@@ -19,6 +19,7 @@ class TimelineQuestionFactory extends Factory
     {
         return [
             'question' => $this->faker->sentence(),
+            'sub_questions' => $this->faker->sentences(5),
         ];
     }
 
