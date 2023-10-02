@@ -30,7 +30,6 @@
                 (content = editor.getText({ blockSeparator: '\n\n' })),
             onCreate: ({ editor }) => {
                 if (autofocus) {
-                    console.log('autofocus')
                     editor.chain().focus('end').run()
                 }
             },
