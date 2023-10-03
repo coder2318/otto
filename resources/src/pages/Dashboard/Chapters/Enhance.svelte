@@ -19,6 +19,7 @@
 
     let enhance: Editor
     let original: Editor
+    let loading: boolean = true
 
     const form = useForm({
         original: chapter.data.content,
@@ -49,11 +50,14 @@
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))
             .put(`/chapters/${chapter.data.id}`, {
-                preserveScroll: true
+                preserveScroll: true,
             })
     }
 
     onMount(() => {
+        original.setOptions({ editable: false })
+        enhance.setOptions({ editable: false })
+
         fetch(`/chapters/${chapter.data.id}/enhance/stream`)
             .then((res) =>
                 res.body.pipeThrough(new TextDecoderStream()).getReader()
@@ -63,11 +67,9 @@
                     if (done) {
                         original.setOptions({ editable: true })
                         enhance.setOptions({ editable: true })
+                        loading = false
                         return
                     }
-
-                    original.setOptions({ editable: false })
-                    enhance.setOptions({ editable: false })
                     $form.enhanced += value
 
                     return reader.read().then(pump)
@@ -118,22 +120,35 @@
                 bind:content={$form.enhanced}
                 placeholder="Write your story here..."
             >
-                <h2
-                    slot="top"
-                    class="m-0 flex items-center justify-between gap-4 rounded-none border border-b-0 border-neutral-content/20 bg-neutral p-4 text-2xl text-primary md:text-3xl lg:text-4xl"
-                >
-                    <span class="flex items-center gap-4"
-                        ><Otto class="h-10" />
-                        <span>Otto's <i>Enhance</i></span></span
+                <div slot="top">
+                    {#if loading}
+                        <figure
+                            class="m-0 flex flex-col gap-2 text-base-content/50"
+                        >
+                            <progress
+                                class="progress progress-secondary w-full rounded-none"
+                            />
+                        </figure>
+                    {/if}
+                    <h2
+                        class="m-0 flex items-center justify-between gap-4 rounded-none border border-b-0 border-neutral-content/20 bg-neutral p-4 text-2xl text-primary md:text-3xl lg:text-4xl"
                     >
-                    <button
-                        class="btn btn-primary btn-xs font-sans"
-                        class:btn-outline={$form.use == 'enhanced'}
-                        disabled={$form.use == 'enhanced'}
-                        on:click|preventDefault={() => ($form.use = 'enhanced')}
-                        >Use OTTO Writing</button
-                    >
-                </h2>
+                        <span class="flex items-center gap-4"
+                            ><Otto class="h-10" />
+                            <span>Otto's <i>Enhance</i></span></span
+                        >
+                        {#if !loading}
+                            <button
+                                class="btn btn-primary btn-xs font-sans"
+                                class:btn-outline={$form.use == 'enhanced'}
+                                disabled={$form.use == 'enhanced'}
+                                on:click|preventDefault={() =>
+                                    ($form.use = 'enhanced')}
+                                >Use OTTO Writing</button
+                            >
+                        {/if}
+                    </h2>
+                </div>
             </TipTap>
         </div>
         <div
@@ -160,13 +175,16 @@
                     class="m-0 flex items-center justify-between gap-4 rounded-none border border-b-0 border-neutral-content/20 bg-neutral p-4 text-2xl md:text-3xl lg:text-4xl"
                 >
                     <span>Original Writing</span>
-                    <button
-                        class="btn btn-primary btn-xs font-sans"
-                        class:btn-outline={$form.use == 'original'}
-                        disabled={$form.use == 'original'}
-                        on:click|preventDefault={() => ($form.use = 'original')}
-                        >Use Original Writing</button
-                    >
+                    {#if !loading}
+                        <button
+                            class="btn btn-primary btn-xs font-sans"
+                            class:btn-outline={$form.use == 'original'}
+                            disabled={$form.use == 'original'}
+                            on:click|preventDefault={() =>
+                                ($form.use = 'original')}
+                            >Use Original Writing</button
+                        >
+                    {/if}
                 </h2>
             </TipTap>
         </div>
