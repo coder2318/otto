@@ -13,7 +13,7 @@ export default {
     ],
     theme: {
         fontFamily: {
-            'serif': ['"Baskerville 10 Pro"', '"Baskerville 120 Pro"', ...fontFamily.serif],
+            'serif': ['baskerville-urw', ...fontFamily.serif],
             'sans': ['ABC Diatype', ...fontFamily.sans],
             'mono': fontFamily.mono
         }
