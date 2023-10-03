@@ -42,7 +42,9 @@
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(`/chapters/${chapter.data.id}`)
+            .put(`/chapters/${chapter.data.id}`, {
+                preserveScroll: true,
+            })
     }
 </script>
 

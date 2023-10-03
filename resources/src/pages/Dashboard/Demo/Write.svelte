@@ -43,7 +43,9 @@
                 ...data,
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(`/demo`)
+            .put(`/demo`, {
+                preserveScroll: true
+            })
     }
 </script>
 

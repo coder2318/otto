@@ -61,7 +61,7 @@
             $messages = $messages.filter((message) => {
                 return (
                     !message.autohide ||
-                    new Date().getTime() - message.timestamp.getTime() < 5000
+                    new Date().getTime() - message.timestamp.getTime() < 3000
                 )
             })
         }, 1000)
@@ -96,7 +96,7 @@
     })
 </script>
 
-<div class="toast toast-end toast-bottom">
+<div class="toast toast-end toast-top top-16 z-50">
     {#each $messages as message, i (i)}
         <div
             class="alert max-w-screen-sm grid-flow-col {message.type}"

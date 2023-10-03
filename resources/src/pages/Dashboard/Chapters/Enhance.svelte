@@ -48,7 +48,9 @@
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))
-            .put(`/chapters/${chapter.data.id}`)
+            .put(`/chapters/${chapter.data.id}`, {
+                preserveScroll: true
+            })
     }
 
     onMount(() => {
