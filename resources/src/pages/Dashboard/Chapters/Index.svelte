@@ -14,6 +14,7 @@
     import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
+    import background from '@/assets/img/stories-bg.jpg'
     import {
         faClose,
         faArrowDownLong,
@@ -82,8 +83,14 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<header class="hero" style="background-image: url({story.data.cover})" in:fade>
-    <div class="hero-overlay bg-gradient-to-br from-primary/80 to-primary/40" />
+<header
+    class="hero relative bg-top"
+    style="background-image: url({background})"
+    in:fade
+>
+    <div
+        class="hero-overlay absolute bg-gradient-to-br from-primary/80 to-primary/40"
+    />
     <div
         class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
     >
