@@ -92,9 +92,11 @@ class OpenAIService
     public function chatEditStreamed(string $input, string $question)
     {
         if ($this->fake) {
+            sleep(3);
+
             foreach (str_split($input) as $segment) {
                 yield $segment;
-                usleep(20000);
+                usleep(10000);
             }
 
             return true;

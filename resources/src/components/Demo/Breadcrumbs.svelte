@@ -19,7 +19,7 @@
         <span class="step-icon">
             <Otto class="w-4 leading-none" />
         </span>
-        Colaborate with OTTO
+        Collaborate with OTTO
     </div>
     <div class="step-breadcrumb" class:inactive={step < 4}>
         <span class="step-icon">
