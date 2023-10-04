@@ -94,7 +94,7 @@
     <div
         class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
     >
-        <div class="breadcrumbs text-sm">
+        <!-- <div class="breadcrumbs text-sm">
             <ul>
                 <li><a href="/stories" use:inertia>Stories</a></li>
                 <li>
@@ -108,7 +108,7 @@
                     >
                 </li>
             </ul>
-        </div>
+        </div> -->
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
                 <span class="font-normal text-neutral">Explore Your</span>
