@@ -43,7 +43,7 @@
                 status: event.submitter.dataset?.status ?? data.status,
             }))
             .put(`/guests/chapters/${chapter.data.id}`, {
-                preserveScroll: true
+                preserveScroll: true,
             })
     }
 </script>

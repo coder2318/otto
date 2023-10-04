@@ -31,7 +31,7 @@
     "dayjs": "^1.11.10",
     "eslint": "^8.50.0",
     "eslint-plugin-prettier": "^5.0.0",
-    "eslint-plugin-svelte": "^2.33.2",
+    "eslint-plugin-svelte": "^2.34.0",
     "filepond": "^4.30.4",
     "filepond-plugin-file-encode": "^2.1.11",
     "filepond-plugin-file-validate-type": "^1.2.8",

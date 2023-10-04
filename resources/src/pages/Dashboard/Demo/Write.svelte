@@ -44,7 +44,7 @@
                 status: event.submitter.dataset?.status ?? data.status,
             }))
             .put(`/demo`, {
-                preserveScroll: true
+                preserveScroll: true,
             })
     }
 </script>
