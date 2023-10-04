@@ -5,18 +5,22 @@
 </script>
 
 <script lang="ts">
+    import qs from 'qs'
     import { fade } from 'svelte/transition'
-    import { useForm, inertia } from '@inertiajs/svelte'
+    import { useForm, inertia, page } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
-    export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
+
+    let query = qs.parse(
+        $page.url.replace(window.location.pathname, '').slice(1)
+    )
 
     let el: HTMLFormElement
     const form = useForm({
         title: '',
-        timeline_id: null,
+        timeline_id: query.timeline_id,
     })
 
     function submit() {
@@ -82,24 +86,6 @@
         </svg>
 
         <div class="card-body z-10 gap-4">
-            <div class="form-control">
-                <select
-                    bind:value={$form.timeline_id}
-                    class:select-error={$form.errors.timeline_id}
-                    class="select select-bordered select-ghost select-lg font-serif text-2xl italic"
-                    name="timeline_id"
-                >
-                    <option value={null} disabled>Select Timeline...</option>
-                    {#each timelines.data as timeline}
-                        <option value={timeline.id}>{timeline.title}</option>
-                    {/each}
-                </select>
-                {#if $form.errors.timeline_id}
-                    <span class="label-text-alt mt-1 text-left text-error">
-                        {$form.errors.timeline_id}
-                    </span>
-                {/if}
-            </div>
             <div class="form-control">
                 <textarea
                     class="textarea textarea-bordered textarea-ghost font-serif text-5xl"

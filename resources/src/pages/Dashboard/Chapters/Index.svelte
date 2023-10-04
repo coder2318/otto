@@ -199,22 +199,26 @@
     <div
         class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
     >
-        <div
-            class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
-            style="background-image: url({customChapter})"
-        >
-            <div class="card-body items-center justify-end">
-                <div class="card-actions justify-between">
-                    <a
-                        href="/stories/{story.data.id}/chapters/create"
-                        use:inertia
-                        class="btn btn-neutral btn-lg rounded-full"
-                    >
-                        Create Custom Question
-                    </a>
+        {#if query?.filter?.timeline_id}
+            <div
+                class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
+                style="background-image: url({customChapter})"
+            >
+                <div class="card-body items-center justify-end">
+                    <div class="card-actions justify-between">
+                        <a
+                            href="/stories/{story.data
+                                .id}/chapters/create?timeline_id={query?.filter
+                                    ?.timeline_id}"
+                            use:inertia
+                            class="btn btn-neutral btn-lg rounded-full"
+                        >
+                            Create Custom Question
+                        </a>
+                    </div>
                 </div>
             </div>
-        </div>
+        {/if}
         {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
             <a
                 class="group card min-h-[36rem] bg-neutral transition-transform hover:scale-105"

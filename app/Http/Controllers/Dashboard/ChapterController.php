@@ -69,7 +69,7 @@ class ChapterController extends Controller
             'story' => fn () => StoryResource::make($story->load('cover')),
             'questions_chapters' => fn () => QuestionsChaptersResource::collection(
                 $request->chaptersQuestions($story)
-                    ->paginate(5)
+                    ->paginate(isset($request->filter['timeline_id']) ? 5 : 6)
                     ->appends($request->query())
             ),
             'timelines' => fn () => TimelineResource::collection(
@@ -186,7 +186,6 @@ class ChapterController extends Controller
         }
 
         return Inertia::render('Dashboard/Chapters/Create', [
-            'timelines' => fn () => TimelineResource::collection(Timeline::all(['id', 'title'])),
             'story' => fn () => StoryResource::make($story),
         ]);
     }
