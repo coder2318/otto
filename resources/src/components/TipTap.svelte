@@ -3,6 +3,7 @@
     import StarterKit from '@tiptap/starter-kit'
     import Focus from '@tiptap/extension-focus'
     import { onMount } from 'svelte'
+    import { strToHtml } from '@/service/helpers'
 
     let element: HTMLElement
     export let editor: Editor = null
@@ -11,7 +12,7 @@
 
     $: {
         if (editor?.getText({ blockSeparator: '\n\n' }) !== content) {
-            editor?.commands.setContent(getContent(content), false)
+            editor?.commands.setContent(strToHtml(content), false)
         }
     }
 
@@ -24,7 +25,7 @@
             },
             element: element,
             extensions: [StarterKit, Focus],
-            content: getContent(content),
+            content: strToHtml(content),
             onTransaction: () => (editor = editor),
             onUpdate: ({ editor }) => (content = editor.getText({ blockSeparator: '\n\n' })),
             onCreate: ({ editor }) => {
@@ -36,10 +37,6 @@
 
         return () => editor?.destroy()
     })
-
-    function getContent(content) {
-        return '<p>' + (content?.replace(/\n([ \t]*\n)+/g, '</p><p>')?.replace('\n', '<br />') || '') + '</p>'
-    }
 </script>
 
 <div class="prose mx-auto my-4 max-w-none focus:outline-none">

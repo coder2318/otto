@@ -135,6 +135,10 @@ class ChapterController extends Controller
     {
         return new StreamedResponse(function () use ($chapter, $service) {
             foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
+                if (connection_aborted()) {
+                    return;
+                }
+
                 echo $chunk;
 
                 ob_flush();

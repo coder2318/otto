@@ -49,6 +49,8 @@
             .trim()
             .split(/\s+/).length ?? 0
 
+    const controller = new AbortController()
+
     function submit(event: SubmitEvent) {
         $form
             .transform((data) => ({
@@ -66,7 +68,7 @@
         original?.setOptions({ editable: false })
         enhance?.setOptions({ editable: false })
 
-        fetch(`/chapters/${chapter.data.id}/enhance/stream`)
+        fetch(`/chapters/${chapter.data.id}/enhance/stream`, { signal: controller.signal })
             .then((res) => res.body.pipeThrough(new TextDecoderStream()).getReader())
             .then((reader) =>
                 reader.read().then(function pump({ done, value }) {
@@ -84,6 +86,10 @@
                     return reader.read().then(pump)
                 })
             )
+
+        return () => {
+            controller.abort()
+        }
     })
 </script>
 

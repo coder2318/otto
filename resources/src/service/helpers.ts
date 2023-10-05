@@ -48,3 +48,10 @@ export function fileToBase64(file: File): Promise<string> {
         reader.readAsDataURL(file)
     })
 }
+
+export function strToHtml(str: string): string {
+    return str
+        .split('\n\n')
+        .map((x) => '<p>' + x.trim().replaceAll('\n', '<br/>') + '</p>')
+        .join()
+}

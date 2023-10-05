@@ -12,6 +12,8 @@
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
+    import { onMount } from 'svelte'
+    import { strToHtml } from '@/service/helpers'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -24,8 +26,6 @@
         status: chapter.data.status,
     })
 
-    $form.content += transcriptions ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n') : ''
-
     $: words =
         $form.content
             ?.replace(/(<([^>]+)>)/gi, '')
@@ -33,6 +33,20 @@
             .trim()
             .split(/\s+/).length ?? 0
     $: pages = Math.ceil(words / 500)
+
+    onMount(() => {
+        if (transcriptions) {
+            editor
+                .chain()
+                .focus('end')
+                .insertContent(strToHtml(Object.values(transcriptions).join('\n\n')), {
+                    parseOptions: {
+                        preserveWhitespace: false,
+                    },
+                })
+                .run()
+        }
+    })
 
     function submit(event: SubmitEvent) {
         $form
