@@ -17,6 +17,11 @@ class TimelineQuestion extends Model implements HasMedia
         'question',
         'order',
         'timeline_id',
+        'sub_questions',
+    ];
+
+    protected $casts = [
+        'sub_questions' => 'array',
     ];
 
     public function timeline(): BelongsTo
