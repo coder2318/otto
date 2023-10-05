@@ -46,8 +46,12 @@
             timer += 500
 
             if (timer > 10000) {
-                carousel.scrollLeft += carousel.offsetWidth
                 timer = 0
+                if (carousel.scrollLeft >= carousel.clientWidth) {
+                    carousel.scrollLeft = 0
+                } else {
+                    carousel.scrollLeft += carousel.offsetWidth
+                }
             }
         }, 500)
 
