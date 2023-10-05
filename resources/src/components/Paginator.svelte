@@ -13,11 +13,7 @@
             styles.push('btn-disabled')
         }
 
-        styles.push(
-            meta.current_page.toString() == link.label
-                ? activeClass
-                : buttonClass
-        )
+        styles.push(meta.current_page.toString() == link.label ? activeClass : buttonClass)
 
         return styles.join(' ')
     }
@@ -26,11 +22,7 @@
 {#if meta}
     <div class="join {className}" {...$$restProps}>
         {#each meta?.links as link}
-            <a
-                href={link.url ?? '#'}
-                class="btn join-item {linkStyle(link)}"
-                use:inertia
-            >
+            <a href={link.url ?? '#'} class="btn join-item {linkStyle(link)}" use:inertia>
                 {@html link.label}
             </a>
         {/each}

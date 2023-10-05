@@ -59,9 +59,7 @@
     style="background-image:{chapter.data.cover};"
     in:fade
 >
-    <div
-        class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40"
-    />
+    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40" />
     <div class="card-body z-10 gap-4 text-primary-content">
         <h1 class="card-title font-serif text-4xl italic">
             {chapter.data.title}
@@ -72,15 +70,12 @@
 <form on:submit|preventDefault={submit} class="p-4" in:fade>
     <main class="container m-4 mx-auto grid grid-cols-1 gap-8 lg:grid-cols-2">
         <div
-            class="form-control join join-vertical transition-all {$form.use ==
-            'enhanced'
+            class="form-control join join-vertical transition-all {$form.use == 'enhanced'
                 ? 'scale-[1.01] drop-shadow-lg'
                 : ''}"
         >
             <div class="alert alert-success flex items-center rounded-b-none">
-                <span
-                    >You have shared {wordsEnhanced} words in this chapter</span
-                >
+                <span>You have shared {wordsEnhanced} words in this chapter</span>
                 <span>|</span>
                 <span>{Math.round(wordsEnhanced / 500)} pages</span>
             </div>
@@ -102,22 +97,18 @@
                         class="btn btn-primary btn-xs font-sans"
                         class:btn-outline={$form.use == 'enhanced'}
                         disabled={$form.use == 'enhanced'}
-                        on:click|preventDefault={() => ($form.use = 'enhanced')}
-                        >Use OTTO Writing</button
+                        on:click|preventDefault={() => ($form.use = 'enhanced')}>Use OTTO Writing</button
                     >
                 </h2>
             </TipTap>
         </div>
         <div
-            class="form-control join join-vertical transition-all {$form.use ==
-            'original'
+            class="form-control join join-vertical transition-all {$form.use == 'original'
                 ? 'scale-[1.01] drop-shadow-lg'
                 : ''}"
         >
             <div class="alert alert-info flex items-center rounded-b-none">
-                <span
-                    >You have shared {wordsOriginal} words in this chapter</span
-                >
+                <span>You have shared {wordsOriginal} words in this chapter</span>
                 <span>|</span>
                 <span>{Math.round(wordsOriginal / 500)} pages</span>
             </div>
@@ -136,8 +127,7 @@
                         class="btn btn-primary btn-xs font-sans"
                         class:btn-outline={$form.use == 'original'}
                         disabled={$form.use == 'original'}
-                        on:click|preventDefault={() => ($form.use = 'original')}
-                        >Use Original Writing</button
+                        on:click|preventDefault={() => ($form.use = 'original')}>Use Original Writing</button
                     >
                 </h2>
             </TipTap>

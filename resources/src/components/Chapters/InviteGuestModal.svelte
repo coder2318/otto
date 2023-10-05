@@ -29,9 +29,7 @@
 <dialog bind:this={modal} class="modal">
     <div class="modal-box">
         <form method="dialog">
-            <button class="btn btn-circle btn-neutral float-right"
-                ><Fa icon={faClose} /></button
-            >
+            <button class="btn btn-circle btn-neutral float-right"><Fa icon={faClose} /></button>
         </form>
         <h3 class="text-2xl text-primary">Get a <i>Friend's Perspective</i></h3>
         <p class="py-4">

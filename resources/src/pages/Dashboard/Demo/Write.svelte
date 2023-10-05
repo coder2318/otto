@@ -25,9 +25,7 @@
         status: chapter.data.status,
     })
 
-    $form.content += transcriptions
-        ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n')
-        : ''
+    $form.content += transcriptions ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n') : ''
 
     $: words =
         $form.content
@@ -78,10 +76,7 @@
                         (You can share only 1 page for demo.)
                     {/if}</span
                 >
-                <span class="italic"
-                    >Please check transcription for any possible errors before
-                    continue.</span
-                >
+                <span class="italic">Please check transcription for any possible errors before continue.</span>
             </div>
             <TipTap
                 class="rounded-t-none border {$form.errors.content
@@ -102,31 +97,17 @@
     </main>
 
     <section class="container mx-auto mb-8 flex flex-wrap justify-between">
-        <a
-            href="/demo/files"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/demo/files" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Back
         </a>
         {#if $form.content != chapter.data.content}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full lg:btn-lg"
-                data-status="draft"
-            >
+            <button type="submit" class="btn btn-secondary rounded-full lg:btn-lg" data-status="draft">
                 Save & Next
             </button>
         {:else}
             <div class="flex gap-4">
-                <a
-                    use:inertia
-                    class="btn btn-primary btn-outline rounded-full lg:btn-lg"
-                    href="/demo/finish"
-                >
+                <a use:inertia class="btn btn-primary btn-outline rounded-full lg:btn-lg" href="/demo/finish">
                     Complete &<br /> Finish this Chapter
                 </a>
 

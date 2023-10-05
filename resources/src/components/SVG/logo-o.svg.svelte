@@ -1,9 +1,4 @@
-<svg
-    viewBox="0 0 48 48"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...$$restProps}
->
+<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" {...$$restProps}>
     <path
         d="M48 24C48 37.2527 37.2574 48 24.003 48C10.7426 48 0 37.2527 0 24C0 10.7473 10.7426 0 24.003 0C37.2574 0 48 10.7473 48 24Z"
         fill="#FFBE33"

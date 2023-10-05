@@ -12,10 +12,7 @@
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import FilePond from '@/components/FilePond.svelte'
     import { start, done } from '@/components/Loading.svelte'
-    import type {
-        FilePondErrorDescription,
-        FilePond as FilePondType,
-    } from 'filepond'
+    import type { FilePondErrorDescription, FilePond as FilePondType } from 'filepond'
 
     export let chapter: { data: App.Chapter }
 
@@ -118,24 +115,12 @@
     </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full font-normal pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Go Back
         </a>
         {#if $form.isDirty}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-            >
-                Transcribe
-            </button>
+            <button type="submit" class="btn btn-secondary rounded-full" data-status="draft"> Transcribe </button>
         {/if}
     </section>
 </form>

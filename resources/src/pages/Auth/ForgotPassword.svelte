@@ -35,10 +35,7 @@
         Forgot Your <span class="text-secondary-focus">Password</span>
     </div>
 
-    <form
-        on:submit|preventDefault={submit}
-        class="flex w-full flex-col items-center"
-    >
+    <form on:submit|preventDefault={submit} class="flex w-full flex-col items-center">
         <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="form-control w-full">
             <label class="label" for="email">
@@ -49,27 +46,20 @@
                 type="email"
                 name="email"
                 placeholder="Enter Email Address"
-                class="input input-bordered {$form.errors.email
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered {$form.errors.email ? 'input-error' : ''}"
                 required
             />
             {#if $form.errors.email}
-                <span class="label-text-alt mt-1 text-left text-error"
-                    >{$form.errors.email}</span
-                >
+                <span class="label-text-alt mt-1 text-left text-error">{$form.errors.email}</span>
             {/if}
         </div>
 
         <div class="form-control mt-8 w-full">
-            <button class="btn btn-primary rounded-full" type="submit"
-                >Reset Password</button
-            >
+            <button class="btn btn-primary rounded-full" type="submit">Reset Password</button>
         </div>
     </form>
 
     <div class="mt-8 text-center lg:mt-16">
-        Back to <a href="/login" use:inertia class="link-primary link">Log in</a
-        >
+        Back to <a href="/login" use:inertia class="link-primary link">Log in</a>
     </div>
 </div>

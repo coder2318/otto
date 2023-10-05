@@ -45,10 +45,7 @@
 
 <section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
     <div class="card-body gap-4">
-        <input
-            class="input card-title input-ghost font-serif"
-            bind:value={$form.title}
-        />
+        <input class="input card-title input-ghost font-serif" bind:value={$form.title} />
     </div>
 </section>
 
@@ -60,22 +57,12 @@
     </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/guests/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/guests/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Back
         </a>
         {#if $form.isDirty}
-            <button
-                type="submit"
-                class="btn btn-primary btn-outline rounded-full"
-                data-status="draft"
-            >
+            <button type="submit" class="btn btn-primary btn-outline rounded-full" data-status="draft">
                 Transcribe
             </button>
         {/if}

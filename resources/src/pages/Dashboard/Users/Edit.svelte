@@ -28,9 +28,7 @@
         details: {
             ...user.data.details,
             social: { ...user.data.details.social },
-            birth_date: dayjs(user.data.details.birth_date).format(
-                'DD/MM/YYYY'
-            ),
+            birth_date: dayjs(user.data.details.birth_date).format('DD/MM/YYYY'),
         },
     })
 
@@ -53,13 +51,9 @@
 
         fetch(user.data.avatar)
             .then(async (response) => {
-                initialFile = new File(
-                    [await response.blob()],
-                    user.data.avatar.split('/').pop(),
-                    {
-                        type: response.headers.get('content-type'),
-                    }
-                )
+                initialFile = new File([await response.blob()], user.data.avatar.split('/').pop(), {
+                    type: response.headers.get('content-type'),
+                })
 
                 const interval = setInterval(() => {
                     if (!pond) return
@@ -117,11 +111,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - Edit Profile</title>
 </svelte:head>
 
-<form
-    class="container mx-auto mt-8 flex flex-col gap-4 px-4"
-    in:fade
-    on:submit|preventDefault={submit}
->
+<form class="container mx-auto mt-8 flex flex-col gap-4 px-4" in:fade on:submit|preventDefault={submit}>
     <PageHeader class="text-primary">
         Personal <i>Information</i>
     </PageHeader>
@@ -130,9 +120,7 @@
         <div class="card-body gap-8">
             <div class="form-control">
                 <label class="label" for="avatar">
-                    <i class="label-text font-serif text-3xl text-primary">
-                        Avatar
-                    </i>
+                    <i class="label-text font-serif text-3xl text-primary"> Avatar </i>
                 </label>
                 {#if editor}
                     <FilePond
@@ -176,9 +164,7 @@
                             placeholder="Full Name"
                         />
                         {#if $form.errors['details.full_name']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.full_name']}
                             </span>
                         {/if}
@@ -196,9 +182,7 @@
                             placeholder="User Name"
                         />
                         {#if $form.errors.name}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.name}
                             </span>
                         {/if}
@@ -225,9 +209,7 @@
                             placeholder="Email"
                         />
                         {#if $form.errors.email}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.email}
                             </span>
                         {/if}
@@ -245,9 +227,7 @@
                             placeholder="Phone"
                         />
                         {#if $form.errors['details.phone']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.phone']}
                             </span>
                         {/if}
@@ -258,15 +238,11 @@
                         </label>
                         <select
                             class="select select-bordered"
-                            class:select-error={$form.errors[
-                                'details.language'
-                            ]}
+                            class:select-error={$form.errors['details.language']}
                             name="language"
                             bind:value={$form.details.language}
                         >
-                            <option value={null} disabled selected>
-                                Select Language...
-                            </option>
+                            <option value={null} disabled selected> Select Language... </option>
                             {#each languages as language}
                                 <option value={language.code}>
                                     {language.name}
@@ -274,9 +250,7 @@
                             {/each}
                         </select>
                         {#if $form.errors['details.language']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.language']}
                             </span>
                         {/if}
@@ -291,9 +265,7 @@
                             name="country"
                             bind:value={$form.details.country}
                         >
-                            <option value={null} disabled selected
-                                >Select Country...</option
-                            >
+                            <option value={null} disabled selected>Select Country...</option>
                             {#each countries as country}
                                 <option value={country.code}>
                                     {country.name}
@@ -301,9 +273,7 @@
                             {/each}
                         </select>
                         {#if $form.errors['details.country']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.country']}
                             </span>
                         {/if}
@@ -320,9 +290,7 @@
                             placeholder="Bio"
                         />
                         {#if $form.errors['details.bio']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.bio']}
                             </span>
                         {/if}
@@ -342,9 +310,7 @@
                         </label>
                         <input
                             class="input input-bordered"
-                            class:input-error={$form.errors[
-                                'details.birth_date'
-                            ]}
+                            class:input-error={$form.errors['details.birth_date']}
                             bind:value={$form.details.birth_date}
                             use:imask={{ mask: '00/00/0000' }}
                             pattern="\d&lcub;1,2&rcub;/\d&lcub;1,2&rcub;/\d&lcub;4&rcub;"
@@ -353,9 +319,7 @@
                             name="birth_date"
                         />
                         {#if $form.errors['details.birth_date']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.birth_date']}
                             </span>
                         {/if}
@@ -370,26 +334,18 @@
                             </label>
                             <select
                                 class="select select-bordered"
-                                class:select-error={$form.errors[
-                                    `quiz.${question.id}`
-                                ]}
+                                class:select-error={$form.errors[`quiz.${question.id}`]}
                                 bind:value={$form.details.quiz[question.id]}
                                 name={`question.${question.id}`}
                             >
-                                <option value={null} disabled
-                                    >Select Answer...</option
-                                >
+                                <option value={null} disabled>Select Answer...</option>
                                 {#each question.answers as answer}
                                     <option>{answer}</option>
                                 {/each}
                             </select>
                             {#if $form.errors[`details.quiz.${question.id}`]}
-                                <span
-                                    class="label-text-alt mt-1 text-left text-error"
-                                >
-                                    {$form.errors[
-                                        `details.quiz.${question.id}`
-                                    ]}
+                                <span class="label-text-alt mt-1 text-left text-error">
+                                    {$form.errors[`details.quiz.${question.id}`]}
                                 </span>
                             {/if}
                         </div>
@@ -408,18 +364,14 @@
                         </label>
                         <input
                             class="input input-bordered"
-                            class:input-error={$form.errors[
-                                'details.social.facebook'
-                            ]}
+                            class:input-error={$form.errors['details.social.facebook']}
                             bind:value={$form.details.social.facebook}
                             type="text"
                             name="facebook"
                             placeholder="Facebook"
                         />
                         {#if $form.errors['details.social.facebook']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.social.facebook']}
                             </span>
                         {/if}
@@ -430,18 +382,14 @@
                         </label>
                         <input
                             class="input input-bordered"
-                            class:input-error={$form.errors[
-                                'details.social.telegram'
-                            ]}
+                            class:input-error={$form.errors['details.social.telegram']}
                             bind:value={$form.details.social.telegram}
                             type="text"
                             name="telegram"
                             placeholder="Telegram"
                         />
                         {#if $form.errors['details.social.telegram']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.social.telegram']}
                             </span>
                         {/if}
@@ -452,18 +400,14 @@
                         </label>
                         <input
                             class="input input-bordered"
-                            class:input-error={$form.errors[
-                                'details.social.instagram'
-                            ]}
+                            class:input-error={$form.errors['details.social.instagram']}
                             bind:value={$form.details.social.instagram}
                             type="text"
                             name="instagram"
                             placeholder="Instagram"
                         />
                         {#if $form.errors['details.social.instagram']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.social.instagram']}
                             </span>
                         {/if}
@@ -474,18 +418,14 @@
                         </label>
                         <input
                             class="input input-bordered"
-                            class:input-error={$form.errors[
-                                'details.social.linkedin'
-                            ]}
+                            class:input-error={$form.errors['details.social.linkedin']}
                             bind:value={$form.details.social.linkedin}
                             type="text"
                             name="linkedin"
                             placeholder="LinkedIn"
                         />
                         {#if $form.errors['details.social.linkedin']}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors['details.social.linkedin']}
                             </span>
                         {/if}
@@ -496,11 +436,7 @@
     </main>
 
     <div class="mb-4 flex w-full items-center justify-end gap-4">
-        <button
-            type="button"
-            class="btn btn-primary btn-outline rounded-full"
-            on:click|preventDefault={reset}
-        >
+        <button type="button" class="btn btn-primary btn-outline rounded-full" on:click|preventDefault={reset}>
             Reset
         </button>
         <button type="submit" class="btn btn-primary rounded-full">Save</button>
@@ -508,18 +444,10 @@
 </form>
 
 <dialog bind:this={modal} class="modal">
-    <form
-        method="dialog"
-        class="modal-box w-11/12 max-w-5xl"
-        on:submit={canvelEdit}
-    >
+    <form method="dialog" class="modal-box w-11/12 max-w-5xl" on:submit={canvelEdit}>
         <div bind:this={element} class="min-h-[500px]" />
         <div class="modal-action">
-            <button
-                type="button"
-                class="btn btn-primary"
-                on:click|preventDefault={saveImage}>Confirm</button
-            >
+            <button type="button" class="btn btn-primary" on:click|preventDefault={saveImage}>Confirm</button>
             <button type="submit" class="btn">Close</button>
         </div>
     </form>

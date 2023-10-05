@@ -22,9 +22,7 @@
         email: '',
         address: '',
         city: '',
-        country_code:
-            new URLSearchParams(window.location.search).get('country_code') ??
-            '',
+        country_code: new URLSearchParams(window.location.search).get('country_code') ?? '',
         state_code: '',
         postal_code: '',
     })
@@ -84,9 +82,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.first_name}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.first_name}
                             </span>
                         {/if}
@@ -105,9 +101,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.last_name}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.last_name}
                             </span>
                         {/if}
@@ -126,9 +120,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.phone}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.phone}
                             </span>
                         {/if}
@@ -147,9 +139,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.email}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.email}
                             </span>
                         {/if}
@@ -168,9 +158,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.address}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.address}
                             </span>
                         {/if}
@@ -187,15 +175,11 @@
                         >
                             <option value="" disabled>Country</option>
                             {#each countries as country}
-                                <option value={country.code}
-                                    >{country.name}</option
-                                >
+                                <option value={country.code}>{country.name}</option>
                             {/each}
                         </select>
                         {#if $form.errors.country_code}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.country_code}
                             </span>
                         {/if}
@@ -215,9 +199,7 @@
                             {/each}
                         </select>
                         {#if $form.errors.state_code}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.state_code}
                             </span>
                         {/if}
@@ -236,9 +218,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.city}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.city}
                             </span>
                         {/if}
@@ -257,9 +237,7 @@
                             disabled={!!price}
                         />
                         {#if $form.errors.postal_code}
-                            <span
-                                class="label-text-alt mt-1 text-left text-error"
-                            >
+                            <span class="label-text-alt mt-1 text-left text-error">
                                 {$form.errors.postal_code}
                             </span>
                         {/if}
@@ -274,11 +252,7 @@
                 <hr />
                 <div class="grid grid-cols-4 items-center justify-center gap-2">
                     <div class="col-span-1">
-                        <img
-                            src={story.data.cover}
-                            alt="cover"
-                            class="w-full"
-                        />
+                        <img src={story.data.cover} alt="cover" class="w-full" />
                     </div>
                     <div class="col-span-3 text-primary">
                         <h4>
@@ -290,14 +264,9 @@
                 </div>
                 {#if dayjs(story.data.created_at).diff(dayjs(), 'month') <= 6}
                     <div class="alert alert-success gap-0 p-2">
-                        <div
-                            class="w-full rounded-xl border-2 border-dashed border-neutral p-2 text-center"
-                        >
-                            Congratulations on completing your story in six
-                            months! As a bonus, you will receive
-                            <b class="block font-serif italic"
-                                >three extra books.</b
-                            >
+                        <div class="w-full rounded-xl border-2 border-dashed border-neutral p-2 text-center">
+                            Congratulations on completing your story in six months! As a bonus, you will receive
+                            <b class="block font-serif italic">three extra books.</b>
                         </div>
                     </div>
                 {/if}

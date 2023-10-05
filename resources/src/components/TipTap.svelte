@@ -26,8 +26,7 @@
             extensions: [StarterKit, Focus],
             content: getContent(content),
             onTransaction: () => (editor = editor),
-            onUpdate: ({ editor }) =>
-                (content = editor.getText({ blockSeparator: '\n\n' })),
+            onUpdate: ({ editor }) => (content = editor.getText({ blockSeparator: '\n\n' })),
             onCreate: ({ editor }) => {
                 if (autofocus) {
                     editor.chain().focus('end').run()
@@ -39,13 +38,7 @@
     })
 
     function getContent(content) {
-        return (
-            '<p>' +
-            (content
-                ?.replace(/\n([ \t]*\n)+/g, '</p><p>')
-                ?.replace('\n', '<br />') || '') +
-            '</p>'
-        )
+        return '<p>' + (content?.replace(/\n([ \t]*\n)+/g, '</p><p>')?.replace('\n', '<br />') || '') + '</p>'
     }
 </script>
 

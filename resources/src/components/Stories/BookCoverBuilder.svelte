@@ -7,9 +7,7 @@
 
     let svg: HTMLElement | SVGElement
 
-    $: cover =
-        template.cover ??
-        import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
+    $: cover = template.cover ?? import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
     $: sizes = getSize(pages)
     $: updateSvg(parameters)
 
@@ -17,21 +15,21 @@
         if (!svg) return
 
         Object.entries(parameters).forEach(([key, value]) => {
-            svg.querySelectorAll(
-                `[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`
-            ).forEach((node: HTMLElement) => {
-                switch (node.dataset[key]) {
-                    case 'innerText':
-                        node.innerHTML = value as string
-                        break
-                    case 'innerHTML':
-                        node.innerHTML = value as string
-                        break
-                    default:
-                        node.setAttribute(node.dataset[key], value as string)
-                        break
+            svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
+                (node: HTMLElement) => {
+                    switch (node.dataset[key]) {
+                        case 'innerText':
+                            node.innerHTML = value as string
+                            break
+                        case 'innerHTML':
+                            node.innerHTML = value as string
+                            break
+                        default:
+                            node.setAttribute(node.dataset[key], value as string)
+                            break
+                    }
                 }
-            })
+            )
         })
     }
 
@@ -65,10 +63,7 @@
     }
 
     export function getCoverAspectRatio() {
-        return (
-            (sizes.width + 2 * sizes.safetyMargin) /
-            (sizes.height + 2 * sizes.safetyMargin)
-        )
+        return (sizes.width + 2 * sizes.safetyMargin) / (sizes.height + 2 * sizes.safetyMargin)
     }
 </script>
 
@@ -105,12 +100,7 @@
         {@html template.spine ?? ''}
     </svg> -->
 
-    <svg
-        x={0}
-        y={0}
-        width={sizes.width + 2 * sizes.safetyMargin}
-        height={sizes.height + 2 * sizes.safetyMargin}
-    >
+    <svg x={0} y={0} width={sizes.width + 2 * sizes.safetyMargin} height={sizes.height + 2 * sizes.safetyMargin}>
         {@html template.front ?? ''}
     </svg>
 </svg>

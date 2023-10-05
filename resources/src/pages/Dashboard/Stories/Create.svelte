@@ -23,13 +23,10 @@
 <main class="container mx-auto flex flex-1 flex-col gap-8 p-4 py-8" in:fade>
     <form
         class="card bg-neutral shadow-sm"
-        on:submit|preventDefault={() =>
-            $form.post('/stories', { forceFormData: true })}
+        on:submit|preventDefault={() => $form.post('/stories', { forceFormData: true })}
     >
         <div class="card-body gap-4">
-            <h2 class="card-title text-3xl italic text-primary">
-                Create New Story
-            </h2>
+            <h2 class="card-title text-3xl italic text-primary">Create New Story</h2>
             <div class="form-control">
                 <label class="label" for="title">
                     <span class="label-text">Title</span>
@@ -58,9 +55,7 @@
                     bind:value={$form.story_type_id}
                     name="story_type_id"
                 >
-                    <option value={null} selected disabled class="hidden">
-                        Select Story Type
-                    </option>
+                    <option value={null} selected disabled class="hidden"> Select Story Type </option>
                     {#each story_types.data as story_type}
                         <option value={story_type.id}>
                             {story_type.name}

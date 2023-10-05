@@ -30,22 +30,15 @@
                 <div class="card-body gap-4">
                     <figure class="rounded-xl">
                         <img
-                            src={question.cover ??
-                                'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                            src={question.cover ?? 'https://placehold.co/600x400?text=Your+cover+should+be+there'}
                             alt=""
                         />
                     </figure>
                     <p class="font-serif text-xl">
                         {question.question}
                     </p>
-                    <form
-                        class="card-actions"
-                        on:submit|preventDefault={() => submit(question.id)}
-                    >
-                        <button
-                            type="submit"
-                            class="btn btn-primary btn-outline btn-lg rounded-full"
-                        >
+                    <form class="card-actions" on:submit|preventDefault={() => submit(question.id)}>
+                        <button type="submit" class="btn btn-primary btn-outline btn-lg rounded-full">
                             Record Your Answer
                         </button>
                     </form>

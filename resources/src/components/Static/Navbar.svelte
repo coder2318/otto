@@ -18,19 +18,12 @@
     <div class="flex-none gap-2">
         {#if user}
             <div class="dropdown-end dropdown leading-none">
-                <label
-                    tabindex="-1"
-                    class="avatar btn btn-circle btn-ghost"
-                    for="dropdown"
-                >
+                <label tabindex="-1" class="avatar btn btn-circle btn-ghost" for="dropdown">
                     <div class="w-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar" />
                         {:else}
-                            <User
-                                class="bg-secondary"
-                                pathClass="fill-primary"
-                            />
+                            <User class="bg-secondary" pathClass="fill-primary" />
                         {/if}
                     </div>
                 </label>
@@ -41,12 +34,7 @@
                 >
                     <li>
                         <a href="/stories" use:inertia>Dashboard</a>
-                        <button
-                            href="/logout"
-                            use:inertia={{ href: '/logout', method: 'POST' }}
-                        >
-                            Logout
-                        </button>
+                        <button href="/logout" use:inertia={{ href: '/logout', method: 'POST' }}> Logout </button>
                     </li>
                 </ul>
             </div>

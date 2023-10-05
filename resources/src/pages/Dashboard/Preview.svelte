@@ -13,9 +13,7 @@
 </svelte:head>
 
 <div class="bg-transparent p-4">
-    <div
-        class="not-prose rounded-box grid gap-3 border border-base-content/20 bg-base-200 p-8 text-base-content"
-    >
+    <div class="not-prose rounded-box grid gap-3 border border-base-content/20 bg-base-200 p-8 text-base-content">
         <!-- button -->
         <div class="grid grid-cols-3 gap-2">
             <button class="btn">Default</button>
@@ -53,65 +51,19 @@
                     <div class="flex flex-col">
                         <span class="link">I'm a simple link</span>
                         <span class="link-primary link">I'm a simple link</span>
-                        <span class="link-secondary link"
-                            >I'm a simple link</span
-                        >
+                        <span class="link-secondary link">I'm a simple link</span>
                         <span class="link-accent link">I'm a simple link</span>
                     </div>
                 </div>
                 <div class="flex flex-col gap-3 md:w-1/2">
-                    <progress value="20" max="100" class="progress"
-                        >Default</progress
-                    >
-                    <progress
-                        value="25"
-                        max="100"
-                        class="progress progress-primary"
-                    >
-                        Primary
-                    </progress>
-                    <progress
-                        value="30"
-                        max="100"
-                        class="progress progress-secondary"
-                    >
-                        Secondary
-                    </progress>
-                    <progress
-                        value="40"
-                        max="100"
-                        class="progress progress-accent"
-                    >
-                        Accent
-                    </progress>
-                    <progress
-                        value="45"
-                        max="100"
-                        class="progress progress-info"
-                    >
-                        Info
-                    </progress>
-                    <progress
-                        value="55"
-                        max="100"
-                        class="progress progress-success"
-                    >
-                        Success
-                    </progress>
-                    <progress
-                        value="70"
-                        max="100"
-                        class="progress progress-warning"
-                    >
-                        Warning
-                    </progress>
-                    <progress
-                        value="90"
-                        max="100"
-                        class="progress progress-error"
-                    >
-                        Error
-                    </progress>
+                    <progress value="20" max="100" class="progress">Default</progress>
+                    <progress value="25" max="100" class="progress progress-primary"> Primary </progress>
+                    <progress value="30" max="100" class="progress progress-secondary"> Secondary </progress>
+                    <progress value="40" max="100" class="progress progress-accent"> Accent </progress>
+                    <progress value="45" max="100" class="progress progress-info"> Info </progress>
+                    <progress value="55" max="100" class="progress progress-success"> Success </progress>
+                    <progress value="70" max="100" class="progress progress-warning"> Warning </progress>
+                    <progress value="90" max="100" class="progress progress-error"> Error </progress>
                 </div>
             </div>
 
@@ -126,27 +78,10 @@
                 </div>
 
                 <!-- radial progress -->
-                <div
-                    class="flex flex-wrap items-center justify-center gap-3 md:w-1/2"
-                >
-                    <div
-                        class="radial-progress"
-                        style="--value: 60; --size: 3.5rem"
-                    >
-                        60%
-                    </div>
-                    <div
-                        class="radial-progress"
-                        style="--value: 75; --size: 3.5rem"
-                    >
-                        75%
-                    </div>
-                    <div
-                        class="radial-progress"
-                        style="--value: 90; --size: 3.5rem"
-                    >
-                        90%
-                    </div>
+                <div class="flex flex-wrap items-center justify-center gap-3 md:w-1/2">
+                    <div class="radial-progress" style="--value: 60; --size: 3.5rem">60%</div>
+                    <div class="radial-progress" style="--value: 75; --size: 3.5rem">75%</div>
+                    <div class="radial-progress" style="--value: 90; --size: 3.5rem">90%</div>
                 </div>
             </div>
         </div>
@@ -157,143 +92,46 @@
                     <!-- toggle -->
                     <div>
                         <input type="checkbox" class="toggle mr-1" checked />
-                        <input
-                            type="checkbox"
-                            class="toggle toggle-primary mr-1"
-                            checked
-                        />
-                        <input
-                            type="checkbox"
-                            class="toggle toggle-secondary mr-1"
-                            checked
-                        />
-                        <input
-                            type="checkbox"
-                            class="toggle toggle-accent mr-1"
-                            checked
-                        />
+                        <input type="checkbox" class="toggle toggle-primary mr-1" checked />
+                        <input type="checkbox" class="toggle toggle-secondary mr-1" checked />
+                        <input type="checkbox" class="toggle toggle-accent mr-1" checked />
                     </div>
                     <!-- checkbox -->
                     <div>
                         <input type="checkbox" class="checkbox mr-1" checked />
-                        <input
-                            type="checkbox"
-                            class="checkbox-primary checkbox mr-1"
-                            checked
-                        />
-                        <input
-                            type="checkbox"
-                            class="checkbox-secondary checkbox mr-1"
-                            checked
-                        />
-                        <input
-                            type="checkbox"
-                            class="checkbox-accent checkbox mr-1"
-                            checked
-                        />
+                        <input type="checkbox" class="checkbox-primary checkbox mr-1" checked />
+                        <input type="checkbox" class="checkbox-secondary checkbox mr-1" checked />
+                        <input type="checkbox" class="checkbox-accent checkbox mr-1" checked />
                     </div>
                     <!-- radio -->
                     <div>
-                        <input
-                            type="radio"
-                            name="radio-1"
-                            class="radio mr-1"
-                            checked
-                        />
-                        <input
-                            type="radio"
-                            name="radio-1"
-                            class="radio-primary radio mr-1"
-                        />
-                        <input
-                            type="radio"
-                            name="radio-1"
-                            class="radio-secondary radio mr-1"
-                        />
-                        <input
-                            type="radio"
-                            name="radio-1"
-                            class="radio-accent radio mr-1"
-                        />
+                        <input type="radio" name="radio-1" class="radio mr-1" checked />
+                        <input type="radio" name="radio-1" class="radio-primary radio mr-1" />
+                        <input type="radio" name="radio-1" class="radio-secondary radio mr-1" />
+                        <input type="radio" name="radio-1" class="radio-accent radio mr-1" />
                     </div>
                 </div>
                 <!-- range -->
                 <div class="md:w-1/2">
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="90"
-                        class="range range-xs"
-                    />
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="70"
-                        class="range range-primary range-xs"
-                    />
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="50"
-                        class="range range-secondary range-xs"
-                    />
-                    <input
-                        type="range"
-                        min="0"
-                        max="100"
-                        value="40"
-                        class="range range-accent range-xs"
-                    />
+                    <input type="range" min="0" max="100" value="90" class="range range-xs" />
+                    <input type="range" min="0" max="100" value="70" class="range range-primary range-xs" />
+                    <input type="range" min="0" max="100" value="50" class="range range-secondary range-xs" />
+                    <input type="range" min="0" max="100" value="40" class="range range-accent range-xs" />
                 </div>
             </div>
             <!-- input -->
             <div class="flex flex-col gap-3 md:flex-row">
                 <div class="flex flex-col gap-3 md:w-1/2">
-                    <input
-                        type="text"
-                        placeholder="Default"
-                        class="input input-bordered w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Primary"
-                        class="input input-bordered input-primary w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Secondary"
-                        class="input input-bordered input-secondary w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Accent"
-                        class="input input-bordered input-accent w-full"
-                    />
+                    <input type="text" placeholder="Default" class="input input-bordered w-full" />
+                    <input type="text" placeholder="Primary" class="input input-bordered input-primary w-full" />
+                    <input type="text" placeholder="Secondary" class="input input-bordered input-secondary w-full" />
+                    <input type="text" placeholder="Accent" class="input input-bordered input-accent w-full" />
                 </div>
                 <div class="flex flex-col gap-3 md:w-1/2">
-                    <input
-                        type="text"
-                        placeholder="Info"
-                        class="input input-bordered input-info w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Success"
-                        class="input input-bordered input-success w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Warning"
-                        class="input input-bordered input-warning w-full"
-                    />
-                    <input
-                        type="text"
-                        placeholder="Error"
-                        class="input input-bordered input-error w-full"
-                    />
+                    <input type="text" placeholder="Info" class="input input-bordered input-info w-full" />
+                    <input type="text" placeholder="Success" class="input input-bordered input-success w-full" />
+                    <input type="text" placeholder="Warning" class="input input-bordered input-warning w-full" />
+                    <input type="text" placeholder="Error" class="input input-bordered input-error w-full" />
                 </div>
             </div>
             <!-- navbar -->
@@ -316,9 +154,7 @@
                     </button>
                 </div>
                 <div class="flex-1">
-                    <button class="btn btn-ghost text-xl normal-case"
-                        >Logo</button
-                    >
+                    <button class="btn btn-ghost text-xl normal-case">Logo</button>
                 </div>
             </div>
             <!-- breadcrumbs -->
@@ -483,9 +319,7 @@
             </div>
         </div>
         <!-- table-->
-        <div
-            class="w-full overflow-x-auto rounded-xl border border-base-content/10"
-        >
+        <div class="w-full overflow-x-auto rounded-xl border border-base-content/10">
             <table class="table w-full">
                 <!-- head -->
                 <thead>
@@ -513,31 +347,23 @@
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle h-12 w-12">
-                                        <img
-                                            src="https://placehold.co/48"
-                                            alt="Avatar Tailwind CSS Component"
-                                        />
+                                        <img src="https://placehold.co/48" alt="Avatar Tailwind CSS Component" />
                                     </div>
                                 </div>
                                 <div>
                                     <div class="font-bold">Hart Hagerty</div>
-                                    <div class="text-sm opacity-50">
-                                        United States
-                                    </div>
+                                    <div class="text-sm opacity-50">United States</div>
                                 </div>
                             </div>
                         </td>
                         <td>
                             Zemlak, Daniel and Leannon
                             <br />
-                            <span class="badge badge-ghost badge-sm"
-                                >Desktop Support Technician</span
-                            >
+                            <span class="badge badge-ghost badge-sm">Desktop Support Technician</span>
                         </td>
                         <td>Purple</td>
                         <th>
-                            <button class="btn btn-ghost btn-xs">details</button
-                            >
+                            <button class="btn btn-ghost btn-xs">details</button>
                         </th>
                     </tr>
                     <!-- row 2 -->
@@ -551,10 +377,7 @@
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle h-12 w-12">
-                                        <img
-                                            src="https://placehold.co/48"
-                                            alt="Avatar Tailwind CSS Component"
-                                        />
+                                        <img src="https://placehold.co/48" alt="Avatar Tailwind CSS Component" />
                                     </div>
                                 </div>
                                 <div>
@@ -566,14 +389,11 @@
                         <td>
                             Carroll Group
                             <br />
-                            <span class="badge badge-ghost badge-sm"
-                                >Tax Accountant</span
-                            >
+                            <span class="badge badge-ghost badge-sm">Tax Accountant</span>
                         </td>
                         <td>Red</td>
                         <th>
-                            <button class="btn btn-ghost btn-xs">details</button
-                            >
+                            <button class="btn btn-ghost btn-xs">details</button>
                         </th>
                     </tr>
                     <!-- row 3 -->
@@ -587,31 +407,23 @@
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle h-12 w-12">
-                                        <img
-                                            src="https://placehold.co/48"
-                                            alt="Avatar Tailwind CSS Component"
-                                        />
+                                        <img src="https://placehold.co/48" alt="Avatar Tailwind CSS Component" />
                                     </div>
                                 </div>
                                 <div>
                                     <div class="font-bold">Marjy Ferencz</div>
-                                    <div class="text-sm opacity-50">
-                                        Ukraine
-                                    </div>
+                                    <div class="text-sm opacity-50">Ukraine</div>
                                 </div>
                             </div>
                         </td>
                         <td>
                             Rowe-Schoen
                             <br />
-                            <span class="badge badge-ghost badge-sm"
-                                >Office Assistant I</span
-                            >
+                            <span class="badge badge-ghost badge-sm">Office Assistant I</span>
                         </td>
                         <td>Crimson</td>
                         <th>
-                            <button class="btn btn-ghost btn-xs">details</button
-                            >
+                            <button class="btn btn-ghost btn-xs">details</button>
                         </th>
                     </tr>
                     <!-- row 4 -->
@@ -625,10 +437,7 @@
                             <div class="flex items-center space-x-3">
                                 <div class="avatar">
                                     <div class="mask mask-squircle h-12 w-12">
-                                        <img
-                                            src="https://placehold.co/48"
-                                            alt="Avatar Tailwind CSS Component"
-                                        />
+                                        <img src="https://placehold.co/48" alt="Avatar Tailwind CSS Component" />
                                     </div>
                                 </div>
                                 <div>
@@ -640,14 +449,11 @@
                         <td>
                             Wyman-Ledner
                             <br />
-                            <span class="badge badge-ghost badge-sm"
-                                >Community Outreach Specialist</span
-                            >
+                            <span class="badge badge-ghost badge-sm">Community Outreach Specialist</span>
                         </td>
                         <td>Indigo</td>
                         <th>
-                            <button class="btn btn-ghost btn-xs">details</button
-                            >
+                            <button class="btn btn-ghost btn-xs">details</button>
                         </th>
                     </tr>
                 </tbody>

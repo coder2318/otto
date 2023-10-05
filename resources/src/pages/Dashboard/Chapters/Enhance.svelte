@@ -67,9 +67,7 @@
         enhance?.setOptions({ editable: false })
 
         fetch(`/chapters/${chapter.data.id}/enhance/stream`)
-            .then((res) =>
-                res.body.pipeThrough(new TextDecoderStream()).getReader()
-            )
+            .then((res) => res.body.pipeThrough(new TextDecoderStream()).getReader())
             .then((reader) =>
                 reader.read().then(function pump({ done, value }) {
                     if (done) {
@@ -100,9 +98,7 @@
     style="background-image: url({bg})"
     in:fade
 >
-    <div
-        class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40"
-    />
+    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40" />
     <div class="card-body z-10 gap-8 text-primary-content">
         {#if !compare}
             <p class="flex items-center gap-8 text-2xl">
@@ -118,14 +114,8 @@
 
 <form on:submit|preventDefault={submit} class="flex flex-col gap-8 p-4" in:fade>
     <section class="container mx-auto flex justify-between">
-        <a
-            href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0 font-normal"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Go Back
         </a>
         <div class="flex gap-4">
@@ -164,15 +154,10 @@
         {/if}
     </section>
 
-    <main
-        class:lg:grid-cols-2={compare}
-        class="container mx-auto grid grid-cols-1 gap-8"
-    >
+    <main class:lg:grid-cols-2={compare} class="container mx-auto grid grid-cols-1 gap-8">
         <div class="form-control join join-vertical transition-all">
             <div class="alert alert-success flex items-center rounded-b-none">
-                <span
-                    >You have shared {wordsEnhanced} words in this chapter</span
-                >
+                <span>You have shared {wordsEnhanced} words in this chapter</span>
                 <span>|</span>
                 <span>{Math.ceil(wordsEnhanced / 500)} pages</span>
             </div>
@@ -195,9 +180,7 @@
                                 class="btn btn-primary btn-xs font-sans"
                                 class:btn-outline={$form.use == 'enhanced'}
                                 disabled={$form.use == 'enhanced'}
-                                on:click|preventDefault={() =>
-                                    ($form.use = 'enhanced')}
-                                >Use OTTO Writing</button
+                                on:click|preventDefault={() => ($form.use = 'enhanced')}>Use OTTO Writing</button
                             >
                         {/if}
                     </h2>
@@ -207,9 +190,7 @@
         {#if compare}
             <div class="form-control join join-vertical transition-all">
                 <div class="alert alert-info flex items-center rounded-b-none">
-                    <span
-                        >You have shared {wordsOriginal} words in this chapter</span
-                    >
+                    <span>You have shared {wordsOriginal} words in this chapter</span>
                     <span>|</span>
                     <span>{Math.ceil(wordsOriginal / 500)} pages</span>
                 </div>
@@ -229,9 +210,7 @@
                                 class="btn btn-primary btn-xs font-sans"
                                 class:btn-outline={$form.use == 'original'}
                                 disabled={$form.use == 'original'}
-                                on:click|preventDefault={() =>
-                                    ($form.use = 'original')}
-                                >Use Original Writing</button
+                                on:click|preventDefault={() => ($form.use = 'original')}>Use Original Writing</button
                             >
                         {/if}
                     </h2>
@@ -241,14 +220,8 @@
     </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Back
         </a>
         <div class="flex gap-4">

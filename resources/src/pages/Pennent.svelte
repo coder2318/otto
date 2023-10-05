@@ -27,16 +27,11 @@
 
 <div class="z-10 flex flex-1 flex-col items-center">
     <div class="flex flex-1 flex-col items-center justify-center gap-8">
-        <h1
-            class="whitespace-pre-wrap text-center text-2xl font-bold text-primary md:px-20"
-        >
-            The page you are looking for is available only to a limited number
-            of testers. Sign up for the pre-order to request the access!
+        <h1 class="whitespace-pre-wrap text-center text-2xl font-bold text-primary md:px-20">
+            The page you are looking for is available only to a limited number of testers. Sign up for the pre-order to
+            request the access!
         </h1>
-        <form
-            on:submit|preventDefault={submit}
-            class="md:join max-md:flex max-md:flex-col max-md:gap-2"
-        >
+        <form on:submit|preventDefault={submit} class="md:join max-md:flex max-md:flex-col max-md:gap-2">
             <Honeypot honeypot={$page?.props?.honeypot} {form} />
             <span class="form-control">
                 <input
@@ -71,18 +66,11 @@
                     </span>
                 {/if}
             </span>
-            <button
-                type="submit"
-                class="btn btn-secondary join-item rounded-full"
-                disabled={$form.processing}>Submit</button
+            <button type="submit" class="btn btn-secondary join-item rounded-full" disabled={$form.processing}
+                >Submit</button
             >
         </form>
 
-        <a
-            href="/"
-            use:inertia
-            class="btn btn-primary btn-outline rounded-full lg:btn-lg"
-            >Back to Home</a
-        >
+        <a href="/" use:inertia class="btn btn-primary btn-outline rounded-full lg:btn-lg">Back to Home</a>
     </div>
 </div>

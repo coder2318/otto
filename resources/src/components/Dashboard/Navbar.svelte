@@ -19,10 +19,7 @@
     </div>
     <div class="navbar-end flex gap-1 md:gap-2">
         <div class="form-control relative">
-            <Fa
-                icon={faSearch}
-                class="absolute left-4 top-1/2 -translate-y-1/2"
-            />
+            <Fa icon={faSearch} class="absolute left-4 top-1/2 -translate-y-1/2" />
             <input
                 type="text"
                 placeholder="Search"
@@ -32,12 +29,8 @@
         {#if user}
             <div class="indicator">
                 {#if $count}
-                    <span
-                        class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0"
-                    >
-                        <span
-                            class="absolute inset-0 animate-ping rounded-full bg-accent"
-                        />
+                    <span class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0">
+                        <span class="absolute inset-0 animate-ping rounded-full bg-accent" />
                         {$count}
                     </span>
                 {/if}
@@ -49,27 +42,16 @@
                     <Fa icon={faBell} class="h-full" />
                 </button>
             </div>
-            <a
-                class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
-                href="/settings"
-                use:inertia
-            >
+            <a class="btn btn-circle btn-ghost border-neutral hover:border-neutral-focus" href="/settings" use:inertia>
                 <Fa icon={faCog} class="h-full" />
             </a>
             <div class="dropdown-end dropdown leading-none">
-                <label
-                    tabindex="-1"
-                    class="avatar btn btn-circle btn-ghost"
-                    for="dropdown"
-                >
+                <label tabindex="-1" class="avatar btn btn-circle btn-ghost" for="dropdown">
                     <div class="w-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar" />
                         {:else}
-                            <User
-                                class="bg-secondary"
-                                pathClass="fill-secondary-content"
-                            />
+                            <User class="bg-secondary" pathClass="fill-secondary-content" />
                         {/if}
                     </div>
                 </label>
@@ -85,19 +67,12 @@
                         <a href="/stories" use:inertia> Stories </a>
                     </li>
                     <li>
-                        <a href="/guests/chapters" use:inertia>
-                            Guest Chapters
-                        </a>
+                        <a href="/guests/chapters" use:inertia> Guest Chapters </a>
                     </li>
                     <li>
                         <!-- <a href="/profile" use:inertia>Profile</a>
                         <a href="/guest-chapters" use:inertia>Guest Chapters</a> -->
-                        <button
-                            href="/logout"
-                            use:inertia={{ href: '/logout', method: 'POST' }}
-                        >
-                            Logout
-                        </button>
+                        <button href="/logout" use:inertia={{ href: '/logout', method: 'POST' }}> Logout </button>
                     </li>
                 </ul>
             </div>

@@ -43,8 +43,7 @@
                             {#each Object.entries(plan.prices) as [key, price] (key)}
                                 {#if price.interval === period}
                                     <span>
-                                        <span
-                                            class="text-4xl font-bold text-primary"
+                                        <span class="text-4xl font-bold text-primary"
                                             >{usd(price.value, {
                                                 maximumFractionDigits: 0,
                                                 currency: price.currency,
@@ -62,8 +61,7 @@
                         <a
                             href="/plans/{plan.slug}?period={period}"
                             use:inertia={options}
-                            class="btn btn-secondary w-full rounded-full"
-                            >Chose Plan</a
+                            class="btn btn-secondary w-full rounded-full">Chose Plan</a
                         >
                     </div>
                 </div>

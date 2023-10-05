@@ -35,10 +35,7 @@
         Enter Your <span class="text-secondary-focus">Password</span>
     </div>
 
-    <form
-        on:submit|preventDefault={submit}
-        class="flex w-full flex-col items-center"
-    >
+    <form on:submit|preventDefault={submit} class="flex w-full flex-col items-center">
         <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="form-control w-full">
             <label class="label" for="password">
@@ -49,22 +46,16 @@
                 type="password"
                 name="password"
                 placeholder="Password"
-                class="input input-bordered w-full {$form.errors.password
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.password ? 'input-error' : ''}"
                 required
             />
             {#if $form.errors.password}
-                <span class="label-text-alt mt-1 text-left text-error"
-                    >{$form.errors.password}</span
-                >
+                <span class="label-text-alt mt-1 text-left text-error">{$form.errors.password}</span>
             {/if}
         </div>
 
         <div class="form-control mt-8 w-full">
-            <button class="btn btn-primary rounded-full" type="submit"
-                >Confirm</button
-            >
+            <button class="btn btn-primary rounded-full" type="submit">Confirm</button>
         </div>
     </form>
 </div>

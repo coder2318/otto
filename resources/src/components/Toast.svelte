@@ -28,13 +28,7 @@
     import { fly } from 'svelte/transition'
     import { page } from '@inertiajs/svelte'
     import Fa from 'svelte-fa'
-    import {
-        faWarning,
-        faInfoCircle,
-        faCheckCircle,
-        faCircleXmark,
-        faClose,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faWarning, faInfoCircle, faCheckCircle, faCircleXmark, faClose } from '@fortawesome/free-solid-svg-icons'
 
     function icon(type: Toast['type']) {
         return (
@@ -59,10 +53,7 @@
     onMount(() => {
         let interval = setInterval(() => {
             $messages = $messages.filter((message) => {
-                return (
-                    !message.autohide ||
-                    new Date().getTime() - message.timestamp.getTime() < 3000
-                )
+                return !message.autohide || new Date().getTime() - message.timestamp.getTime() < 3000
             })
         }, 1000)
         return () => clearInterval(interval)
@@ -77,9 +68,7 @@
 
         const message = flash.status ?? flash.error ?? flash.message
         const type =
-            (flash.status && 'alert-info') ||
-            (flash.error && 'alert-warning') ||
-            (flash.message && 'alert-success')
+            (flash.status && 'alert-info') || (flash.error && 'alert-warning') || (flash.message && 'alert-success')
 
         if (!message || !type) {
             return
@@ -98,17 +87,11 @@
 
 <div class="toast toast-end toast-top top-16 z-50">
     {#each $messages as message, i (i)}
-        <div
-            class="alert max-w-screen-sm grid-flow-col {message.type}"
-            out:fly={{ x: '100%' }}
-        >
+        <div class="alert max-w-screen-sm grid-flow-col {message.type}" out:fly={{ x: '100%' }}>
             <Fa icon={icon(message.type)} />
             <span class="whitespace-break-spaces">{message.message}</span>
             <div>
-                <button
-                    class="btn btn-circle btn-ghost btn-xs"
-                    on:click={() => ($messages = $messages.slice(0, i))}
-                >
+                <button class="btn btn-circle btn-ghost btn-xs" on:click={() => ($messages = $messages.slice(0, i))}>
                     <Fa icon={faClose} />
                 </button>
             </div>

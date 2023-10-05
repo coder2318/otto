@@ -31,63 +31,40 @@
     <div class="grid grid-cols-1 md:grid-cols-2">
         <div class="card">
             <div class="card-body">
-                <h5
-                    class="card-title mb-8 block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
-                    You've shown the world chapters of your life, <i
-                        >now give them the complete book</i
-                    >.
+                <h5 class="card-title mb-8 block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
+                    You've shown the world chapters of your life, <i>now give them the complete book</i>.
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Everyone has a unique story, and at OttoStory, we turn it
-                    into an extraordinary autobiography. Meet Otto, your AI
-                    biographer, guiding you through a reflective journey of your
-                    life's experiences.
+                    Everyone has a unique story, and at OttoStory, we turn it into an extraordinary autobiography. Meet
+                    Otto, your AI biographer, guiding you through a reflective journey of your life's experiences.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Say goodbye to professional writers and high costs. Otto
-                    helps transform your cherished memories into a captivating
-                    memoir, allowing you to share your journey or simply reflect
-                    on your life. With OttoStory, your story is immortalized in
-                    a personal hardback book.
+                    Say goodbye to professional writers and high costs. Otto helps transform your cherished memories
+                    into a captivating memoir, allowing you to share your journey or simply reflect on your life. With
+                    OttoStory, your story is immortalized in a personal hardback book.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Begin with us today and watch your life's narrative come
-                    alive in print. Welcome to OttoStory
+                    Begin with us today and watch your life's narrative come alive in print. Welcome to OttoStory
                 </p>
             </div>
         </div>
-        <div
-            class="mx-auto bg-contain bg-no-repeat p-16"
-            style="background-image: url({splash})"
-        >
+        <div class="mx-auto bg-contain bg-no-repeat p-16" style="background-image: url({splash})">
             <img src={img} alt={img} class="h-auto w-full" />
         </div>
     </div>
 </section>
 
 <section class="cta-bg bg-base-200">
-    <div
-        class="container mx-auto mb-16 flex flex-col items-center justify-center gap-8 py-16 text-center"
-    >
+    <div class="container mx-auto mb-16 flex flex-col items-center justify-center gap-8 py-16 text-center">
         <h2 class="text-4xl text-primary md:text-5xl lg:text-6xl">
-            Memoirs of a Year : <i
-                >A Beautiful Book Encompassing a Lifetime of Stories</i
-            >
+            Memoirs of a Year : <i>A Beautiful Book Encompassing a Lifetime of Stories</i>
         </h2>
-        <a
-            href="/plans"
-            class="btn btn-primary btn-lg rounded-full px-16"
-            use:inertia
-        >
-            Buy Now
-        </a>
+        <a href="/plans" class="btn btn-primary btn-lg rounded-full px-16" use:inertia> Buy Now </a>
     </div>
 </section>
 
 <section class="container mx-auto mb-16">
-    <PageHeader element="div" class="my-16 lg:my-24">Our <i>Team</i></PageHeader
-    >
+    <PageHeader element="div" class="my-16 lg:my-24">Our <i>Team</i></PageHeader>
 
     <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
         <div class="card bg-neutral text-neutral-content">
@@ -124,8 +101,7 @@
 
 <style lang="scss">
     .cta-bg {
-        background-image: url(@/assets/img/about-cta-2.svg),
-            url(@/assets/img/about-cta-1.svg);
+        background-image: url(@/assets/img/about-cta-2.svg), url(@/assets/img/about-cta-1.svg);
         background-repeat: no-repeat, no-repeat;
         background-position:
             top 0 right 0,

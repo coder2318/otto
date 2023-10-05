@@ -234,18 +234,8 @@
 	c0.2,0,0.4,0.1,0.7,0.1l0.3,0v0.3l-1.9,0h0L155.6,147.5z"
     />
     <defs>
-        <filter
-            id="Adobe_OpacityMaskFilter"
-            filterUnits="userSpaceOnUse"
-            x="74.7"
-            y="138.7"
-            width="9.3"
-            height="9.1"
-        >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+        <filter id="Adobe_OpacityMaskFilter" filterUnits="userSpaceOnUse" x="74.7" y="138.7" width="9.3" height="9.1">
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -346,10 +336,7 @@
             width="9.9"
             height="8.9"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -454,10 +441,7 @@
             width="9.9"
             height="8.9"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -562,10 +546,7 @@
             width="9.3"
             height="9.1"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -673,10 +654,7 @@
             width="6.2"
             height="9.1"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -786,10 +764,7 @@
             width="9.9"
             height="8.9"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -894,10 +869,7 @@
             width="9.3"
             height="9.1"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -1005,10 +977,7 @@
             width="9"
             height="9"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask
@@ -1117,10 +1086,7 @@
             width="9.4"
             height="8.9"
         >
-            <feColorMatrix
-                type="matrix"
-                values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0"
-            />
+            <feColorMatrix type="matrix" values="1 0 0 0 0  0 1 0 0 0  0 0 1 0 0  0 0 0 1 0" />
         </filter>
     </defs>
     <mask

@@ -17,29 +17,19 @@
 </script>
 
 <section class="flex items-center justify-center py-16">
-    <div
-        class="container grid items-stretch justify-center gap-20 p-4 md:grid-cols-2"
-    >
+    <div class="container grid items-stretch justify-center gap-20 p-4 md:grid-cols-2">
         <figure class="rounded-xl">
-            <img
-                src={image}
-                alt="contact"
-                class=" h-full w-full rounded-xl object-cover"
-            />
+            <img src={image} alt="contact" class=" h-full w-full rounded-xl object-cover" />
         </figure>
         <div class="card rounded-xl bg-neutral">
-            <form
-                class="card-body justify-center gap-4"
-                on:submit|preventDefault={submit}
-            >
+            <form class="card-body justify-center gap-4" on:submit|preventDefault={submit}>
                 <Honeypot honeypot={$page?.props?.honeypot} {form} />
                 <h1 class="text-4xl text-primary">
                     Sign Up for <i>Preorder</i>
                 </h1>
                 <div>
-                    Be the first to get your hands on our exciting new product!
-                    Sign up for our pre-order section and secure your spot to
-                    receive exclusive offers and early access.
+                    Be the first to get your hands on our exciting new product! Sign up for our pre-order section and
+                    secure your spot to receive exclusive offers and early access.
                 </div>
                 <div class="form-control">
                     <label class="label" for="name">
@@ -81,10 +71,8 @@
                     {/if}
                 </div>
                 <div class="card-actions justify-end">
-                    <button
-                        type="submit"
-                        class="btn btn-secondary btn-lg rounded-full"
-                        disabled={$form.processing}>Submit</button
+                    <button type="submit" class="btn btn-secondary btn-lg rounded-full" disabled={$form.processing}
+                        >Submit</button
                     >
                 </div>
             </form>

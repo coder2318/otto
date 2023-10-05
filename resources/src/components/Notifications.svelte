@@ -28,14 +28,12 @@
 
         const { echo } = await import('@/service/echo')
 
-        echo.private(`App.Models.User.${user?.id}`).notification(
-            (notification) => {
-                $notifications = [notification, ...$notifications]
-                const audio = new Audio(sound)
-                audio.volume = 0.1
-                audio.play()
-            }
-        )
+        echo.private(`App.Models.User.${user?.id}`).notification((notification) => {
+            $notifications = [notification, ...$notifications]
+            const audio = new Audio(sound)
+            audio.volume = 0.1
+            audio.play()
+        })
 
         return () => {
             echo.leave(`App.Models.User.${user?.id}`)
@@ -48,9 +46,7 @@
         router.post(`/notifications/read/${notification?.id ?? ''}`, null, {
             onSuccess: () => {
                 if (notification) {
-                    return ($notifications = $notifications.filter(
-                        (n) => n.id !== notification.id
-                    ))
+                    return ($notifications = $notifications.filter((n) => n.id !== notification.id))
                 }
                 $notifications = []
             },
@@ -61,17 +57,10 @@
 <slot />
 
 <div class="drawer drawer-end z-20">
-    <input
-        id="notifications-drawer"
-        bind:checked={$opened}
-        type="checkbox"
-        class="drawer-toggle"
-    />
+    <input id="notifications-drawer" bind:checked={$opened} type="checkbox" class="drawer-toggle" />
     <div class="drawer-side">
         <label for="notifications-drawer" class="drawer-overlay" />
-        <ul
-            class="flex min-h-full w-96 flex-col items-stretch gap-4 bg-base-200 p-4 text-base-content"
-        >
+        <ul class="flex min-h-full w-96 flex-col items-stretch gap-4 bg-base-200 p-4 text-base-content">
             {#each $notifications as notification (notification.id)}
                 <li out:fly={{ x: '100%' }}>
                     <div class="card bg-neutral text-neutral-content">
@@ -80,8 +69,7 @@
                                 <button
                                     class="btn btn-circle btn-ghost btn-sm"
                                     type="button"
-                                    on:click|preventDefault={() =>
-                                        markAsRead(notification, false)}
+                                    on:click|preventDefault={() => markAsRead(notification, false)}
                                 >
                                     <Fa icon={faClose} />
                                 </button>
@@ -99,11 +87,7 @@
                                 <p>{notification.data.message}</p>
                             {/if}
                             <div class="card-actions">
-                                <span
-                                    >{dayjs(
-                                        notification.created_at
-                                    ).fromNow()}</span
-                                >
+                                <span>{dayjs(notification.created_at).fromNow()}</span>
                             </div>
                         </div>
                     </div>
@@ -112,20 +96,13 @@
                 <li>
                     <div class="card">
                         <div class="card-body items-center">
-                            <p class="text-base-content/60">
-                                You have no notifications
-                            </p>
+                            <p class="text-base-content/60">You have no notifications</p>
                         </div>
                     </div>
                 </li>
             {/each}
             <li class="flex flex-1 items-end">
-                <button
-                    class="btn btn-primary w-full"
-                    on:click|preventDefault={() => markAsRead()}
-                >
-                    Clear
-                </button>
+                <button class="btn btn-primary w-full" on:click|preventDefault={() => markAsRead()}> Clear </button>
             </li>
         </ul>
     </div>

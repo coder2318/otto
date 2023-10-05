@@ -30,21 +30,15 @@
         Verify Your <span class="text-secondary-focus">Email Address</span>
     </div>
 
-    <form
-        on:submit|preventDefault={submit}
-        class="flex w-full flex-col items-center"
-    >
+    <form on:submit|preventDefault={submit} class="flex w-full flex-col items-center">
         <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="mb-8">
-            Thanks for signing up! Before getting started, could you verify your
-            email address by clicking on the link we just emailed to you? If you
-            didn't receive the email, we will gladly send you another.
+            Thanks for signing up! Before getting started, could you verify your email address by clicking on the link
+            we just emailed to you? If you didn't receive the email, we will gladly send you another.
         </div>
 
         <div class="form-control w-full">
-            <button class="btn btn-primary rounded-full" type="submit"
-                >Resend Verification Email</button
-            >
+            <button class="btn btn-primary rounded-full" type="submit">Resend Verification Email</button>
         </div>
     </form>
 </div>

@@ -6,9 +6,7 @@
     export let step: number = 0
 </script>
 
-<header
-    class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-3"
->
+<header class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-3">
     <div class="step-breadcrumb" class:inactive={step < 2}>
         <span class="step-icon">
             <Fa icon={faKeyboard} />

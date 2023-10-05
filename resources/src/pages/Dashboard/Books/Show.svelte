@@ -15,9 +15,7 @@
 </svelte:head>
 
 <main class="container mx-auto p-4" in:fade>
-    <div
-        class="prose max-h-screen max-w-none select-none overflow-hidden prose-headings:text-primary"
-    >
+    <div class="prose max-h-screen max-w-none select-none overflow-hidden prose-headings:text-primary">
         <h1>{story.data.title}</h1>
 
         {#each story.data.chapters as chapter}
@@ -28,14 +26,8 @@
     </div>
 </main>
 
-<div
-    class="fixed bottom-0 flex h-48 w-full items-center justify-center bg-gradient-to-b from-transparent to-base-300"
->
-    <button
-        type="button"
-        class="btn btn-primary btn-lg rounded-full"
-        on:click={() => {}}
-    >
+<div class="fixed bottom-0 flex h-48 w-full items-center justify-center bg-gradient-to-b from-transparent to-base-300">
+    <button type="button" class="btn btn-primary btn-lg rounded-full" on:click={() => {}}>
         Subscribe to Read Book
     </button>
 </div>

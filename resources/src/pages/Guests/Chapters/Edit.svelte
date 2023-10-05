@@ -61,11 +61,7 @@
                         <img src={record} alt="record" />
                     </figure>
                     <div class="card-body items-center">
-                        <h2
-                            class="card-title text-2xl font-normal text-primary"
-                        >
-                            Record your Answer
-                        </h2>
+                        <h2 class="card-title text-2xl font-normal text-primary">Record your Answer</h2>
                     </div>
                 </a>
                 <a
@@ -77,11 +73,7 @@
                         <img src={upload} alt="upload" />
                     </figure>
                     <div class="card-body items-center">
-                        <h2
-                            class="card-title text-2xl font-normal text-primary"
-                        >
-                            Upload File
-                        </h2>
+                        <h2 class="card-title text-2xl font-normal text-primary">Upload File</h2>
                     </div>
                 </a>
                 <a
@@ -93,11 +85,7 @@
                         <img src={write} alt="write" />
                     </figure>
                     <div class="card-body items-center">
-                        <h2
-                            class="card-title text-2xl font-normal text-primary"
-                        >
-                            Type your Story
-                        </h2>
+                        <h2 class="card-title text-2xl font-normal text-primary">Type your Story</h2>
                     </div>
                 </a>
             </div>
@@ -105,24 +93,12 @@
     </main>
 
     <section class="container mx-auto mb-8 flex items-center justify-between">
-        <a
-            href="/guests/chapters"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            > Back
+        <a href="/guests/chapters" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span> Back
         </a>
 
         {#if $form.title != chapter.data.title}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-            >
-                Save
-            </button>
+            <button type="submit" class="btn btn-secondary rounded-full" data-status="draft"> Save </button>
         {:else}
             <div>
                 <a

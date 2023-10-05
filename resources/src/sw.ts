@@ -15,12 +15,7 @@ self.addEventListener('push', function (event) {
     const data = event.data?.json()
 
     if (data) {
-        event.waitUntil(
-            this.registration.showNotification(
-                data?.title ?? import.meta.env.VITE_APP_NAME,
-                data
-            )
-        )
+        event.waitUntil(this.registration.showNotification(data?.title ?? import.meta.env.VITE_APP_NAME, data))
     }
 })
 
@@ -32,8 +27,6 @@ self.addEventListener('notificationclick', function (event) {
     }
 
     if (event.notification.data?.url) {
-        return event.waitUntil(
-            this.clients.openWindow(event.notification.data?.url)
-        )
+        return event.waitUntil(this.clients.openWindow(event.notification.data?.url))
     }
 })

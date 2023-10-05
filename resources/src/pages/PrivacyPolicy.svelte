@@ -16,15 +16,11 @@
 
 <Navbar class="bg-primary text-primary-content" />
 
-<PageHeader
-    class="container relative mx-auto mb-16 mt-36 flex px-4 text-primary lg:mb-24 lg:mt-48"
->
+<PageHeader class="container relative mx-auto mb-16 mt-36 flex px-4 text-primary lg:mb-24 lg:mt-48">
     Our <i>Commitment</i> to <i>Privacy</i>
 </PageHeader>
 
-<main
-    class="!container prose mx-auto mb-16 px-4 lg:prose-lg xl:prose-xl prose-h1:mt-16 prose-h1:text-primary"
->
+<main class="!container prose mx-auto mb-16 px-4 lg:prose-lg xl:prose-xl prose-h1:mt-16 prose-h1:text-primary">
     <PrivacyPolicy />
 </main>
 

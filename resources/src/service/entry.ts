@@ -2,10 +2,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers'
 import { registerSW } from 'virtual:pwa-register'
 
 export const resolve = (name: string) =>
-    resolvePageComponent(
-        `/resources/src/pages/${name}.svelte`,
-        import.meta.glob(`@/pages/**/*.svelte`)
-    )
+    resolvePageComponent(`/resources/src/pages/${name}.svelte`, import.meta.glob(`@/pages/**/*.svelte`))
 
 export const createServiceWorker = () => {
     if (!('serviceWorker' in navigator)) {

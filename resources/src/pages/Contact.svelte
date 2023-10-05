@@ -47,13 +47,8 @@
     Get in <i>Touch</i>
 </PageHeader>
 
-<section
-    class="container mx-auto mb-16 grid grid-cols-1 items-center justify-center gap-4 px-4 md:grid-cols-2"
->
-    <div
-        class="card bg-contain bg-center bg-no-repeat p-16"
-        style="background-image: url({splash})"
-    >
+<section class="container mx-auto mb-16 grid grid-cols-1 items-center justify-center gap-4 px-4 md:grid-cols-2">
+    <div class="card bg-contain bg-center bg-no-repeat p-16" style="background-image: url({splash})">
         <figure class="rounded-xl">
             <img src={img} alt="" class="h-auto w-full" />
         </figure>
@@ -126,11 +121,7 @@
             </div>
 
             <div class="card-actions">
-                <button
-                    type="submit"
-                    class="btn btn-primary btn-lg rounded-full px-8"
-                    disabled={$form.processing}
-                >
+                <button type="submit" class="btn btn-primary btn-lg rounded-full px-8" disabled={$form.processing}>
                     Send Message
                 </button>
             </div>
@@ -138,13 +129,8 @@
     </form>
 </section>
 
-<section
-    class="container mx-auto mb-16 grid grid-cols-1 items-center justify-center gap-8 px-4 md:grid-cols-3"
->
-    <a
-        class="card bg-neutral transition-transform hover:scale-105"
-        href="tel:+444123456789"
-    >
+<section class="container mx-auto mb-16 grid grid-cols-1 items-center justify-center gap-8 px-4 md:grid-cols-3">
+    <a class="card bg-neutral transition-transform hover:scale-105" href="tel:+444123456789">
         <figure>
             <Phone />
         </figure>
@@ -154,10 +140,7 @@
         </div>
     </a>
 
-    <a
-        class="card bg-neutral transition-transform hover:scale-105"
-        href="mailto:info@ottostory.com"
-    >
+    <a class="card bg-neutral transition-transform hover:scale-105" href="mailto:info@ottostory.com">
         <figure>
             <Mail />
         </figure>

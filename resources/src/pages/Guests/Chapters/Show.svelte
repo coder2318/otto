@@ -15,38 +15,25 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<main
-    class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col gap-4 p-4 py-8"
->
+<main class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col gap-4 p-4 py-8">
     <div class="flex flex-col justify-between gap-y-4 md:flex-row">
         <h1 class="text-4xl text-primary">
             View <i>Response</i>
         </h1>
     </div>
 
-    <section
-        class="container card m-4 mx-auto rounded-xl bg-base-200 px-4"
-        in:fade
-    >
+    <section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
         <div class="card-body gap-4">
-            <div
-                class="card-title font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
-            >
+            <div class="card-title font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl">
                 {chapter.data.title}
             </div>
             <div class="flex items-center gap-4">
                 <div class="avatar">
                     <div class="w-20 rounded-full">
                         {#if chapter.data.guest.avatar}
-                            <img
-                                src={chapter.data.guest.avatar}
-                                alt={chapter.data.guest.name}
-                            />
+                            <img src={chapter.data.guest.avatar} alt={chapter.data.guest.name} />
                         {:else}
-                            <User
-                                class="bg-secondary"
-                                pathClass="fill-secondary-content"
-                            />
+                            <User class="bg-secondary" pathClass="fill-secondary-content" />
                         {/if}
                     </div>
                 </div>

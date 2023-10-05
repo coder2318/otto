@@ -15,9 +15,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - {story.data.title}</title>
 </svelte:head>
 
-<main
-    class="container mx-auto flex flex-1 flex-col items-center justify-center gap-8 p-4 py-8"
->
+<main class="container mx-auto flex flex-1 flex-col items-center justify-center gap-8 p-4 py-8">
     <h1 class="relative z-20 text-center text-4xl text-primary lg:text-5xl">
         <svg
             class="absolute top-8 -z-10 -translate-y-1/2 sm:-left-4 sm:top-1/2"
@@ -45,9 +43,7 @@
                 <figure class="rounded-lg">
                     <img src={writing} alt="writing room" />
                 </figure>
-                <h2
-                    class="card-title text-3xl font-normal text-primary md:text-4xl"
-                >
+                <h2 class="card-title text-3xl font-normal text-primary md:text-4xl">
                     Writing <i>Room</i>
                 </h2>
             </div>
@@ -61,9 +57,7 @@
                 <figure class="rounded-lg">
                     <img src={editing} alt="editing room" />
                 </figure>
-                <h2
-                    class="card-title text-3xl font-normal text-primary md:text-4xl"
-                >
+                <h2 class="card-title text-3xl font-normal text-primary md:text-4xl">
                     Editing <i>Room</i>
                 </h2>
             </div>

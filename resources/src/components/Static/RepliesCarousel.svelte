@@ -5,11 +5,7 @@
     import replyImg3 from '@/assets/img/reply-3.jpg'
     import replyImg4 from '@/assets/img/reply-4.jpg'
     import Fa from 'svelte-fa'
-    import {
-        faCaretLeft,
-        faCaretRight,
-        faQuoteLeft,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faCaretLeft, faCaretRight, faQuoteLeft } from '@fortawesome/free-solid-svg-icons'
 
     let carousel: HTMLElement
 
@@ -69,42 +65,28 @@
         </h2>
         <div class="grid items-stretch justify-stretch gap-8 lg:grid-cols-2">
             <div class="card relative bg-neutral">
-                <Fa
-                    icon={faQuoteLeft}
-                    class="absolute -top-12 left-16 text-8xl text-base-300"
-                />
+                <Fa icon={faQuoteLeft} class="absolute -top-12 left-16 text-8xl text-base-300" />
                 <div class="card-body gap-4 pt-12">
                     {#key elements[0].key}
                         <p class="md:text-md lg:text-lg" in:blur>
                             “{elements[0].text}”
                         </p>
-                        <p
-                            class="font-serif text-3xl italic text-primary"
-                            in:blur
-                        >
+                        <p class="font-serif text-3xl italic text-primary" in:blur>
                             {elements[0].name}
                         </p>
                     {/key}
                     <div class="card-actions gap-4">
-                        <button
-                            type="button"
-                            class="btn btn-circle btn-sm"
-                            on:click={() => change(true)}
-                        >
+                        <button type="button" class="btn btn-circle btn-sm" on:click={() => change(true)}>
                             <Fa icon={faCaretLeft} />
                         </button>
-                        <button
-                            type="button"
-                            class="btn btn-circle btn-sm"
-                            on:click={() => change()}
-                        >
+                        <button type="button" class="btn btn-circle btn-sm" on:click={() => change()}>
                             <Fa icon={faCaretRight} />
                         </button>
                     </div>
                 </div>
             </div>
             <div
-                class="carousel carousel-center rounded-box hidden space-x-4 overflow-hidden lg:inline-flex"
+                class="carousel-center carousel rounded-box hidden space-x-4 overflow-hidden lg:inline-flex"
                 bind:this={carousel}
             >
                 {#each elements as element (element.key)}

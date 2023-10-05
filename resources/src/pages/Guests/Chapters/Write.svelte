@@ -24,9 +24,7 @@
         status: chapter.data.status,
     })
 
-    $form.content += transcriptions
-        ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n')
-        : ''
+    $form.content += transcriptions ? ($form.content ? '\n' : '') + Object.values(transcriptions).join('\n') : ''
 
     $: words =
         $form.content
@@ -66,18 +64,13 @@
 <form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto">
         <div class="form-control join join-vertical">
-            <div
-                class="alert alert-success flex flex-wrap items-center rounded-b-none"
-            >
+            <div class="alert alert-success flex flex-wrap items-center rounded-b-none">
                 <span>You have shared {words} words in this chapter</span>
                 <span>|</span>
                 <span class="flex-1">{pages} pages</span>
 
                 {#if transcriptions}
-                    <span class="italic">
-                        Please check transcription for any possible errors
-                        before continue.
-                    </span>
+                    <span class="italic"> Please check transcription for any possible errors before continue. </span>
                 {/if}
             </div>
             <TipTap
@@ -95,24 +88,12 @@
     </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/guests/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/guests/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Back
         </a>
         {#if $form.content != chapter.data.content}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-            >
-                Save & Next
-            </button>
+            <button type="submit" class="btn btn-secondary rounded-full" data-status="draft"> Save & Next </button>
         {:else}
             <div class="flex gap-4">
                 <a

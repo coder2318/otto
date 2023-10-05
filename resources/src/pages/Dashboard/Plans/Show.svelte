@@ -7,11 +7,7 @@
 <script lang="ts">
     import { router } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
-    import {
-        loadStripe,
-        type Stripe,
-        type StripeElements,
-    } from '@stripe/stripe-js'
+    import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js'
     import { fade } from 'svelte/transition'
     import { usd } from '@/service/helpers'
     import { Elements, PaymentElement } from 'svelte-stripe'
@@ -26,11 +22,8 @@
     let stripe: Stripe | null = null
 
     onMount(() => {
-        loadStripe(import.meta.env.VITE_STRIPE_KEY).then(
-            (res) => (stripe = res)
-        )
-        period =
-            new URLSearchParams(window.location.search).get('period') || 'month'
+        loadStripe(import.meta.env.VITE_STRIPE_KEY).then((res) => (stripe = res))
+        period = new URLSearchParams(window.location.search).get('period') || 'month'
     })
 
     async function submit() {
@@ -53,9 +46,7 @@
         })
     }
 
-    $: [price_id, price] = Object.entries(plan.data.prices).find(
-        ([, price]) => price.interval === period
-    )
+    $: [price_id, price] = Object.entries(plan.data.prices).find(([, price]) => price.interval === period)
 </script>
 
 <svelte:head>
@@ -64,10 +55,7 @@
     </title>
 </svelte:head>
 
-<div
-    class="z-10 flex flex-1 flex-col items-center justify-center gap-8"
-    in:fade
->
+<div class="z-10 flex flex-1 flex-col items-center justify-center gap-8" in:fade>
     <h1 class="text-2xl text-primary md:text-4xl lg:text-6xl">
         Subscribe to <span class="italic">{plan.data.name}</span>
     </h1>
@@ -81,9 +69,7 @@
                         currency: price.currency,
                     })}</span
                 >
-                <span class="text-base-content"
-                    >/{price.interval_count} {price.interval}</span
-                >
+                <span class="text-base-content">/{price.interval_count} {price.interval}</span>
             </p>
             <p class="prose max-w-none">{@html plan.data.description}</p>
         </div>
@@ -98,10 +84,7 @@
                     locale="en"
                     bind:elements
                 >
-                    <form
-                        on:submit|preventDefault={submit}
-                        class="flex h-full flex-col items-stretch"
-                    >
+                    <form on:submit|preventDefault={submit} class="flex h-full flex-col items-stretch">
                         <div class="flex-1">
                             <PaymentElement />
                         </div>
@@ -112,14 +95,8 @@
                                     {error.message}
                                 </div>
                             {/if}
-                            <button
-                                type="submit"
-                                class="btn btn-secondary w-full rounded-full"
-                                disabled={processing}
-                            >
-                                {#if processing}<span
-                                        class="loading loading-dots loading-md"
-                                    />{/if} Parchase
+                            <button type="submit" class="btn btn-secondary w-full rounded-full" disabled={processing}>
+                                {#if processing}<span class="loading loading-dots loading-md" />{/if} Parchase
                             </button>
                         </div>
                     </form>

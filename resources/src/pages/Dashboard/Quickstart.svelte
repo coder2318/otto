@@ -19,9 +19,7 @@
     const form = useForm({
         first_name: details?.first_name as string,
         last_name: details?.last_name as string,
-        birth_date: details?.birth_date
-            ? dayjs(details?.birth_date).format('DD/MM/YYYY')
-            : (null as string),
+        birth_date: details?.birth_date ? dayjs(details?.birth_date).format('DD/MM/YYYY') : (null as string),
         quiz: details?.quiz ?? {},
     })
 

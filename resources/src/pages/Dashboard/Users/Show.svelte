@@ -54,27 +54,16 @@
                         {#if user.data.avatar}
                             <img src={user.data.avatar} alt="avatar" />
                         {:else}
-                            <User
-                                class="bg-secondary"
-                                pathClass="fill-secondary-content"
-                            />
+                            <User class="bg-secondary" pathClass="fill-secondary-content" />
                         {/if}
                     </div>
                 </div>
                 {#if user.data.id === authId}
-                    <a
-                        href="/profile"
-                        use:inertia
-                        class="btn btn-primary btn-outline rounded-full"
-                    >
-                        Edit
-                    </a>
+                    <a href="/profile" use:inertia class="btn btn-primary btn-outline rounded-full"> Edit </a>
                 {/if}
             </div>
             <div class="pt-20">
-                <div
-                    class="mb-4 flex flex-col justify-between gap-4 md:flex-row"
-                >
+                <div class="mb-4 flex flex-col justify-between gap-4 md:flex-row">
                     <h2 class="card-title text-3xl text-primary">
                         {user.data.details?.first_name}
                         {user.data.details?.last_name}
@@ -82,11 +71,7 @@
                     <div class="flex gap-2">
                         {#each Object.entries(user.data.details?.social ?? {}) as [key, value]}
                             {#if value}
-                                <a
-                                    href={value}
-                                    target="_blank"
-                                    class="btn btn-circle btn-primary btn-outline text-xl"
-                                >
+                                <a href={value} target="_blank" class="btn btn-circle btn-primary btn-outline text-xl">
                                     <Fa icon={icon(key)} />
                                 </a>
                             {/if}
@@ -111,18 +96,10 @@
         {#each stories.data as story}
             <div class="card border-4 border-base-300 bg-base-200">
                 <div class="card-body flex-row items-center gap-4 p-4 md:p-8">
-                    <img
-                        src={story.cover}
-                        alt="cover"
-                        class="float-left max-h-32 rounded-xl"
-                    />
+                    <img src={story.cover} alt="cover" class="float-left max-h-32 rounded-xl" />
                     <div class="flex flex-col items-start gap-4">
                         <h2 class="card-title">{story.title}</h2>
-                        <a
-                            href="/books/{story.id}"
-                            use:inertia
-                            class="btn btn-primary rounded-full px-8"
-                        >
+                        <a href="/books/{story.id}" use:inertia class="btn btn-primary rounded-full px-8">
                             View Book
                         </a>
                     </div>

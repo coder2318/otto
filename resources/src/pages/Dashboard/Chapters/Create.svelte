@@ -13,9 +13,7 @@
 
     export let story: { data: App.Story }
 
-    let query = qs.parse(
-        $page.url.replace(window.location.pathname, '').slice(1)
-    )
+    let query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
 
     let el: HTMLFormElement
     const form = useForm({
@@ -33,15 +31,8 @@
     <title>{import.meta.env.VITE_APP_NAME} - Create New Chapter</title>
 </svelte:head>
 
-<form
-    on:submit|preventDefault={submit}
-    bind:this={el}
-    in:fade
-    class="flex flex-1 flex-col items-center justify-center"
->
-    <main
-        class="container card relative m-4 mx-auto h-full rounded-xl bg-base-200 px-4"
-    >
+<form on:submit|preventDefault={submit} bind:this={el} in:fade class="flex flex-1 flex-col items-center justify-center">
+    <main class="container card relative m-4 mx-auto h-full rounded-xl bg-base-200 px-4">
         <svg
             xmlns="http://www.w3.org/2000/svg"
             width="75"
@@ -105,22 +96,12 @@
     </main>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/stories/{story.data.id}/chapters"
-            class="btn btn-neutral rounded-full font-normal pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            > Go Back
+        <a href="/stories/{story.data.id}/chapters" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span> Go Back
         </a>
 
         {#if $form.isDirty}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                disabled={$form.processing}
-            >
+            <button type="submit" class="btn btn-secondary rounded-full" disabled={$form.processing}>
                 {#if $form.processing}
                     <span class="loading loading-spinner" />
                 {/if} Save

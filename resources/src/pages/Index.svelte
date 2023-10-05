@@ -37,19 +37,14 @@
 
 <Focus>
     <div class="flex w-full items-center justify-center">
-        <h6
-            class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
-        >
-            Wave goodbye to expensive fees and embrace the chance to author your
-            life story.
+        <h6 class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+            Wave goodbye to expensive fees and embrace the chance to author your life story.
         </h6>
     </div>
 </Focus>
 
 <section class="flex items-center justify-center py-16">
-    <div
-        class="container grid items-center justify-center gap-20 md:grid-cols-2"
-    >
+    <div class="container grid items-center justify-center gap-20 md:grid-cols-2">
         <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex items-center justify-between">
@@ -60,30 +55,20 @@
                         <span class="badge badge-accent h-8 w-8">1</span>
                         <span>Kick-starting Your Story</span>
                     </div>
-                    <a
-                        href="/stories"
-                        use:inertia
-                        class="btn btn-secondary btn-lg rounded-full"
-                    >
-                        Start Writing
-                    </a>
+                    <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a>
                 </div>
-                <h5
-                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
+                <h5 class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
                     Your Story <i>Starts Here</i>
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Begin your storytelling by diving into a random chapter
-                    presented by Otto, navigate through your life's timeline
-                    divided into distinct periods like childhood, adolescence,
-                    and beyond, or revise your previous drafts.
+                    Begin your storytelling by diving into a random chapter presented by Otto, navigate through your
+                    life's timeline divided into distinct periods like childhood, adolescence, and beyond, or revise
+                    your previous drafts.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Each question you encounter has been meticulously designed
-                    by experienced psychologists, ensuring meaningful and
-                    reflective storytelling. Your journey through the past,
-                    present, and future is just a story-start away.
+                    Each question you encounter has been meticulously designed by experienced psychologists, ensuring
+                    meaningful and reflective storytelling. Your journey through the past, present, and future is just a
+                    story-start away.
                 </p>
                 <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
                     <li class="flex items-center gap-4">
@@ -118,9 +103,7 @@
 </section>
 
 <section class="flex items-center justify-center py-16">
-    <div
-        class="container grid items-center justify-center gap-20 md:grid-cols-2"
-    >
+    <div class="container grid items-center justify-center gap-20 md:grid-cols-2">
         <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex items-center justify-between">
@@ -128,36 +111,23 @@
                         <img src={splash2} alt="splash" />
                     </div>
                     <div class="badge badge-neutral gap-4 px-2 py-6 text-lg">
-                        <span class="badge badge-primary h-8 w-8 text-neutral"
-                            >2</span
-                        >
+                        <span class="badge badge-primary h-8 w-8 text-neutral">2</span>
                         <span>Intuitive Engagement with Otto</span>
                     </div>
-                    <a
-                        href="/stories"
-                        use:inertia
-                        class="btn btn-secondary btn-lg rounded-full"
-                    >
-                        Start Writing
-                    </a>
+                    <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a>
                 </div>
-                <h5
-                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
+                <h5 class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
                     Your Story, <i>Your Way</i>
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Sharing your life with OttoStory is a breeze. Engage with
-                    Otto Story in the way that suits you best. Reply to our
-                    curated questions and prompts through spoken voice
-                    recordings, uploaded pre-written files, or simply type out
-                    your tales on the keyboard.
+                    Sharing your life with OttoStory is a breeze. Engage with Otto Story in the way that suits you best.
+                    Reply to our curated questions and prompts through spoken voice recordings, uploaded pre-written
+                    files, or simply type out your tales on the keyboard.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Each entry allows room for drafting, editing, and
-                    personalizing your story. And remember, Otto is always there
-                    to listen and to refine your narrative, ensuring your memoir
-                    shines as brightly as your memories.
+                    Each entry allows room for drafting, editing, and personalizing your story. And remember, Otto is
+                    always there to listen and to refine your narrative, ensuring your memoir shines as brightly as your
+                    memories.
                 </p>
                 <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
                     <li class="flex items-center gap-4">
@@ -192,9 +162,7 @@
 </section>
 
 <section class="flex items-center justify-center py-16">
-    <div
-        class="container grid items-center justify-center gap-20 md:grid-cols-2"
-    >
+    <div class="container grid items-center justify-center gap-20 md:grid-cols-2">
         <div class="card order-1 md:order-2">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex items-center justify-between">
@@ -205,31 +173,20 @@
                         <span class="badge badge-success h-8 w-8">3</span>
                         <span>Finalizing Your Masterpiece</span>
                     </div>
-                    <a
-                        href="/stories"
-                        use:inertia
-                        class="btn btn-secondary btn-lg rounded-full"
-                    >
-                        Start Writing
-                    </a>
+                    <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a>
                 </div>
-                <h5
-                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
+                <h5 class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
                     From Digital Pages to <i>Tangible Keepsake</i>
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Take artistic control and create a personalized cover that
-                    encapsulates the essence of your story. From choosing
-                    captivating images to selecting the perfect font, you shape
-                    the face of your autobiography.
+                    Take artistic control and create a personalized cover that encapsulates the essence of your story.
+                    From choosing captivating images to selecting the perfect font, you shape the face of your
+                    autobiography.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Finally, your digital memoir is transformed into a tangible
-                    keepsake, professionally printed and bound in hardback.
-                    Every page you turn is a testament to your life's unique
-                    journey, now immortalized in print, waiting to be shared and
-                    cherished forever.
+                    Finally, your digital memoir is transformed into a tangible keepsake, professionally printed and
+                    bound in hardback. Every page you turn is a testament to your life's unique journey, now
+                    immortalized in print, waiting to be shared and cherished forever.
                 </p>
                 <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
                     <li class="flex items-center gap-4">
@@ -264,9 +221,7 @@
 </section>
 
 <section class="flex items-center justify-center py-16">
-    <div
-        class="container grid items-center justify-center gap-20 md:grid-cols-2"
-    >
+    <div class="container grid items-center justify-center gap-20 md:grid-cols-2">
         <div class="card order-1 items-center">
             <div class="flex flex-col gap-8 p-4">
                 <div class="relative flex items-center justify-between">
@@ -277,31 +232,20 @@
                         <span class="badge badge-secondary h-8 w-8">4</span>
                         <span>Share and Sell Your Autobiography</span>
                     </div>
-                    <a
-                        href="/stories"
-                        use:inertia
-                        class="btn btn-secondary btn-lg rounded-full"
-                    >
-                        Start Writing
-                    </a>
+                    <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a>
                 </div>
-                <h5
-                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
+                <h5 class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
                     Memoirs Meet <i>Marketplace</i>
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    OttoStory isn't just about preserving your life story for
-                    yourself and your loved ones. We provide a platform for you
-                    to share your memoir with the world. Imagine self-publishing
-                    your autobiography online and reaching an audience eager to
-                    hear your unique journey.
+                    OttoStory isn't just about preserving your life story for yourself and your loved ones. We provide a
+                    platform for you to share your memoir with the world. Imagine self-publishing your autobiography
+                    online and reaching an audience eager to hear your unique journey.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    That's the beauty of OttoStory's marketplace - not just a
-                    writing platform but a stage for your narrative. Here, your
-                    story can inspire, entertain, and touch lives far beyond
-                    your immediate circle.
+                    That's the beauty of OttoStory's marketplace - not just a writing platform but a stage for your
+                    narrative. Here, your story can inspire, entertain, and touch lives far beyond your immediate
+                    circle.
                 </p>
                 <ul class="md:text-md flex flex-col gap-4 lg:text-lg xl:pl-20">
                     <li class="flex items-center gap-4">
@@ -341,11 +285,9 @@
 
 <Focus>
     <div class="flex w-full items-center justify-center">
-        <h6
-            class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl"
-        >
-            Turn your memories into stories, experiences into wisdom, and a
-            lifetime into a beautiful book with OttoStory.
+        <h6 class="text-center text-xl text-primary sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl">
+            Turn your memories into stories, experiences into wisdom, and a lifetime into a beautiful book with
+            OttoStory.
             <br />
             <br />
             Ready to tell <i>your story?</i>

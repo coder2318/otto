@@ -29,18 +29,13 @@
 
 <main class="card rounded-xl border border-base-300" in:fade>
     <form class="card-body gap-4" on:submit|preventDefault={submit}>
-        <span class="card-title text-2xl text-primary lg:text-3xl"
-            >Change Password</span
-        >
+        <span class="card-title text-2xl text-primary lg:text-3xl">Change Password</span>
         <div class="form-control">
             <label class="label" for="current_password">
                 <span class="label-text">Current Password</span>
             </label>
             <InputPassword
-                class="input input-bordered w-full {$form.errors
-                    .current_password
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.current_password ? 'input-error' : ''}"
                 bind:value={$form.current_password}
                 type="password"
                 name="current_password"
@@ -58,9 +53,7 @@
                 <span class="label-text">New Password</span>
             </label>
             <InputPassword
-                class="input input-bordered w-full {$form.errors.password
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.password ? 'input-error' : ''}"
                 bind:value={$form.password}
                 type="password"
                 name="password"
@@ -78,10 +71,7 @@
                 <span class="label-text">Confirm Password</span>
             </label>
             <InputPassword
-                class="input input-bordered w-full {$form.errors
-                    .password_confirmation
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.password_confirmation ? 'input-error' : ''}"
                 bind:value={$form.password_confirmation}
                 type="password"
                 name="password_confirmation"
@@ -96,12 +86,7 @@
         </div>
 
         <div class="card-actions justify-end">
-            <button
-                class="btn btn-primary"
-                class:disabled={$form.processing}
-                disabled={$form.processing}
-                type="submit"
-            >
+            <button class="btn btn-primary" class:disabled={$form.processing} disabled={$form.processing} type="submit">
                 {#if $form.processing}
                     <span class="loading loading-spinner" />
                 {/if}

@@ -15,20 +15,13 @@
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
     import Fa from 'svelte-fa'
-    import {
-        faArrowLeft,
-        faArrowRight,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
     import { fileToBase64 } from '@/service/helpers'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
 
-    let element: HTMLElement,
-        modal: HTMLDialogElement,
-        filepond: FilePondType,
-        builder: BookCoverBuilder,
-        editor: any
+    let element: HTMLElement, modal: HTMLDialogElement, filepond: FilePondType, builder: BookCoverBuilder, editor: any
 
     let parameters = {} as any
 
@@ -87,9 +80,7 @@
 </section>
 
 <form on:submit|preventDefault={submit} in:fade id="book-cover">
-    <section
-        class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2"
-    >
+    <section class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2">
         <div class="card bg-base-200">
             <div class="card-body gap-4">
                 {#each template.data.fields as field}
@@ -114,18 +105,14 @@
                                 placeholder={field.name}
                             />
                         {:else if field.type === 'image' && editor}
-                            <div
-                                class="rounded-lg border border-base-content/20"
-                            >
+                            <div class="rounded-lg border border-base-content/20">
                                 <FilePond
                                     name={field.key}
                                     server={false}
                                     bind:pond={filepond}
                                     onpreparefile={async (file, blob) =>
-                                        (parameters[field.key] =
-                                            await fileToBase64(blob))}
-                                    onremovefile={() =>
-                                        (parameters[field.key] = null)}
+                                        (parameters[field.key] = await fileToBase64(blob))}
+                                    onremovefile={() => (parameters[field.key] = null)}
                                     imageEditEditor={editor}
                                     allowImageEdit={true}
                                     allowMultiple={false}
@@ -140,9 +127,7 @@
             </div>
         </div>
         <div class="card border-2 border-base-300">
-            <div
-                class="card-body max-h-screen items-center justify-center gap-4"
-            >
+            <div class="card-body max-h-screen items-center justify-center gap-4">
                 <BookCoverBuilder
                     bind:this={builder}
                     class="select-none"
@@ -155,47 +140,25 @@
     </section>
 
     <section class="container mx-auto mb-8 flex justify-between">
-        <a
-            href="/stories/{story.data.id}"
-            class="btn btn-neutral rounded-full pl-0"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/stories/{story.data.id}" class="btn btn-neutral rounded-full pl-0" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Back
         </a>
         <div class="flex gap-4">
-            <a
-                href="/stories/{story.data.id}/covers"
-                use:inertia
-                class="btn btn-neutral rounded-full"
-            >
-                More Covers
-            </a>
+            <a href="/stories/{story.data.id}/covers" use:inertia class="btn btn-neutral rounded-full"> More Covers </a>
             <button class="btn btn-secondary rounded-full pr-0" type="submit">
                 Save & Next
-                <span class="badge mask badge-neutral mask-circle p-4"
-                    ><Fa icon={faArrowRight} /></span
-                >
+                <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
             </button>
         </div>
     </section>
 </form>
 
 <dialog bind:this={modal} class="modal">
-    <form
-        method="dialog"
-        class="modal-box w-11/12 max-w-5xl"
-        on:submit={canvelEdit}
-    >
+    <form method="dialog" class="modal-box w-11/12 max-w-5xl" on:submit={canvelEdit}>
         <div bind:this={element} class="min-h-[500px]" />
         <div class="modal-action">
-            <button
-                type="button"
-                class="btn btn-primary"
-                on:click|preventDefault={saveImage}>Confirm</button
-            >
+            <button type="button" class="btn btn-primary" on:click|preventDefault={saveImage}>Confirm</button>
             <button type="submit" class="btn" form="book-cover">Close</button>
         </div>
     </form>

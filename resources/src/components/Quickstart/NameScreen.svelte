@@ -14,9 +14,7 @@
 >
     <div class="items-left flex flex-1 flex-col justify-center">
         <div class="form-control">
-            <label
-                class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4"
-            >
+            <label class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4">
                 <span class="label-text text-2xl md:text-5xl lg:text-6xl"
                     >{$form.first_name ? 'First Name:' : 'What is your'}</span
                 >
@@ -32,9 +30,7 @@
             </label>
         </div>
         <div class="form-control">
-            <label
-                class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4"
-            >
+            <label class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4">
                 <span class="label-text text-2xl md:text-5xl lg:text-6xl"
                     >{$form.last_name ? 'Last Name:' : 'What is your'}</span
                 >
@@ -50,12 +46,8 @@
             </label>
         </div>
         <div class="form-control">
-            <label
-                class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4"
-            >
-                <span class="label-text text-2xl md:text-5xl lg:text-6xl"
-                    >What is your birthday?</span
-                >
+            <label class="label flex-col items-start whitespace-nowrap font-serif md:flex-row md:gap-4">
+                <span class="label-text text-2xl md:text-5xl lg:text-6xl">What is your birthday?</span>
                 <input
                     type="text"
                     use:imask={{ mask: '00/00/0000' }}

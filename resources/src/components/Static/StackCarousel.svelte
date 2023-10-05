@@ -45,8 +45,7 @@
     }
 
     function setActive(index: number) {
-        const back =
-            elements[0].index - index > 0 && elements[0].index - index != 3
+        const back = elements[0].index - index > 0 && elements[0].index - index != 3
 
         while (elements[0].index !== index) {
             change(back, false)
@@ -59,29 +58,20 @@
     <div class="container grid gap-20 lg:grid-cols-2">
         <div class="card">
             <div class="flex flex-col gap-8 p-4">
-                <h5
-                    class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl"
-                >
-                    You've shown the world chapters of your life, <i
-                        >now give them the complete book.</i
-                    >
+                <h5 class="card-title block text-2xl font-normal text-primary md:text-3xl lg:text-4xl xl:text-5xl">
+                    You've shown the world chapters of your life, <i>now give them the complete book.</i>
                 </h5>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Everyone has a unique story, and at OttoStory, we turn it
-                    into an extraordinary autobiography. Meet Otto, your AI
-                    biographer, guiding you through a reflective journey of your
-                    life's experiences.
+                    Everyone has a unique story, and at OttoStory, we turn it into an extraordinary autobiography. Meet
+                    Otto, your AI biographer, guiding you through a reflective journey of your life's experiences.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Say goodbye to professional writers and high costs. Otto
-                    helps transform your cherished memories into a captivating
-                    memoir, allowing you to share your journey or simply reflect
-                    on your life. With OttoStory, your story is immortalized in
-                    a personal hardback book.
+                    Say goodbye to professional writers and high costs. Otto helps transform your cherished memories
+                    into a captivating memoir, allowing you to share your journey or simply reflect on your life. With
+                    OttoStory, your story is immortalized in a personal hardback book.
                 </p>
                 <p class="md:text-md lg:text-lg xl:pl-20">
-                    Begin with us today and watch your life's narrative come
-                    alive in print. Welcome to OttoStory
+                    Begin with us today and watch your life's narrative come alive in print. Welcome to OttoStory
                 </p>
             </div>
         </div>
@@ -103,7 +93,7 @@
                 </div>
 
                 <div class="flex w-full justify-center gap-2 pt-8">
-                    {#each [...elements].sort( (a, b) => (a.index > b.index ? 1 : -1) ) as { index } (index)}
+                    {#each [...elements].sort((a, b) => (a.index > b.index ? 1 : -1)) as { index } (index)}
                         <button
                             on:click|preventDefault={() => setActive(index)}
                             type="button"

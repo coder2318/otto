@@ -48,8 +48,7 @@
             if (timer > 10000) {
                 timer = 0
                 carousel.scrollLeft =
-                    carousel.scrollLeft >=
-                    carousel.scrollWidth - carousel.offsetWidth
+                    carousel.scrollLeft >= carousel.scrollWidth - carousel.offsetWidth
                         ? 0
                         : carousel.scrollLeft + carousel.offsetWidth
             }
@@ -74,24 +73,15 @@
                 rows="1"
             />
 
-            <div
-                class:lg:grid-cols-2={chapter.data?.question?.sub_questions
-                    ?.length}
-                class="grid grid-cols-1 gap-8"
-            >
+            <div class:lg:grid-cols-2={chapter.data?.question?.sub_questions?.length} class="grid grid-cols-1 gap-8">
                 {#if chapter.data?.question?.sub_questions?.length}
-                    <div
-                        class="card min-h-[200px] rounded-xl bg-neutral-focus text-neutral-content"
-                    >
+                    <div class="card min-h-[200px] rounded-xl bg-neutral-focus text-neutral-content">
                         <div class="card-body">
                             <div class="card-title gap-2">
                                 <Logo class="h-12" />
                                 <span>Start with a Memory:</span>
                             </div>
-                            <div
-                                class="carousel h-full overflow-hidden"
-                                bind:this={carousel}
-                            >
+                            <div class="carousel h-full overflow-hidden" bind:this={carousel}>
                                 {#each chapter.data?.question?.sub_questions as quastion}
                                     <p
                                         class="carousel-item flex h-full w-full flex-wrap content-center justify-center text-center text-xl"
@@ -114,22 +104,12 @@
     </main>
 
     <section class="container mx-auto flex justify-between">
-        <a
-            href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0 font-normal"
-            use:inertia
-        >
-            <span class="badge mask badge-accent mask-circle p-4"
-                ><Fa icon={faArrowLeft} /></span
-            >
+        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
+            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Go Back
         </a>
         {#if $form.isDirty}
-            <button
-                type="submit"
-                class="btn btn-primary btn-outline rounded-full"
-                data-status="draft"
-            >
+            <button type="submit" class="btn btn-primary btn-outline rounded-full" data-status="draft">
                 Transcribe
             </button>
         {/if}

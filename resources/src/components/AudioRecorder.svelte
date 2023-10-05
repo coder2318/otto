@@ -1,10 +1,6 @@
 <script lang="ts">
     import { msToTime } from '@/service/helpers'
-    import {
-        faMicrophone,
-        faStop,
-        faTrash,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faMicrophone, faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
     import { flash } from './Toast.svelte'
@@ -23,42 +19,36 @@
     let options: any = {}
 
     function startRecording() {
-        navigator.mediaDevices
-            .getUserMedia({ audio: true, video: false })
-            .then((stream) => {
-                const recordedChunks = []
-                mediaRecorder = new MediaRecorder(stream, {
-                    mimeType: 'audio/webm',
-                })
-
-                mediaRecorder.addEventListener('dataavailable', function (e) {
-                    if (e.data.size > 0) recordedChunks.push(e.data)
-                })
-
-                mediaRecorder.addEventListener('stop', function () {
-                    recordings = [
-                        ...(recordings ?? []),
-                        {
-                            options: { ...options },
-                            file: new File(
-                                recordedChunks,
-                                `audio_${dayjs().format(
-                                    'YYYY-MM-DD_HH-mm-ss'
-                                )}.weba`,
-                                { type: 'audio/webm' }
-                            ),
-                        },
-                    ]
-                })
-
-                mediaRecorder.start()
-                timer = 0
-                interval = setInterval(() => {
-                    if (max - 10 < (timer += 10)) {
-                        stopRecording()
-                    }
-                }, 10)
+        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
+            const recordedChunks = []
+            mediaRecorder = new MediaRecorder(stream, {
+                mimeType: 'audio/webm',
             })
+
+            mediaRecorder.addEventListener('dataavailable', function (e) {
+                if (e.data.size > 0) recordedChunks.push(e.data)
+            })
+
+            mediaRecorder.addEventListener('stop', function () {
+                recordings = [
+                    ...(recordings ?? []),
+                    {
+                        options: { ...options },
+                        file: new File(recordedChunks, `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.weba`, {
+                            type: 'audio/webm',
+                        }),
+                    },
+                ]
+            })
+
+            mediaRecorder.start()
+            timer = 0
+            interval = setInterval(() => {
+                if (max - 10 < (timer += 10)) {
+                    stopRecording()
+                }
+            }, 10)
+        })
     }
 
     function stopRecording() {
@@ -92,26 +82,16 @@
     <div class="mask mask-circle bg-primary/5 p-4">
         <div class="mask mask-circle bg-primary/10 p-4">
             <div class="mask mask-circle bg-primary/30 p-4">
-                <div
-                    class="mask mask-circle bg-primary p-4"
-                    class:animate-pulse={!!mediaRecorder}
-                >
+                <div class="mask mask-circle bg-primary p-4" class:animate-pulse={!!mediaRecorder}>
                     <div class="mask mask-circle bg-neutral">
                         <button
                             type="button"
                             class="btn btn-circle btn-ghost btn-lg text-4xl"
-                            disabled={maxFiles !== null &&
-                                recordings?.length >= maxFiles}
-                            on:click|preventDefault={() =>
-                                mediaRecorder
-                                    ? stopRecording()
-                                    : startRecording()}
+                            disabled={maxFiles !== null && recordings?.length >= maxFiles}
+                            on:click|preventDefault={() => (mediaRecorder ? stopRecording() : startRecording())}
                         >
-                            <label class="swap swap-rotate">
-                                <input
-                                    type="checkbox"
-                                    checked={!!mediaRecorder}
-                                />
+                            <label class="swap-rotate swap">
+                                <input type="checkbox" checked={!!mediaRecorder} />
                                 <div class="swap-on text-secondary">
                                     <Fa icon={faStop} />
                                 </div>
@@ -129,11 +109,7 @@
         <div class="form-control">
             <label class="label flex gap-4">
                 <span class="label-text">Language:</span>
-                <select
-                    class="select select-bordered select-ghost"
-                    name="language"
-                    bind:value={options.language}
-                >
+                <select class="select select-bordered select-ghost" name="language" bind:value={options.language}>
                     <option value={null}>Recognize</option>
                     <option value="en">English</option>
                     <option value="nl">Dutch</option>
@@ -158,14 +134,8 @@
         </div>
     {/if}
     {#each recordings ?? [] as recording, i (recording.file.name)}
-        <div
-            class="group relative flex items-center justify-center gap-2 transition-all"
-        >
-            <audio
-                bind:this={player}
-                src={URL.createObjectURL(recording.file)}
-                controls
-            />
+        <div class="group relative flex items-center justify-center gap-2 transition-all">
+            <audio bind:this={player} src={URL.createObjectURL(recording.file)} controls />
             <button
                 type="button"
                 class="btn btn-circle btn-error btn-outline btn-sm text-error"
@@ -176,15 +146,9 @@
         </div>
     {/each}
     {#if timer}
-        <div
-            class="flex items-center justify-center gap-2 rounded-full bg-primary/10 p-4 text-primary"
-        >
+        <div class="flex items-center justify-center gap-2 rounded-full bg-primary/10 p-4 text-primary">
             <span class="w-12"> {msToTime(timer)}</span>
-            <progress
-                class="progress progress-primary w-36"
-                value={timer}
-                {max}
-            />
+            <progress class="progress progress-primary w-36" value={timer} {max} />
             <span class="w-12"> {msToTime(max)}</span>
         </div>
     {:else if !recordings?.length}
@@ -197,17 +161,10 @@
 
 <dialog bind:this={dialog} class="modal">
     <form method="dialog" class="modal-box">
-        <h3 class="text-lg font-bold">
-            Are you sure you want to delete this recording?
-        </h3>
+        <h3 class="text-lg font-bold">Are you sure you want to delete this recording?</h3>
         <div class="modal-action">
-            <button
-                class="btn btn-error btn-sm"
-                on:click|preventDefault={confirmDelete}>Delete</button
-            >
-            <button class="btn btn-sm" on:click={() => dialog.close()}
-                >Close</button
-            >
+            <button class="btn btn-error btn-sm" on:click|preventDefault={confirmDelete}>Delete</button>
+            <button class="btn btn-sm" on:click={() => dialog.close()}>Close</button>
         </div>
     </form>
 </dialog>

@@ -35,15 +35,9 @@
         <Logo class="w-full" />
     </a>
 
-    <div class="my-8 font-serif text-3xl italic text-primary">
-        Start Your Story Now!
-    </div>
+    <div class="my-8 font-serif text-3xl italic text-primary">Start Your Story Now!</div>
 
-    <form
-        on:submit|preventDefault={submit}
-        class="flex w-full flex-col items-center"
-        autocomplete="on"
-    >
+    <form on:submit|preventDefault={submit} class="flex w-full flex-col items-center" autocomplete="on">
         <Honeypot honeypot={$page?.props?.honeypot} {form} />
         <div class="form-control w-full">
             <label class="label" for="email">
@@ -54,16 +48,12 @@
                 type="email"
                 name="email"
                 placeholder="Email"
-                class="input input-bordered {$form.errors.email
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered {$form.errors.email ? 'input-error' : ''}"
                 required
                 autocomplete="email"
             />
             {#if $form.errors.email}
-                <span class="label-text-alt mt-1 text-left text-error"
-                    >{$form.errors.email}</span
-                >
+                <span class="label-text-alt mt-1 text-left text-error">{$form.errors.email}</span>
             {/if}
         </div>
         <div class="form-control w-full">
@@ -75,16 +65,12 @@
                 type="password"
                 name="password"
                 placeholder="Password"
-                class="input input-bordered w-full {$form.errors.password
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.password ? 'input-error' : ''}"
                 required
                 autocomplete="new-password"
             />
             {#if $form.errors.password}
-                <span class="label-text-alt mt-1 text-left text-error"
-                    >{$form.errors.password}</span
-                >
+                <span class="label-text-alt mt-1 text-left text-error">{$form.errors.password}</span>
             {/if}
         </div>
         <div class="form-control w-full">
@@ -96,38 +82,25 @@
                 type="password"
                 name="password_confirmation"
                 placeholder="Password Confirmation"
-                class="input input-bordered w-full {$form.errors
-                    .password_confirmation
-                    ? 'input-error'
-                    : ''}"
+                class="input input-bordered w-full {$form.errors.password_confirmation ? 'input-error' : ''}"
                 required
                 autocomplete="new-password"
             />
             {#if $form.errors.password}
-                <span class="label-text-alt mt-1 text-left text-error"
-                    >{$form.errors.password}</span
-                >
+                <span class="label-text-alt mt-1 text-left text-error">{$form.errors.password}</span>
             {/if}
         </div>
 
         <div class="form-control mt-8 w-full">
-            <button class="btn btn-primary rounded-full" type="submit"
-                >Sign Up</button
-            >
+            <button class="btn btn-primary rounded-full" type="submit">Sign Up</button>
         </div>
 
         <div class="mt-4 text-center">
-            Already have an account? <a
-                href="/login"
-                use:inertia
-                class="link-primary link">Log In</a
-            >
+            Already have an account? <a href="/login" use:inertia class="link-primary link">Log In</a>
         </div>
     </form>
 
-    <div class="divider my-8 text-base-content/30 lg:my-16">
-        or continue with
-    </div>
+    <div class="divider my-8 text-base-content/30 lg:my-16">or continue with</div>
 
     <SocialLogin />
 </div>

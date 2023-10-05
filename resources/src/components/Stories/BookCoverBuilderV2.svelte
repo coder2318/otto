@@ -7,9 +7,7 @@
 
     let svg: HTMLElement | SVGElement
 
-    $: cover =
-        template.cover ??
-        import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
+    $: cover = template.cover ?? import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
     $: sizes = getSize(pages)
     $: updateSvg(parameters)
 
@@ -17,21 +15,21 @@
         if (!svg) return
 
         Object.entries(parameters).forEach(([key, value]) => {
-            svg.querySelectorAll(
-                `[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`
-            ).forEach((node: HTMLElement) => {
-                switch (node.dataset[key]) {
-                    case 'innerText':
-                        node.innerHTML = value as string
-                        break
-                    case 'innerHTML':
-                        node.innerHTML = value as string
-                        break
-                    default:
-                        node.setAttribute(node.dataset[key], value as string)
-                        break
+            svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
+                (node: HTMLElement) => {
+                    switch (node.dataset[key]) {
+                        case 'innerText':
+                            node.innerHTML = value as string
+                            break
+                        case 'innerHTML':
+                            node.innerHTML = value as string
+                            break
+                        default:
+                            node.setAttribute(node.dataset[key], value as string)
+                            break
+                    }
                 }
-            })
+            )
         })
     }
 
@@ -51,8 +49,7 @@
 
         const sizes = {
             totalHeight: height + 2 * safetyMargin + 2 * bleedArea,
-            totalWidth:
-                2 * width + 4 * safetyMargin + spineWidth + 2 * bleedArea,
+            totalWidth: 2 * width + 4 * safetyMargin + spineWidth + 2 * bleedArea,
             width,
             height,
             spineWidth,
@@ -66,10 +63,7 @@
     }
 
     export function getCoverAspectRatio() {
-        return (
-            (2 * sizes.width + 4 * sizes.safetyMargin + sizes.spineWidth) /
-            (sizes.height + 2 * sizes.safetyMargin)
-        )
+        return (2 * sizes.width + 4 * sizes.safetyMargin + sizes.spineWidth) / (sizes.height + 2 * sizes.safetyMargin)
     }
 </script>
 
@@ -107,10 +101,7 @@
     </svg>
 
     <svg
-        x={sizes.bleedArea +
-            2 * sizes.safetyMargin +
-            sizes.spineWidth +
-            sizes.width}
+        x={sizes.bleedArea + 2 * sizes.safetyMargin + sizes.spineWidth + sizes.width}
         y={sizes.bleedArea}
         width={sizes.width + 2 * sizes.safetyMargin}
         height={sizes.height + 2 * sizes.safetyMargin}

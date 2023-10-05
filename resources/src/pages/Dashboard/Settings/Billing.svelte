@@ -12,17 +12,12 @@
     import { dayjs } from '@/service/dayjs'
     import Fa from 'svelte-fa'
     import { fade } from 'svelte/transition'
-    export let current: any | null,
-        plans: { data: App.Plan[] },
-        upcoming: any | null,
-        invoices: any
+    export let current: any | null, plans: { data: App.Plan[] }, upcoming: any | null, invoices: any
 
     let plansModal: HTMLDialogElement, confirmCancelModal: HTMLDialogElement
     let period = 'month'
 
-    $: currentPlan = plans.data.find(
-        (plan) => plan.prices?.[current?.stripe_price ?? -1]
-    )
+    $: currentPlan = plans.data.find((plan) => plan.prices?.[current?.stripe_price ?? -1])
     $: currentPrice = currentPlan?.prices?.[current?.stripe_price ?? -1]
 
     function cancelSubscription() {
@@ -34,9 +29,7 @@
 
     function changeSubscription(plan: App.Plan) {
         plansModal.close()
-        const price = Object.entries(plan.prices).find(
-            ([, price]) => price.interval === period
-        )[0]
+        const price = Object.entries(plan.prices).find(([, price]) => price.interval === period)[0]
         router.put(window.location.pathname, { price })
     }
 </script>
@@ -48,9 +41,7 @@
 <main class="card mb-8 rounded-xl border border-base-300" in:fade>
     <div class="card-body gap-4">
         {#if current}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Current Subscription Plan
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Current Subscription Plan </span>
 
             <div class="rounded-lg bg-base-200 p-4">
                 <div class="card-title text-xl text-primary">
@@ -72,26 +63,17 @@
                     {/each}
                 </ul>
 
-                <button
-                    class="btn btn-primary btn-sm mt-4"
-                    on:click={() => plansModal.show()}
-                >
-                    Change Plan
-                </button>
+                <button class="btn btn-primary btn-sm mt-4" on:click={() => plansModal.show()}> Change Plan </button>
             </div>
 
             <div class="divider" />
         {/if}
         {#if upcoming}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Payments
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Payments </span>
 
             <div class="rounded-lg bg-base-200 p-4">
                 <div class="text-sm text-base-content/80">
-                    Next Payment on {dayjs
-                        .unix(upcoming.period_end)
-                        .format('LL')}
+                    Next Payment on {dayjs.unix(upcoming.period_end).format('LL')}
                 </div>
                 <div class="mt-4 text-4xl font-bold text-primary">
                     {usd(upcoming.amount_due / 100)}
@@ -100,73 +82,49 @@
             <div class="divider" />
         {/if}
         {#if current && !current.ends_at}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Cancel Subscription
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Cancel Subscription </span>
 
             <div class="rounded-lg bg-base-200 p-4">
                 <p>
-                    You may cancel your subscription at any time. Once your
-                    subscription has been cancelled, you will have the option to
-                    resume the subscription until the end of your current
-                    billing cycle.
+                    You may cancel your subscription at any time. Once your subscription has been cancelled, you will
+                    have the option to resume the subscription until the end of your current billing cycle.
                 </p>
-                <button
-                    class="btn btn-primary btn-outline btn-sm mt-4"
-                    on:click={() => confirmCancelModal.show()}
-                >
+                <button class="btn btn-primary btn-outline btn-sm mt-4" on:click={() => confirmCancelModal.show()}>
                     Cancel Subscription
                 </button>
             </div>
 
             <div class="divider" />
         {:else if current}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Resume Subscription
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Resume Subscription </span>
 
             <div class="rounded-lg bg-base-200 p-4">
                 <p>
-                    Having second thoughts about cancelling your subscription?
-                    You can instantly reactive your subscription at any time
-                    until the end of your current billing cycle
-                    <i>({dayjs(current.ends_at).format('ll')})</i>. After your
-                    current billing cycle ends, you may choose an entirely new
-                    subscription plan.
+                    Having second thoughts about cancelling your subscription? You can instantly reactive your
+                    subscription at any time until the end of your current billing cycle
+                    <i>({dayjs(current.ends_at).format('ll')})</i>. After your current billing cycle ends, you may
+                    choose an entirely new subscription plan.
                 </p>
-                <button
-                    class="btn btn-primary btn-outline btn-sm mt-4"
-                    on:click={() => confirmCancelModal.show()}
-                >
+                <button class="btn btn-primary btn-outline btn-sm mt-4" on:click={() => confirmCancelModal.show()}>
                     Resume
                 </button>
             </div>
 
             <div class="divider" />
         {:else}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Subscribe to a Plan
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Subscribe to a Plan </span>
 
             <div class="rounded-lg bg-base-200 p-4">
                 <p>
-                    You are currently not subscribed to any plan. Please follow
-                    the link below to unlock all platform features.
+                    You are currently not subscribed to any plan. Please follow the link below to unlock all platform
+                    features.
                 </p>
-                <a
-                    class="btn btn-primary btn-outline btn-sm mt-4"
-                    href="/plans"
-                    use:inertia
-                >
-                    Subscription Plans
-                </a>
+                <a class="btn btn-primary btn-outline btn-sm mt-4" href="/plans" use:inertia> Subscription Plans </a>
             </div>
         {/if}
 
         {#if invoices.length}
-            <span class="card-title text-2xl text-primary lg:text-3xl">
-                Receipts
-            </span>
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Receipts </span>
 
             <div class="rounded-lg bg-base-200">
                 <div class="overflow-x-auto">
@@ -174,21 +132,10 @@
                         <tbody>
                             {#each invoices as invoice}
                                 <tr class="hover hover:!bg-base-300">
-                                    <td
-                                        >{dayjs
-                                            .unix(invoice.created)
-                                            .format('ll')}</td
-                                    >
+                                    <td>{dayjs.unix(invoice.created).format('ll')}</td>
                                     <td>{usd(invoice.total / 100)}</td>
-                                    <td
-                                        ><span class="badge badge-sm"
-                                            >{invoice.status}</span
-                                        ></td
-                                    >
-                                    <a
-                                        href="/user/invoice/{invoice.id}"
-                                        class="btn btn-square btn-ghost"
-                                    >
+                                    <td><span class="badge badge-sm">{invoice.status}</span></td>
+                                    <a href="/user/invoice/{invoice.id}" class="btn btn-square btn-ghost">
                                         <Fa icon={faDownload} />
                                     </a>
                                 </tr>
@@ -227,10 +174,7 @@
             </div>
         </div>
         <div class="modal-backdrop bg-base-content/20">
-            <button
-                type="button"
-                on:click|preventDefault={() => confirmCancelModal.close()}
-            />
+            <button type="button" on:click|preventDefault={() => confirmCancelModal.close()} />
         </div>
     </dialog>
 {/if}
@@ -243,15 +187,12 @@
                 <input
                     type="checkbox"
                     class="toggle-success-error"
-                    on:change={(e) =>
-                        (period = e.currentTarget.checked ? 'year' : 'month')}
+                    on:change={(e) => (period = e.currentTarget.checked ? 'year' : 'month')}
                 />
                 <span class="label-text">Yearly</span>
             </label>
-            <button
-                type="button"
-                class="btn btn-square btn-ghost"
-                on:click={() => plansModal.close()}><Fa icon={faX} /></button
+            <button type="button" class="btn btn-square btn-ghost" on:click={() => plansModal.close()}
+                ><Fa icon={faX} /></button
             >
         </div>
         <div class="carousel rounded-box w-full flex-1">
@@ -266,8 +207,7 @@
                                 {#each Object.entries(plan.prices) as [key, price] (key)}
                                     {#if price.interval === period}
                                         <span>
-                                            <span
-                                                class="text-4xl font-bold text-primary"
+                                            <span class="text-4xl font-bold text-primary"
                                                 >{usd(price.value, {
                                                     maximumFractionDigits: 0,
                                                     currency: price.currency,
@@ -287,11 +227,8 @@
                             <button
                                 class="btn btn-secondary btn-xs w-full rounded-full"
                                 type="button"
-                                disabled={plan.prices?.[
-                                    current?.stripe_price ?? -1
-                                ]?.interval === period}
-                                on:click|preventDefault={() =>
-                                    changeSubscription(plan)}
+                                disabled={plan.prices?.[current?.stripe_price ?? -1]?.interval === period}
+                                on:click|preventDefault={() => changeSubscription(plan)}
                             >
                                 {#if plan.prices?.[current?.stripe_price ?? -1]?.interval === period}
                                     Current Plan
@@ -306,9 +243,6 @@
         </div>
     </div>
     <div class="modal-backdrop bg-base-content/20">
-        <button
-            type="button"
-            on:click|preventDefault={() => plansModal.close()}
-        />
+        <button type="button" on:click|preventDefault={() => plansModal.close()} />
     </div>
 </dialog>

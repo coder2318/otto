@@ -7,10 +7,7 @@ export function range(from: number, to: number | null = null): Array<number> {
     return Array.from({ length: to - from }, (_, i) => from + i)
 }
 
-export function usd(
-    amount: number,
-    options?: Intl.NumberFormatOptions
-): string {
+export function usd(amount: number, options?: Intl.NumberFormatOptions): string {
     return new Intl.NumberFormat('en-US', {
         style: 'currency',
         currency: 'USD',
@@ -34,17 +31,7 @@ export function msToTime(s: number): string {
 }
 
 export function bytes(bytes: number): string {
-    const units = [
-        'bytes',
-        'KiB',
-        'MiB',
-        'GiB',
-        'TiB',
-        'PiB',
-        'EiB',
-        'ZiB',
-        'YiB',
-    ]
+    const units = ['bytes', 'KiB', 'MiB', 'GiB', 'TiB', 'PiB', 'EiB', 'ZiB', 'YiB']
     let l = 0
 
     while (bytes >= 1024 && ++l) {

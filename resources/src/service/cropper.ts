@@ -73,14 +73,10 @@ function getEditedOptions(cropper: Cropper) {
     const translatedTopLeftY = rotatedTopLeftY + canvasData.naturalHeight / 2
     const translatedTopRightX = rotatedTopRightX + canvasData.naturalWidth / 2
     const translatedTopRightY = rotatedTopRightY + canvasData.naturalHeight / 2
-    const translatedBottomLeftX =
-        rotatedBottomLeftX + canvasData.naturalWidth / 2
-    const translatedBottomLeftY =
-        rotatedBottomLeftY + canvasData.naturalHeight / 2
-    const translatedBottomRightX =
-        rotatedBottomRightX + canvasData.naturalWidth / 2
-    const translatedBottomRightY =
-        rotatedBottomRightY + canvasData.naturalHeight / 2
+    const translatedBottomLeftX = rotatedBottomLeftX + canvasData.naturalWidth / 2
+    const translatedBottomLeftY = rotatedBottomLeftY + canvasData.naturalHeight / 2
+    const translatedBottomRightX = rotatedBottomRightX + canvasData.naturalWidth / 2
+    const translatedBottomRightY = rotatedBottomRightY + canvasData.naturalHeight / 2
 
     /* Center point of crop area in rotated coordinates */
     let centerX = cropData.x + cropData.width / 2
@@ -193,11 +189,7 @@ function getEditedOptions(cropper: Cropper) {
 
     const shortestDistance = Math.min(...distances)
     // gets the zoom from shortest distance and half diagonal of crop area
-    const zoom =
-        shortestDistance /
-        Math.sqrt(
-            Math.pow(cropData.width / 2, 2) + Math.pow(cropData.height / 2, 2)
-        )
+    const zoom = shortestDistance / Math.sqrt(Math.pow(cropData.width / 2, 2) + Math.pow(cropData.height / 2, 2))
 
     /* Center point in the non-rotated image coordinates (for filepond) */
 
@@ -207,11 +199,9 @@ function getEditedOptions(cropper: Cropper) {
 
     /* apply reverse rotation to the point */
     const rotatedX =
-        offsetX * Math.cos((-cropData.rotate * Math.PI) / 180) -
-        offsetY * Math.sin((-cropData.rotate * Math.PI) / 180)
+        offsetX * Math.cos((-cropData.rotate * Math.PI) / 180) - offsetY * Math.sin((-cropData.rotate * Math.PI) / 180)
     const rotatedY =
-        offsetX * Math.sin((-cropData.rotate * Math.PI) / 180) +
-        offsetY * Math.cos((-cropData.rotate * Math.PI) / 180)
+        offsetX * Math.sin((-cropData.rotate * Math.PI) / 180) + offsetY * Math.cos((-cropData.rotate * Math.PI) / 180)
 
     /* offset coordinates so origin is the top left corner of the unrotated canvas (ie use imageData width and height) */
     const translatedX = rotatedX + imageData.naturalWidth / 2
@@ -270,8 +260,7 @@ function getCenterPointToIntersectionDistance(
     )
     if (intersectionPoint) {
         const distance = Math.sqrt(
-            Math.pow(intersectionPoint.x - cropCenterX, 2) +
-                Math.pow(intersectionPoint.y - cropCenterY, 2)
+            Math.pow(intersectionPoint.x - cropCenterX, 2) + Math.pow(intersectionPoint.y - cropCenterY, 2)
         )
         return distance
     }

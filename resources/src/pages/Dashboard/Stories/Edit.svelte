@@ -8,11 +8,7 @@
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import {
-        faArrowRight,
-        faGripLines,
-        faPencil,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowRight, faGripLines, faPencil } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
     import { onMount } from 'svelte'
     import Sortable from 'sortablejs'
@@ -24,8 +20,7 @@
     const form = useForm({
         timelines: timelines.data.map((timeline) => ({
             id: timeline.id,
-            chapters:
-                chapters[timeline.id]?.data.map((chapter) => chapter.id) ?? [],
+            chapters: chapters[timeline.id]?.data.map((chapter) => chapter.id) ?? [],
         })),
     })
 
@@ -41,19 +36,9 @@
                     handle: '.cursor-grab',
                     onEnd(event) {
                         const { oldIndex, newIndex } = event
-                        const from = $form.timelines.find(
-                            (timeline) =>
-                                timeline.id == event.from.dataset.timeline
-                        )
-                        const to = $form.timelines.find(
-                            (timeline) =>
-                                timeline.id == event.to.dataset.timeline
-                        )
-                        to.chapters.splice(
-                            newIndex,
-                            0,
-                            ...from.chapters.splice(oldIndex, 1)
-                        )
+                        const from = $form.timelines.find((timeline) => timeline.id == event.from.dataset.timeline)
+                        const to = $form.timelines.find((timeline) => timeline.id == event.to.dataset.timeline)
+                        to.chapters.splice(newIndex, 0, ...from.chapters.splice(oldIndex, 1))
 
                         $form.timelines = $form.timelines
                     },
@@ -91,25 +76,14 @@
                 Table of <i>Contents</i>
             </h1>
             {#if $form.isDirty}
-                <button
-                    type="submit"
-                    class="btn btn-primary rounded-full"
-                    disabled={$form.processing}
-                >
-                    {#if $form.processing}<span class="loading loading-spinner"
-                        ></span>{/if}
+                <button type="submit" class="btn btn-primary rounded-full" disabled={$form.processing}>
+                    {#if $form.processing}<span class="loading loading-spinner"></span>{/if}
                     Save Chapter Order
                 </button>
             {:else}
-                <a
-                    href="/stories/{story.data.id}/preview"
-                    use:inertia
-                    class="btn btn-secondary rounded-full pr-0"
-                >
+                <a href="/stories/{story.data.id}/preview" use:inertia class="btn btn-secondary rounded-full pr-0">
                     Preview Your Book
-                    <span class="badge mask badge-neutral mask-circle p-4"
-                        ><Fa icon={faArrowRight} /></span
-                    >
+                    <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                 </a>
             {/if}
         </div>
@@ -123,19 +97,13 @@
                     {timeline.title}
                 </div>
                 <div class="collapse-content">
-                    <ul
-                        class="flex flex-col gap-4"
-                        bind:this={lists[timeline.id]}
-                        data-timeline={timeline.id}
-                    >
+                    <ul class="flex flex-col gap-4" bind:this={lists[timeline.id]} data-timeline={timeline.id}>
                         {#each chapters[timeline.id]?.data ?? [] as chapter (chapter.id)}
                             <li
                                 data-chapter={chapter.id}
                                 class="flex items-center justify-between gap-4 rounded-xl border border-neutral-content/20 p-2"
                             >
-                                <span
-                                    class="badge badge-neutral h-8 w-8 cursor-grab rounded-full"
-                                >
+                                <span class="badge badge-neutral h-8 w-8 cursor-grab rounded-full">
                                     <Fa icon={faGripLines} />
                                 </span>
                                 <span class="flex-1">{chapter.title}</span>

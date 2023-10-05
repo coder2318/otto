@@ -36,8 +36,7 @@
             {#each question.answers as answer (answer)}
                 <button
                     on:click={() => toggleAnswer(answer)}
-                    class="btn btn-primary btn-outline btn-lg w-40 rounded-full {answer ===
-                    $form.quiz?.[question.id]
+                    class="btn btn-primary btn-outline btn-lg w-40 rounded-full {answer === $form.quiz?.[question.id]
                         ? 'btn-active'
                         : ''}">{answer}</button
                 >
@@ -45,9 +44,7 @@
         </div>
     </div>
     <div class="mb-4 flex items-center justify-center gap-4">
-        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}
-            >Back</button
-        >
+        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}>Back</button>
         <button class="btn btn-primary w-40" on:click={next}>Continue</button>
     </div>
 </div>

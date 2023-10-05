@@ -53,9 +53,7 @@
                 {question}
             </div>
 
-            <div
-                class="collapse-content bg-neutral-focus peer-checked:bg-neutral"
-            >
+            <div class="collapse-content bg-neutral-focus peer-checked:bg-neutral">
                 <p class="md:text-md px-4 pb-4 lg:text-lg">
                     {answer}
                 </p>

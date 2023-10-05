@@ -1,16 +1,5 @@
-<svg
-    viewBox="0 0 62 62"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-    {...$$restProps}
->
-    <rect
-        width="62"
-        height="62"
-        rx="10"
-        transform="matrix(-1 0 0 1 62 0)"
-        fill="#FFD885"
-    />
+<svg viewBox="0 0 62 62" fill="none" xmlns="http://www.w3.org/2000/svg" {...$$restProps}>
+    <rect width="62" height="62" rx="10" transform="matrix(-1 0 0 1 62 0)" fill="#FFD885" />
     <g clip-path="url(#clip0_2169_56243)">
         <path
             d="M27.1479 23.8334C27.1479 22.0493 25.7384 20.6094 23.9919 20.6094C22.2455 20.6094 20.8359 22.0493 20.8359 23.8334C20.8359 25.6176 22.2455 27.0575 23.9919 27.0575C25.7384 27.0575 27.1479 25.6176 27.1479 23.8334ZM22.609 23.8334C22.609 23.0546 23.2295 22.4207 23.9919 22.4207C24.7543 22.4207 25.3749 23.0546 25.3749 23.8334C25.3749 24.6123 24.7543 25.2462 23.9919 25.2462C23.2295 25.2462 22.609 24.6123 22.609 23.8334Z"
@@ -185,20 +174,10 @@
     />
     <defs>
         <clipPath id="clip0_2169_56243">
-            <rect
-                width="20.3279"
-                height="31"
-                fill="white"
-                transform="translate(20.8359 10.5391)"
-            />
+            <rect width="20.3279" height="31" fill="white" transform="translate(20.8359 10.5391)" />
         </clipPath>
         <clipPath id="clip1_2169_56243">
-            <rect
-                width="20.3279"
-                height="31"
-                fill="white"
-                transform="translate(20.8359 10.5391)"
-            />
+            <rect width="20.3279" height="31" fill="white" transform="translate(20.8359 10.5391)" />
         </clipPath>
     </defs>
 </svg>

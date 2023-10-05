@@ -43,10 +43,7 @@
 
 <section class="container card m-4 mx-auto rounded-xl bg-base-300 px-4" in:fade>
     <div class="card-body gap-4">
-        <textarea
-            class="textarea card-title textarea-ghost font-serif"
-            bind:value={$form.title}
-        />
+        <textarea class="textarea card-title textarea-ghost font-serif" bind:value={$form.title} />
     </div>
 </section>
 
@@ -59,11 +56,7 @@
 
     {#if $form.isDirty}
         <section class="container mx-auto mb-8 flex justify-end">
-            <button
-                class="btn btn-primary btn-outline rounded-full"
-                data-status="draft"
-                type="submit"
-            >
+            <button class="btn btn-primary btn-outline rounded-full" data-status="draft" type="submit">
                 Transcribe
             </button>
         </section>

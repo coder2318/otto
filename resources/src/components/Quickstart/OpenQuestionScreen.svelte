@@ -35,9 +35,7 @@
         />
     </div>
     <div class="mb-4 flex items-center justify-center gap-4">
-        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}
-            >Back</button
-        >
+        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}>Back</button>
         <button class="btn btn-primary w-40" on:click={next}>Continue</button>
     </div>
 </div>

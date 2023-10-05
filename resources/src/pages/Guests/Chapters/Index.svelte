@@ -9,8 +9,7 @@
     import { inertia, page, router } from '@inertiajs/svelte'
     import { fade } from 'svelte/transition'
 
-    $: type =
-        new URLSearchParams($page.url.split('?')?.[1]).get('type') ?? 'sent'
+    $: type = new URLSearchParams($page.url.split('?')?.[1]).get('type') ?? 'sent'
     $: user = $page.props?.auth?.user
     $: guest = $page.props?.auth?.guest
 
@@ -34,9 +33,7 @@
     <title>{import.meta.env.VITE_APP_NAME} - Guest Chapters</title>
 </svelte:head>
 
-<main
-    class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col gap-16 p-4 py-8"
->
+<main class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col gap-16 p-4 py-8">
     <div class="flex flex-col justify-between gap-y-4 md:flex-row">
         <h1 class="text-4xl text-primary">
             Your <i>Guest Chapters</i>
@@ -45,12 +42,7 @@
         {#if user && guest}
             <div class="tabs">
                 {#each Object.entries(types) as [key, value]}
-                    <a
-                        class="tab tab-bordered"
-                        class:tab-active={type === key}
-                        href="?type={key}"
-                        use:inertia
-                    >
+                    <a class="tab tab-bordered" class:tab-active={type === key} href="?type={key}" use:inertia>
                         {value}
                     </a>
                 {/each}
@@ -73,15 +65,9 @@
                         <td
                             >{type === 'sent'
                                 ? chapter.guest?.name
-                                : chapter.user?.details.first_name +
-                                  ' ' +
-                                  chapter.user?.details.last_name}</td
+                                : chapter.user?.details.first_name + ' ' + chapter.user?.details.last_name}</td
                         >
-                        <td
-                            >{type === 'sent'
-                                ? chapter.guest?.email
-                                : chapter.user?.email}</td
-                        >
+                        <td>{type === 'sent' ? chapter.guest?.email : chapter.user?.email}</td>
                         <td>{chapter.title}</td>
                         <td>{chapter.status}</td>
                         <td>
@@ -93,9 +79,7 @@
                                 >
                                     Review
                                 </a>
-                                <button
-                                    on:click={() => resend(chapter)}
-                                    class="btn btn-primary rounded-full"
+                                <button on:click={() => resend(chapter)} class="btn btn-primary rounded-full"
                                     >Resend</button
                                 >
                             {/if}
@@ -115,8 +99,5 @@
         </table>
     </section>
 
-    <Paginator
-        class="flex-wrap items-center justify-center gap-y-2"
-        meta={chapters.meta}
-    />
+    <Paginator class="flex-wrap items-center justify-center gap-y-2" meta={chapters.meta} />
 </main>

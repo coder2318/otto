@@ -14,11 +14,7 @@
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
     import background from '@/assets/img/stories-bg.jpg'
-    import {
-        faClose,
-        faArrowDownLong,
-        faTrash,
-    } from '@fortawesome/free-solid-svg-icons'
+    import { faClose, faArrowDownLong, faTrash } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
 
     export let questions_chapters: {
@@ -34,20 +30,12 @@
     let dropdownDialog: HTMLDialogElement
     let chapterId: number = null
 
-    $: query = qs.parse(
-        $page.url.replace(window.location.pathname, '').slice(1)
-    )
+    $: query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
 
-    const filter = writable(
-        qs.parse($page.url.replace(window.location.pathname, '').slice(1))
-            ?.filter ?? {}
-    )
+    const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter ?? {})
 
     filter.subscribe((value) => {
-        router.visit(
-            window.location.pathname + '?' + qs.stringify({ filter: value }),
-            { only: ['questions_chapters'] }
-        )
+        router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), { only: ['questions_chapters'] })
     })
 
     function removeFilter(key: string) {
@@ -82,14 +70,8 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<header
-    class="hero relative bg-top"
-    style="background-image: url({background})"
-    in:fade
->
-    <div
-        class="hero-overlay absolute bg-gradient-to-br from-primary/90 to-primary/60"
-    />
+<header class="hero relative bg-top" style="background-image: url({background})" in:fade>
+    <div class="hero-overlay absolute bg-gradient-to-br from-primary/90 to-primary/60" />
     <div
         class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
     >
@@ -110,15 +92,13 @@
         </div> -->
         <div class="flex justify-between">
             <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl">
-                <span class="font-normal italic text-neutral">Explore Your</span
-                >
+                <span class="font-normal italic text-neutral">Explore Your</span>
                 <button
                     on:click={() => dropdownDialog.showModal()}
                     class="inline-flex items-center rounded-full border-none bg-neutral/30 px-8 py-4 backdrop-blur hover:clear-none"
                 >
                     <i class="mr-20 font-normal text-neutral"
-                        >{timelines.data[query?.filter?.timeline_id - 1]
-                            ?.title ?? 'Timeline'}</i
+                        >{timelines.data[query?.filter?.timeline_id - 1]?.title ?? 'Timeline'}</i
                     >
                     <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
                 </button>
@@ -132,8 +112,7 @@
                                 <li class="text-center">
                                     <button
                                         class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
-                                        class:!bg-secondary={query?.filter
-                                            ?.timeline_id == timeline.id}
+                                        class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
                                         on:click={selectOption}
                                         value={timeline.id}
                                     >
@@ -144,18 +123,13 @@
                         </ul>
                     </div>
                 </dialog>
-                <span class="font-normal text-neutral"
-                    >With These Questions</span
-                >
+                <span class="font-normal text-neutral">With These Questions</span>
             </h1>
         </div>
     </div>
 </header>
 
-<section
-    class="container m-4 mx-auto flex place-content-between gap-4 px-4 pb-4 md:pb-0 lg:my-4"
-    in:fade
->
+<section class="container m-4 mx-auto flex place-content-between gap-4 px-4 pb-4 md:pb-0 lg:my-4" in:fade>
     <div class="tabs flex-1 border-b-2 border-neutral/40 md:gap-4">
         <button
             class="tab -mb-0.5"
@@ -200,24 +174,16 @@
     </div>
 
     <div>
-        <div
-            class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content"
-        >
+        <div class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content">
             Pages: <span class="text-primary"
-                >{questions_chapters.meta.current_page}/{questions_chapters.meta
-                    .last_page}</span
+                >{questions_chapters.meta.current_page}/{questions_chapters.meta.last_page}</span
             >
         </div>
     </div>
 </section>
 
-<main
-    class="container mx-auto flex flex-col items-center justify-center gap-8 p-4 lg:py-8"
-    in:fade
->
-    <div
-        class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3"
-    >
+<main class="container mx-auto flex flex-col items-center justify-center gap-8 p-4 lg:py-8" in:fade>
+    <div class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
         {#if query?.filter?.timeline_id}
             <div
                 class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
@@ -226,9 +192,7 @@
                 <div class="card-body items-center justify-end">
                     <div class="card-actions justify-between">
                         <a
-                            href="/stories/{story.data
-                                .id}/chapters/create?timeline_id={query?.filter
-                                    ?.timeline_id}"
+                            href="/stories/{story.data.id}/chapters/create?timeline_id={query?.filter?.timeline_id}"
                             use:inertia
                             class="btn btn-neutral btn-lg rounded-full"
                         >
@@ -251,9 +215,9 @@
                     <figure class="mb-2 max-h-[300px]">
                         <img
                             src={chapter.cover ??
-                                `https://placehold.co/600x400?${new URLSearchParams(
-                                    { text: chapter.title }
-                                ).toString()}`}
+                                `https://placehold.co/600x400?${new URLSearchParams({
+                                    text: chapter.title,
+                                }).toString()}`}
                             alt={chapter.title}
                             class="h-full rounded-xl object-contain"
                         />
@@ -268,17 +232,14 @@
                                 <div class="card-actions">
                                     <button
                                         class="btn btn-secondary btn-sm"
-                                        on:click|preventDefault={() =>
-                                            modal.invite(chapter)}
+                                        on:click|preventDefault={() => modal.invite(chapter)}
                                     >
                                         Invite Guest
                                     </button>
                                 </div>
                             {/if}
                             {#if chapter.type === 'chapter'}
-                                Started: {dayjs(chapter.created_at).format(
-                                    'MMM DD, YYYY'
-                                )}
+                                Started: {dayjs(chapter.created_at).format('MMM DD, YYYY')}
                             {/if}
                         </div>
                         <div class="badge badge-outline">
@@ -289,8 +250,7 @@
                         <div class="absolute right-4 top-4">
                             <button
                                 class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"
-                                on:click|preventDefault={() =>
-                                    deleteChapter(chapter.id)}
+                                on:click|preventDefault={() => deleteChapter(chapter.id)}
                             >
                                 <Fa icon={faTrash} />
                             </button>
@@ -307,37 +267,23 @@
         </form>
         <form method="dialog" class="modal-box">
             <div class="flex justify-end">
-                <button
-                    class="btn btn-circle btn-sm bg-white"
-                    on:click={() => dialog.close()}
-                >
+                <button class="btn btn-circle btn-sm bg-white" on:click={() => dialog.close()}>
                     <Fa icon={faClose} />
                 </button>
             </div>
-            <h3
-                class="text-center text-[30px] text-xl font-normal leading-[33px]"
-            >
+            <h3 class="text-center text-[30px] text-xl font-normal leading-[33px]">
                 Are you sure <i>want to delete this chapter?</i>
             </h3>
             <div class="modal-action mt-12 flex justify-around">
-                <button
-                    class="btn btn-primary btn-sm w-[150px] rounded-full"
-                    on:click|preventDefault={confirmDelete}>Yes</button
+                <button class="btn btn-primary btn-sm w-[150px] rounded-full" on:click|preventDefault={confirmDelete}
+                    >Yes</button
                 >
-                <button
-                    class="btn btn-sm w-[150px] rounded-full py-1"
-                    on:click={() => dialog.close()}
-                >
-                    No
-                </button>
+                <button class="btn btn-sm w-[150px] rounded-full py-1" on:click={() => dialog.close()}> No </button>
             </div>
         </form>
     </dialog>
 
-    <Paginator
-        class="flex-wrap items-center justify-center gap-y-2"
-        meta={questions_chapters.meta}
-    />
+    <Paginator class="flex-wrap items-center justify-center gap-y-2" meta={questions_chapters.meta} />
 </main>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
