@@ -120,7 +120,7 @@
     <section class="container mx-auto flex justify-between">
         <a
             href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full font-normal pl-0"
+            class="btn btn-neutral rounded-full pl-0 font-normal"
             use:inertia
         >
             <span class="badge mask badge-accent mask-circle p-4"
@@ -177,7 +177,7 @@
                 <span>{Math.ceil(wordsEnhanced / 500)} pages</span>
             </div>
             <TipTap
-                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 lg:text-lg"
                 bind:editor={enhance}
                 bind:content={$form.enhanced}
                 placeholder="Write your story here..."
@@ -214,7 +214,7 @@
                     <span>{Math.ceil(wordsOriginal / 500)} pages</span>
                 </div>
                 <TipTap
-                    class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                    class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 lg:text-lg"
                     bind:editor={original}
                     bind:content={$form.original}
                     placeholder="Write your story here..."

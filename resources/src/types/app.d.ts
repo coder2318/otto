@@ -78,6 +78,7 @@ declare namespace App {
     interface Chapter {
         id: number
         title: string
+        context: ?string
         content: string | null
         edit: string | null
         order: number

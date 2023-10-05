@@ -81,7 +81,7 @@
                 {/if}
             </div>
             <TipTap
-                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 font-serif"
+                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 lg:text-lg"
                 bind:editor
                 bind:content={$form.content}
                 placeholder="Write your story here..."

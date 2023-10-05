@@ -258,25 +258,27 @@
                             class="h-full rounded-xl object-contain"
                         />
                     </figure>
-                    <h2 class="card-title text-2xl font-normal">
-                        {chapter.title}
+                    <h2 class="card-title block text-2xl font-normal">
+                        {chapter.context ?? ''} <i>{chapter.title}</i>
                     </h2>
-                    {#if chapter.type === 'question'}
-                        <div class="card-actions">
-                            <button
-                                class="btn btn-secondary btn-sm"
-                                on:click|preventDefault={() =>
-                                    modal.invite(chapter)}
-                            >
-                                Invite Guest
-                            </button>
-                        </div>
-                    {/if}
                     <div class="card-actions justify-between">
                         <div>
-                            Started: {dayjs(chapter.created_at).format(
-                                'MMM DD, YYYY'
-                            )}
+                            {#if chapter.type === 'question'}
+                                <div class="card-actions">
+                                    <button
+                                        class="btn btn-secondary btn-sm"
+                                        on:click|preventDefault={() =>
+                                            modal.invite(chapter)}
+                                    >
+                                        Invite Guest
+                                    </button>
+                                </div>
+                            {/if}
+                            {#if chapter.type === 'chapter'}
+                                Started: {dayjs(chapter.created_at).format(
+                                    'MMM DD, YYYY'
+                                )}
+                            {/if}
                         </div>
                         <div class="badge badge-outline">
                             {chapter.status}
