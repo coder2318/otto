@@ -10,12 +10,6 @@
     export let content = ''
     export let autofocus = false
 
-    $: {
-        if (editor?.getText({ blockSeparator: '\n\n' }) !== content) {
-            editor?.commands.setContent(strToHtml(content), false)
-        }
-    }
-
     onMount(() => {
         editor = new Editor({
             editorProps: {

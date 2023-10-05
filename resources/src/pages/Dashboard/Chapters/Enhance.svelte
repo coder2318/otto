@@ -17,6 +17,7 @@
     import Otto from '@/components/SVG/otto.svg.svelte'
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
+    import { strToHtml } from '@/service/helpers'
 
     export let chapter: { data: App.Chapter }
 
@@ -78,7 +79,9 @@
                         loading = false
                         return
                     }
+
                     $form.enhanced += value
+                    enhance?.commands.setContent(strToHtml($form.enhanced), false)
 
                     if ($form.enhanced) {
                         finish()
