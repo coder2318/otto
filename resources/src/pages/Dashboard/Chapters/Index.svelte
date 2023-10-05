@@ -11,7 +11,6 @@
     import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
     import { dayjs } from '@/service/dayjs'
-    import { truncate } from '@/service/helpers'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
     import background from '@/assets/img/stories-bg.jpg'
@@ -89,7 +88,7 @@
     in:fade
 >
     <div
-        class="hero-overlay absolute bg-gradient-to-br from-primary/80 to-primary/40"
+        class="hero-overlay absolute bg-gradient-to-br from-primary/90 to-primary/60"
     />
     <div
         class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
@@ -110,8 +109,9 @@
             </ul>
         </div> -->
         <div class="flex justify-between">
-            <h1 class="text-3xl font-bold italic md:text-4xl lg:text-5xl">
-                <span class="font-normal text-neutral">Explore Your</span>
+            <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl">
+                <span class="font-normal italic text-neutral">Explore Your</span
+                >
                 <button
                     on:click={() => dropdownDialog.showModal()}
                     class="inline-flex items-center rounded-full border-none bg-neutral/30 px-8 py-4 backdrop-blur hover:clear-none"
@@ -153,14 +153,16 @@
 </header>
 
 <section
-    class="gird-cols-1 container m-4 mx-auto grid place-content-between gap-4 border-b-2 border-base-content/20 px-4 pb-4 md:grid-cols-2 md:pb-0 lg:my-8"
+    class="container m-4 mx-auto flex place-content-between gap-4 px-4 pb-4 md:pb-0 lg:my-4"
     in:fade
 >
-    <div class="tabs">
+    <div class="tabs flex-1 border-b-2 border-neutral/40 md:gap-4">
         <button
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == undefined}
             class:tab-bordered={query?.filter?.status == undefined}
+            class:text-primary={query?.filter?.status == undefined}
+            class:!border-primary={query?.filter?.status == undefined}
             on:click|preventDefault={() => removeFilter('status')}
         >
             All
@@ -169,6 +171,8 @@
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == 'undone'}
             class:tab-bordered={query?.filter?.status == 'undone'}
+            class:text-primary={query?.filter?.status == 'undone'}
+            class:!border-primary={query?.filter?.status == 'undone'}
             on:click|preventDefault={() => ($filter.status = 'undone')}
         >
             Undone
@@ -177,6 +181,8 @@
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == 'draft'}
             class:tab-bordered={query?.filter?.status == 'draft'}
+            class:text-primary={query?.filter?.status == 'draft'}
+            class:!border-primary={query?.filter?.status == 'draft'}
             on:click|preventDefault={() => ($filter.status = 'draft')}
         >
             In Progress
@@ -185,10 +191,23 @@
             class="tab -mb-0.5"
             class:tab-active={query?.filter?.status == 'published'}
             class:tab-bordered={query?.filter?.status == 'published'}
+            class:text-primary={query?.filter?.status == 'published'}
+            class:!border-primary={query?.filter?.status == 'published'}
             on:click|preventDefault={() => ($filter.status = 'published')}
         >
             Completed
         </button>
+    </div>
+
+    <div>
+        <div
+            class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content"
+        >
+            Pages: <span class="text-primary"
+                >{questions_chapters.meta.current_page}/{questions_chapters.meta
+                    .last_page}</span
+            >
+        </div>
     </div>
 </section>
 
