@@ -261,6 +261,7 @@
                     <h2 class="card-title block text-2xl font-normal">
                         {chapter.context ?? ''} <i>{chapter.title}</i>
                     </h2>
+                    <p />
                     <div class="card-actions justify-between">
                         <div>
                             {#if chapter.type === 'question'}
