@@ -33,8 +33,8 @@ vendor/bin/sail up -d
 
 # install application
 vendor/bin/sail composer install
-vendor/bin/sail npm install
-vendor/bin/sail npm run build
+vendor/bin/sail bun install
+vendor/bin/sail bun run build
 ```
 
 ## Access points

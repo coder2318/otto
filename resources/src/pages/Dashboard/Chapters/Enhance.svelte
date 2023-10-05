@@ -120,13 +120,13 @@
     <section class="container mx-auto flex justify-between">
         <a
             href="/chapters/{chapter.data.id}/edit"
-            class="btn btn-neutral rounded-full pl-0"
+            class="btn btn-neutral rounded-full font-normal pl-0"
             use:inertia
         >
             <span class="badge mask badge-accent mask-circle p-4"
                 ><Fa icon={faArrowLeft} /></span
             >
-            Back
+            Go Back
         </a>
         <div class="flex gap-4">
             {#if !compare && !loading}

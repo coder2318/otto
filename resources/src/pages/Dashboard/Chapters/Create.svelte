@@ -107,12 +107,12 @@
     <section class="container mx-auto mb-8 flex justify-between">
         <a
             href="/stories/{story.data.id}/chapters"
-            class="btn btn-neutral rounded-full pl-0"
+            class="btn btn-neutral rounded-full font-normal pl-0"
             use:inertia
         >
             <span class="badge mask badge-accent mask-circle p-4"
                 ><Fa icon={faArrowLeft} /></span
-            > Back
+            > Go Back
         </a>
 
         {#if $form.isDirty}

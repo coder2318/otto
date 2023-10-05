@@ -120,12 +120,12 @@
     <section class="container mx-auto mb-8 flex items-center justify-between">
         <a
             href="/stories/{chapter.data.story_id}/chapters"
-            class="btn btn-neutral rounded-full pl-0"
+            class="btn btn-neutral rounded-full pl-0 font-normal"
             use:inertia
         >
             <span class="badge mask badge-accent mask-circle p-4"
                 ><Fa icon={faArrowLeft} /></span
-            > Back
+            > Go Back
         </a>
 
         {#if $form.title != chapter.data.title}

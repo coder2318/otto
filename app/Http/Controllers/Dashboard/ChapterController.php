@@ -15,7 +15,6 @@ use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
 use App\Models\Story;
-use App\Models\Timeline;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
