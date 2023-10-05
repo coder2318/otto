@@ -40,11 +40,12 @@ class ChaptersRequest extends FormRequest
     public function chaptersQuestions(Story &$story)
     {
         return $this->builder($story->chapters()
+            ->join('timeline_questions as tq', 'tq.id', '=', 'chapters.timeline_question_id')
             ->select([
                 'chapters.id',
                 'chapters.timeline_id',
                 'title',
-                DB::raw('null as context'),
+                DB::raw('tq.context as context'),
                 'status',
                 'timeline_question_id',
                 DB::raw("'chapter' as type"),
