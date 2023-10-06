@@ -19,6 +19,7 @@
     export let chapter: { data: App.Chapter }
 
     let editor: Editor
+    let modal: HTMLDialogElement
 
     const form = useForm({
         content: chapter.data.content ?? '',
@@ -36,17 +37,31 @@
 
     onMount(() => {
         if (transcriptions) {
-            editor
-                .chain()
-                .focus('end')
-                .insertContent(strToHtml(Object.values(transcriptions).join('\n\n')), {
-                    parseOptions: {
-                        preserveWhitespace: false,
-                    },
-                })
-                .run()
+            $form.content ? modal.showModal() : paste('replace')
         }
     })
+
+    function paste(mode: string) {
+        switch (mode) {
+            case 'start':
+            case 'end':
+                editor
+                    .chain()
+                    .focus(mode)
+                    .insertContent(strToHtml(Object.values(transcriptions).join('\n\n')), {
+                        parseOptions: {
+                            preserveWhitespace: false,
+                        },
+                    })
+                    .run()
+                break
+            case 'replace':
+                editor.commands.setContent(strToHtml(Object.values(transcriptions).join('\n\n')), true)
+                break
+        }
+
+        modal.close()
+    }
 
     function submit(event: SubmitEvent) {
         $form
@@ -125,3 +140,29 @@
         {/if}
     </section>
 </form>
+
+<dialog bind:this={modal} class="modal">
+    <form method="dialog" class="modal-box w-11/12 max-w-5xl">
+        <h3 class="text-lg font-bold">Do you want to replace old content?</h3>
+        <p class="py-4">
+            It seems like you have been working on this chapter already. How do you want to proceed with new content?
+        </p>
+        <div class="flex flex-wrap gap-x-4 gap-y-2">
+            <button
+                type="button"
+                class="btn btn-error btn-outline btn-sm"
+                on:click|preventDefault={() => paste('replace')}>Replace old content</button
+            >
+            <button
+                type="button"
+                class="btn btn-primary btn-outline btn-sm"
+                on:click|preventDefault={() => paste('start')}>Paste at the beginning</button
+            >
+            <button
+                type="button"
+                class="btn btn-primary btn-outline btn-sm"
+                on:click|preventDefault={() => paste('end')}>Paste in the end</button
+            >
+        </div>
+    </form>
+</dialog>

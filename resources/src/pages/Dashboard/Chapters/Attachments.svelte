@@ -20,12 +20,6 @@
         attachments: [],
     })
 
-    let selected = {}
-
-    $: $form.attachments = Object.entries(selected)
-        .filter(([, v]) => v)
-        .map(([id]) => id)
-
     function submit() {
         $form.post(`/chapters/${chapter.data.id}/files`, {
             onStart: start,
@@ -45,6 +39,11 @@
     function confirmDelete() {
         $form.delete(`/chapters/${chapter.data.id}/files/${deleting}`)
         dialog.close()
+    }
+
+    function select(id: number, checked: boolean) {
+        checked ? $form.attachments.push(id) : $form.attachments.splice($form.attachments.indexOf(id), 1)
+        $form.attachment = $form.attachments
     }
 </script>
 
@@ -68,7 +67,7 @@
                             type="checkbox"
                             class="checkbox-primary checkbox col-span-1"
                             class:checkbox-success={recording.transcribed}
-                            bind:checked={selected[recording.id]}
+                            on:change={(e) => select(recording.id, e.currentTarget.checked)}
                         />
                         <div class="col-span-3 flex flex-1 flex-col gap-2 lg:col-span-1">
                             <span>{recording.name}</span>
