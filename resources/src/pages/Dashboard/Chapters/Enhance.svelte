@@ -25,6 +25,8 @@
     let original: Editor
     let loading: boolean = true
     let compare: boolean = false
+    let language: string | null = null
+    let initialText = ''
 
     const form = useForm({
         original: chapter.data.content,
@@ -65,6 +67,37 @@
             })
     }
 
+    async function translate(language = null) {
+        if (import.meta.env.SSR) return
+
+        const axios = (await import('axios')).default
+
+        if (!language || loading) {
+            $form.enhanced = initialText
+            enhance?.commands.setContent(strToHtml($form.enhanced), false)
+            return
+        }
+
+        loading = true
+        enhance?.setOptions({ editable: false })
+
+        axios
+            .post('/translate', {
+                text: $form.enhanced,
+                options: {
+                    target: language,
+                },
+            })
+            .finally(() => {
+                enhance?.setOptions({ editable: true })
+                loading = false
+            })
+            .then((res) => {
+                $form.enhanced = res.data.text
+                enhance?.commands.setContent(strToHtml($form.enhanced), false)
+            })
+    }
+
     onMount(() => {
         original?.setOptions({ editable: false })
         enhance?.setOptions({ editable: false })
@@ -76,6 +109,7 @@
                     if (done) {
                         original?.setOptions({ editable: true })
                         enhance?.setOptions({ editable: true })
+                        initialText = $form.enhanced
                         loading = false
                         return
                     }
@@ -122,7 +156,7 @@
 </section>
 
 <form on:submit|preventDefault={submit} class="flex flex-col gap-8 p-4" in:fade>
-    <section class="container mx-auto flex justify-between">
+    <section class="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row">
         <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
             <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Go Back
@@ -151,16 +185,36 @@
                 </button>
             {/if}
         </div>
-        {#if $form.isDirty && $form.use && !loading}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-                data-redirect="dashboard.stories.chapters.index"
-            >
-                Save & Next
-            </button>
-        {/if}
+        <div class="flex gap-4">
+            {#if !loading}
+                <div class="form-control flex-row gap-2">
+                    <label class="label" for="language">
+                        <span class="label-text">Output Language:</span>
+                    </label>
+                    <select
+                        name="language"
+                        id="language"
+                        class="select select-primary"
+                        bind:value={language}
+                        on:change={() => translate(language)}
+                    >
+                        <option value={null}>Default</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                    </select>
+                </div>
+            {/if}
+            {#if $form.isDirty && $form.use && !loading}
+                <button
+                    type="submit"
+                    class="btn btn-secondary rounded-full"
+                    data-status="draft"
+                    data-redirect="dashboard.stories.chapters.index"
+                >
+                    Save & Next
+                </button>
+            {/if}
+        </div>
     </section>
 
     <main class:lg:grid-cols-2={compare} class="container mx-auto grid grid-cols-1 gap-8">
@@ -228,10 +282,10 @@
         {/if}
     </main>
 
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0" use:inertia>
+    <section class="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row">
+        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
             <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Back
+            Go Back
         </a>
         <div class="flex gap-4">
             {#if !compare && !loading}
@@ -257,15 +311,35 @@
                 </button>
             {/if}
         </div>
-        {#if $form.isDirty && $form.use && !loading}
-            <button
-                type="submit"
-                class="btn btn-secondary rounded-full"
-                data-status="draft"
-                data-redirect="dashboard.stories.chapters.index"
-            >
-                Save & Next
-            </button>
-        {/if}
+        <div class="flex gap-4">
+            {#if !loading}
+                <div class="form-control flex-row gap-2">
+                    <label class="label" for="language">
+                        <span class="label-text">Output Language:</span>
+                    </label>
+                    <select
+                        name="language"
+                        id="language"
+                        class="select select-primary"
+                        bind:value={language}
+                        on:change={() => translate(language)}
+                    >
+                        <option value={null}>Default</option>
+                        <option value="en">English</option>
+                        <option value="fr">French</option>
+                    </select>
+                </div>
+            {/if}
+            {#if $form.isDirty && $form.use && !loading}
+                <button
+                    type="submit"
+                    class="btn btn-secondary rounded-full"
+                    data-status="draft"
+                    data-redirect="dashboard.stories.chapters.index"
+                >
+                    Save & Next
+                </button>
+            {/if}
+        </div>
     </section>
 </form>

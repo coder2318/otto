@@ -12,6 +12,7 @@ use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Guests\ChapterController as GuestsChapterController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\TranslateController;
 use Illuminate\Support\Facades\Route;
 
 // Quickstart Quiz
@@ -85,6 +86,7 @@ Route::middleware('user-configured')->group(function () {
             Route::patch('/order', 'orderCost')->name('order.cost');
             Route::post('/order', 'orderPurchase')->name('order.purchase');
         });
+        Route::post('translate', TranslateController::class)->name('translate');
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::resource('stories.questions.chapters', ChapterController::class)->shallow()->only('create');
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
