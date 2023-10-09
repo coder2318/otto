@@ -18,6 +18,7 @@ use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -97,7 +98,7 @@ class ChapterController extends Controller
     public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
         $media = $chapter->attachments()->whereIn('id', $attachments = $request->validated('attachments'))->get()
-            ->sortBy(fn (Media $model) => array_search($model->getKey(), $attachments));
+            ->sortBy(fn (Model $a) => array_search($a->getKey(), $attachments));
 
         $transcriptions = null;
 

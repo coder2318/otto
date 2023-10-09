@@ -6,7 +6,6 @@ use App\Data\Chapter\Status;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
@@ -69,10 +68,5 @@ class Chapter extends Model implements HasMedia
     public function attachments(): MorphMany
     {
         return $this->media()->where('collection_name', 'attachments');
-    }
-
-    public function history(): HasMany
-    {
-        return $this->hasMany(ChapterHistory::class);
     }
 }
