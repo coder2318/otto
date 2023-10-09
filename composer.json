@@ -33,6 +33,7 @@
         "spatie/laravel-query-builder": "^5.2",
         "spatie/pdf-to-text": "^1.52",
         "sqids/sqids": "^0.4.1",
+        "statickidz/php-google-translate-free": "^1.2",
         "staudenmeir/belongs-to-through": "^2.13",
         "yooper/php-text-analysis": "^1.9"
     },

@@ -18,6 +18,7 @@
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
     import { strToHtml } from '@/service/helpers'
+    import languages from '@/data/translate_languages.json'
 
     export let chapter: { data: App.Chapter }
 
@@ -83,7 +84,7 @@
 
         axios
             .post('/translate', {
-                text: $form.enhanced,
+                text: initialText,
                 options: {
                     target: language,
                 },
@@ -199,8 +200,9 @@
                         on:change={() => translate(language)}
                     >
                         <option value={null}>Default</option>
-                        <option value="en">English</option>
-                        <option value="fr">French</option>
+                        {#each languages as language}
+                            <option value={language.code}>{language.language}</option>
+                        {/each}
                     </select>
                 </div>
             {/if}
@@ -325,8 +327,9 @@
                         on:change={() => translate(language)}
                     >
                         <option value={null}>Default</option>
-                        <option value="en">English</option>
-                        <option value="fr">French</option>
+                        {#each languages as language}
+                            <option value={language.code}>{language.language}</option>
+                        {/each}
                     </select>
                 </div>
             {/if}
