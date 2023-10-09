@@ -33,6 +33,7 @@ class ChapterResource extends JsonResource
                         'audio/x-mpeg-3',
                         'audio/m4a',
                         'audio/mp4',
+                        'video/mp4',
                         'audio/flac',
                         'audio/aac',
                         'audio/x-wav',
