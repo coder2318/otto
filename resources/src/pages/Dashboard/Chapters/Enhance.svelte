@@ -87,6 +87,7 @@
                 text: initialText,
                 options: {
                     target: language,
+                    format: 'text',
                 },
             })
             .finally(() => {
