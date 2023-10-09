@@ -39,6 +39,11 @@ return [
         'client_id' => env('GOOGLE_CLIENT_ID'),
         'client_secret' => env('GOOGLE_CLIENT_SECRET'),
         'redirect' => env('GOOGLE_REDIRECT'),
+
+        'translate' => [
+            'fake' => env('GOOGLE_TRANSLATE_FAKE', env('APP_ENV', 'production') !== 'production'),
+            'key' => env('GOOGLE_TRANSLATE_KEY'),
+        ],
     ],
 
     'facebook' => [
