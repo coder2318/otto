@@ -8,7 +8,6 @@ use App\Http\Requests\Chapters\ChaptersRequest;
 use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
-use App\Http\Requests\TranslateRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
@@ -19,7 +18,6 @@ use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
-use App\Services\TranslateService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
@@ -99,14 +97,19 @@ class ChapterController extends Controller
 
     public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
-        $media = $chapter->attachments()->whereIn('id', $attachments = $request->validated('attachments'))->get()
+        $attachments = collect($request->validated('attachments'))->pluck('id')->toArray();
+        $media = $chapter->attachments()->whereIn('id', $attachments)->get()
             ->sortBy(fn (Model $a) => array_search($a->getKey(), $attachments));
 
         $transcriptions = null;
 
         /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> $media */
         foreach ($media as $record) {
-            if ($transcription = $service->transcribe($record)) {
+            if ($transcription = $service->transcribe(
+                $record,
+                $request->validated('translate.source'),
+                $request->validated('translate.target'),
+            )) {
                 $transcriptions[$record->file_name] = $transcription;
             }
         }
@@ -239,7 +242,10 @@ class ChapterController extends Controller
                 ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
                 ->toMediaCollection('attachments', 's3');
 
-            if ($transcription = $service->transcribe($record)) {
+            $source = $attachment['translate']['source'] ?? null;
+            $target = $attachment['translate']['target'] ?? null;
+
+            if ($transcription = $service->transcribe($record, $source, $target)) {
                 $transcriptions[$record->file_name] = $transcription;
             }
         }

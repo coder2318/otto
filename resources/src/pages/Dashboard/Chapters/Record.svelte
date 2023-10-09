@@ -96,7 +96,7 @@
 
                 <div class="card rounded-xl bg-neutral">
                     <div class="card-body gap-4">
-                        <AudioRecorder bind:recordings={$form.attachments} />
+                        <AudioRecorder min={1} maxFiles={1} bind:recordings={$form.attachments} />
                     </div>
                 </div>
             </div>

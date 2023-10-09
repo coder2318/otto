@@ -4,6 +4,7 @@
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
     import { flash } from './Toast.svelte'
+    import languages from '@/data/translate_languages.json'
 
     let dialog: HTMLDialogElement
     let player: HTMLAudioElement
@@ -11,12 +12,22 @@
     let interval: number
     let timer: number
 
+    let translate = {
+        source: null as string | null,
+        target: null as string | null,
+    }
+
     export let min: number = 1 * 60 * 1000
     export let max: number = 5 * 60 * 1000
-    export let recordings: Array<{ file: File; options: object }>
+    export let recordings: Array<{ file: File; translate?: typeof translate }>
     export let maxFiles: number = null
 
-    let options: any = {}
+    $: setTranslation(translate)
+
+    function setTranslation(options) {
+        recordings?.forEach((record) => (record.translate = options))
+        recordings = recordings
+    }
 
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
@@ -33,7 +44,7 @@
                 recordings = [
                     ...(recordings ?? []),
                     {
-                        options: { ...options },
+                        translate,
                         file: new File(recordedChunks, `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.weba`, {
                             type: 'audio/webm',
                         }),
@@ -108,27 +119,21 @@
     {#if !timer}
         <div class="form-control">
             <label class="label flex gap-4">
-                <span class="label-text">Language:</span>
-                <select class="select select-bordered select-ghost" name="language" bind:value={options.language}>
+                <span class="label-text">Source Language:</span>
+                <select class="select select-bordered select-ghost" name="language" bind:value={translate.source}>
                     <option value={null}>Recognize</option>
-                    <option value="en">English</option>
-                    <option value="nl">Dutch</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="hi">Hindi</option>
-                    <option value="id">Indonesian</option>
-                    <option value="it">Italian</option>
-                    <option value="ja">Japanese</option>
-                    <option value="ko">Korean</option>
-                    <option value="zh">Mandarin</option>
-                    <option value="no">Norwegian</option>
-                    <option value="pl">Polish</option>
-                    <option value="pt">Portuguese</option>
-                    <option value="ru">Russian</option>
-                    <option value="es">Spanish</option>
-                    <option value="sv">Swedish</option>
-                    <option value="tr">Turkish</option>
-                    <option value="uk">Ukrainian</option>
+                    {#each languages as language}
+                        <option value={language.code}>{language.language}</option>
+                    {/each}
+                </select>
+            </label>
+            <label class="label flex gap-4">
+                <span class="label-text">Target Language:</span>
+                <select class="select select-bordered select-ghost" name="language" bind:value={translate.target}>
+                    <option value={null}>Do not translate</option>
+                    {#each languages as language}
+                        <option value={language.code}>{language.language}</option>
+                    {/each}
                 </select>
             </label>
         </div>

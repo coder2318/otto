@@ -12,11 +12,15 @@
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import FilePond from '@/components/FilePond.svelte'
     import { start, done } from '@/components/Loading.svelte'
-    import type { FilePondErrorDescription, FilePond as FilePondType } from 'filepond'
+    import type { FilePondErrorDescription, FilePond as FilePondType, FilePondFile } from 'filepond'
+    import translateIcon from '@fortawesome/fontawesome-free/svgs/solid/globe.svg?raw'
+    import FileTranslateModal from '@/components/Chapters/FileTranslateModal.svelte'
 
     export let chapter: { data: App.Chapter }
 
     let filepond: FilePondType
+    let modal: HTMLDialogElement
+    let currentFile: FilePondFile | null = null
 
     const form = useForm({
         title: chapter.data.title,
@@ -32,18 +36,52 @@
         const files = filepond.getFiles().map((file) => ({
             file: file.file,
             options: [],
+            translate: {
+                source: file.getMetadata('source') ?? null,
+                target: file.getMetadata('target') ?? null,
+            },
         }))
 
         $form.attachments = files.length ? files : null
+    }
+
+    function openMetaDataModal(file: FilePondFile) {
+        currentFile = file
+        modal.showModal()
+    }
+
+    function addMetadataButton(file: FilePondFile) {
+        const button = document.createElement('button')
+        button.classList.add('filepond--file-action-button', 'p-2', 'text-neutral')
+        button.type = 'button'
+        button.dataset.align = 'right'
+        button.style.transform = 'translate3d(0px, 0px, 0px) scale3d(1, 1, 1)'
+        button.title = 'Translate'
+
+        const icon = document.createElement('div')
+        icon.classList.add('flex', 'p-1.5', 'fill-neutral', 'w-full', 'h-full')
+        icon.innerHTML = translateIcon
+
+        button.appendChild(icon)
+
+        button.addEventListener('click', (event) => {
+            event.preventDefault()
+            openMetaDataModal(file)
+        })
+
+        document
+            .getElementById('filepond--item-' + file.id)
+            .getElementsByClassName('filepond--file')[0]
+            .appendChild(button)
     }
 
     function submit(event: SubmitEvent) {
         $form
             .transform((data) => ({
                 _method: 'PUT',
-                ...data,
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: 'dashboard.chapters.write',
+                ...data,
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,
@@ -81,7 +119,10 @@
                 allowMultiple={true}
                 allowProcess={false}
                 instantUpload={false}
-                onaddfile={syncFiles}
+                onaddfile={(err, file) => {
+                    syncFiles(err)
+                    addMetadataButton(file)
+                }}
                 onremovefile={syncFiles}
                 acceptedFileTypes={[
                     'audio/webm',
@@ -125,3 +166,5 @@
         {/if}
     </section>
 </form>
+
+<FileTranslateModal bind:modal bind:file={currentFile} />

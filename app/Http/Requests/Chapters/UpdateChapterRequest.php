@@ -24,6 +24,9 @@ class UpdateChapterRequest extends FormRequest
             'attachments' => ['sometimes', 'nullable', 'array'],
             'attachments.*.file' => ['required', 'file', 'mimes:webm,weba,wav,mp3,text,txt,pdf,docx,m4a,m2a', 'max:20480'],
             'attachments.*.options' => ['nullable', 'array'],
+            'attachments.*.translate' => ['sometimes', 'array'],
+            'attachments.*.translate.source' => ['nullable', 'string'],
+            'attachments.*.translate.target' => ['nullable', 'string'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
             'redirect' => ['sometimes', 'nullable'],
         ];

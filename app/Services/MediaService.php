@@ -11,10 +11,11 @@ class MediaService
 {
     public function __construct(
         protected DeepgramService $deepgram,
+        protected TranslateService $translate,
     ) {
     }
 
-    public function transcribe(Media &$media): ?string
+    public function transcribe(Media &$media, string $source = null, string $target = null): ?string
     {
         if ($media->hasCustomProperty('transcript')) {
             return $media->getCustomProperty('transcript');
@@ -23,21 +24,35 @@ class MediaService
         $transcript = rescue(fn () => match ($media->getCustomProperty('mime-type', $media->mime_type)) {
             'video/webm', 'audio/webm', 'audio/wav', 'audio/mpeg', 'audio/mpeg3',
             'audio/x-mpeg-3', 'audio/m4a', 'audio/mp4', 'video/mp4', 'audio/flac', 'audio/aac',
-            'audio/x-wav', 'audio/x-m4a' => $this->transcribeAudio($media),
+            'audio/x-wav', 'audio/x-m4a' => $this->transcribeAudio($media, $source),
             'application/pdf' => $this->transcribePdf($media),
             'application/vnd.openxmlformats-officedocument.wordprocessingml.document' => $this->transcribeDocx($media),
             'text/plain' => $this->transcribeText($media),
             default => null,
         });
 
-        $transcript
-            ? $media->setCustomProperty('transcript', $transcript)->save()
-            : Session::flash('error', 'Some files could not be transcribed.');
+        if (! $transcript) {
+            return Session::flash('error', 'Some files could not be transcribed.');
+        }
+
+        if ($source) {
+            $media->setCustomProperty('language', $target);
+        }
+
+        if ($target) {
+            $media->setCustomProperty('translated', $target);
+            $transcript = $this->translate->translate($transcript, [
+                'format' => 'text',
+                'target' => $target,
+            ])['text'] ?? $transcript;
+        }
+
+        $media->setCustomProperty('transcript', $transcript)->save();
 
         return $transcript;
     }
 
-    protected function transcribeAudio(Media &$media): ?string
+    protected function transcribeAudio(Media &$media, string $language = null): ?string
     {
         $language = $media->getCustomProperty('language');
 
@@ -45,7 +60,7 @@ class MediaService
             Storage::disk($media->disk),
             $media->getPath(),
             $language ? [
-                'language' => $language,
+                'language' => $language ?? $media->getCustomProperty('language'),
                 'paragraphs' => 'true',
                 'punctuate' => 'true',
                 'smart_format' => 'true',
