@@ -52,7 +52,7 @@
     })
 
     function submit() {
-        $form.post(window.location.pathname, {
+        $form.post(`/stories/${story.data.id}/contents`, {
             onSuccess: () =>
                 $form.defaults({
                     timelines: $form.timelines,
