@@ -52,6 +52,13 @@ class MediaService
         return $transcript;
     }
 
+    protected function format(string $text)
+    {
+        return collect(preg_split('/\n\n/', $text, -1, PREG_SPLIT_NO_EMPTY))
+            ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p))
+            ->join(PHP_EOL.PHP_EOL);
+    }
+
     protected function transcribeAudio(Media &$media, string $language = null): ?string
     {
         $language = $media->getCustomProperty('language');
@@ -76,7 +83,7 @@ class MediaService
         );
 
         return tap(
-            Pdf::getText(Storage::disk('local')->path($path)),
+            $this->format(Pdf::getText(Storage::disk('local')->path($path))),
             fn () => Storage::disk('local')->delete($path)
         );
     }
