@@ -32,7 +32,8 @@ class MediaService
         });
 
         if (! $transcript) {
-            return Session::flash('error', 'Some files could not be transcribed.');
+            Session::flash('error', 'Some files could not be transcribed.');
+            return null;
         }
 
         if ($source) {
@@ -59,15 +60,15 @@ class MediaService
             ->join(PHP_EOL.PHP_EOL);
     }
 
-    protected function transcribeAudio(Media &$media, string $language = null): ?string
+    protected function transcribeAudio(Media &$media, ?string $language = null): ?string
     {
-        $language = $media->getCustomProperty('language');
+        $language ??= $media->getCustomProperty('language');
 
         return $this->deepgram->transcribeFromFile(
             Storage::disk($media->disk),
             $media->getPath(),
             $language ? [
-                'language' => $language ?? $media->getCustomProperty('language'),
+                'language' => $language,
                 'paragraphs' => 'true',
                 'punctuate' => 'true',
                 'smart_format' => 'true',
