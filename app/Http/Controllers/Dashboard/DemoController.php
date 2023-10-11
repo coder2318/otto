@@ -21,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DemoController extends Controller
 {
@@ -89,7 +90,7 @@ class DemoController extends Controller
         }
 
         return Inertia::render('Dashboard/Demo/Record', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn () => ChapterResource::make($chapter->load('question')),
         ]);
     }
 
@@ -171,26 +172,30 @@ class DemoController extends Controller
         return redirect()->route('dashboard.demo.attachments')->with('message', 'Attachment deleted successfully!');
     }
 
-    public function enhance(Request $request, OpenAIService $service)
+    public function process(Request $request, OpenAIService $service)
     {
-        if (! $request->user()->enhances) {
-            return redirect()->route('dashboard.demo.write')->with('status', 'You can only enhance once for demo!');
-        }
-
         [$chapter] = $this->data($request);
 
-        if (! $chapter->content) {
-            return redirect()->back()->with('status', 'Chapter content is empty!');
-        }
+        return new StreamedResponse(function () use ($chapter, $service) {
+            foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
+                if (connection_aborted()) {
+                    return;
+                }
 
-        $request->user()->decrement('enhances', 1);
+                echo $chunk;
+
+                ob_flush();
+                flush();
+            }
+        }, headers: ['X-Accel-Buffering' => 'no']);
+    }
+
+    public function enhance(Request $request)
+    {
+        [$chapter] = $this->data($request);
 
         return Inertia::render('Dashboard/Demo/Enhance', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
-            'otto_edit' => $service->chatEdit(
-                $chapter->content,
-                $chapter->title,
-            ),
+            'chapter' => fn () => ChapterResource::make($chapter),
         ]);
     }
 

@@ -33,6 +33,7 @@ class MediaService
 
         if (! $transcript) {
             Session::flash('error', 'Some files could not be transcribed.');
+
             return null;
         }
 
@@ -60,7 +61,7 @@ class MediaService
             ->join(PHP_EOL.PHP_EOL);
     }
 
-    protected function transcribeAudio(Media &$media, ?string $language = null): ?string
+    protected function transcribeAudio(Media &$media, string $language = null): ?string
     {
         $language ??= $media->getCustomProperty('language');
 

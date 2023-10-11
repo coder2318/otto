@@ -54,9 +54,9 @@
 <Breadcrumbs step={2} />
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-base-300 px-4">
+    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
         <div class="card-body gap-4">
-            <h1 class="card-title mb-4">{chapter.data.title}</h1>
+            <h1 class="card-title mb-4 text-3xl font-normal italic">{chapter.data.title}</h1>
 
             {#each chapter.data?.attachments as recording}
                 <div class="card bg-neutral">

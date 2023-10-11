@@ -33,14 +33,7 @@
             return
         }
 
-        const files = filepond.getFiles().map((file) => ({
-            file: file.file,
-            options: [],
-            translate: {
-                source: file.getMetadata('source') ?? null,
-                target: file.getMetadata('target') ?? null,
-            },
-        }))
+        const files = filepond.getFiles()
 
         $form.attachments = files.length ? files : null
     }
@@ -82,6 +75,14 @@
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: 'dashboard.chapters.write',
                 ...data,
+                attachments: filepond.getFiles().map((file: FilePondFile) => ({
+                    file: file.file,
+                    options: [],
+                    translate: {
+                        source: file.getMetadata('source') ?? null,
+                        target: file.getMetadata('target') ?? null,
+                    },
+                })),
             }))
             .post(`/chapters/${chapter.data.id}`, {
                 forceFormData: true,

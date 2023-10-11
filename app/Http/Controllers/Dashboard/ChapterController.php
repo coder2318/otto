@@ -97,7 +97,7 @@ class ChapterController extends Controller
 
     public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
-        $attachments = collect($request->validated('attachments'))->pluck('id')->toArray();
+        $attachments = $request->validated('attachments');
         $media = $chapter->attachments()->whereIn('id', $attachments)->get()
             ->sortBy(fn (Model $a) => array_search($a->getKey(), $attachments));
 
@@ -105,11 +105,7 @@ class ChapterController extends Controller
 
         /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> $media */
         foreach ($media as $record) {
-            if ($transcription = $service->transcribe(
-                $record,
-                $request->validated('translate.source'),
-                $request->validated('translate.target'),
-            )) {
+            if ($transcription = $service->transcribe($record)) {
                 $transcriptions[$record->file_name] = $transcription;
             }
         }

@@ -5,6 +5,7 @@
 
     export let modal: HTMLDialogElement
     export let file: FilePondFile
+    export function onChange() {}
 
     const form = useForm({
         source: '',
@@ -23,6 +24,7 @@
     function save() {
         file.setMetadata('source', $form.source)
         file.setMetadata('target', $form.target)
+
         modal.close()
     }
 

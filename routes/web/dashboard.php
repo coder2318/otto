@@ -27,6 +27,7 @@ Route::middleware('user-configured')->group(function () {
         Route::get('/record', 'record')->name('record')->middleware('demo:published');
         Route::get('/files', 'attachments')->name('attachments')->middleware('demo:published');
         Route::get('/enhance', 'enhance')->name('enhance')->middleware('demo:published');
+        Route::get('/enhance/stream', 'process')->name('enhance.stream')->middleware('demo:published');
         Route::get('/finish', 'finish')->name('finish');
         Route::get('/book', 'book')->name('book');
         Route::post('/', 'store')->name('store')->middleware('demo:pending');
@@ -72,6 +73,8 @@ Route::middleware('user-configured')->group(function () {
         ->only(['index', 'show', 'update'])
         ->middleware(['subscribed:0']);
 
+    Route::post('translate', TranslateController::class)->name('translate');
+
     Route::middleware(['subscribed:1'])->group(function () {
         // Stories
         Route::resource('stories', StoryController::class);
@@ -86,7 +89,6 @@ Route::middleware('user-configured')->group(function () {
             Route::patch('/order', 'orderCost')->name('order.cost');
             Route::post('/order', 'orderPurchase')->name('order.purchase');
         });
-        Route::post('translate', TranslateController::class)->name('translate');
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::resource('stories.questions.chapters', ChapterController::class)->shallow()->only('create');
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
