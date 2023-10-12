@@ -200,11 +200,4 @@ class ChapterController extends Controller
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
     }
-
-    public function destroy(Chapter $chapter)
-    {
-        $chapter->delete();
-
-        return redirect()->route('guests.chapters.index')->with('message', 'Chapter deleted successfully!');
-    }
 }

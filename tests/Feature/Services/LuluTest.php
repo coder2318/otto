@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services;
 
 use App\Data\Lulu\LineItem;
 use App\Data\Lulu\ShippingAddress;
@@ -11,13 +11,14 @@ use Tests\TestCase;
 
 class LuluTest extends TestCase
 {
-    public function test_cost()
+    /** @test */
+    public function cost()
     {
         Http::fake([
-            config('services.lulu.url').'auth/realms/glasstree/protocol/openid-connect/token' => Http::response([
+            config('services.lulu.url').'/auth/realms/glasstree/protocol/openid-connect/token' => Http::response([
                 'access_token' => 'token',
             ]),
-            config('services.lulu.url').'print-job-cost-calculations' => Http::response([
+            config('services.lulu.url').'/print-job-cost-calculations' => Http::response([
                 'currency' => 'USD',
                 'line_item_costs' => [
                     [
@@ -68,11 +69,44 @@ class LuluTest extends TestCase
         $this->assertEquals(3224.74, $cost);
 
         Http::assertSent(fn ($request) => $request->method() === 'POST' &&
-            $request->url() === config('services.lulu.url').'auth/realms/glasstree/protocol/openid-connect/token'
+            $request->url() === config('services.lulu.url').'/auth/realms/glasstree/protocol/openid-connect/token'
         );
 
         Http::assertSent(fn ($request) => $request->method() === 'POST' &&
-            $request->url() === config('services.lulu.url').'print-job-cost-calculations'
+            $request->url() === config('services.lulu.url').'/print-job-cost-calculations'
         );
+    }
+
+    /** @test */
+    public function print()
+    {
+        Http::fake([
+            config('services.lulu.url').'/print-jobs' => Http::response([
+                'id' => '1234',
+            ]),
+        ], 201);
+
+        /** @var LuluService */
+        $service = $this->app->make(LuluService::class);
+
+        $job = $service->print(
+            'a@b.com',
+            LineItem::from([
+                'page_count' => 32,
+                'pod_package_id' => '0600X0900BWSTDPB060UW444MXX',
+                'quantity' => 20,
+            ]),
+            ShippingAddress::from([
+                'phone_number' => '+1-212-456-7890',
+                'city' => 'Washington',
+                'country_code' => 'US',
+                'postcode' => '20540',
+                'state_code' => 'DC',
+                'street1' => '101 Independence Ave SE',
+            ]),
+            ShippingOption::EXPRESS
+        );
+
+        $this->assertEquals('1234', $job['id']);
     }
 }

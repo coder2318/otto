@@ -50,6 +50,8 @@ class StaticController extends Controller
 
         Preorder::create($data);
 
+        // TODO: send preorder
+
         return redirect()->back()->with(['message' => 'Your preorder request was received!']);
     }
 

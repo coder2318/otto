@@ -36,11 +36,11 @@ class SocialAuthController extends Controller
     {
         $userData = Socialite::driver($provider)->user();
 
-        if (! $user = User::where('email', $userData->getEmail())->first()) {
+        if (! $user = User::where('email', $email = $userData->getEmail())->first()) {
             /** @var User */
             $user = User::create([
                 'name' => $userData->getName(),
-                'email' => $userData->getEmail(),
+                'email' => $email,
                 'avatar' => $userData->getAvatar(),
                 'password' => Hash::make($password = Str::random()),
             ]);

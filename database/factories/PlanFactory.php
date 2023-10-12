@@ -19,7 +19,13 @@ class PlanFactory extends Factory
         return [
             'name' => fake()->sentence(2),
             'slug' => fake()->slug(),
-            'price' => fake()->randomFloat(0, 10, 100),
+            'prices' => [[
+                'interval' => fake()->randomElement(['month', 'year']),
+                'interval_count' => 1,
+                'value' => fake()->randomFloat(2, 10, 100),
+                'currency' => 'usd',
+            ]],
+            'features' => [],
             'description' => fake()->text(),
         ];
     }

@@ -26,8 +26,8 @@ class PlanController extends Controller
     public function show(Plan $plan, Request $request)
     {
         return Inertia::render('Dashboard/Plans/Show', [
-            'plan' => PlanResource::make($plan),
-            'intent' => $request->user()->createSetupIntent(),
+            'plan' => fn () => PlanResource::make($plan),
+            'intent' => fn () => $request->user()->createSetupIntent(),
         ]);
     }
 
@@ -39,7 +39,7 @@ class PlanController extends Controller
             $user->createOrGetStripeCustomer();
             $paymentMethod = $user->addPaymentMethod($request->validated('payment_method'));
             // @phpstan-ignore-next-line
-            $user->newSubscription('default', $request->validated('price_id'))->create($paymentMethod->id);
+            $user->newSubscription('default', $request->validated('price_id'))?->create($paymentMethod->id);
 
             return redirect()->intended(route('dashboard.stories.index'))->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
         }, function (Throwable $exception) {

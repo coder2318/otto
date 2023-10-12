@@ -16,12 +16,12 @@ class MinWordsRule implements ValidationRule
     /**
      * Run the validation rule.
      *
-     * @param  \Closure(string): \Illuminate\Translation\PotentiallyTranslatedString  $fail
+     * @param  \Closure(string): ?\Illuminate\Translation\PotentiallyTranslatedString  $fail
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
         if (Str::wordCount(strip_tags($value)) < $this->min) {
-            $fail('validation.min.words')->translate([
+            $fail('validation.min.words')?->translate([
                 'attribute' => $attribute,
                 'min' => $this->min,
             ]);

@@ -11,12 +11,16 @@ class UpdateUserRequest extends FormRequest
 {
     public function prepareForValidation(): void
     {
-        $this->merge([
-            'details' => [
+        $data = [];
+
+        if ($this->input('details')) {
+            $data['details'] = [
                 'birth_date' => ($date = Carbon::createFromFormat('d/m/Y', $this->input('details.birth_date'))) ?
                     $date->startOfDay() : null,
-            ] + $this->input('details'),
-        ]);
+            ] + $this->input('details');
+        }
+
+        $this->merge($data);
     }
 
     /**
@@ -33,8 +37,10 @@ class UpdateUserRequest extends FormRequest
             'avatar' => ['sometimes', 'nullable', 'file', 'mimetypes:image/*', 'max:2048'],
         ];
 
-        foreach (Details::getValidationRules($this->input('details')) as $field => $value) {
-            $rules["details.$field"] = $value;
+        if ($this->input('details')) {
+            foreach (Details::getValidationRules($this->input('details')) as $field => $value) {
+                $rules["details.$field"] = $value;
+            }
         }
 
         return $rules;

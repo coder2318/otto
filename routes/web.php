@@ -36,15 +36,15 @@ Route::get('/guests/{guest:sqid}/login', GuestAuthController::class)
 
 // Guests Dashboard
 Route::group(['middleware' => ['auth:web,web-guest'], 'as' => 'guests.', 'prefix' => 'guests'], function () {
-    include_once __DIR__.'/web/guests.php';
+    include __DIR__.'/web/guests.php';
 });
 
 // User Dashboard
 Route::group(['middleware' => ['auth', 'verified'], 'as' => 'dashboard.'], function () {
-    include_once __DIR__.'/web/dashboard.php';
+    include __DIR__.'/web/dashboard.php';
 })->middleware('features:beta-access');
 
 // Admin Panel
 Route::group(['middleware' => ['auth', 'verified'], 'as' => 'admin.'], function () {
-    include_once __DIR__.'/web/admin.php';
+    include __DIR__.'/web/admin.php';
 })->middleware('features:beta-access');

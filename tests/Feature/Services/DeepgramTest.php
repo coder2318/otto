@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services;
 
 use App\Services\DeepgramService;
 use Illuminate\Support\Facades\Http;
@@ -8,11 +8,12 @@ use Tests\TestCase;
 
 class DeepgramTest extends TestCase
 {
-    public function test_transcript_url(): void
+    /** @test */
+    public function transcript_url(): void
     {
         Http::fake([
             'api.deepgram.com/v1/*' => Http::response(
-                $data = json_decode(file_get_contents(__DIR__.'/../Mock/DeepgramResponse.json'), true),
+                $data = json_decode(file_get_contents(__DIR__.'/../../Mock/DeepgramResponse.json'), true),
                 200, ['Content-Type' => 'application/json']
             ),
         ]);

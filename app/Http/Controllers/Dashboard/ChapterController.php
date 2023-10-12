@@ -166,7 +166,7 @@ class ChapterController extends Controller
         return Inertia::render('Dashboard/Chapters/Finish', [
             'chapter' => fn () => ChapterResource::make($chapter),
             'questions' => fn () => TimelineQuestionResource::collection((
-                $chapter?->timeline->questions()->where('id', '!=', $chapter?->timeline_question_id) ?? // @phpstan-ignore-line
+                $chapter?->timeline?->questions()->where('id', '!=', $chapter?->timeline_question_id) ?? // @phpstan-ignore-line
                 TimelineQuestion::query()
             )->inRandomOrder()->limit(3)->get()),
         ]);

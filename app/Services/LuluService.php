@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Http;
 
 class LuluService
 {
-    protected string $token;
+    protected ?string $token;
 
     protected function token(): ?string
     {

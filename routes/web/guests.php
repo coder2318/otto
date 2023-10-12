@@ -11,7 +11,7 @@ Route::controller(SetupController::class)->group(function () {
 });
 
 // Chapters
-Route::resource('chapters', ChapterController::class)->middleware(GuestConfigured::class);
+Route::resource('chapters', ChapterController::class)->except('destroy')->middleware(GuestConfigured::class);
 Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->middleware(GuestConfigured::class)->group(function () {
     Route::post('/resend', 'resend')->name('resend');
     Route::get('/write', 'write')->name('write');

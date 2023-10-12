@@ -17,6 +17,12 @@
             <directory>app</directory>
         </include>
     </source>
+    <coverage>
+        <report>
+            <clover outputFile=".phpunit/clover.xml" />
+            <html outputDirectory=".phpunit/html" />
+        </report>
+    </coverage>
     <php>
         <env name="APP_ENV" value="testing"/>
         <env name="BCRYPT_ROUNDS" value="4"/>
@@ -28,5 +34,6 @@
         <env name="TELESCOPE_ENABLED" value="false"/>
         <env name="OPENAI_FAKE" value="false"/>
         <env name="DEEPGRAM_FAKE" value="false"/>
+        <env name="LULU_API" value="https://api.sandbox.lulu.com"/>
     </php>
 </phpunit>

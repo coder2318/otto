@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Services;
 
 use App\Services\OpenAIService;
 use OpenAI\Laravel\Facades\OpenAI;
@@ -9,7 +9,8 @@ use Tests\TestCase;
 
 class OpenAITest extends TestCase
 {
-    public function test_edits(): void
+    /** @test */
+    public function edits(): void
     {
         OpenAI::fake([
             CreateResponse::fake([
