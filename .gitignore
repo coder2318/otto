@@ -12,6 +12,7 @@
 .env.backup
 .env.production
 .pnpm-store
+.phpunit
 .phpunit.result.cache
 .phpstorm.meta.php
 _ide_helper*.php
