@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Http\Controllers\Dashboard;
 
-use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\Request;
 use Inertia\Testing\AssertableInertia;
 use Tests\TestCase;
 
@@ -20,10 +20,6 @@ class PlanControllerTest extends TestCase
         \App\Models\Plan::factory()->times(3)->create();
         $user = $this->createUser(configured: true);
 
-        $this->mock(User::class, function ($mock) {
-            $mock->shouldReceive('createSetupIntent')->andReturn('null');
-        });
-
         $response = $this->actingAs($user)->get(route('dashboard.plans.index'));
 
         $response->assertOk();
@@ -38,6 +34,8 @@ class PlanControllerTest extends TestCase
     {
         $plan = \App\Models\Plan::factory()->create();
         $user = $this->createUser(configured: true);
+
+        $this->mock(Request::class, fn ($mock) => $mock->shouldReceive('user->createSetupIntent')->andReturn());
 
         $response = $this->actingAs($user)->get(route('dashboard.plans.show', [$plan]));
 
