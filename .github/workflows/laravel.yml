@@ -55,6 +55,7 @@ jobs:
       env:
         DB_CONNECTION: sqlite
         DB_DATABASE: database/database.sqlite
+        XDEBUG_MODE: coverage
       run: |
         ./vendor/bin/pint --test --format=txt
         php artisan test --coverage --min=70
