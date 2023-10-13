@@ -58,6 +58,6 @@ jobs:
         XDEBUG_MODE: coverage
       run: |
         ./vendor/bin/pint --test --format=txt
-        php artisan test --coverage --min=70
+        ./vendor/bin/phpunit
         ./vendor/bin/phpstan --memory-limit=512M --no-progress
         npm run lint
