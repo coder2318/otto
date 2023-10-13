@@ -57,6 +57,7 @@ class OpenAIService
                     Please write in the styles and rules below for writing my autobiography.
 
                     Rules:
+                    Do not include any chapters just start writing.
                     Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
                     Write in the uplifting inspiration style of Richard Branson when he wrote "Losing my Virginity"
                     Accuracy is paramount. Output the exact same information you receive from the input with a high-quality, well-written tone.
