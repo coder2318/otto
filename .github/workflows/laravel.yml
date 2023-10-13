@@ -56,6 +56,6 @@ jobs:
         DB_DATABASE: database/database.sqlite
       run: |
         ./vendor/bin/pint --test --format=txt
-        ./vendor/bin/phpunit --no-progress
+        php artisan test --coverage --min=70
         ./vendor/bin/phpstan --memory-limit=512M --no-progress
         npm run lint

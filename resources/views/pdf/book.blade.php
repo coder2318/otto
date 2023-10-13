@@ -20,6 +20,11 @@
             text-align: center;
         }
 
+        p {
+            text-indent: 1.5rem;
+            text-align: justify;
+        }
+
         footer {
             position: fixed;
             left: 0;
@@ -39,7 +44,15 @@
 
     @foreach ($chapters as $chapter)
         <h1 @if (!$loop->first) style="page-break-before:always" @endif>{{ $chapter->title }}</h1>
-        <section>{!! $chapter->content !!}</section>
+        @php
+            $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))
+                ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p));
+        @endphp
+        <section>
+            @foreach ($content as $p)
+                <p>{{ $p }}</p>
+            @endforeach
+        </section>
     @endforeach
 </body>
 </html>

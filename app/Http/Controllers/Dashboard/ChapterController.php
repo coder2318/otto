@@ -66,11 +66,9 @@ class ChapterController extends Controller
     public function index(Story $story, ChaptersRequest $request)
     {
         return Inertia::render('Dashboard/Chapters/Index', [
-            'story' => fn () => StoryResource::make($story->load('cover')),
+            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
             'questions_chapters' => fn () => QuestionsChaptersResource::collection(
                 $request->chaptersQuestions($story)
-                    ->paginate(isset($request->filter['timeline_id']) ? 5 : 6)
-                    ->appends($request->query())
             ),
             'timelines' => fn () => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])

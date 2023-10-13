@@ -175,9 +175,7 @@
 
     <div>
         <div class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content">
-            Pages: <span class="text-primary"
-                >{questions_chapters.meta.current_page}/{questions_chapters.meta.last_page}</span
-            >
+            Pages: <span class="text-primary">{story.data.pages}</span>
         </div>
     </div>
 </section>
