@@ -77,7 +77,7 @@ class ChaptersRequest extends FormRequest
 
         return $this->crutchCovers($chapters->union($questions)
             ->with(['question', 'cover'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->paginate(isset($this->filter['timeline_id']) ? 5 : 6)
             ->appends($this->query())
         );
