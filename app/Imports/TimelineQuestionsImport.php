@@ -12,11 +12,12 @@ use Maatwebsite\Excel\Row;
 use Psr\Http\Message\ResponseInterface;
 use TextAnalysis\Tokenizers\SentenceTokenizer;
 
-# Excel::import(new \App\Imports\TimelineQuestionsImport, storage_path('app/questions.xlsx'))
+// Excel::import(new \App\Imports\TimelineQuestionsImport, storage_path('app/questions.xlsx'))
 /** @codeCoverageIgnore */
 class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
 {
     protected Drive $drive;
+
     protected string $token;
 
     public function onRow(Row $row): ?TimelineQuestion
@@ -40,7 +41,7 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
         /** @var TimelineQuestion */
         $question = TimelineQuestion::updateOrCreate([
             'question' => $row[1],
-        ],[
+        ], [
             'context' => $row[0],
             'sub_questions' => ! isset($row[2]) ? null : array_map('trim', tokenize($row[2], SentenceTokenizer::class)),
             'timeline_id' => $row[3],
@@ -54,7 +55,7 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
 
         dump($row[4]);
 
-        foreach($this->getImages($row[4]) as $file) {
+        foreach ($this->getImages($row[4]) as $file) {
             dump($file->name);
             /** @var ResponseInterface */
             $response = $this->getDrive()->files->get($file->id, ['alt' => 'media']);
@@ -93,7 +94,7 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
 
         $client = new \Google\Client();
         $client->setAuthConfig(storage_path('app/google.json'));
-        $client->setAccessType("offline");
+        $client->setAccessType('offline');
         $client->setScopes(Drive::DRIVE_READONLY);
 
         if (file_exists($tokenPath)) {
@@ -107,11 +108,12 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
                 $client->fetchAccessTokenWithRefreshToken($client->getRefreshToken());
             } else {
                 $auth = $client->createAuthUrl();
-                printf("Open the following link in your browser:\n%s\n", $auth);print 'Enter verification code: ';
+                printf("Open the following link in your browser:\n%s\n", $auth);
+                echo 'Enter verification code: ';
                 $code = trim(fgets(STDIN));
                 $accessToken = $client->fetchAccessTokenWithAuthCode($code);
 
-                if (!file_exists(dirname($tokenPath))) {
+                if (! file_exists(dirname($tokenPath))) {
                     mkdir(dirname($tokenPath), 0700, true);
                 }
                 file_put_contents($tokenPath, json_encode($accessToken));
