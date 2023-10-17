@@ -156,6 +156,6 @@ class OpenAIService
             return $prompt;
         }
 
-        return $translate->translate($prompt, ['target' => $language]);
+        return $translate->translate($prompt, ['target' => $language])['text'] ?? $prompt;
     }
 }
