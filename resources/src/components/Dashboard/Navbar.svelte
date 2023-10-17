@@ -17,7 +17,7 @@
             <LogoIcon class="h-full md:hidden" />
         </a>
     </div>
-    <div class="navbar-end flex gap-1 md:gap-2">
+    <div class="navbar-end flex">
         <div class="form-control relative">
             <Fa icon={faSearch} class="absolute left-4 top-1/2 -translate-y-1/2" />
             <input
@@ -79,3 +79,4 @@
         {/if}
     </div>
 </nav>
+

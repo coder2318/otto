@@ -10,17 +10,16 @@
     in:fade
 >
     <div class="hero-overlay bg-black bg-opacity-30" />
-    <div class="hero-content p-8 md:p-16 lg:p-28">
-        <div class="flex w-full flex-col items-start justify-center gap-4">
-            <h1 class="lg::text-6xl text-3xl text-white sm:text-4xl md:text-5xl xl:text-7xl">
-                Every life is a story. Begin <br />
-                telling yours with
-                <span class="italic text-secondary">OttoStory</span>.
+    <div class="hero-content pb-16 pl-4 md:pb-16 md:pl-16 lg:pb-28 lg:pl-28">
+        <div class="flex w-full flex-col items-start justify-center">
+            <h1 class="fz_h1 mb-12 text-white">
+                Every life is a story. Begin
+                <br class="hidden sm:inline" />
+                telling
+                <span class="italic text-secondary">yours with Otto</span>.
             </h1>
 
-            <a use:inertia href="/stories" class="btn btn-secondary rounded-full lg:h-20 lg:px-10 lg:text-xl">
-                Start Writing
-            </a>
+            <a use:inertia href="/stories" class="btn btn-secondary h-16 rounded-full px-10 text-xl"> Start Writing </a>
         </div>
     </div>
 </header>

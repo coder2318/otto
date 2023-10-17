@@ -15,7 +15,7 @@
             <Logo class="h-full" textClass="fill-current" />
         </a>
     </div>
-    <div class="flex-none gap-2">
+    <div class="flex-none">
         {#if user}
             <div class="dropdown-end dropdown leading-none">
                 <label tabindex="-1" class="avatar btn btn-circle btn-ghost" for="dropdown">
@@ -41,3 +41,13 @@
         {/if}
     </div>
 </nav>
+
+<style lang="scss">
+    .btn-ghost {
+        padding: 0;
+    }
+    .navbar {
+        padding: 20px 30px;
+        opacity: 1;
+    }
+</style>

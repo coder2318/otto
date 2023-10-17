@@ -24,3 +24,88 @@
 
 @import 'scss/components';
 @import 'scss/filepond';
+
+
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.otto-btn-primary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #0C345C;
+    color: #fff;
+    height: 64px;
+    line-height: 1;
+    padding: 0 42px;
+    border-radius: 40px;
+    font-size: 20px;
+    transition: 0.3s;
+
+    &:hover{
+        background-color: rgba(8,33,59,1);
+    }
+}
+
+.color-gray{
+    color: #474747;
+}
+
+.g-text{
+    font-size: 1.25rem;
+    color: #474747;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.g-text-wrap{
+    p{
+        font-size: 18px;
+        color: #474747;
+        line-height: 1.6;
+        margin-bottom: 30px;
+
+        &:last-child{
+            margin-bottom: 0;
+        }
+    }
+}
+
+.fz_h1{
+    font-size: 86px;
+    line-height: 1.1;
+
+    @media (max-width: 1280px) {
+        font-size: 68px;
+    }
+    @media (max-width: 767px) {
+        font-size: 48px;
+    }
+}
+
+.fz_h2{
+    font-size: 60px;
+    line-height: 1.1;
+
+    @media (max-width: 1280px) {
+        font-size: 48px;
+    }
+    @media (max-width: 767px) {
+        font-size: 36px;
+    }
+}
+
+.fz_h3{
+    font-size: 48px;
+    line-height: 1.1;
+
+    @media (max-width: 1280px) {
+        font-size: 40px;
+    }
+    @media (max-width: 767px) {
+        font-size: 32px;
+    }
+}

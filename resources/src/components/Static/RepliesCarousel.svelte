@@ -6,6 +6,9 @@
     import replyImg4 from '@/assets/img/reply-4.jpg'
     import Fa from 'svelte-fa'
     import { faCaretLeft, faCaretRight, faQuoteLeft } from '@fortawesome/free-solid-svg-icons'
+    import iconQuote from '@/assets/img/quote-icon.svg'
+    import arrowLeft from '@/assets/img/arrow-left.svg'
+    import arrowRight from '@/assets/img/arrow-right.svg'
 
     let carousel: HTMLElement
 
@@ -57,43 +60,53 @@
     }
 </script>
 
-<section class="flex items-center justify-center bg-base-200 py-16">
-    <div class="container mx-auto flex flex-col gap-16 p-4">
-        <h2 class="text-2xl text-primary sm:text-4xl md:text-5xl xl:text-7xl">
+<section class=" repliesCarousel relative flex items-center justify-center overflow-hidden pb-36 pt-32">
+    <div class="backGround rounded-3xl bg-base-200"></div>
+    <div class="container z-10 mx-auto flex flex-col">
+        <h2 class="fz_h1 mb-20 text-primary">
             What <span class="italic">Customers</span>
             Are <span class="italic">Saying.</span>
         </h2>
-        <div class="grid items-stretch justify-stretch gap-8 lg:grid-cols-2">
-            <div class="card relative bg-neutral">
-                <Fa icon={faQuoteLeft} class="absolute -top-12 left-16 text-8xl text-base-300" />
-                <div class="card-body gap-4 pt-12">
-                    {#key elements[0].key}
-                        <p class="md:text-md lg:text-lg" in:blur>
-                            “{elements[0].text}”
-                        </p>
-                        <p class="font-serif text-3xl italic text-primary" in:blur>
-                            {elements[0].name}
-                        </p>
-                    {/key}
-                    <div class="card-actions gap-4">
-                        <button type="button" class="btn btn-circle btn-sm" on:click={() => change(true)}>
-                            <Fa icon={faCaretLeft} />
+
+        <div class="wrap flex items-stretch justify-stretch">
+            <!-- Quote -->
+            <div class="card relative block bg-neutral">
+                <img class="iconQuote" src={iconQuote} alt="iconQuote" />
+                <div class="flex h-full flex-col justify-between">
+                    <div class="cardContent">
+                        <div class="cardContent__image">
+                            <img src={elements[0].photo} alt={elements[0].name} />
+                        </div>
+                        {#key elements[0].key}
+                            <p class="desc" in:blur>
+                                “{elements[0].text}”
+                            </p>
+                            <p class="name font-serif" in:blur>
+                                {elements[0].name}
+                            </p>
+                        {/key}
+                    </div>
+                    <div class="slide__nav">
+                        <button type="button" class="slide__nav-item" on:click={() => change(true)}>
+                            <img src={arrowLeft} alt="arrow" />
                         </button>
-                        <button type="button" class="btn btn-circle btn-sm" on:click={() => change()}>
-                            <Fa icon={faCaretRight} />
+                        <button type="button" class="slide__nav-item" on:click={() => change()}>
+                            <img src={arrowRight} alt="arrow" />
                         </button>
                     </div>
                 </div>
             </div>
+
+            <!-- Slider -->
             <div
-                class="carousel-center carousel rounded-box hidden space-x-4 overflow-hidden lg:inline-flex"
+                class="carousel-center carousel rounded-box space-x-4 overflow-visible lg:inline-flex"
                 bind:this={carousel}
             >
                 {#each elements as element (element.key)}
-                    <div class="carousel-item" transition:shrink>
+                    <div class="carousel-item overflow-hidden rounded-xl" transition:shrink>
                         <img
                             src={element.photo}
-                            class="h-96 w-96 object-cover lg:h-[30rem] lg:w-[30rem]"
+                            class="h-96 w-96 object-cover lg:h-[600px] lg:w-[600px]"
                             alt={element.name}
                         />
                     </div>
@@ -102,3 +115,137 @@
         </div>
     </div>
 </section>
+
+<style lang="scss">
+    .repliesCarousel {
+        .backGround {
+            position: absolute;
+            width: 100%;
+            max-width: calc(100% - 40px);
+            height: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 0;
+        }
+        .block {
+            min-width: 640px;
+            max-width: 640px;
+            padding: 100px 80px 60px;
+            margin-right: 24px;
+        }
+        .iconQuote {
+            position: absolute;
+            left: 80px;
+            top: -30px;
+        }
+        .cardContent {
+            margin-bottom: 20px;
+
+            &__image {
+                width: 100%;
+                height: auto;
+                aspect-ratio: 16/14;
+                position: relative;
+                overflow: hidden;
+                margin-bottom: 15px;
+                display: none;
+                border-radius: 16px;
+                transition: 0.5s;
+
+                img {
+                    position: absolute;
+                    left: 0;
+                    top: 0;
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                    object-position: center;
+                }
+            }
+            .name {
+                font-size: 1.5rem;
+                color: #0c345c;
+            }
+            .desc {
+                font-size: 1.25rem;
+                color: #474747;
+                line-height: 1.6;
+                margin-bottom: 20px;
+            }
+        }
+        .slide__nav {
+            display: flex;
+            align-items: center;
+
+            &-item {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                width: 32px;
+                height: 32px;
+                border-radius: 100%;
+                background: #f1ede7;
+                margin-right: 12px;
+                transition: 0.3s;
+
+                &:hover {
+                    background: #e3dfda;
+                }
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
+        }
+    }
+    @media (max-width: 1280px) {
+        .repliesCarousel {
+            .backGround {
+                max-width: none;
+                border-radius: 0;
+            }
+            .block {
+                min-width: 50%;
+                max-width: 50%;
+                padding: 80px 40px 40px;
+            }
+            .carousel-item {
+                width: 100%;
+            }
+        }
+    }
+    @media (max-width: 991px) {
+        .repliesCarousel {
+            padding: 100px 0;
+            .iconQuote {
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                top: -21px;
+            }
+            .wrap {
+                flex-direction: column;
+            }
+            .block {
+                min-width: 100%;
+                max-width: 100%;
+                margin-right: 0;
+                margin-bottom: 0;
+                padding: 50px 20px 30px 20px;
+            }
+            .cardContent {
+                margin-bottom: 30px;
+                &__image {
+                    display: block;
+                }
+                p {
+                    filter: none !important;
+                    transition: 0s !important;
+                }
+            }
+            .carousel {
+                display: none;
+            }
+        }
+    }
+</style>
