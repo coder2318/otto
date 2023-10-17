@@ -12,6 +12,7 @@ class ChapterSeeder extends Seeder
      */
     public function run(): void
     {
-        Chapter::factory(100)->withStory()->withTimeline()->create();
+        Chapter::factory(5)->withStory()->withTimeline()->create();
+        Chapter::factory(3)->withStory()->withTimeline()->withTimelineQuestion()->create();
     }
 }

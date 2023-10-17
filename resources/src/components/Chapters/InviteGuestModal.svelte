@@ -13,7 +13,12 @@
     })
 
     function submit() {
-        $form.post(`/stories/${story_id}/questions/${chapter.id}/invite`, {
+        const url =
+            chapter.type === 'question'
+                ? `/stories/${story_id}/questions/${chapter.id}/invite`
+                : `/chapters/${chapter.id}/invite`
+
+        $form.post(url, {
             onSuccess: () => {
                 modal.close()
             },

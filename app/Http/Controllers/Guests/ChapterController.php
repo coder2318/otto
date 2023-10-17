@@ -40,7 +40,7 @@ class ChapterController extends Controller
             'timeline_question_id' => $question->id,
             'timeline_id' => $question->timeline_id,
             'guest_id' => $guest->id,
-            'status' => Status::DRAFT,
+            'status' => Status::UNDONE,
         ]);
 
         if ($cover = $question->cover) {

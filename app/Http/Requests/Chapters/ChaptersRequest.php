@@ -43,14 +43,15 @@ class ChaptersRequest extends FormRequest
     public function chaptersQuestions(Story &$story)
     {
         $chapters = $this->builder($story->chapters()
-            ->join('timeline_questions as tq', 'tq.id', '=', 'chapters.timeline_question_id')
+            ->leftJoin('timeline_questions as tq', 'tq.id', '=', 'chapters.timeline_question_id')
             ->select([
                 'chapters.id',
                 'chapters.timeline_id',
-                'title',
+                'chapters.title',
                 DB::raw('tq.context as context'),
-                'status',
-                'timeline_question_id',
+                'chapters.status',
+                'chapters.timeline_question_id',
+                'chapters.guest_id',
                 DB::raw("'chapter' as type"),
                 'chapters.created_at',
             ])
@@ -65,6 +66,7 @@ class ChaptersRequest extends FormRequest
                 'context',
                 DB::raw("'undone' as status"),
                 DB::raw('null as timeline_question_id'),
+                DB::raw('null as guest_id'),
                 DB::raw("'question' as type"),
                 'timeline_questions.created_at',
             ])
@@ -85,17 +87,23 @@ class ChaptersRequest extends FormRequest
 
     protected function crutchCovers(AbstractPaginator $results)
     {
-        $questions = $results->where('type', 'question');
+        $questions = $results->where('type', 'question')->pluck('id')->merge(
+            $results->where('type', 'chapter')->pluck('timeline_question_id')
+        )->unique();
 
         $covers = Media::query()
             ->where('model_type', TimelineQuestion::class)
-            ->whereIn('model_id', $questions->pluck('id'))
+            ->whereIn('model_id', $questions)
             ->get()
             ->keyBy('model_id');
 
         $results->getCollection()->transform(function (Chapter $questionChapter) use ($covers) {
             if ($questionChapter->type === 'question') { // @phpstan-ignore-line
                 $questionChapter->setRelation('cover', $covers->get($questionChapter->id));
+            }
+
+            if ($questionChapter->type === 'chapter') {
+                $questionChapter->setRelation('cover', $covers->get($questionChapter->timeline_question_id));
             }
 
             return $questionChapter;

@@ -102,6 +102,7 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/enhance', 'enhance')->name('enhance');
             Route::get('/enhance/stream', 'process')->name('enhance.stream');
             Route::get('/finish', 'finish')->name('finish');
+            Route::post('/invite', 'invite')->name('invite');
         });
 
         // Guest features

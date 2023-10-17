@@ -16,6 +16,7 @@
     import background from '@/assets/img/stories-bg.jpg'
     import { faClose, faArrowDownLong, faTrash } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
+    import { onMount } from 'svelte'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -64,6 +65,23 @@
 
         dropdownDialog.close()
     }
+
+    onMount(() => {
+        if (Object.keys($filter).length === 0) {
+            $filter = JSON.parse(localStorage.getItem('chapters-filter'))
+        }
+
+        window.addEventListener('beforeunload', updateFilter)
+
+        function updateFilter() {
+            localStorage.setItem('chapters-filter', JSON.stringify($filter))
+        }
+
+        return () => {
+            updateFilter()
+            window.removeEventListener('beforeunload', updateFilter)
+        }
+    })
 </script>
 
 <svelte:head>
@@ -226,7 +244,7 @@
                     <p />
                     <div class="card-actions justify-between">
                         <div>
-                            {#if chapter.type === 'question'}
+                            {#if chapter.status === 'undone' && !chapter.guest_id}
                                 <div class="card-actions">
                                     <button
                                         class="btn btn-secondary btn-sm"
@@ -244,7 +262,7 @@
                             {chapter.status}
                         </div>
                     </div>
-                    {#if chapter.status !== 'undone'}
+                    {#if chapter.type === 'chapter'}
                         <div class="absolute right-4 top-4">
                             <button
                                 class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"

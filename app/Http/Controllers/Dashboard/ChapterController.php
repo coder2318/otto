@@ -14,8 +14,10 @@ use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
 use App\Models\Chapter;
+use App\Models\Guest;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
+use App\Notifications\GuestChapterInviteNotification;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Illuminate\Database\Eloquent\Model;
@@ -178,7 +180,7 @@ class ChapterController extends Controller
                 'title' => $question->question,
                 'timeline_question_id' => $question->id,
                 'timeline_id' => $question->timeline_id,
-                'status' => Status::DRAFT,
+                'status' => Status::UNDONE,
             ]);
 
             if ($cover = $question->cover) {
@@ -192,6 +194,25 @@ class ChapterController extends Controller
         return Inertia::render('Dashboard/Chapters/Create', [
             'story' => fn () => StoryResource::make($story),
         ]);
+    }
+
+    public function invite(Chapter $chapter, Request $request)
+    {
+        $data = $request->validate([
+            'email' => 'required|email',
+            'name' => 'required',
+        ]);
+
+        $guest = Guest::firstOrCreate(
+            ['email' => $data['email']],
+            ['name' => $data['name']],
+        );
+
+        $chapter->update(['guest_id' => $guest->id]);
+
+        $guest->notify(new GuestChapterInviteNotification($chapter));
+
+        return redirect()->back()->with('message', 'Guest invited successfully!');
     }
 
     public function store(Story $story, StoreChapterRequest $request)

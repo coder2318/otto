@@ -23,7 +23,7 @@ class ChapterFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'content' => $this->faker->paragraph(),
-            'status' => $this->faker->randomElement(array_filter(array_column(Status::cases(), 'value'), fn ($v) => $v !== 'undone')),
+            'status' => $this->faker->randomElement(array_column(Status::cases(), 'value')),
         ];
     }
 
