@@ -24,6 +24,15 @@ class TranslateService
         return $this->client->translate($text, $options);
     }
 
+    public function detectLanguage(string $text, array $options = []): ?array
+    {
+        if (config('services.google.translate.fake', true)) {
+            return ['languageCode' => 'en'];
+        }
+
+        return $this->client->detectLanguage($text, $options);
+    }
+
     public function translateFree($target, $text): array
     {
         $service = new GoogleTranslate();

@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Data\User\Details;
 use Illuminate\Support\Facades\Cache;
 use OpenAI\Laravel\Facades\OpenAI;
 use Soundasleep\Html2Text;
@@ -11,6 +10,22 @@ use TextAnalysis\Tokenizers\SentenceTokenizer;
 class OpenAIService
 {
     protected bool $fake;
+
+    protected string $defaultPrompt = <<<'TXT'
+    You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
+    The ghostwriting must be narrated in the First Person.
+    It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
+    Please write in the styles and rules below for writing my autobiography.
+
+    Rules:
+    Do not include any chapters just start writing.
+    Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
+    Write in the uplifting inspiration style of Richard Branson when he wrote "Losing my Virginity"
+    Accuracy is paramount. Output the exact same information you receive from the input with a high-quality, well-written tone.
+    Ensure the rewrite is highly engaging to readers and high quality.
+    Use college-level language and thought-provoking statements.
+    Write in the first person, documenting my story accurately as a first person narrator.
+    TXT;
 
     public function __construct()
     {
@@ -28,43 +43,18 @@ class OpenAIService
         return $edit['choices'][0]['text'];
     }
 
-    public function createInstractions(?Details $details): string
-    {
-        $instructions = [
-            'Fix the spelling mistakes.',
-        ];
-
-        // TODO: enhance writing using user details
-
-        return implode(' ', $instructions);
-    }
-
-    public function chatEdit(string $input, string $question): string
+    public function chatEdit(string $input, string $question, string $prompt = null): string
     {
         if ($this->fake) {
             return $input;
         }
 
-        return Cache::remember($input, 60 * 60 * 24, function () use ($input, $question) {
+        return Cache::remember($input, 60 * 60 * 24, function () use ($input, $question, $prompt) {
             $result = '';
 
             foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
                 $messages = [
-                    ['role' => 'system', 'content' => <<<'TXT'
-                    You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
-                    The ghostwriting must be narrated in the First Person.
-                    It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
-                    Please write in the styles and rules below for writing my autobiography.
-
-                    Rules:
-                    Do not include any chapters just start writing.
-                    Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
-                    Write in the uplifting inspiration style of Richard Branson when he wrote "Losing my Virginity"
-                    Accuracy is paramount. Output the exact same information you receive from the input with a high-quality, well-written tone.
-                    Ensure the rewrite is highly engaging to readers and high quality.
-                    Use college-level language and thought-provoking statements.
-                    Write in the first person, documenting my story accurately as a first person narrator.
-                    TXT],
+                    ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
                 ];
 
                 $messages[] = [
@@ -105,20 +95,7 @@ class OpenAIService
 
         foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
             $messages = [
-                ['role' => 'system', 'content' => $prompt ?? <<<'TXT'
-                    You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
-                    The ghostwriting must be narrated in the First Person.
-                    It is spoken word so you must review the entire passage as a context window before performing your rewrite so that everything is in order.
-                    Please write in the styles and rules below for writing my autobiography.
-
-                    Rules:
-                    Include all examples, proper nouns, company names, etc. in your rewrite. Write in great detail.
-                    Write in the uplifting inspiration style of Richard Branson when he wrote "Losing my Virginity"
-                    Accuracy is paramount. Output the exact same information you receive from the input with a high-quality, well-written tone.
-                    Ensure the rewrite is highly engaging to readers and high quality.
-                    Use college-level language and thought-provoking statements.
-                    Write in the first person, documenting my story accurately as a first person narrator.
-                    TXT],
+                ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
             ];
 
             $messages[] = [
@@ -168,5 +145,17 @@ class OpenAIService
 
         yield $result;
 
+    }
+
+    protected function getPrompt(string $input, string $prompt): string
+    {
+        $translate = app(TranslateService::class);
+        $language = $translate->detectLanguage($input)['languageCode'] ?? 'en';
+
+        if ($language === 'en') {
+            return $prompt;
+        }
+
+        return $translate->translate($prompt, ['target' => $language]);
     }
 }
