@@ -33,7 +33,7 @@
 
     $: query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
 
-    const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter ?? {})
+    const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter || {})
 
     filter.subscribe((value) => {
         router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), { only: ['questions_chapters'] })
@@ -57,10 +57,10 @@
     }
 
     function selectOption(e) {
-        if ($filter.timeline_id == e.currentTarget.value) {
+        if ($filter.timeline_id == e.target.value) {
             removeFilter('timeline_id')
         } else {
-            $filter.timeline_id = e.currentTarget.value
+            $filter.timeline_id = e.target.value
         }
 
         dropdownDialog.close()
@@ -68,7 +68,8 @@
 
     onMount(() => {
         if (Object.keys($filter).length === 0) {
-            const storageFilters = localStorage.getItem('chapters-filter')
+            const storageFilters = JSON.parse(localStorage.getItem('chapters-filter') ?? '{}')
+
             if (storageFilters && Object.keys(storageFilters).length) {
                 $filter = JSON.parse(localStorage.getItem('chapters-filter'))
             }
