@@ -68,13 +68,18 @@
 
     onMount(() => {
         if (Object.keys($filter).length === 0) {
-            $filter = JSON.parse(localStorage.getItem('chapters-filter'))
+            const storageFilters = localStorage.getItem('chapters-filter')
+            if (storageFilters && Object.keys(storageFilters).length) {
+                $filter = JSON.parse(localStorage.getItem('chapters-filter'))
+            }
         }
 
         window.addEventListener('beforeunload', updateFilter)
 
         function updateFilter() {
-            localStorage.setItem('chapters-filter', JSON.stringify($filter))
+            $filter && Object.keys($filter).length === 0
+                ? localStorage.removeItem('chapters-filter')
+                : localStorage.setItem('chapters-filter', JSON.stringify($filter))
         }
 
         return () => {
