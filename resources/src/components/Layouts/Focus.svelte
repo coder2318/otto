@@ -6,7 +6,7 @@
 </script>
 
 <section class="focusSection flex flex-col">
-    <div class="container">
+    <div class="otto-container">
         <div class="blockFocus relative flex flex-1 rounded-3xl bg-base-200">
             <slot />
             <img class="womanIllustration" src={womanIllustration} alt="Illustration" />
@@ -19,7 +19,7 @@
 
 <style lang="scss">
     .focusSection {
-        .container {
+        .otto-container {
             margin: 0 auto;
             width: 100%;
             max-width: 100%;

@@ -62,7 +62,7 @@
 
 <section class=" repliesCarousel relative flex items-center justify-center overflow-hidden pb-36 pt-32">
     <div class="backGround rounded-3xl bg-base-200"></div>
-    <div class="container z-10 mx-auto flex flex-col">
+    <div class="otto-container z-10 mx-auto flex flex-col">
         <h2 class="fz_h1 mb-20 text-primary">
             What <span class="italic">Customers</span>
             Are <span class="italic">Saying.</span>

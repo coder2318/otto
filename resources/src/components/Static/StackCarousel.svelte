@@ -55,7 +55,7 @@
 </script>
 
 <section class="firstSlider">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap">
             <!-- Content -->
             <div class="cardContent card">

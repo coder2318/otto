@@ -15,7 +15,7 @@
 
 <footer class="overflow-hidden bg-primary text-primary-content">
     <!-- Header -->
-    <div class="container">
+    <div class="otto-container">
         <div class="f-top-block mx-auto pb-20 pt-24">
             <div class="f-top relative flex flex-col items-center justify-between sm:flex-row">
                 <img class="footerIllustration" src={footerIllustration} alt="Illustration" />
@@ -101,6 +101,12 @@
             color: rgba(255, 255, 255, 0.3);
             transition: 0.3s linear;
             width: fit-content;
+
+            &:focus,
+            &:active {
+                outline: none;
+                border: none;
+            }
 
             &:hover {
                 color: rgba(255, 255, 255, 1);

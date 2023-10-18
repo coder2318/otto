@@ -25,7 +25,7 @@
 <Navbar class="relative bg-primary text-primary-content" />
 
 <section class="aboutUs">
-    <div class="container">
+    <div class="otto-container">
         <div class="titleWithIllustration">
             <div class="wrap">
                 <h1 class="fz_h2 title text-primary">
@@ -68,7 +68,7 @@
 <section class="titleAndButton bg-base-200">
     <img class="whiteOrangeFigure" src={whiteOrangeFigure} alt="Figure" />
     <img class="yellowWhiteFigure" src={yellowWhiteFigure} alt="Figure" />
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap">
             <h2 class="fz_h2 title text-center text-primary">
                 Memoirs of a Year : <i>A Beautiful Book Encompassing a Lifetime of Stories</i>
@@ -79,7 +79,7 @@
 </section>
 
 <section class="ourTeam">
-    <div class="container">
+    <div class="otto-container">
         <div class="titleWithIllustration">
             <div class="wrap">
                 <h2 class="fz_h2 title text-primary">
@@ -140,20 +140,21 @@
 
         .whiteOrangeFigure {
             position: absolute;
-            left: -60px;
-            bottom: -20px;
+            left: -5%;
+            bottom: -4%;
             max-width: 230px;
         }
         .yellowWhiteFigure {
             position: absolute;
-            right: 10px;
-            top: -28px;
+            top: -5%;
+            right: 1%;
             max-width: 230px;
         }
         .wrap {
             display: flex;
             flex-direction: column;
             align-items: center;
+            padding: 0 40px;
         }
 
         .title {
@@ -161,28 +162,9 @@
         }
     }
 
-    .titleWithIllustration {
-        margin-bottom: 60px;
-        display: flex;
-        justify-content: center;
-        .wrap {
-            position: relative;
-        }
-
-        .title {
-            z-index: 2;
-            position: relative;
-        }
-
-        img {
-            position: absolute;
-            left: -60px;
-            top: -40px;
-        }
-    }
-
     .aboutUs {
         padding: 120px 0 160px;
+        overflow: hidden;
 
         .titleWithIllustration {
             margin-bottom: 90px;
@@ -197,6 +179,9 @@
         &__content {
             width: 100%;
             max-width: 624px;
+            margin-right: 60px;
+            position: relative;
+            z-index: 2;
             .title {
                 margin-bottom: 3rem;
                 display: block;
@@ -209,19 +194,22 @@
 
         &__block {
             position: relative;
+            width: 100%;
+            max-width: 428px;
         }
 
         &-illustration {
             position: absolute;
-            top: -120px;
-            right: -150px;
-            min-width: 617px;
-            max-width: 617px;
+            bottom: -22%;
+            left: -10%;
+            width: 100%;
+            min-width: 144%;
+            // max-height: 100%;
             height: auto;
         }
 
         &__img {
-            width: 428px;
+            width: 100%;
             aspect-ratio: 16/18;
             position: relative;
             overflow: hidden;
@@ -240,9 +228,9 @@
     }
 
     .ourTeam {
-        padding: 120px 0;
+        padding: 120px 0 94px;
 
-        .container {
+        .otto-container {
             max-width: 1190px;
         }
 
@@ -252,9 +240,11 @@
             margin-right: -24px;
         }
     }
+
     .ourTeamCard {
         flex-basis: calc(100% / 3 - 24px);
         margin-right: 24px;
+        margin-bottom: 24px;
         background-color: #fff;
         padding: 16px;
         border-radius: 16px;
@@ -268,6 +258,9 @@
             border-radius: 16px;
             img {
                 position: absolute;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
             }
         }
 
@@ -291,4 +284,55 @@
         }
     }
 
+    @media (max-width: 1280px) {
+        .titleAndButton {
+            .whiteOrangeFigure {
+                width: 18%;
+                min-width: 120px;
+            }
+            .yellowWhiteFigure {
+                width: 18%;
+                min-width: 120px;
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
+        .ourTeamCard {
+            flex-basis: calc(100% / 2 - 24px);
+        }
+        .aboutUs {
+            .wrap {
+                flex-direction: column;
+            }
+
+            &__desc {
+                padding-left: 0;
+            }
+
+            &__content {
+                max-width: 100%;
+                margin-right: 0;
+            }
+            &__block {
+                margin-top: 110px;
+            }
+            &-illustration {
+                bottom: -7%;
+                left: 2%;
+                min-width: 114%;
+            }
+        }
+    }
+
+    @media (max-width: 767px) {
+        .ourTeamCard {
+            flex-basis: calc(100%);
+        }
+        .titleAndButton {
+            .wrap {
+                padding: 0;
+            }
+        }
+    }
 </style>

@@ -14,7 +14,7 @@
 
 <section class="section-grid-cards flex items-center justify-center pb-40 pt-44">
     <div
-        class="container mx-auto grid grid-cols-1 items-stretch justify-center gap-4 bg-contain bg-center bg-no-repeat sm:grid-cols-2 lg:grid-flow-col lg:grid-cols-4 lg:grid-rows-6"
+        class="otto-container mx-auto grid grid-cols-1 items-stretch justify-center gap-4 bg-contain bg-center bg-no-repeat sm:grid-cols-2 lg:grid-flow-col lg:grid-cols-4 lg:grid-rows-6"
         style="background-image: url({background})"
     >
         <div class="card order-1 sm:order-2 lg:row-span-2 lg:ml-auto lg:w-1/2 lg:pb-[50%]">
@@ -95,7 +95,7 @@
     .section-grid-cards {
         font-size: 1.25rem;
 
-        .container {
+        .otto-container {
             max-width: calc(100%);
         }
 

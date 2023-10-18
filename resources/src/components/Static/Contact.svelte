@@ -20,7 +20,7 @@
 </script>
 
 <section class="contact flex items-center justify-center pb-24 pt-44">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap flex items-stretch justify-center">
             <img class="contact-illustration" src={contactIllustration} alt="Illustration" />
             <div class="contact__image">

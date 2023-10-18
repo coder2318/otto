@@ -47,7 +47,7 @@
 </Focus>
 
 <section class="imageContent flex items-center justify-center pb-16 pt-56 md:pt-72">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap">
             <div class="cardContent card order-1 md:order-2">
                 <img class="cardContent-illustration" src={splash1} alt="splash" />
@@ -109,7 +109,7 @@
 </section>
 
 <section class="imageContent flex items-center justify-center py-20">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap flex flex-col justify-between md:flex-row">
             <div class="cardContent card order-1 items-center">
                 <img class="cardContent-illustration" src={splash2} alt="splash" />
@@ -168,7 +168,7 @@
 </section>
 
 <section class="imageContent flex items-center justify-center py-20">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap flex flex-col justify-between md:flex-row">
             <div class="cardContent card order-1 md:order-2">
                 <img class="cardContent-illustration" src={splash3} alt="splash" />
@@ -229,7 +229,7 @@
 </section>
 
 <section class="imageContent flex items-center justify-center pb-36 pt-20">
-    <div class="container">
+    <div class="otto-container">
         <div class="wrap flex flex-col justify-between md:flex-row">
             <div class="cardContent card order-1 items-center">
                 <img class="cardContent-illustration" src={splash4} alt="splash" />
