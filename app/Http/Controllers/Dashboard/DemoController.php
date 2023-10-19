@@ -16,10 +16,10 @@ use App\Models\User;
 use App\Notifications\DemoFinishedNotification;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 

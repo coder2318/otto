@@ -3,17 +3,18 @@
 namespace App\Models;
 
 use App\Data\Chapter\Status as ChapterStatus;
+use App\Data\Story\Book;
 use App\Data\Story\Status;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
+use Mccarlosen\LaravelMpdf\LaravelMpdf;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
-use Storage;
 
 /**
  * @property ?integer $pages
@@ -32,6 +33,7 @@ class Story extends Model implements HasMedia
 
     protected $casts = [
         'status' => Status::class,
+        'book' => Book::class,
     ];
 
     public function cover(): MorphOne
@@ -65,28 +67,17 @@ class Story extends Model implements HasMedia
     protected function pages(): Attribute
     {
         return Attribute::get(function () {
-            Storage::disk('local')->put($file = 'temp.pdf', Pdf::loadView('pdf.book', [
+            /** @var LaravelMpdf */
+            $pdf = tap(Pdf::loadView('pdf.book', [
                 'story' => $this,
                 'chapters' => $this->chapters()
                     ->where('status', ChapterStatus::PUBLISHED)
                     ->orderBy('timeline_id', 'asc')
                     ->orderBy('order', 'asc')
                     ->lazy(),
-            ])->output());
+            ]), fn (LaravelMpdf $pdf) => $pdf->output());
 
-            exec('pdfinfo '.Storage::disk('local')->path($file), $output);
-            Storage::disk('local')->delete($file);
-
-            $pages = null;
-
-            foreach ($output as $line) {
-                if (preg_match("/Pages:\s*(\d+)/i", $line, $matches)) {
-                    $pages = $matches[1];
-                    break;
-                }
-            }
-
-            return $pages;
+            return $pdf->getMpdf()->page; // @phpstan-ignore-line
         })->shouldCache();
     }
 }

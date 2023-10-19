@@ -11,7 +11,7 @@ class UpdateStoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'required', 'string'],
+            'title' => ['sometimes', 'required', 'string', 'max:255', 'min:3'],
             'cover' => ['sometimes', 'nullable', 'image'],
             'book_cover' => ['sometimes', 'nullable', 'image'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],

@@ -23,12 +23,12 @@ use App\Models\Story;
 use App\Models\StoryType;
 use App\Models\User;
 use App\Services\LuluService;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Intervention\Image\Facades\Image;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
@@ -200,9 +200,11 @@ class StoryController extends Controller
 
         $spineWidth = (($story->pages > 32 ? $story->pages : 32) / 444 + 0.06) * 96;
 
-        return Pdf::setPaper([0, 0, 2 * $image->width() + $spineWidth, $image->height()])
-            ->loadView('pdf.book-cover', ['cover' => $image->encode('data-url')])
-            ->stream();
+        return Pdf::loadView('pdf.book-cover', [
+            'cover' => $image->encode('data-url'),
+            'width' => 2 * $image->width() + $spineWidth,
+            'height' => $image->height(),
+        ])->stream();
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)

@@ -3,10 +3,10 @@
 namespace App\Notifications;
 
 use App\Models\Story;
-use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 
 class DemoFinishedNotification extends Notification
 {

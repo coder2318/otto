@@ -20,6 +20,7 @@ class StoryFactory extends Factory
         return [
             'title' => $this->faker->sentence(),
             'status' => $this->faker->randomElement(array_column(Status::cases(), 'value')),
+            'book' => null,
         ];
     }
 }
