@@ -40,7 +40,7 @@
                 if (e.data.size > 0) recordedChunks.push(e.data)
             })
 
-            mediaRecorder.addEventListener('stop', function (e) {
+            mediaRecorder.addEventListener('stop', function () {
                 const getFormat = () =>
                     ({
                         'audio/webm': 'weba',

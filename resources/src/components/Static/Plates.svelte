@@ -4,8 +4,6 @@
     import plate3 from '@/assets/img/index-plates-3.png'
     import plate4 from '@/assets/img/index-plates-4.png'
     import background from '@/assets/img/index-plates-bg.svg'
-    import { faFaceSmile, faGift, faImage, faLock } from '@fortawesome/free-solid-svg-icons'
-    import Fa from 'svelte-fa'
     import emotion from '@/assets/img/section-grid-cards/emotion.svg'
     import gift from '@/assets/img/section-grid-cards/gift.svg'
     import photo from '@/assets/img/section-grid-cards/photo.svg'

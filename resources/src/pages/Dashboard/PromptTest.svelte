@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
     import Base from '@/components/Layouts/Base.svelte'
     import Dashboard from '@/components/Layouts/Dashboard.svelte'
-    import Error from '../Error.svelte'
     export const layout = [Base, Dashboard]
 </script>
 
@@ -15,7 +14,6 @@
     const controller = new AbortController()
     let loading = false
     let response = ''
-    let errors = null
 
     async function submit() {
         if (loading) {
@@ -39,12 +37,10 @@
                 },
             })
         } catch (err) {
-            errors = await res.json()
             return (loading = false)
         }
 
         if (res.status !== 200) {
-            errors = await res.json()
             return (loading = false)
         }
 

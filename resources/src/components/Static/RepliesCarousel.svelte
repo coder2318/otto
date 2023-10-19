@@ -4,8 +4,6 @@
     import replyImg2 from '@/assets/img/reply-2.jpg'
     import replyImg3 from '@/assets/img/reply-3.jpg'
     import replyImg4 from '@/assets/img/reply-4.jpg'
-    import Fa from 'svelte-fa'
-    import { faCaretLeft, faCaretRight, faQuoteLeft } from '@fortawesome/free-solid-svg-icons'
     import iconQuote from '@/assets/img/quote-icon.svg'
     import arrowLeft from '@/assets/img/arrow-left.svg'
     import arrowRight from '@/assets/img/arrow-right.svg'

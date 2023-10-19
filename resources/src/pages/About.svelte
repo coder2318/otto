@@ -6,7 +6,6 @@
 <script lang="ts">
     import { inertia } from '@inertiajs/svelte'
     import Navbar from '@/components/Static/Navbar.svelte'
-    import PageHeader from '@/components/Static/PageHeader.svelte'
     import Footer from '@/components/Static/Footer.svelte'
     import img from '@/assets/img/about-img.jpg'
     import splash from '@/assets/img/about-splash.svg'
@@ -124,16 +123,6 @@
 <Footer />
 
 <style lang="scss">
-    .cta-bg {
-        background-image: url(@/assets/img/about-cta-2.svg), url(@/assets/img/about-cta-1.svg);
-        background-repeat: no-repeat, no-repeat;
-        background-position:
-            top 0 right 0,
-            bottom 0 left 0;
-
-        background-size: 9rem, 6rem;
-    }
-
     .titleAndButton {
         padding: 180px 0;
         position: relative;
