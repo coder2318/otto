@@ -32,22 +32,33 @@
     function startRecording() {
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
             const recordedChunks = []
-            mediaRecorder = new MediaRecorder(stream, {
-                mimeType: 'audio/webm',
-            })
+            mediaRecorder = new MediaRecorder(stream)
+            let format = null
 
             mediaRecorder.addEventListener('dataavailable', function (e) {
+                if (!format) format = e.data.type
                 if (e.data.size > 0) recordedChunks.push(e.data)
             })
 
-            mediaRecorder.addEventListener('stop', function () {
+            mediaRecorder.addEventListener('stop', function (e) {
+                const getFormat = () =>
+                    ({
+                        'audio/webm': 'weba',
+                        'audio/ogg': 'ogg',
+                        'audio/wav': 'wav',
+                    })[format] ?? format
+
                 recordings = [
                     ...(recordings ?? []),
                     {
                         translate,
-                        file: new File(recordedChunks, `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.weba`, {
-                            type: 'audio/webm',
-                        }),
+                        file: new File(
+                            recordedChunks,
+                            `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.${getFormat()}`,
+                            {
+                                type: format,
+                            }
+                        ),
                     },
                 ]
             })
