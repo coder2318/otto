@@ -12,7 +12,6 @@ use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\Dashboard\UserController;
 use App\Http\Controllers\Guests\ChapterController as GuestsChapterController;
 use App\Http\Controllers\InvoiceController;
-use App\Http\Controllers\TestController;
 use App\Http\Controllers\TranslateController;
 use Illuminate\Support\Facades\Route;
 
@@ -111,4 +110,3 @@ Route::middleware('user-configured')->group(function () {
 });
 
 Route::inertia('/test-prompt', 'Dashboard/PromptTest')->middleware(['features:'.BetaAccess::class])->name('test.prompt');
-Route::post('/test-prompt', [TestController::class, 'prompt'])->middleware(['features:'.BetaAccess::class])->name('test.prompt.submit');

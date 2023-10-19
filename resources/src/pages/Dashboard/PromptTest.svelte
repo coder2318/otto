@@ -25,16 +25,23 @@
         response = ''
         loading = true
 
-        const res = await fetch('/test-prompt', {
-            method: 'POST',
-            signal: controller.signal,
-            body: JSON.stringify(data),
-            headers: {
-                'Content-Type': 'application/json',
-                Accept: 'application/json, text/plain',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-        })
+        let res
+
+        try {
+            res = await fetch('/api/test-prompt', {
+                method: 'POST',
+                signal: controller.signal,
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json, text/plain',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                },
+            })
+        } catch (err) {
+            errors = await res.json()
+            return (loading = false)
+        }
 
         if (res.status !== 200) {
             errors = await res.json()
