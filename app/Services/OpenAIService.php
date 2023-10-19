@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Cache;
 use OpenAI\Laravel\Facades\OpenAI;
 use Soundasleep\Html2Text;
 use TextAnalysis\Tokenizers\SentenceTokenizer;
@@ -36,7 +35,7 @@ class OpenAIService
         if ($this->fake) {
             return $input;
         }
-            $result = '';
+        $result = '';
 
         foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
             $messages = [
@@ -85,7 +84,7 @@ class OpenAIService
 
             $messages[] = [
                 'role' => 'assistant',
-                'content' => "Please, tell me your story on: \"$question\""
+                'content' => "Please, tell me your story on: \"$question\"",
             ];
 
             $messages[] = [
