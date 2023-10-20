@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Data\User\Details;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
@@ -39,6 +40,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'password' => 'hashed',
         'details' => Details::class,
     ];
+
+    public function name(): Attribute
+    {
+        return Attribute::get(fn () => $this->details?->name ?? trim($this->details?->first_name.' '.$this->details?->last_name));
+    }
 
     public function stories(): HasMany
     {

@@ -43,8 +43,3 @@ Route::group(['middleware' => ['auth:web,web-guest'], 'as' => 'guests.', 'prefix
 Route::group(['middleware' => ['auth', 'verified'], 'as' => 'dashboard.'], function () {
     include __DIR__.'/web/dashboard.php';
 })->middleware('features:beta-access');
-
-// Admin Panel
-Route::group(['middleware' => ['auth', 'verified'], 'as' => 'admin.'], function () {
-    include __DIR__.'/web/admin.php';
-})->middleware('features:beta-access');
