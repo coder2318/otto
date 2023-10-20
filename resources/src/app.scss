@@ -27,6 +27,7 @@
 @import 'scss/filepond';
 
 
+
 .otto-container {
     width: 100%;
     max-width: 1280px;
@@ -92,14 +93,72 @@
     border-radius: 40px;
     font-size: 20px;
     transition: 0.3s;
+    width: fit-content;
+
+    &.small{
+        height: 40px;
+        font-size: 14px;
+    }
 
     &:hover{
         background-color: rgba(8,33,59,1);
     }
 }
 
+.otto-btn-outline{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    border: 1px solid #0C345C;
+    color: #fff;
+    height: 64px;
+    line-height: 1;
+    padding: 0 42px;
+    border-radius: 40px;
+    font-size: 20px;
+    transition: 0.3s;
+    width: fit-content;
+    color: #0C345C;
+
+    &.small{
+        height: 40px;
+        font-size: 14px;
+    }
+
+    &:hover{
+        background-color: rgba(8,33,59,1);
+        color: #fff;
+    }
+}
+
+.otto-btn-secondary{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #FFD886;
+    color: #0C345C;
+    height: 64px;
+    line-height: 1;
+    padding: 0 42px;
+    border-radius: 40px;
+    font-size: 20px;
+    transition: 0.3s;
+    width: fit-content;
+
+    &.small{
+        height: 40px;
+        font-size: 14px;
+    }
+
+    &:hover{
+        background-color: #ffcb5e;
+    }
+}
+
 .color-gray{
     color: #474747;
+    
 }
 
 .g-text{
@@ -107,6 +166,7 @@
     color: #474747;
     line-height: 1.6;
     margin-bottom: 20px;
+    position: relative;
 }
 
 .g-text-wrap{

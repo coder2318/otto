@@ -3,7 +3,7 @@
 </script>
 
 <script lang="ts">
-    // import { inertia } from '@inertiajs/svelte'
+    import { inertia } from '@inertiajs/svelte'
     import Navbar from '@/components/Static/Navbar.svelte'
     import Hero from '@/components/Static/Hero.svelte'
     import StackCarousel from '@/components/Static/StackCarousel.svelte'
@@ -19,8 +19,6 @@
     import splash3 from '@/assets/img/splash-3.svg'
     import splash4 from '@/assets/img/splash-4.svg'
     import checkIcon from '@/assets/img/check-icon.svg'
-    // import Fa from 'svelte-fa'
-    // import { faCheck } from '@fortawesome/free-solid-svg-icons'
     import Footer from '@/components/Static/Footer.svelte'
     import Contact from '@/components/Static/Contact.svelte'
     import Plates from '@/components/Static/Plates.svelte'
@@ -52,12 +50,12 @@
             <div class="cardContent card order-1 md:order-2">
                 <img class="cardContent-illustration" src={splash1} alt="splash" />
                 <div class="z-10 flex flex-col">
-                    <div class="relative flex items-center justify-between">
+                    <div class="cardContent__top">
                         <div class="cardContent__target">
                             <span class="cardContent__target-number"> 1 </span>
                             <p>Kick-starting Your Story</p>
                         </div>
-                        <!-- <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a> -->
+                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
                         Your Story <i>Starts Here</i>
@@ -114,12 +112,12 @@
             <div class="cardContent card order-1 items-center">
                 <img class="cardContent-illustration" src={splash2} alt="splash" />
                 <div class="z-10 flex flex-col">
-                    <div class="relative flex items-center justify-between">
+                    <div class="cardContent__top">
                         <div class="cardContent__target second">
                             <span class="cardContent__target-number second"> 2 </span>
                             <p>Intuitive Engagement with Otto</p>
                         </div>
-                        <!-- <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a> -->
+                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
                         Your Story, <i>Your Way</i>
@@ -173,12 +171,12 @@
             <div class="cardContent card order-1 md:order-2">
                 <img class="cardContent-illustration" src={splash3} alt="splash" />
                 <div class="z-10 flex flex-col">
-                    <div class="relative flex items-center justify-between">
+                    <div class="cardContent__top">
                         <div class="cardContent__target">
                             <span class="cardContent__target-number third"> 3 </span>
                             <p>Finalizing Your Masterpiece</p>
                         </div>
-                        <!-- <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a> -->
+                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
 
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
@@ -234,12 +232,12 @@
             <div class="cardContent card order-1 items-center">
                 <img class="cardContent-illustration" src={splash4} alt="splash" />
                 <div class="z-10 flex flex-col">
-                    <div class="relative flex items-center justify-between">
+                    <div class="cardContent__top">
                         <div class="cardContent__target">
                             <span class="cardContent__target-number fourth"> 4 </span>
                             <p>Share and Sell Your Autobiography</p>
                         </div>
-                        <!-- <a href="/stories" use:inertia class="btn btn-secondary btn-lg rounded-full"> Start Writing </a> -->
+                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
 
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
@@ -323,20 +321,26 @@
             max-width: 650px;
             position: relative;
 
+            &__top {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                margin-bottom: 20px;
+            }
+
             &-illustration {
                 position: absolute;
                 left: -60px;
                 top: -48px;
             }
-
             &__target {
-                margin-bottom: 20px;
                 background-color: #fff;
                 height: 54px;
                 border-radius: 40px;
                 display: flex;
                 align-items: center;
                 padding: 0 18px 0 12px;
+                margin-right: 10px;
 
                 &-number {
                     width: 36px;
@@ -370,7 +374,6 @@
                     line-height: 1;
                 }
             }
-
             &__wrap {
                 padding-left: 108px;
                 padding-right: 26px;
@@ -472,6 +475,19 @@
     @media (max-width: 767px) {
         .focusTitle {
             font-size: 28px;
+        }
+
+        .imageContent {
+            .cardContent {
+                &__top {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                &__target {
+                    margin-bottom: 20px;
+                }
+            }
         }
     }
 </style>
