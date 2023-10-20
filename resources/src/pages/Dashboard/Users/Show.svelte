@@ -13,31 +13,23 @@
     import Facebook from '@/components/SVG/socials/facebook.svg.svelte'
     import Linkedin from '@/components/SVG/socials/linkedin.svg.svelte'
     import Telegram from '@/components/SVG/socials/telegram.svg.svelte'
-    // import Fa from 'svelte-fa'
     import profileIllustration from '@/assets/img/profile-illustration.svg'
-    // import {
-    //     faFacebook,
-    //     faTelegram,
-    //     faInstagram,
-    //     faLinkedin,
-    //     type IconDefinition,
-    // } from '@fortawesome/free-brands-svg-icons'
 
     export let user: { data: App.User }
     export let stories: { data: App.Story[] }
 
     $: authId = $page.props?.auth?.user?.data?.id
 
-    // function icon(code: string) {
-    //     return (
-    //         {
-    //             instagram: Instagram,
-    //             facebook: Instagram,
-    //             telegram: Instagram,
-    //             linkedin: Instagram,
-    //         }[code] ?? null
-    //     )
-    // }
+    function icon(code: string) {
+        return (
+            {
+                instagram: Instagram,
+                facebook: Facebook,
+                telegram: Telegram,
+                linkedin: Linkedin,
+            }[code] ?? null
+        )
+    }
 </script>
 
 <svelte:head>
@@ -81,7 +73,7 @@
                                     {#each Object.entries(user.data.details?.social ?? {}) as [key, value]}
                                         {#if value}
                                             <a href={value} target="_blank">
-                                                <Facebook />
+                                                <svelte:component this={icon(key)} />
                                             </a>
                                         {/if}
                                     {/each}

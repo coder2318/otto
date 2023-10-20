@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "02ebd2927f78105ee2b958c55f982ab6",
+    "content-hash": "c298f0dea9543ab397e38075b1cddd52",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -4351,6 +4351,57 @@
                 "source": "https://github.com/thephpleague/oauth1-client/tree/v1.10.1"
             },
             "time": "2022-04-15T14:02:14+00:00"
+        },
+        {
+            "name": "limedeck/nova-cashier-overview",
+            "version": "4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/LimeDeck/nova-cashier-overview.git",
+                "reference": "8fdbba87f57621606552af68e585ef53fb24c233"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/LimeDeck/nova-cashier-overview/zipball/8fdbba87f57621606552af68e585ef53fb24c233",
+                "reference": "8fdbba87f57621606552af68e585ef53fb24c233",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/nova": "^4.0",
+                "php": "^7.3 || ^8.0"
+            },
+            "require-dev": {
+                "limedeck/phpunit-detailed-printer": "^6.0",
+                "orchestra/testbench": "^6.18",
+                "phpunit/phpunit": "^9.5"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "LimeDeck\\NovaCashierOverview\\Providers\\CashierOverviewServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "LimeDeck\\NovaCashierOverview\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Interact with your Stripe subscriptions directly inside Nova.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/LimeDeck/nova-cashier-overview/issues",
+                "source": "https://github.com/LimeDeck/nova-cashier-overview/tree/4.2.0"
+            },
+            "time": "2022-09-03T23:14:04+00:00"
         },
         {
             "name": "maatwebsite/excel",
@@ -11245,6 +11296,71 @@
                 }
             ],
             "time": "2023-09-12T10:11:35+00:00"
+        },
+        {
+            "name": "tightenco/nova-stripe",
+            "version": "v2.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/tighten/nova-stripe.git",
+                "reference": "285be66897368f253088f871a304f0755625aa85"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/tighten/nova-stripe/zipball/285be66897368f253088f871a304f0755625aa85",
+                "reference": "285be66897368f253088f871a304f0755625aa85",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0|^8.1",
+                "stripe/stripe-php": ">=5.0"
+            },
+            "require-dev": {
+                "laravel/nova": "^4.0",
+                "orchestra/testbench": ">=3.6.x-dev",
+                "phpunit/phpunit": "9.5.*",
+                "tightenco/duster": "^0.3.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Tighten\\NovaStripe\\ToolServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Tighten\\NovaStripe\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Samantha Geitz",
+                    "email": "samantha@tighten.co"
+                },
+                {
+                    "name": "Alison Kirk",
+                    "email": "alison.kirk@tighten.co"
+                }
+            ],
+            "description": "A tool to create a quick Stripe dashboard in your Laravel Nova admin panels",
+            "keywords": [
+                "laravel",
+                "nova",
+                "stripe",
+                "tighten",
+                "tightenco"
+            ],
+            "support": {
+                "issues": "https://github.com/tighten/nova-stripe/issues",
+                "source": "https://github.com/tighten/nova-stripe/tree/v2.0.7"
+            },
+            "time": "2022-10-31T12:15:21+00:00"
         },
         {
             "name": "tijsverkoyen/css-to-inline-styles",

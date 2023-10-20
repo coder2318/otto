@@ -26,6 +26,7 @@
         "laravel/telescope": "^4.15",
         "laravel/tinker": "^2.8",
         "league/flysystem-aws-s3-v3": "^3.0",
+        "limedeck/nova-cashier-overview": "^4.2",
         "maatwebsite/excel": "^3.1",
         "openai-php/laravel": "^0.7",
         "pusher/pusher-php-server": "^7.2",
@@ -41,6 +42,7 @@
         "sqids/sqids": "^0.4.1",
         "statickidz/php-google-translate-free": "^1.2",
         "staudenmeir/belongs-to-through": "^2.13",
+        "tightenco/nova-stripe": "^2.0",
         "vyuldashev/nova-permission": "^3.2",
         "yooper/php-text-analysis": "^1.9"
     },

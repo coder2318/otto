@@ -69,6 +69,7 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
     {
         return [
             \Vyuldashev\NovaPermission\NovaPermissionTool::make(),
+            new \Tighten\NovaStripe\NovaStripe,
         ];
     }
 

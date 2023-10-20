@@ -33,6 +33,8 @@ return [
 
     'stripe' => [
         'plans' => env('STRIPE_PLANS') ? explode(',', env('STRIPE_PLANS')) : [],
+        'key' => env('STRIPE_KEY'),
+        'secret' => env('STRIPE_SECRET'),
     ],
 
     'google' => [

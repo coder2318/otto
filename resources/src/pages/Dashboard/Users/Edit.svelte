@@ -127,7 +127,6 @@
                         <FilePond
                             id="avatar"
                             name="avatar"
-                            class="avatar2"
                             bind:instance={pond}
                             server={false}
                             allowMultiple={false}
@@ -487,11 +486,6 @@
             }
         }
 
-        .filepond--drop-label {
-            background-color: #fff;
-            border: 1px solid #666666 !important;
-        }
-
         form {
             input {
                 height: 60px;
@@ -544,11 +538,9 @@
         }
     }
 
-    :global() {
-        .filepond--root .filepond--drop-label {
-            background-color: #fff !important;
-            border: 1px solid #666666 !important;
-        }
+    :global(.filepond--drop-label) {
+        background-color: #fff !important;
+        border: 1px solid #666666;
     }
 
     @media (max-width: 767px) {

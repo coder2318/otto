@@ -11,6 +11,7 @@ use Laravel\Nova\Fields\MorphToMany;
 use Laravel\Nova\Fields\Password;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use LimeDeck\NovaCashierOverview\Subscription;
 use Vyuldashev\NovaPermission\Permission;
 use Vyuldashev\NovaPermission\Role;
 
@@ -78,6 +79,8 @@ class User extends Resource
                 ->onlyOnForms()
                 ->creationRules('required', Rules\Password::defaults())
                 ->updateRules('nullable', Rules\Password::defaults()),
+
+            Subscription::make(),
 
             MorphToMany::make('Roles', 'roles', Role::class),
 
