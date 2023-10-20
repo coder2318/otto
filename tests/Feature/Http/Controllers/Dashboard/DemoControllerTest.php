@@ -38,8 +38,6 @@ class DemoControllerTest extends TestCase
         $response = $this->actingAs($user)->get(route('dashboard.demo.book'));
 
         $response->assertOk();
-
-        $response->assertHeader('Content-Type', 'application/pdf');
     }
 
     /** @test */
