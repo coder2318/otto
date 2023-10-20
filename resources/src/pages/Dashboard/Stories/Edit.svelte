@@ -131,7 +131,7 @@
         }
 
         .collapse-content {
-            @apply bg-base-300 text-base-content;
+            @apply bg-base-200 text-base-content;
         }
 
         &:has(input:checked) {

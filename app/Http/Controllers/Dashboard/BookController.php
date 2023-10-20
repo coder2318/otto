@@ -17,7 +17,8 @@ class BookController extends Controller
     {
         return Inertia::render('Dashboard/Books/Show', [
             'story' => fn () => StoryResource::make($book->load([
-                'chapters' => fn ($q) => $q->orderBy('order', 'asc')
+                'chapters' => fn ($q) => $q->orderBy('timeline_id', 'asc')
+                    ->orderBy('order', 'asc')
                     ->where('status', Status::PUBLISHED)->limit(1),
             ])),
         ]);

@@ -78,7 +78,7 @@ class StoryController extends Controller
     public function cover(Story $story, Request $request)
     {
         return Inertia::render('Dashboard/Stories/Cover', [
-            'story' => fn () => StoryResource::make($story->append('pages')),
+            'story' => fn () => StoryResource::make($story->append('pages')->load('cover')),
             'template' => fn () => BookCoverTemplateResource::make(
                 BookCoverTemplate::when(
                     $tmpl = $request->query('template'),
@@ -140,6 +140,7 @@ class StoryController extends Controller
         return Inertia::render('Dashboard/Stories/Edit', [
             'story' => fn () => StoryResource::make($story),
             'chapters' => fn () => $story->chapters()
+                ->orderBy('timeline_id', 'asc')
                 ->orderBy('order', 'asc')
                 ->where('status', Status::PUBLISHED)
                 ->get([
@@ -209,6 +210,10 @@ class StoryController extends Controller
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
     {
+        if (! $story->cover) {
+            return redirect()->route('dashboard.stories.cover', $story)->with('error', trans('Please create cover before ordering!'));
+        }
+
         return Inertia::render('Dashboard/Stories/Order', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
             'countries' => fn () => collect($iso->getCountries())->map(fn (Country $country) => [

@@ -12,13 +12,13 @@
         }
 
         span.mpdf_toc_t_level_0 {
-            font-family: 'DejaVu Sans';
+            font-family: 'Baskerville';
             font-size: 1rem;
             font-weight: normal;
         }
 
         section {
-            font-family: 'DejaVu Sans';
+            font-family: 'Baskerville';
             font-size: 1rem;
         }
 
@@ -26,6 +26,7 @@
             font-family: 'DejaVu Serif';
             font-size: 1.5rem;
             font-style: italic;
+            font-weight: normal;
             color: #0C345C;
             text-align: center;
             text-wrap: balance;

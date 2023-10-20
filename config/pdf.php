@@ -32,7 +32,7 @@ return [
     'pdfa' => false,
     'pdfaauto' => false,
     'use_active_forms' => false,
-    'custom_font_dir' => resource_path('src/assets/fonts/Baskerville/'),
+    'custom_font_dir' => resource_path('src/assets/fonts/Baskerville'),
     'custom_font_data' => [
         'Baskerville' => [
             'R' => 'Baskerville120Pro.ttf',
