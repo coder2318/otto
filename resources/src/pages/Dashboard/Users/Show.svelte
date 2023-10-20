@@ -125,8 +125,8 @@
                                     <a href="/books/{story.id}" use:inertia class="otto-btn-primary btn-view-book">
                                         View Book
                                     </a>
-                                    <a href="/books/{story.id}" class="otto-btn-outline btn-edit-chapter">
-                                        Edit Chapter
+                                    <a href="/stories/{story.id}" class="otto-btn-outline btn-edit-chapter">
+                                        Edit Book
                                     </a>
                                 {/if}
                             </div>
