@@ -33,6 +33,8 @@ jobs:
         key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
     - name: Install Composer Dependencies
       uses: php-actions/composer@v6
+      env:
+        COMPOSER_AUTH: '{"http-basic":{"nova.laravel.com":{"username":"${{ secrets.NOVA_USERNAME }}","password":"${{ secrets.NOVA_PASSWORD }}"}}}'
       with:
         php_version: "8.2"
         args: -q --no-ansi --no-interaction --no-scripts --no-progress --prefer-dist --ignore-platform-reqs
