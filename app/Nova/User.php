@@ -2,8 +2,7 @@
 
 namespace App\Nova;
 
-use App\Models\User as UserModel;
-use Illuminate\Http\Request;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rules;
 use Laravel\Nova\Fields\Avatar;
 use Laravel\Nova\Fields\ID;
@@ -15,6 +14,9 @@ use LimeDeck\NovaCashierOverview\Subscription;
 use Vyuldashev\NovaPermission\Permission;
 use Vyuldashev\NovaPermission\Role;
 
+/**
+ * @mixin \App\Models\User
+ */
 class User extends Resource
 {
     /**
@@ -51,11 +53,10 @@ class User extends Resource
             ID::make()->sortable(),
 
             Avatar::make('Avatar', 'avatar')
-                ->store(function (Request $request, UserModel $user) {
+                ->store(function (NovaRequest $request, Model $user) {
+                    /** @var \App\Models\User $user */
                     $user->clearMediaCollection('avatar');
                     $user->addMediaFromRequest('avatar')->toMediaCollection('avatar');
-
-                    return true;
                 })
                 ->preview(function () {
                     return $this->getFirstMediaUrl('avatar');
