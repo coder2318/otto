@@ -35,7 +35,9 @@ class DemoControllerTest extends TestCase
             'user_id' => $user->id,
         ]);
 
+        ob_start();
         $response = $this->actingAs($user)->get(route('dashboard.demo.book'));
+        ob_end_clean();
 
         $response->assertOk();
     }

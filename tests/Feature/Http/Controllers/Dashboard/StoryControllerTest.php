@@ -21,7 +21,9 @@ class StoryControllerTest extends TestCase
             'user_id' => $user->id,
         ]);
 
+        ob_start();
         $response = $this->actingAs($user)->get(route('dashboard.stories.book', [$story]));
+        ob_end_clean();
 
         $response->assertOk();
     }
@@ -35,7 +37,9 @@ class StoryControllerTest extends TestCase
         ]);
         $story->addMediaFromUrl(fake()->imageUrl())->toMediaCollection('cover');
 
+        ob_start();
         $response = $this->actingAs($user)->get(route('dashboard.stories.book-cover', [$story]));
+        ob_end_clean();
 
         $response->assertOk();
     }
@@ -177,7 +181,9 @@ class StoryControllerTest extends TestCase
         $user = $this->createUser(configured: true, subscribed: true);
         $story = \App\Models\Story::factory()->create([
             'user_id' => $user->id,
-        ])->addMedia(fake()->image())->toMediaCollection('cover');
+        ]);
+
+        $story->addMedia(fake()->image())->toMediaCollection('cover');
 
         $response = $this->actingAs($user)->get(route('dashboard.stories.order', [$story]));
 
