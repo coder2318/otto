@@ -47,6 +47,7 @@
     })
 
     function canvelEdit() {
+        modal.close()
         editor.oncancel()
         editor.onclose && editor.onclose()
         editor?.clear()
@@ -198,11 +199,11 @@
 </form>
 
 <dialog bind:this={modal} class="modal">
-    <form method="dialog" class="modal-box w-11/12 max-w-5xl" on:submit={canvelEdit}>
+    <div class="modal-box w-11/12 max-w-5xl">
         <div bind:this={element} class="min-h-[500px]" />
         <div class="modal-action">
             <button type="button" class="btn btn-primary" on:click|preventDefault={saveImage}>Confirm</button>
-            <button type="submit" class="btn" form="book-cover">Close</button>
+            <button type="button" class="btn" on:click|preventDefault={canvelEdit}>Close</button>
         </div>
-    </form>
+    </div>
 </dialog>
