@@ -58,6 +58,11 @@ class LuluService
         return $this->request()->post('webhooks', compact('url', 'topics'))->json('is_active', false);
     }
 
+    public function testWebhook()
+    {
+        return $this->request()->post('webhooks/1a0aba5c-f4d0-436e-8bfa-64a3c11333e0/test-submission/PRINT_JOB_STATUS_CHANGED/')->json();
+    }
+
     public function print(
         string $email,
         LineItem $item,
