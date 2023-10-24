@@ -48,7 +48,7 @@
         {/if}
         <div class="card-body gap-4">
             <textarea
-                class="textarea resize-none card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
+                class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
                 rows="1"
                 use:autosize={{ offset: 2 }}
                 bind:value={$form.title}

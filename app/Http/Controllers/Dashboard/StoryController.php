@@ -275,10 +275,10 @@ class StoryController extends Controller
                 'printable_normalization' => PrintableNormalization::from([
                     'external_id' => $payment->external_id, // @phpstan-ignore-line
                     'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
-                    'cover' => ['source_url' => route('dashboard.dashboard.stories.book-cover', compact('story'))],
+                    'cover' => ['source_url' => route('dashboard.stories.book-cover', compact('story'))],
                     'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
                 ]),
-                'quantity' => 1,
+                'quantity' => $story->created_at->diffInMonths(now()) < 6 ? 3 : 1,
                 'title' => $story->title,
             ]),
             $request->shippingAddress(),
