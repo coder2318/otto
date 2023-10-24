@@ -195,6 +195,7 @@ class StoryController extends Controller
 
     public function bookCover(Story $story)
     {
+        ini_set("pcre.backtrack_limit", "5000000");
         abort_unless((bool) $cover = $story->cover, 404);
         /** @var Media $cover */
         $image = Image::make($cover->stream());
