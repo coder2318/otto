@@ -188,7 +188,7 @@ class ChapterController extends Controller
                 $cover->copy($chapter, 'cover');
             }
 
-            return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('message', 'Chapter created successfully!');
+            return redirect()->route('dashboard.chapters.edit', compact('chapter'));
         }
 
         return Inertia::render('Dashboard/Chapters/Create', [

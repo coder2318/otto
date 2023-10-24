@@ -13,6 +13,7 @@
     import upload from '@/assets/img/chapter-upload.jpg'
     import write from '@/assets/img/chapter-type.jpg'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
+    import { autosize } from '@/service/svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -47,8 +48,9 @@
         {/if}
         <div class="card-body gap-4">
             <textarea
-                class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
+                class="textarea resize-none card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
                 rows="1"
+                use:autosize={{ offset: 2 }}
                 bind:value={$form.title}
             />
             <div class="grid grid-cols-1 gap-8 p-4 md:grid-cols-3">

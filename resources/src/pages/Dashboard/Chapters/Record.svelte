@@ -14,6 +14,7 @@
     import AudioRecorder from '@/components/AudioRecorder.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import { onMount } from 'svelte'
+    import { autosize } from '@/service/svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -68,8 +69,9 @@
     <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
         <div class="card-body gap-4 p-4 md:p-8">
             <textarea
-                class="textarea card-title textarea-ghost font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
+                class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
                 bind:value={$form.title}
+                use:autosize={{ offset: 2 }}
                 rows="1"
             />
 
