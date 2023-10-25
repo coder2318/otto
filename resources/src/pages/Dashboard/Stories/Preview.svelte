@@ -5,7 +5,6 @@
 </script>
 
 <script lang="ts">
-    import PdfViewer from 'svelte-pdf'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
     import { inertia } from '@inertiajs/svelte'

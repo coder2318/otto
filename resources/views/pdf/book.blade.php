@@ -3,23 +3,26 @@
     <title>{{ $story->title }}</title>
     <style>
         @page {
-            size: 8.75in 11.25in;
-            margin: 0.625in;
+            sheet-size: 6.25in 9.25in;
+            margin: 1in;
+            margin-bottom: 1.25in;
+            margin-footer: 1in;
             header: page-header;
             footer: page-footer;
-            margin-header: 5mm;
-            margin-footer: 5mm;
+        }
+
+        .mpdf_toc {
+            font-size: 0.8rem;
         }
 
         span.mpdf_toc_t_level_0 {
             font-family: 'Baskerville';
-            font-size: 1rem;
             font-weight: normal;
         }
 
         section {
             font-family: 'Baskerville';
-            font-size: 1rem;
+            font-size: 0.8rem;
         }
 
         h1 {
@@ -38,7 +41,7 @@
 
         .first-letter {
             font-weight: bold;
-            font-size: 2rem;
+            font-size: 1.5rem;
             color: #0C345C;
         }
     </style>
@@ -49,7 +52,7 @@
     </htmlpageheader> --}}
 
     <htmlpagefooter name="page-footer">
-        <div style="font-size:12pt;text-align:center">{PAGENO}</div>
+        <div style="font-size:0.8rem;text-align:center">{PAGENO}</div>
     </htmlpagefooter>
 
     <tocpagebreak links="on" toc-prehtml="&lt;h1&gt;Table of Contents&lt;/h1&gt;"/>
@@ -58,10 +61,11 @@
     @if(!$loop->first)
         <pagebreak/>
     @endif
+    <tocentry content="{{ $chapter->title }}"/><bookmark content="{{ $chapter->title }}"/>
     <article>
-        <h1><tocentry content="{{ $chapter->title }}"/><bookmark content="{{ $chapter->title }}"/>{{ $chapter->title }}</h1>
+        <h1>{{ $chapter->title }}</h1>
         <div style="text-align:center;padding:1rem 0">
-            <svg viewBox="0 0 375 25" xmlns="http://www.w3.org/2000/svg">
+            <svg viewBox="0 0 375 25" xmlns="http://www.w3.org/2000/svg" width="100%">
                 <g stroke="#999" fill="#999">
                     <path d="m203.06 12.22c6.26-1.7 8.3-4.34 11.94-4.34 3.99 0 4.67 4.34 4.67 4.34h-16.61z"/>
                     <path d="m203.06 12.22c6.26 1.7 8.3 4.34 11.94 4.34 3.99 0 4.67-4.34 4.67-4.34h-16.61z"/>

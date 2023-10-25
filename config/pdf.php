@@ -1,8 +1,8 @@
 <?php
 
 return [
-    'mode' => '',
-    'format' => 'A4',
+    'mode' => 'utf-8',
+    'format' => [159, 235],
     'default_font_size' => '12',
     'default_font' => 'sans-serif',
     'margin_left' => 10,

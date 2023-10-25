@@ -190,23 +190,23 @@ class StoryController extends Controller
             ->orderBy('order', 'asc')
             ->lazy();
 
-        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
+        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->download($story->title.'.pdf');
     }
 
     public function bookCover(Story $story)
     {
-        ini_set("pcre.backtrack_limit", "5000000");
+        ini_set('pcre.backtrack_limit', '5000000');
         abort_unless((bool) $cover = $story->cover, 404);
         /** @var Media $cover */
         $image = Image::make($cover->stream());
 
-        $spineWidth = (($story->pages > 32 ? $story->pages : 32) / 444 + 0.06) * 96;
+        $spineWidth = (($story->pages > 32 ? $story->pages : 32) / 444 + 0.06) * 25.4;
 
         return Pdf::loadView('pdf.book-cover', [
             'cover' => $image->encode('data-url'),
-            'width' => 2 * $image->width() + $spineWidth,
-            'height' => $image->height(),
-        ])->stream();
+            'width' => 2 * 158.75 + $spineWidth,
+            'height' => 235,
+        ])->download();
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)

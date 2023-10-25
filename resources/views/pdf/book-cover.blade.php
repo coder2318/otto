@@ -2,10 +2,9 @@
 <head>
     <style>
         @page {
-            margin: 12px;
-            sheet-size: {{ $width }}px {{ $height }}px;
+            margin: 0.125in;
+            sheet-size: {{ $width }}mm {{ $height }}mm;
         }
-        body { margin: 12px; }
     </style>
 </head>
 <body>
