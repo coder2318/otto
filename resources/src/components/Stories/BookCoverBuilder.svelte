@@ -1,5 +1,8 @@
 <script lang="ts">
     import { toBlob } from 'html-to-image'
+    import { draggable } from '@/service/svelte'
+    import { svgTextWrap } from '@/service/helpers'
+    import { onMount } from 'svelte'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
@@ -11,18 +14,21 @@
     $: sizes = getSize(pages)
     $: updateSvg(parameters)
 
+    let dragHooks = []
+
     function updateSvg(parameters) {
         if (!svg) return
 
+        dragHooks.forEach((element) => element.destroy())
+        dragHooks = []
+
         Object.entries(parameters).forEach(([key, value]) => {
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
-                (node: HTMLElement) => {
+                (node: HTMLElement | SVGElement) => {
                     switch (node.dataset[key]) {
                         case 'innerText':
-                            node.innerHTML = value as string
-                            break
                         case 'innerHTML':
-                            node.innerHTML = value as string
+                            svgTextWrap(node as SVGTextElement, value as string, sizes.width)
                             break
                         default:
                             node.setAttribute(node.dataset[key], value as string)
@@ -31,7 +37,21 @@
                 }
             )
         })
+
+        svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
+            dragHooks.push(draggable(node, svg as SVGElement))
+        })
     }
+
+    onMount(() => {
+        svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
+            dragHooks.push(draggable(node, svg as SVGElement))
+        })
+
+        return () => {
+            dragHooks.forEach((element) => element.destroy())
+        }
+    })
 
     export async function getFile() {
         return await toBlob(svg as HTMLElement, {
@@ -104,3 +124,9 @@
         {@html template.front ?? ''}
     </svg>
 </svg>
+
+<style lang="scss">
+    :global([data-draggable]) {
+        @apply cursor-move;
+    }
+</style>

@@ -91,7 +91,7 @@
 
     <main class="container mx-auto mb-16 flex flex-col gap-6 px-4">
         {#each timelines.data as timeline (timeline.id)}
-            <div class="otto-colapse collapse-arrow collapse bg-base-200">
+            <div class="otto-colapse collapse collapse-arrow bg-base-200">
                 <input type="checkbox" />
                 <div class="collapse-title text-xl font-medium">
                     {timeline.title}

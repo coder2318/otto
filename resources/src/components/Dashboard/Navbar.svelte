@@ -72,7 +72,7 @@
                 <img src={settingsIcon} alt="Figure" />
             </a>
 
-            <div class="dropdown-end dropdown leading-none">
+            <div class="dropdown dropdown-end leading-none">
                 <label tabindex="-1" class="avatar btn btn-circle btn-ghost" for="dropdown">
                     <div class="w-full rounded-full">
                         {#if user.avatar}

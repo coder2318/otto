@@ -17,10 +17,6 @@ fields:
     key: title
     type: text
 
-  - name: Spine
-    key: spine
-    type: text
-
   - name: Text Color
     key: textColor
     type: color
@@ -56,29 +52,29 @@ front: |
     @import url('https://fonts.cdnfonts.com/css/lunchtype22');
   </style>
   <text
-    x="50%" y="75"
+    x="288" y="75"
     font-size="3rem"
     text-anchor="middle"
     font-family="Corbel"
     text-shadow="#FC0 1px 0 10px"
     data-author="innerText"
     data-text-color="fill"
+    data-dragable="true"
     letter-spacing="0.1em"
     fill="black"
     style="text-transform:uppercase"
   >Author</text>
-  <g transform="translate(0 -50)">
-    <text
-      x="50%" y="100%"
-      font-size="5rem"
-      text-anchor="middle"
-      data-title="innerText"
-      data-text-color="fill"
-      text-shadow="#FC0 1px 0 10px"
-      font-family="Lunchtype22"
-      font-weight="bold"
-      letter-spacing="0.1em"
-      fill="black"
-      style="text-transform:uppercase"
-    >Title</text>
-  </g>
+  <text
+    x="288" y="814"
+    font-size="5rem"
+    text-anchor="middle"
+    data-title="innerText"
+    data-text-color="fill"
+    data-draggable="true"
+    text-shadow="#FC0 1px 0 10px"
+    font-family="Lunchtype22"
+    font-weight="bold"
+    letter-spacing="0.1em"
+    fill="black"
+    style="text-transform:uppercase"
+  >Title</text>

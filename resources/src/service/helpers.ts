@@ -64,3 +64,32 @@ export function srtRandom(length: number): string {
     }
     return result
 }
+
+export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number) {
+    const words = text.split(' ').filter((w) => w)
+    const test = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
+    node.innerHTML = ''
+    node.appendChild(test)
+    const lines = []
+    let line = ''
+
+    words.forEach((word) => {
+        const testLine = line + word + ' '
+        test.innerHTML = testLine
+
+        if (test.getBBox().width <= maxWidth) {
+            line = testLine
+        } else {
+            lines.push(line.trim())
+            line = word + ' '
+        }
+    })
+
+    lines.push(line.trim())
+
+    node.innerHTML = lines.reduce(
+        (a, line) =>
+            a + `<tspan x="${node.getAttributeNS(null, 'x')}" dy="${a ? test.getBBox().height : 0}">${line}</tspan>`,
+        ''
+    )
+}

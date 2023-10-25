@@ -97,7 +97,7 @@
 
             <!-- Slider -->
             <div
-                class="carousel-center carousel rounded-box space-x-4 overflow-visible lg:inline-flex"
+                class="carousel carousel-center rounded-box space-x-4 overflow-visible lg:inline-flex"
                 bind:this={carousel}
             >
                 {#each elements as element (element.key)}
