@@ -59,7 +59,7 @@ front: |
     text-shadow="#FC0 1px 0 10px"
     data-author="innerText"
     data-text-color="fill"
-    data-dragable="true"
+    data-draggable="true"
     letter-spacing="0.1em"
     fill="black"
     style="text-transform:uppercase"
