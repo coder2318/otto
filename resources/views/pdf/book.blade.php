@@ -59,8 +59,7 @@
         <pagebreak/>
     @endif
     <article>
-        <tocentry content="{{ $chapter->title }}"/>
-        <h1>{{ $chapter->title }}</h1>
+        <h1><tocentry content="{{ $chapter->title }}"/><bookmark content="{{ $chapter->title }}"/>{{ $chapter->title }}</h1>
         <div style="text-align:center;padding:1rem 0">
             <svg viewBox="0 0 375 25" xmlns="http://www.w3.org/2000/svg">
                 <g stroke="#999" fill="#999">

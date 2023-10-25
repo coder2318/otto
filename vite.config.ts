@@ -79,6 +79,10 @@ export default ({ mode }) => {
                         src: path.resolve(__dirname, 'resources/assets'),
                         dest: path.resolve(__dirname, 'public/build'),
                     },
+                    {
+                        src: path.resolve(__dirname, 'resources/pdf'),
+                        dest: path.resolve(__dirname, 'public'),
+                    }
                 ],
             }),
             eslint({
