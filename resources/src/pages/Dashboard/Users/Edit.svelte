@@ -7,7 +7,6 @@
 <script lang="ts">
     import { useForm } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
-    import PageHeader from '@/components/Static/PageHeader.svelte'
     import { fade } from 'svelte/transition'
     import type { FilePond as FilePondType, FilePondFile } from 'filepond'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'

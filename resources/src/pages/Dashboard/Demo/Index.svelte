@@ -1,6 +1,7 @@
 <script context="module" lang="ts">
     import Base from '@/components/Layouts/Base.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
+    import { strRandom } from '@/service/helpers'
     export const layout = [Base, Focus]
 </script>
 
@@ -30,7 +31,10 @@
                 <div class="card-body gap-4">
                     <figure class="rounded-xl">
                         <img
-                            src={question.cover ?? 'https://placehold.co/600x400?text=Your+cover+should+be+there'}
+                            src={question.cover ??
+                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${strRandom(
+                                    10
+                                )}`}
                             alt=""
                         />
                     </figure>

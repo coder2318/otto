@@ -17,7 +17,7 @@
     import { faClose, faArrowDownLong, faTrash } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
     import { onMount } from 'svelte'
-    import { srtRandom } from '@/service/helpers'
+    import { strRandom } from '@/service/helpers'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -238,7 +238,7 @@
                     <figure class="mb-2 max-h-[300px]">
                         <img
                             src={chapter.cover ??
-                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${srtRandom(
+                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${strRandom(
                                     10
                                 )}`}
                             alt={chapter.title}

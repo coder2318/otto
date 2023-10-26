@@ -61,7 +61,7 @@ export function draggable(node: SVGElement, root: SVGElement) {
         })
     }
 
-    function stop(event: MouseEvent) {
+    function stop() {
         selected = null
         offset = null
     }

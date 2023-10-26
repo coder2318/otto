@@ -51,7 +51,7 @@
         </div>
 
         {#each questions as { question, answer }}
-            <div class="collapse-arrow group collapse rounded-xl">
+            <div class="group collapse collapse-arrow rounded-xl">
                 <input type="radio" name="faq-accordion" class="peer" />
 
                 <div class="collapse-title bg-neutral-focus font-serif text-primary peer-checked:bg-neutral">

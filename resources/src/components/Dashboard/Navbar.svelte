@@ -4,9 +4,8 @@
     import LogoIcon from '../SVG/logo-icon.svg.svelte'
     import User from '../SVG/user.svg.svelte'
     import Fa from 'svelte-fa'
-    import { faSearch, faBell, faCog } from '@fortawesome/free-solid-svg-icons'
+    import { faSearch } from '@fortawesome/free-solid-svg-icons'
     import { opened, count } from '../Notifications.svelte'
-    import indicatorIcon from '@/assets/img/navbar-icons/indicator.svg'
     import settingsIcon from '@/assets/img/navbar-icons/settings.svg'
 
     $: user = $page.props?.auth?.user?.data as App.User | null
