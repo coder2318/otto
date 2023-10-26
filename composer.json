@@ -9,6 +9,7 @@
     "license": "MIT",
     "require": {
         "php": "^8.1",
+        "app/book-cover-params": "@dev",
         "carlos-meneses/laravel-mpdf": "^2.1",
         "ebess/advanced-nova-media-library": "^4.1",
         "google/apiclient": "^2.15",
@@ -46,8 +47,7 @@
         "staudenmeir/belongs-to-through": "^2.13",
         "tightenco/nova-stripe": "^2.0",
         "vyuldashev/nova-permission": "^3.2",
-        "yooper/php-text-analysis": "^1.9",
-        "app/book-cover-params": "@dev"
+        "yooper/php-text-analysis": "^1.9"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.13",

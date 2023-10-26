@@ -18,11 +18,6 @@ class Timeline extends Model
         'story_type_id',
     ];
 
-    public function user(): BelongsTo
-    {
-        return $this->belongsTo(User::class);
-    }
-
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);

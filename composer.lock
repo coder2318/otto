@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "17aeabe0cef3fb93d0750e56c12a7bd3",
+    "content-hash": "0dc28766d9e627c1edfc01bb24eabfb7",
     "packages": [
         {
             "name": "app/book-cover-params",
