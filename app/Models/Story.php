@@ -11,6 +11,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mccarlosen\LaravelMpdf\LaravelMpdf;
 use Spatie\MediaLibrary\HasMedia;
@@ -21,7 +22,7 @@ use Spatie\MediaLibrary\InteractsWithMedia;
  */
 class Story extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Searchable;
 
     protected $fillable = [
         'title',
@@ -79,5 +80,13 @@ class Story extends Model implements HasMedia
 
             return $pdf->getMpdf()->page; // @phpstan-ignore-line
         })->shouldCache();
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+        ];
     }
 }

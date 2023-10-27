@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 use Znck\Eloquent\Relations\BelongsToThrough;
@@ -15,7 +16,7 @@ use Znck\Eloquent\Traits\BelongsToThrough as HasBelongsToThrough;
 
 class Chapter extends Model implements HasMedia
 {
-    use HasBelongsToThrough, HasFactory, InteractsWithMedia;
+    use HasBelongsToThrough, HasFactory, InteractsWithMedia, Searchable;
 
     protected $fillable = [
         'title',
@@ -68,5 +69,14 @@ class Chapter extends Model implements HasMedia
     public function attachments(): MorphMany
     {
         return $this->media()->where('collection_name', 'attachments');
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'title' => $this->title,
+            'content' => $this->content,
+        ];
     }
 }
