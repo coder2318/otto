@@ -16,10 +16,10 @@
                 Every life is a story. Begin
                 <br class="hidden sm:inline" />
                 telling
-                <span class="italic text-secondary">yours with Otto</span>.
+                <span class="italic text-secondary">yours with Ottostory</span>.
             </h1>
 
-            <a use:inertia href="/stories" class="btn btn-secondary h-16 rounded-full px-10 text-xl"> Start Writing </a>
+            <a use:inertia href="/stories" class="otto-btn-secondary"> Start Writing </a>
         </div>
     </div>
 </header>

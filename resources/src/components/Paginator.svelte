@@ -20,7 +20,7 @@
 </script>
 
 {#if meta}
-    <div class="join {className}" {...$$restProps}>
+    <div class="otto-pagination join {className}" {...$$restProps}>
         {#each meta?.links as link}
             <a href={link.url ?? '#'} class="btn join-item {linkStyle(link)}" use:inertia>
                 {@html link.label}

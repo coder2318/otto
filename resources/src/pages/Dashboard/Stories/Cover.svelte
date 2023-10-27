@@ -14,9 +14,10 @@
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
-    import Fa from 'svelte-fa'
-    import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
     import { fileToBase64 } from '@/service/helpers'
+    import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
+    import bookCoverIllustration2 from '@/assets/img/book-cover-illustration-2.svg'
+    import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -93,108 +94,107 @@
 </section>
 
 <form on:submit|preventDefault={submit} in:fade id="book-cover">
-    <section class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 md:grid-cols-2">
-        <div class="card bg-base-200">
-            <div class="card-body gap-4">
-                {#if editing}
-                    {#each template.data.fields as field}
-                        <div class="form-control">
-                            <label class="label" for={field.key}>
-                                <span class="label-text">{field.name}</span>
-                            </label>
-                            {#if field.type === 'text'}
-                                <textarea
-                                    class="textarea textarea-bordered"
-                                    bind:value={parameters[field.key]}
-                                    name={field.key}
-                                    placeholder={field.name}
-                                    rows="1"
-                                />
-                            {:else if field.type === 'color'}
-                                <input
-                                    class="input input-bordered w-full"
-                                    bind:value={parameters[field.key]}
-                                    type="color"
-                                    name={field.key}
-                                    placeholder={field.name}
-                                />
-                            {:else if field.type === 'image' && editor}
-                                <div class="rounded-lg border border-base-content/20">
-                                    <FilePond
-                                        name={field.key}
-                                        server={false}
-                                        bind:pond={filepond}
-                                        onpreparefile={async (file, blob) =>
-                                            (parameters[field.key] = await fileToBase64(blob))}
-                                        onremovefile={() => (parameters[field.key] = null)}
-                                        imageEditEditor={editor}
-                                        allowImageEdit={true}
-                                        allowMultiple={false}
-                                        imageEditInstantEdit={true}
-                                        styleImageEditButtonEditItemPosition="top right"
-                                        imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                                    />
-                                </div>
-                            {/if}
-                        </div>
-                    {/each}
-                {:else}
-                    <div class="flex h-full flex-col items-center justify-center gap-4">
-                        <button
-                            type="button"
-                            class="max-w-96 btn btn-primary w-full rounded-full"
-                            on:click={() => (editing = true)}
-                        >
-                            Change Cover
-                        </button>
-                        <a
-                            use:inertia
-                            href="/stories/{story.data.id}/order"
-                            class="max-w-96 btn btn-primary btn-outline w-full rounded-full"
-                        >
-                            Order Book
-                        </a>
-                    </div>
-                {/if}
-            </div>
-        </div>
-        <div class="card border-2 border-base-300">
-            <div class="card-body max-h-screen items-center justify-center gap-4">
-                <BookCoverBuilder
-                    bind:this={builder}
-                    class="select-none {!editing ? 'hidden' : ''}"
-                    pages={story.data.pages ?? 0}
-                    {parameters}
-                    template={template.data}
-                />
-                {#if !editing}
-                    <div class="flex h-full items-center justify-center">
-                        <img src={story.data.cover} alt="" class="h-full w-full object-cover" />
-                    </div>
-                {/if}
-            </div>
-        </div>
-    </section>
+    <section class="bookCover">
+        <div class="otto-container">
+            <div class="wrap">
+                <div class="bookCover__block">
+                    <img class="bookCover-illustration-1" src={bookCoverIllustration1} alt="Illustration" />
+                    <img class="bookCover-illustration-2" src={bookCoverIllustration2} alt="Illustration" />
+                    {#if editing}
+                        {#each template.data.fields as field}
+                            <div class="form-control">
+                                <label class="label" for={field.key}>
+                                    <span class="label-text">{field.name}</span>
+                                </label>
 
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a href="/stories/{story.data.id}" class="btn btn-neutral rounded-full pl-0" use:inertia>
-            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Back
-        </a>
-        {#if editing}
-            <div class="flex gap-4">
-                <a href="/stories/{story.data.id}/covers" use:inertia class="btn btn-neutral rounded-full">
-                    More Covers
-                </a>
-                <button class="btn btn-secondary rounded-full pr-0" disabled={loading} type="submit">
-                    {#if loading}<span class="loading loading-spinner"></span>{/if}
-                    Save & Next
-                    <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
-                </button>
+                                {#if field.type === 'text'}
+                                    <textarea
+                                        class="textarea textarea-bordered"
+                                        bind:value={parameters[field.key]}
+                                        name={field.key}
+                                        placeholder={field.name}
+                                        rows="1"
+                                    />
+                                {:else if field.type === 'color'}
+                                    <input
+                                        class="input input-bordered w-full"
+                                        bind:value={parameters[field.key]}
+                                        type="color"
+                                        name={field.key}
+                                        placeholder={field.name}
+                                    />
+                                {:else if field.type === 'image' && editor}
+                                    <div class="">
+                                        <FilePond
+                                            name={field.key}
+                                            server={false}
+                                            bind:pond={filepond}
+                                            onpreparefile={async (file, blob) =>
+                                                (parameters[field.key] = await fileToBase64(blob))}
+                                            onremovefile={() => (parameters[field.key] = null)}
+                                            imageEditEditor={editor}
+                                            allowImageEdit={true}
+                                            allowMultiple={false}
+                                            imageEditInstantEdit={true}
+                                            styleImageEditButtonEditItemPosition="top right"
+                                            imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                        />
+                                    </div>
+                                {/if}
+                            </div>
+                        {/each}
+                    {:else}
+                        <div class="bookCover__block_buttons">
+                            <button type="button" class="otto-btn-primary otto-btn" on:click={() => (editing = true)}>
+                                Change Cover
+                            </button>
+                            <a use:inertia href="/stories/{story.data.id}/order" class="otto-btn-outline otto-btn">
+                                Order Book
+                            </a>
+                        </div>
+                    {/if}
+                </div>
+                <div class="bookCover__cover">
+                    <BookCoverBuilder
+                        bind:this={builder}
+                        class="select-none {!editing ? 'hidden' : ''}"
+                        pages={story.data.pages ?? 0}
+                        {parameters}
+                        template={template.data}
+                    />
+                    {#if !editing}
+                        <div class="flex h-full items-center justify-center">
+                            <img src={story.data.cover} alt="" class="h-full w-full object-cover" />
+                        </div>
+                    {/if}
+                </div>
             </div>
-        {:else}
-            <a href="/stories/{story.data.id}/order" class="btn btn-secondary rounded-full" use:inertia> Continue </a>
-        {/if}
+
+            <div class="bookCover__buttons">
+                <a href="/stories/{story.data.id}" class="otto-btn-with-arrow-secondary" use:inertia>
+                    <span class="icon">
+                        <BtnArrow />
+                    </span>
+                    <p>Back</p>
+                </a>
+                {#if editing}
+                    <div class="flex">
+                        <a href="/stories/{story.data.id}/covers" use:inertia class="otto-btn-primary"> More Covers </a>
+                        <button class="otto-btn-with-arrow" disabled={loading} type="submit">
+                            {#if loading}<span class="loading loading-spinner"></span>{/if}
+                            <p>Save & Next</p>
+                            <span class="icon">
+                                <BtnArrow />
+                            </span>
+                        </button>
+                    </div>
+                {:else}
+                    <a href="/stories/{story.data.id}/order" class="btn btn-secondary rounded-full" use:inertia>
+                        Continue
+                    </a>
+                {/if}
+            </div>
+        </div>
     </section>
 </form>
 
@@ -207,3 +207,153 @@
         </div>
     </div>
 </dialog>
+
+<style lang="scss">
+    .bookCover {
+        padding-bottom: 100px;
+
+        &-illustration-1 {
+            position: absolute;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+        }
+
+        &-illustration-2 {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+        }
+
+        .wrap {
+            display: flex;
+            width: 100%;
+            margin-bottom: 34px;
+        }
+
+        &__block {
+            width: 100%;
+            background: #eae4dc;
+            border-radius: 24px;
+            max-width: 516px;
+            margin-right: 24px;
+            padding: 70px 50px 90px;
+            position: relative;
+            overflow: hidden;
+
+            .form-control {
+                margin-bottom: 25px;
+
+                &:last-child {
+                    margin-bottom: 0;
+                }
+
+                .label {
+                    padding: 0;
+                    &-text {
+                        font-size: 16px;
+                        color: #333;
+                        line-height: 1;
+                        margin-bottom: 6px;
+                    }
+                }
+
+                :global(.filepond--drop-label) {
+                    background-color: transparent;
+                    border: 1px dashed #4d4d4d;
+                }
+
+                input {
+                    height: 60px;
+                    font-size: 16px;
+                    background: #fff;
+                    color: #666666;
+                    border: 1px solid #c8b69d;
+
+                    &::placeholder {
+                        color: #c8b69d;
+                    }
+
+                    &:focus {
+                        outline: none;
+                    }
+                }
+
+                textarea {
+                    background-color: #fff;
+                    border: 1px solid #c8b69d;
+                    min-height: 60px;
+                    box-shadow: 0 2px 2px #dbd1c2;
+                    border-radius: 8px;
+                    padding-top: 16px;
+                    &:focus {
+                        outline: none;
+                    }
+                    &::placeholder {
+                        color: #c8b69d;
+                    }
+                }
+            }
+
+            &_buttons {
+                display: flex;
+                flex-direction: column;
+                width: 100%;
+                z-index: 2;
+                padding-top: 60px;
+                .otto-btn {
+                    width: 100%;
+                    margin-bottom: 20px;
+                }
+            }
+        }
+
+        &__cover {
+            border: 3px solid #eae4dc;
+            border-radius: 24px;
+            width: 100%;
+            padding: 60px 120px;
+        }
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+
+            .otto-btn-primary {
+                height: 54px;
+                margin-right: 24px;
+                padding: 0 30px;
+            }
+        }
+    }
+
+    @media (max-width: 1199px) {
+        .bookCover {
+            &__block {
+                padding: 70px 20px 90px;
+            }
+
+            &__cover {
+                padding: 60px 50px;
+            }
+        }
+    }
+    @media (max-width: 767px) {
+        .bookCover {
+            .wrap {
+                flex-direction: column;
+            }
+            &__buttons {
+                flex-direction: column;
+                align-items: flex-start;
+
+                .otto-btn-with-arrow-secondary {
+                    margin-top: 20px;
+                    order: 2;
+                }
+            }
+        }
+    }
+</style>

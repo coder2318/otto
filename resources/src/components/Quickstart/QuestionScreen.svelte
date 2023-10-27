@@ -27,24 +27,80 @@
     }
 </script>
 
-<div class="flex h-full w-full flex-col items-center justify-center" in:fade>
+<div class="questions flex h-full w-full flex-col items-center justify-center" in:fade>
     <div class="flex flex-1 flex-col items-center justify-center">
-        <h1 class="text-center text-2xl text-primary md:text-4xl lg:text-6xl">
+        <h1 class="fz_h2 text-center text-primary">
             {question.question}
         </h1>
-        <div class="mt-8 flex gap-4">
+        <div class="wrap mt-8 flex gap-4">
             {#each question.answers as answer (answer)}
                 <button
                     on:click={() => toggleAnswer(answer)}
-                    class="btn btn-primary btn-outline btn-lg w-40 rounded-full {answer === $form.quiz?.[question.id]
-                        ? 'btn-active'
+                    class="questions-item font-serif {answer === $form.quiz?.[question.id]
+                        ? 'questions-item-active'
                         : ''}">{answer}</button
                 >
             {/each}
         </div>
-    </div>
-    <div class="mb-4 flex items-center justify-center gap-4">
-        <button class="btn btn-primary w-40" on:click={() => dispatch('back')}>Back</button>
-        <button class="btn btn-primary w-40" on:click={next}>Continue</button>
+        <div class="buttons">
+            <button class="otto-btn-outline otto-btn" on:click={() => dispatch('back')}>Back</button>
+            <button class="otto-btn-primary otto-btn" on:click={next}>Continue</button>
+        </div>
     </div>
 </div>
+
+<style lang="scss">
+    .questions {
+        .wrap {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .buttons {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 36px;
+        }
+        .otto-btn {
+            height: 48px;
+            font-size: 16px;
+            margin: 6px 6px;
+            width: 200px;
+
+            @media (max-width: 767px) {
+                width: 130px;
+            }
+        }
+
+        &-item {
+            display: flex;
+            align-items: center;
+            height: 64px;
+            border: 1px solid #0c345c;
+            padding: 0 32px;
+            border-radius: 40px;
+            font-size: 24px;
+            line-height: 1;
+            color: #333333;
+            transition: 0.3s;
+            padding-bottom: 3px;
+            @media (max-width: 767px) {
+                height: 48px;
+                padding: 0 24px;
+                font-size: 16px;
+            }
+
+            &:hover {
+                background: #0c345c;
+                color: #fff;
+            }
+
+            &-active {
+                background: #0c345c;
+                color: #fff;
+            }
+        }
+    }
+</style>

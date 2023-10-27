@@ -251,6 +251,10 @@
                 z-index: 10;
             }
 
+            &_right {
+                width: 100%;
+            }
+
             &_row {
                 display: flex;
                 align-items: center;

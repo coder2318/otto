@@ -81,3 +81,19 @@
         {/each}
     </ul>
 </div>
+
+<style lang="scss">
+    .steps {
+        .step {
+            min-width: 40px;
+            &:after {
+                content: '';
+                width: 10px;
+                height: 10px;
+            }
+            &:before {
+                height: 2px;
+            }
+        }
+    }
+</style>

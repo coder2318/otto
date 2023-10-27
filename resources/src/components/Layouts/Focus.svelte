@@ -1,11 +1,11 @@
 <script lang="ts">
-    import womanIllustration from '@/assets/img/woman-illustration.svg'
-    import manIllustration from '@/assets/img/man-illustration.svg'
+    import womanIllustration from '@/assets/img/woman-illustration.png'
+    import manIllustration from '@/assets/img/man-illustration.png'
     import whiteOrangeFigure from '@/assets/img/white-orange-figure.svg'
     import yellowWhiteFigure from '@/assets/img/yellow-white-figure.svg'
 </script>
 
-<section class="focusSection flex flex-col">
+<section class="regSection flex flex-col">
     <div class="otto-container">
         <div class="blockFocus relative flex flex-1 rounded-3xl bg-base-200">
             <slot />
@@ -18,15 +18,24 @@
 </section>
 
 <style lang="scss">
-    .focusSection {
+    .regSection {
+        padding: 70px 50px;
+        height: 100vh;
+
+        @media (max-width: 1280px) {
+            padding: 40px 20px;
+        }
+
         .otto-container {
             margin: 0 auto;
             width: 100%;
             max-width: 100%;
+            height: inherit;
+            padding: 0;
         }
         .blockFocus {
-            min-height: 950px;
-            padding: 20px;
+            padding: 20px 40px;
+            height: 100%;
             @media (max-width: 1280px) {
                 min-height: 800px;
             }
@@ -37,8 +46,9 @@
         }
         .womanIllustration {
             position: absolute;
-            left: 130px;
-            top: -110px;
+            left: -30px;
+            top: -52px;
+            width: 175px;
             @media (max-width: 1280px) {
                 left: 50px;
                 top: -80px;
@@ -52,8 +62,8 @@
         }
         .manIllustration {
             position: absolute;
-            right: 75px;
-            bottom: -95px;
+            right: -21px;
+            bottom: -37px;
             @media (max-width: 1280px) {
                 right: 45px;
                 bottom: -45px;
@@ -67,8 +77,9 @@
         }
         .whiteOrangeFigure {
             position: absolute;
-            bottom: -15px;
-            left: -133px;
+            bottom: 4px;
+            left: 0px;
+            width: 175px;
             @media (max-width: 1280px) {
                 left: -83px;
                 bottom: -15px;
@@ -81,8 +92,9 @@
         }
         .yellowWhiteFigure {
             position: absolute;
-            top: 60px;
-            right: 20px;
+            top: 20px;
+            right: 10px;
+            width: 240px;
             @media (max-width: 1280px) {
                 top: 30px;
                 right: 10px;
