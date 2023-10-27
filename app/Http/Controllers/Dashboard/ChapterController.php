@@ -193,6 +193,9 @@ class ChapterController extends Controller
 
         return Inertia::render('Dashboard/Chapters/Create', [
             'story' => fn () => StoryResource::make($story),
+            'timelines' => fn () => TimelineResource::collection(
+                $story->storyType->timelines()->get(['id', 'title'])
+            ),
         ]);
     }
 
@@ -226,7 +229,11 @@ class ChapterController extends Controller
             $chapter->addMediaFromRequest('cover')->toMediaCollection('cover');
         }
 
-        return redirect()->route('dashboard.chapters.edit', compact('story', 'chapter'))->with('message', 'Chapter created successfully!');
+        if ($request->redirect) {
+            return redirect()->route($request->redirect, compact('chapter'));
+        }
+
+        return redirect()->route('dashboard.chapters.edit', compact('chapter'));
     }
 
     public function show(Chapter $chapter)

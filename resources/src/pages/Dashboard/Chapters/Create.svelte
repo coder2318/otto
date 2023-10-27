@@ -12,18 +12,26 @@
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
 
     export let story: { data: App.Story }
+    export let timelines: { data: App.Timeline[] }
 
     let query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
 
     let el: HTMLFormElement
     const form = useForm({
         title: '',
-        timeline_id: query.timeline_id,
+        timeline_id: query.timeline_id ?? null,
     })
+
+    const getRedirect = () =>
+        ({
+            record: 'dashboard.chapters.record',
+            upload: 'dashboard.chapters.upload',
+            write: 'dashboard.chapters.write',
+        })[query.redirect] ?? null
 
     function submit() {
         $form.clearErrors()
-        $form.post(`/stories/${story.data.id}/chapters`)
+        $form.transform((data) => ({ ...data, redirect: getRedirect() })).post(`/stories/${story.data.id}/chapters`)
     }
 </script>
 
@@ -77,6 +85,29 @@
         </svg>
 
         <div class="card-body z-10 gap-4">
+            {#if !query.timeline_id}
+                <div class="form-control">
+                    <label class="label" for="timeline_id">
+                        <span class="label-text">Timeline</span>
+                    </label>
+                    <select
+                        bind:value={$form.timeline_id}
+                        class:select-error={$form.errors.timeline_id}
+                        class="select select-bordered select-ghost"
+                        name="timeline_id"
+                    >
+                        <option value={null} disabled>Select Timeline...</option>
+                        {#each timelines.data as timeline}
+                            <option value={timeline.id}>{timeline.title}</option>
+                        {/each}
+                    </select>
+                    {#if $form.errors.timeline_id}
+                        <span class="label-text-alt mt-1 text-left text-error">
+                            {$form.errors.timeline_id}
+                        </span>
+                    {/if}
+                </div>
+            {/if}
             <div class="form-control">
                 <textarea
                     class="textarea textarea-bordered textarea-ghost font-serif text-5xl"

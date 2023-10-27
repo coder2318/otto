@@ -102,7 +102,7 @@
         <div class="otto-container">
             <div class="wrap">
                 {#each timelines.data as timeline (timeline.id)}
-                    <div class="otto-colapse collapse-arrow collapse bg-base-200">
+                    <div class="otto-colapse collapse collapse-arrow bg-base-200">
                         <input type="checkbox" />
 
                         <div class="collapse-title">

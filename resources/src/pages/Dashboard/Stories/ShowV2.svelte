@@ -99,18 +99,30 @@
                     </p>
                 </div>
                 <div class="createStory__blocks">
-                    <div class="createStory__block">
+                    <a
+                        class="createStory__block"
+                        href="/stories/{story.data.id}/chapters/create?redirect=record"
+                        use:inertia
+                    >
                         <img src={createOttos1} alt="icon" />
                         <h3 class="createStory__block-title">Record your Answer</h3>
-                    </div>
-                    <div class="createStory__block">
+                    </a>
+                    <a
+                        class="createStory__block"
+                        href="/stories/{story.data.id}/chapters/create?redirect=upload"
+                        use:inertia
+                    >
                         <img src={createOttos2} alt="icon" />
                         <h3 class="createStory__block-title">Upload File</h3>
-                    </div>
-                    <div class="createStory__block">
+                    </a>
+                    <a
+                        class="createStory__block"
+                        href="/stories/{story.data.id}/chapters/create?redirect=write"
+                        use:inertia
+                    >
                         <img src={createOttos3} alt="icon" />
                         <h3 class="createStory__block-title">Type your Story</h3>
-                    </div>
+                    </a>
                 </div>
             </div>
         </div>
