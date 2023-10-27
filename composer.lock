@@ -98,16 +98,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.283.12",
+            "version": "3.283.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "0807e68e8ffaa57b86f9cfef3a3dfc411bff41e5"
+                "reference": "853eecfb21e8d623fa1b32e597b0a75912e8a404"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/0807e68e8ffaa57b86f9cfef3a3dfc411bff41e5",
-                "reference": "0807e68e8ffaa57b86f9cfef3a3dfc411bff41e5",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/853eecfb21e8d623fa1b32e597b0a75912e8a404",
+                "reference": "853eecfb21e8d623fa1b32e597b0a75912e8a404",
                 "shasum": ""
             },
             "require": {
@@ -187,9 +187,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.283.12"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.283.13"
             },
-            "time": "2023-10-25T20:08:04+00:00"
+            "time": "2023-10-26T18:14:40+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2547,16 +2547,16 @@
         },
         {
             "name": "inertiajs/inertia-laravel",
-            "version": "v0.6.10",
+            "version": "v0.6.11",
             "source": {
                 "type": "git",
                 "url": "https://github.com/inertiajs/inertia-laravel.git",
-                "reference": "609f960c9392e61f8f10418e333599cf1b12efbe"
+                "reference": "2a1e19048f95c0e4adb2b2733f9119e49c4fc09f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/609f960c9392e61f8f10418e333599cf1b12efbe",
-                "reference": "609f960c9392e61f8f10418e333599cf1b12efbe",
+                "url": "https://api.github.com/repos/inertiajs/inertia-laravel/zipball/2a1e19048f95c0e4adb2b2733f9119e49c4fc09f",
+                "reference": "2a1e19048f95c0e4adb2b2733f9119e49c4fc09f",
                 "shasum": ""
             },
             "require": {
@@ -2607,7 +2607,7 @@
             ],
             "support": {
                 "issues": "https://github.com/inertiajs/inertia-laravel/issues",
-                "source": "https://github.com/inertiajs/inertia-laravel/tree/v0.6.10"
+                "source": "https://github.com/inertiajs/inertia-laravel/tree/v0.6.11"
             },
             "funding": [
                 {
@@ -2615,7 +2615,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-09-13T02:24:55+00:00"
+            "time": "2023-10-27T10:59:02+00:00"
         },
         {
             "name": "intervention/image",
@@ -13295,16 +13295,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "13.2.6",
+            "version": "13.2.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "61eecbc7d902b576aad47a4c01454ef023f78450"
+                "reference": "b7b97aa2202fe36a7e3077f82201d02cee8c1c13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/61eecbc7d902b576aad47a4c01454ef023f78450",
-                "reference": "61eecbc7d902b576aad47a4c01454ef023f78450",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/b7b97aa2202fe36a7e3077f82201d02cee8c1c13",
+                "reference": "b7b97aa2202fe36a7e3077f82201d02cee8c1c13",
                 "shasum": ""
             },
             "require": {
@@ -13357,7 +13357,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-10-24T14:30:01+00:00"
+            "time": "2023-10-26T16:35:07+00:00"
         },
         {
             "name": "laravel-lang/publisher",
