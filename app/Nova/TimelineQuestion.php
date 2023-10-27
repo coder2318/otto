@@ -2,6 +2,8 @@
 
 namespace App\Nova;
 
+use App\ArrayOfStrings\ArrayOfStrings;
+use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
 use Laravel\Nova\Fields\ID;
@@ -45,9 +47,13 @@ class TimelineQuestion extends Resource
         return [
             ID::make()->sortable(),
 
-            Text::make('Context')->rules('required', 'max:254'),
+            Text::make('Context')->rules('max:254')->showOnIndex(false),
 
             Text::make('Question')->rules('required', 'max:254'),
+
+            Medialibrary::make('Covers')->accept('image/*')->showOnIndex(false),
+
+            ArrayOfStrings::make('Sub Questions')->showOnIndex(false),
 
             BelongsTo::make('Timeline', 'timeline', Timeline::class),
         ];

@@ -6,7 +6,9 @@
         "build": "NODE_OPTIONS=--max_old_space_size=2048 vite build",
         "lint": "eslint resources/src/**/*.{ts,js,svelte}",
         "build-book-cover-params": "cd nova-components/BookCoverParams && npm run dev",
-        "build-book-cover-params-prod": "cd nova-components/BookCoverParams && npm run prod"
+        "build-book-cover-params-prod": "cd nova-components/BookCoverParams && npm run prod",
+        "build-array-of-strings": "cd nova-components/ArrayOfStrings && npm run dev",
+        "build-array-of-strings-prod": "cd nova-components/ArrayOfStrings && npm run prod"
     },
     "devDependencies": {
         "@fortawesome/fontawesome-free": "^6.4.2",

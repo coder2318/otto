@@ -4,8 +4,44 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0dc28766d9e627c1edfc01bb24eabfb7",
+    "content-hash": "091c0cb666c6e80cacb47d4e9caa3fe4",
     "packages": [
+        {
+            "name": "app/array-of-strings",
+            "version": "dev-main",
+            "dist": {
+                "type": "path",
+                "url": "./nova-components/ArrayOfStrings",
+                "reference": "fa5e1a54ea1afeb6e2bdc2a33e25f737a74004ef"
+            },
+            "require": {
+                "php": "^7.3|^8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "App\\ArrayOfStrings\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "App\\ArrayOfStrings\\": "src/"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "description": "A Laravel Nova field.",
+            "keywords": [
+                "laravel",
+                "nova"
+            ],
+            "transport-options": {
+                "relative": true
+            }
+        },
         {
             "name": "app/book-cover-params",
             "version": "dev-main",
@@ -619,6 +655,69 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "dmitrybubyakin/nova-medialibrary-field",
+            "version": "4.0.5",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/dmitrybubyakin/nova-medialibrary-field.git",
+                "reference": "8de35ef3be1b718d76fe878a395c96f704a78f14"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/dmitrybubyakin/nova-medialibrary-field/zipball/8de35ef3be1b718d76fe878a395c96f704a78f14",
+                "reference": "8de35ef3be1b718d76fe878a395c96f704a78f14",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4|^8.0|^8.1",
+                "spatie/laravel-medialibrary": "^8.0|^9.0|^10.0"
+            },
+            "require-dev": {
+                "laravel/nova": "^4.0",
+                "nunomaduro/collision": "^4.0|^5.0|^6.0",
+                "orchestra/testbench": "^5.0|^6.0|^7.0",
+                "phpunit/phpunit": "^8.5|^9.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "DmitryBubyakin\\NovaMedialibraryField\\FieldServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/helpers.php"
+                ],
+                "psr-4": {
+                    "DmitryBubyakin\\NovaMedialibraryField\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Dmitry Bubyakin",
+                    "email": "dimabubyakin97@gmail.com"
+                }
+            ],
+            "description": "Laravel Nova field for managing the Spatie media library.",
+            "homepage": "https://github.com/dmitrybubyakin/nova-medialibrary-field",
+            "keywords": [
+                "laravel",
+                "medialibrary",
+                "nova"
+            ],
+            "support": {
+                "issues": "https://github.com/dmitrybubyakin/nova-medialibrary-field/issues",
+                "source": "https://github.com/dmitrybubyakin/nova-medialibrary-field/tree/4.0.5"
+            },
+            "time": "2023-10-05T05:50:05+00:00"
         },
         {
             "name": "doctrine/cache",
@@ -13295,16 +13394,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "13.2.7",
+            "version": "13.2.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "b7b97aa2202fe36a7e3077f82201d02cee8c1c13"
+                "reference": "f0a31ba2bca33483717c0cd98e6a049bdd14956a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/b7b97aa2202fe36a7e3077f82201d02cee8c1c13",
-                "reference": "b7b97aa2202fe36a7e3077f82201d02cee8c1c13",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/f0a31ba2bca33483717c0cd98e6a049bdd14956a",
+                "reference": "f0a31ba2bca33483717c0cd98e6a049bdd14956a",
                 "shasum": ""
             },
             "require": {
@@ -13357,7 +13456,7 @@
                     "type": "open_collective"
                 }
             ],
-            "time": "2023-10-26T16:35:07+00:00"
+            "time": "2023-10-27T14:43:32+00:00"
         },
         {
             "name": "laravel-lang/publisher",
@@ -16151,6 +16250,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "app/book-cover-params": 20,
+        "app/array-of-strings": 20,
         "laravel-shift/factory-generator": 20
     },
     "prefer-stable": true,

@@ -1,0 +1,16 @@
+<template>
+  <span>{{ fieldValue.join(', ') }}</span>
+</template>
+
+<script>
+export default {
+  props: ['resourceName', 'field'],
+
+  computed: {
+    fieldValue() {
+        console.log(this.field.value)
+      return this.field.displayedAs || this.field.value
+    },
+  }
+}
+</script>

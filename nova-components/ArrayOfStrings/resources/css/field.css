@@ -1,0 +1,30 @@
+
+.form-group-fields > * {
+    line-height: 1;
+    margin-top: 0;
+    margin-bottom: 0;
+}
+
+.form-group-fields > .delete-btn {
+    background: rgba(var(--colors-red-700));
+    color: white;
+    width: 2.25rem;
+    height: 2.25rem;
+    border-radius: 0.25rem;
+}
+
+.form-group-fields > :not(:first-child) {
+    border-left: none;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
+
+.form-group-fields > :not(:last-child) {
+    border-right: none;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.form-group-fields-add-btn {
+    background: rgba(var(--colors-primary-500));
+}
