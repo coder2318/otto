@@ -60,7 +60,7 @@
 
 <section class="container card mx-auto bg-neutral text-neutral-content">
     <div class="card-body items-center justify-center">
-        <h6 class="card-title">Contratulations!</h6>
+        <h6 class="card-title">Congratulations!</h6>
         <p>You've just completed your first chapter!</p>
         <div class="card-actions items-center justify-center">
             <a href="/demo/book" target="_blank" class="btn btn-primary">Download Preview</a>

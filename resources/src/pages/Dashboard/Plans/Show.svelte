@@ -96,7 +96,7 @@
                                 </div>
                             {/if}
                             <button type="submit" class="btn btn-secondary w-full rounded-full" disabled={processing}>
-                                {#if processing}<span class="loading loading-dots loading-md" />{/if} Parchase
+                                {#if processing}<span class="loading loading-dots loading-md" />{/if} Purchase
                             </button>
                         </div>
                     </form>
