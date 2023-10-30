@@ -14,6 +14,10 @@
     body:has(.drawer-toggle:checked) {
         @apply overflow-hidden;
     }
+
+    mark {
+        @apply bg-secondary text-secondary-content #{!important};
+    }
 }
 
 @layer components {
@@ -287,7 +291,7 @@
 
 .color-gray{
     color: #474747;
-    
+
 }
 
 .g-text{

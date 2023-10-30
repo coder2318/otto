@@ -1,6 +1,7 @@
 <?php
 
 use App\Features\BetaAccess;
+use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
@@ -21,6 +22,9 @@ Route::controller(StaticController::class)->group(function () {
         Route::post('/contact', 'postContact')->name('contact.store')->middleware('anti-spam');
     });
 });
+
+// Search
+Route::post('/search', GlobalSearchController::class)->name('search')->middleware('auth');
 
 // Auth
 Route::controller(SocialAuthController::class)

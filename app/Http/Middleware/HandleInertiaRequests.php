@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use App\Http\Resources\GuestResource;
 use App\Http\Resources\UserResource;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Inertia\Middleware;
 
 class HandleInertiaRequests extends Middleware
@@ -39,7 +40,7 @@ class HandleInertiaRequests extends Middleware
             $request->user('web')?->load('unreadNotifications');
         }
 
-        return array_merge(parent::share($request), [
+        $data = [
             'auth.user' => fn () => ($user = $request->user('web'))
                 ? UserResource::make($user->load('avatar'))
                 : null,
@@ -51,6 +52,12 @@ class HandleInertiaRequests extends Middleware
                 'status' => $request->session()->get('status'),
                 'error' => $request->session()->get('error'),
             ],
-        ]);
+        ];
+
+        if (Session::has('search')) {
+            $data['search'] = Session::get('search');
+        }
+
+        return array_merge(parent::share($request), $data);
     }
 }

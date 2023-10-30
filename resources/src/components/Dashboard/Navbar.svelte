@@ -3,34 +3,25 @@
     import Logo from '../SVG/logo.svg.svelte'
     import LogoIcon from '../SVG/logo-icon.svg.svelte'
     import User from '../SVG/user.svg.svelte'
-    import Fa from 'svelte-fa'
-    import { faSearch } from '@fortawesome/free-solid-svg-icons'
     import { opened, count } from '../Notifications.svelte'
     import settingsIcon from '@/assets/img/navbar-icons/settings.svg'
+    import Search from './Search.svelte'
 
     $: user = $page.props?.auth?.user?.data as App.User | null
 </script>
 
-<nav class="navbar sticky top-0 z-20 bg-primary text-primary-content">
+<nav class="navbar sticky top-0 z-20 bg-primary px-5 py-4 text-primary-content md:px-12">
     <div class="navbar-start">
-        <a class="btn-logo" href="/" use:inertia>
+        <a class="relative block h-14 w-fit" href="/" use:inertia>
             <Logo class="hidden h-full md:block" />
             <LogoIcon class="h-full md:hidden" />
         </a>
     </div>
-    <div class="navbar-end flex">
-        <!-- Search -->
-        <div class="form-control relative">
-            <Fa icon={faSearch} class="absolute left-4 top-1/2 -translate-y-1/2" />
-            <input
-                type="text"
-                placeholder="Search"
-                class="search input input-ghost rounded-full border-neutral pl-10"
-            />
-        </div>
+    <div class="navbar-end flex gap-4">
+        <Search />
         <!-- Indicator -->
         {#if user}
-            <div class="indicator">
+            <div class="indicator transition duration-300">
                 {#if $count}
                     <span class="badge indicator-item badge-accent right-2 top-2 h-4 w-4 p-0">
                         <span class="absolute inset-0 animate-ping rounded-full bg-accent" />
@@ -64,7 +55,7 @@
             </div>
 
             <a
-                class="link-settings btn btn-circle btn-ghost border-neutral hover:border-neutral-focus"
+                class="btn btn-circle btn-ghost border-neutral transition duration-300 hover:scale-105 hover:border-neutral-focus"
                 href="/settings"
                 use:inertia
             >
@@ -72,7 +63,7 @@
             </a>
 
             <div class="dropdown dropdown-end leading-none">
-                <label tabindex="-1" class="avatar btn btn-circle btn-ghost" for="dropdown">
+                <label tabindex="-1" class="avatar btn btn-circle btn-ghost h-16 w-16 bg-neutral" for="dropdown">
                     <div class="w-full rounded-full">
                         {#if user.avatar}
                             <img src={user.avatar} alt="avatar" />
@@ -105,50 +96,3 @@
         {/if}
     </div>
 </nav>
-
-<style lang="scss">
-    .navbar {
-        padding: 18px 48px;
-
-        .btn-logo {
-            display: block;
-            position: relative;
-            height: 52px;
-            width: fit-content;
-        }
-
-        .form-control {
-            margin-right: 16px;
-        }
-
-        .indicator,
-        .link-settings {
-            margin-right: 16px;
-            transition: 0.3s;
-
-            &:hover {
-                transform: scale(1.05);
-            }
-        }
-
-        .avatar {
-            background-color: #ccc;
-            width: 64px;
-            height: 64px;
-        }
-    }
-
-    @media (max-width: 991px) {
-        .navbar {
-            padding: 18px 20px;
-        }
-    }
-    @media (max-width: 767px) {
-        .navbar {
-            padding: 18px 20px;
-            .form-control {
-                display: none;
-            }
-        }
-    }
-</style>
