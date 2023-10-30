@@ -194,7 +194,7 @@ class ChapterController extends Controller
         return Inertia::render('Dashboard/Chapters/Create', [
             'story' => fn () => StoryResource::make($story),
             'timelines' => fn () => TimelineResource::collection(
-                $story->storyType->timelines()->get(['id', 'title'])
+                $story->storyType?->timelines()->get(['id', 'title']) ?? []
             ),
         ]);
     }

@@ -33,7 +33,7 @@
         "axios": "^1.6.0",
         "canvg": "^4.0.1",
         "cropperjs": "^1.6.1",
-        "daisyui": "^3.9.3",
+        "daisyui": "^3.9.4",
         "dayjs": "^1.11.10",
         "eslint": "^8.52.0",
         "eslint-plugin-prettier": "^5.0.1",
@@ -69,7 +69,7 @@
         "typescript": "^5.2.2",
         "vite": "^4.5.0",
         "vite-plugin-eslint": "^1.8.1",
-        "vite-plugin-pwa": "^0.16.5",
+        "vite-plugin-pwa": "^0.16.6",
         "vite-plugin-static-copy": "^0.17.0"
     },
     "dependencies": {
