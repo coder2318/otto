@@ -38,7 +38,6 @@
             <div class="f-item basis-1/3 border-r border-primary-content/20 px-8 py-8 pb-16">
                 <div class="footer-menu flex flex-col">
                     <a href="/" use:inertia class="link-hover link">Home</a>
-                    <a href="/" use:inertia class="link-hover link">Features</a>
                     <a href="/about" use:inertia class="link-hover link">Our Story</a>
                     <a href="/contact" use:inertia class="link-hover link">Contact</a>
                 </div>

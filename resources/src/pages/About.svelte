@@ -9,12 +9,10 @@
     import Footer from '@/components/Static/Footer.svelte'
     import img from '@/assets/img/about-img.jpg'
     import splash from '@/assets/img/about-splash.svg'
-    import imgTeam1 from '@/assets/img/team-1.jpg'
-    import imgTeam2 from '@/assets/img/team-2.jpg'
-    import imgTeam3 from '@/assets/img/team-3.jpg'
     import titleWithIllustration from '@/assets/img/title-with-illustration.svg'
     import whiteOrangeFigure from '@/assets/img/white-orange-figure.svg'
     import yellowWhiteFigure from '@/assets/img/yellow-white-figure.svg'
+    import About from '@/assets/md/about.md'
 </script>
 
 <svelte:head>
@@ -77,48 +75,11 @@
     </div>
 </section>
 
-<section class="ourTeam">
-    <div class="otto-container">
-        <div class="titleWithIllustration">
-            <div class="wrap">
-                <h2 class="fz_h2 title text-primary">
-                    Our <i>Team</i>
-                </h2>
-                <img src={titleWithIllustration} alt="Illustration" />
-            </div>
-        </div>
-
-        <div class="wrap">
-            <div class="ourTeamCard">
-                <div class="ourTeamCard-img">
-                    <img src={imgTeam1} alt="Team member" />
-                </div>
-                <div class="ourTeamCard__content">
-                    <h3 class="ourTeamCard-name">Darlene</h3>
-                    <p class="ourTeamCard-position">Founder</p>
-                </div>
-            </div>
-            <div class="ourTeamCard">
-                <div class="ourTeamCard-img">
-                    <img src={imgTeam2} alt="Team member" />
-                </div>
-                <div class="ourTeamCard__content">
-                    <h3 class="ourTeamCard-name">John Due</h3>
-                    <p class="ourTeamCard-position">Customer Care Lead</p>
-                </div>
-            </div>
-            <div class="ourTeamCard">
-                <div class="ourTeamCard-img">
-                    <img src={imgTeam3} alt="Team member" />
-                </div>
-                <div class="ourTeamCard__content">
-                    <h3 class="ourTeamCard-name">Alejandro</h3>
-                    <p class="ourTeamCard-position">Manager</p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<main
+    class="!container prose mx-auto mb-16 px-4 lg:prose-lg xl:prose-xl prose-h1:mt-16 prose-h1:font-normal prose-h1:text-primary"
+>
+    <About />
+</main>
 
 <Footer />
 
@@ -216,63 +177,6 @@
         }
     }
 
-    .ourTeam {
-        padding: 120px 0 94px;
-
-        .otto-container {
-            max-width: 1190px;
-        }
-
-        .wrap {
-            display: flex;
-            flex-wrap: wrap;
-            margin-right: -24px;
-        }
-    }
-
-    .ourTeamCard {
-        flex-basis: calc(100% / 3 - 24px);
-        margin-right: 24px;
-        margin-bottom: 24px;
-        background-color: #fff;
-        padding: 16px;
-        border-radius: 16px;
-
-        &-img {
-            position: relative;
-            overflow: hidden;
-            width: 100%;
-            height: auto;
-            aspect-ratio: 16/16;
-            border-radius: 16px;
-            img {
-                position: absolute;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-            }
-        }
-
-        &__content {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 16px 16px 8px 16px;
-        }
-
-        &-name {
-            font-size: 32px;
-            line-height: 1.2;
-            margin-bottom: 7px;
-            color: #0c345c;
-        }
-        &-position {
-            line-height: 1.4;
-            font-size: 20px;
-            color: #0c345c;
-        }
-    }
-
     @media (max-width: 1280px) {
         .titleAndButton {
             .whiteOrangeFigure {
@@ -287,9 +191,6 @@
     }
 
     @media (max-width: 991px) {
-        .ourTeamCard {
-            flex-basis: calc(100% / 2 - 24px);
-        }
         .aboutUs {
             .wrap {
                 flex-direction: column;
@@ -315,9 +216,6 @@
     }
 
     @media (max-width: 767px) {
-        .ourTeamCard {
-            flex-basis: calc(100%);
-        }
         .titleAndButton {
             .wrap {
                 padding: 0;

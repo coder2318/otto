@@ -1,27 +1,52 @@
-## What should the privacy policy include?
+1\. Terms
+---------
 
-Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+By accessing this Website, accessible from ottostory.com, you are agreeing to be bound by these Website Terms and Conditions of Use and agree that you are responsible for the agreement with any applicable local laws. If you disagree with any of these terms, you are prohibited from accessing this site. The materials contained in this Website are protected by copyright and trade mark law.
 
-It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+2\. Use License
+---------------
 
-## Cookies
+Permission is granted to temporarily download one copy of the materials on OttoStory's Website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
 
-It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+*   modify or copy the materials;
+*   use the materials for any commercial purpose or for any public display;
+*   attempt to reverse engineer any software contained on OttoStory's Website;
+*   remove any copyright or other proprietary notations from the materials; or
+*   transferring the materials to another person or "mirror" the materials on any other server.
 
-1. **How we use your information**
+This will let OttoStory to terminate upon violations of any of these restrictions. Upon termination, your viewing right will also be terminated and you should destroy any downloaded materials in your possession whether it is printed or electronic format.
 
-    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+3\. Disclaimer
+--------------
 
-    - It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed
+All the materials on OttoStory's Website are provided "as is". OttoStory makes no warranties, may it be expressed or implied, therefore negates all other warranties. Furthermore, OttoStory does not make any representations concerning the accuracy or reliability of the use of the materials on its Website or otherwise relating to such materials or any sites linked to this Website.
 
-2. **DoubleClick DART Cookie**
+4\. Limitations
+---------------
 
-    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages.
+OttoStory or its suppliers will not be hold accountable for any damages that will arise with the use or inability to use the materials on OttoStory's Website, even if OttoStory or an authorize representative of this Website has been notified, orally or written, of the possibility of such damage. Some jurisdiction does not allow limitations on implied warranties or limitations of liability for incidental damages, these limitations may not apply to you.
 
-    - It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed
+5\. Revisions and Errata
+------------------------
 
-## Content Liability
+The materials appearing on OttoStory's Website may include technical, typographical, or photographic errors. OttoStory will not promise that any of the materials in this Website are accurate, complete, or current. OttoStory may change the materials contained on its Website at any time without notice. OttoStory does not make any commitment to update the materials.
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+6\. Links
+---------
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+OttoStory has not reviewed all of the sites linked to its Website and is not responsible for the contents of any such linked site. The presence of any link does not imply endorsement by OttoStory of the site. The use of any linked website is at the user's own risk.
+
+7\. Site Terms of Use Modifications
+-----------------------------------
+
+OttoStory may revise these Terms of Use for its Website at any time without prior notice. By using this Website, you are agreeing to be bound by the current version of these Terms and Conditions of Use.
+
+8\. Your Privacy
+----------------
+
+Please read our [Privacy Policy](/privacy-policy).
+
+9\. Governing Law
+-----------------
+
+Any claim related to OttoStory's Website shall be governed by the laws of us without regards to its conflict of law provisions.
