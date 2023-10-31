@@ -1,6 +1,5 @@
 <?php
 
-use App\Features\BetaAccess;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
 use App\Http\Controllers\SocialAuthController;
@@ -12,15 +11,12 @@ use Illuminate\Support\Facades\Route;
 Route::controller(StaticController::class)->group(function () {
     Route::get('/', 'index')->name('index');
     Route::post('/preorder', 'postPreorder')->name('preorder.store')->middleware('anti-spam');
-
-    Route::group(['middleware' => 'features:'.BetaAccess::class], function () {
-        Route::get('/about', 'about')->name('about');
-        Route::get('/privacy-policy', 'privacyPolicy')->name('privacy-policy');
-        Route::get('/terms-and-conditions', 'termsAndConditions')->name('terms-and-conditions');
-        Route::get('/faq', 'faq')->name('faq');
-        Route::get('/contact', 'contact')->name('contact');
-        Route::post('/contact', 'postContact')->name('contact.store')->middleware('anti-spam');
-    });
+    Route::get('/about', 'about')->name('about');
+    Route::get('/privacy-policy', 'privacyPolicy')->name('privacy-policy');
+    Route::get('/terms-and-conditions', 'termsAndConditions')->name('terms-and-conditions');
+    Route::get('/faq', 'faq')->name('faq');
+    Route::get('/contact', 'contact')->name('contact');
+    Route::post('/contact', 'postContact')->name('contact.store')->middleware('anti-spam');
 });
 
 // Search
