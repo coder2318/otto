@@ -18,6 +18,7 @@ class UserConfigured
     {
         if (! $request->user()?->details) {
             Session::put('url.intended', $request->url());
+
             return redirect()->route('dashboard.quickstart.index');
         }
 

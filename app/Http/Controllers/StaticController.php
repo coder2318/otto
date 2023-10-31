@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Preorder;
+use App\Notifications\ContactFormNotification;
+use App\Notifications\Notifiables\AdminNotifiable;
+use App\Notifications\PreorderNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Spatie\Honeypot\Honeypot;
@@ -41,21 +44,21 @@ class StaticController extends Controller
         return Inertia::render('Contact');
     }
 
-    public function postPreorder(Request $request)
+    public function postPreorder(Request $request, AdminNotifiable $admin)
     {
         $data = $request->validate([
             'name' => ['nullable', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:preorders'],
         ]);
 
-        Preorder::create($data);
+        $preorder = Preorder::create($data);
 
-        // TODO: send preorder
+        $admin->notify(new PreorderNotification($preorder));
 
         return redirect()->back()->with(['message' => 'Your preorder request was received!']);
     }
 
-    public function postContact(Request $request)
+    public function postContact(Request $request, AdminNotifiable $admin)
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255'],
@@ -64,7 +67,7 @@ class StaticController extends Controller
             'message' => ['required', 'string'],
         ]);
 
-        // TODO: send contact
+        $admin->notify(new ContactFormNotification(...$data));
 
         return redirect()->back()->with(['message' => 'Your contact request was received!']);
     }

@@ -92,4 +92,8 @@ return [
         'dictionary' => env('SQIDS_DICTIONARY', \Sqids\Sqids::DEFAULT_ALPHABET),
     ],
 
+    'admin' => [
+        'email' => env('ADMIN_EMAIL'),
+    ],
+
 ];
