@@ -15,11 +15,13 @@ class Plan extends Model
         'description',
         'prices',
         'features',
+        'metadata',
     ];
 
     protected $casts = [
         'prices' => 'collection',
         'features' => 'array',
+        'metadata' => 'array',
     ];
 
     public function getRouteKeyName(): string

@@ -6,6 +6,7 @@ use App\Data\User\Details;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -28,6 +29,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
         'password',
         'details',
         'enhances',
+        'plan_id',
     ];
 
     protected $hidden = [
@@ -44,6 +46,11 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
     public function name(): Attribute
     {
         return Attribute::get(fn () => $this->details?->name ?? trim($this->details?->first_name.' '.$this->details?->last_name));
+    }
+
+    public function plan(): BelongsTo
+    {
+        return $this->belongsTo(Plan::class);
     }
 
     public function stories(): HasMany

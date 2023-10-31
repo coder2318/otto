@@ -53,6 +53,7 @@ declare namespace App {
             }
         }
         features: string[]
+        discount?: string
     }
 
     interface Story {

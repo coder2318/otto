@@ -13,6 +13,7 @@
         "app/book-cover-params": "@dev",
         "carlos-meneses/laravel-mpdf": "^2.1",
         "dmitrybubyakin/nova-medialibrary-field": "^4.0",
+        "dompdf/dompdf": "^2.0",
         "ebess/advanced-nova-media-library": "^4.1",
         "google/apiclient": "^2.15",
         "google/cloud-translate": "^1.15",

@@ -72,6 +72,7 @@ Route::middleware('user-configured')->group(function () {
     Route::resource('plans', PlanController::class)
         ->only(['index', 'show', 'update'])
         ->middleware(['subscribed:0']);
+    Route::post('/plans/coupon', [PlanController::class, 'useCoupon'])->name('plans.coupon');
 
     Route::post('translate', TranslateController::class)->name('translate');
 

@@ -38,13 +38,14 @@ class PlanSeeder extends Seeder
             'description' => $product?->description,
             'prices' => collect($prices)->mapWithKeys(fn (Price $price) => [
                 $price->id => [
-                    'interval' => $price?->recurring?->interval,
+                    'interval' => $price?->recurring?->interval ?? 'unlimited',
                     'interval_count' => $price?->recurring?->interval_count,
                     'value' => $price?->unit_amount / 100,
                     'currency' => $price?->currency,
                 ],
             ])->sortBy('value')->all(),
-            'features' => $product?->metadata->toArray() ?? [],
+            'features' => $product?->features ? array_map(fn ($feature) => $feature['name'], $product?->features) : [],
+            'metadata' => $product?->metadata ?? [],
         ];
     }
 }

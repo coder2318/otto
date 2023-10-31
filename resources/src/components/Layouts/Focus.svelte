@@ -6,8 +6,8 @@
 </script>
 
 <section class="regSection flex flex-col">
-    <div class="otto-container">
-        <div class="blockFocus relative flex flex-1 rounded-3xl bg-base-200">
+    <div class="otto-container flex flex-1 flex-col">
+        <div class="relative flex flex-1 rounded-3xl bg-base-200 p-8 pt-16 md:pt-8">
             <slot />
             <img class="womanIllustration" src={womanIllustration} alt="Illustration" />
             <img class="manIllustration" src={manIllustration} alt="Illustration" />
@@ -20,7 +20,7 @@
 <style lang="scss">
     .regSection {
         padding: 70px 50px;
-        height: 100vh;
+        min-height: 100vh;
 
         @media (max-width: 1280px) {
             padding: 40px 20px;
@@ -32,17 +32,6 @@
             max-width: 100%;
             height: inherit;
             padding: 0;
-        }
-        .blockFocus {
-            padding: 20px 40px;
-            height: 100%;
-            @media (max-width: 1280px) {
-                min-height: 800px;
-            }
-            @media (max-width: 767px) {
-                min-height: auto;
-                padding: 160px 20px;
-            }
         }
         .womanIllustration {
             position: absolute;

@@ -19,27 +19,27 @@
     }
 
     let checked = false
-    $: period = checked ? 'year' : 'month'
+    $: period = checked ? 'unlimited' : 'month'
 </script>
 
 <svelte:head>
     <title>{import.meta.env.VITE_APP_NAME} - Subscription Plans</title>
 </svelte:head>
 
-<div class="z-10 flex flex-1 flex-col items-center gap-8" in:fade>
-    <h1 class="text-6xl text-primary">
+<div class="z-10 flex flex-1 flex-col items-center gap-8 pt-16 lg:p-16" in:fade>
+    <h1 class="text-center text-6xl text-primary">
         Chose a <span class="italic">Otto Story Plan</span>
     </h1>
     <img src={stripe} alt="stripe" class="w-[200px]" />
-    <div class="carousel rounded-box max-w-full flex-1">
+    <div class="rounded-box max-w-full flex-1 flex-col md:carousel md:flex-row">
         {#each plans.data as plan}
-            <div class="carousel-item w-1/3">
+            <div class="carousel-item md:w-1/3">
                 <div class="card m-5 bg-neutral text-neutral-content">
                     <div class="card-body">
                         <h2 class="card-title text-2xl text-primary">
                             {plan.name}
                         </h2>
-                        <div class="flex">
+                        <p class="flex">
                             {#each Object.entries(plan.prices) as [key, price] (key)}
                                 {#if price.interval === period}
                                     <span>
@@ -49,14 +49,16 @@
                                                 currency: price.currency,
                                             })}</span
                                         >
-                                        <span class="text-base-content"
-                                            >/{price.interval_count}
-                                            {price.interval}</span
-                                        >
+                                        {#if price.interval_count && price.interval}
+                                            <span class="text-base-content"
+                                                >/{price.interval_count}
+                                                {price.interval}</span
+                                            >
+                                        {/if}
                                     </span>
                                 {/if}
                             {/each}
-                        </div>
+                        </p>
                         <p class="prose max-w-none">{@html plan.description}</p>
                         <a
                             href="/plans/{plan.slug}?period={period}"
@@ -71,6 +73,6 @@
     <label class="label cursor-pointer gap-2">
         <span class="label-text">Monthly</span>
         <input type="checkbox" class="toggle-success-error" bind:checked />
-        <span class="label-text">Yearly</span>
+        <span class="label-text">One Time Payment</span>
     </label>
 </div>

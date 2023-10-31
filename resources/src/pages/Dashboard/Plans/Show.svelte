@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { router } from '@inertiajs/svelte'
+    import { router, useForm } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import { loadStripe, type Stripe, type StripeElements } from '@stripe/stripe-js'
     import { fade } from 'svelte/transition'
@@ -20,11 +20,31 @@
     let processing = false
     let elements: StripeElements
     let stripe: Stripe | null = null
+    let modal: HTMLDialogElement
+
+    const form = useForm({
+        coupon: '',
+    })
 
     onMount(() => {
         loadStripe(import.meta.env.VITE_STRIPE_KEY).then((res) => (stripe = res))
         period = new URLSearchParams(window.location.search).get('period') || 'month'
     })
+
+    function submitCoupon() {
+        if (processing) return
+
+        modal.close()
+
+        processing = true
+
+        $form.post('/plans/coupon', {
+            only: ['plan'],
+            onFinish: () => {
+                processing = false
+            },
+        })
+    }
 
     async function submit() {
         if (processing) return
@@ -55,23 +75,41 @@
     </title>
 </svelte:head>
 
-<div class="z-10 flex flex-1 flex-col items-center justify-center gap-8" in:fade>
-    <h1 class="text-2xl text-primary md:text-4xl lg:text-6xl">
+<div class="z-10 flex flex-1 flex-col items-center justify-center gap-8 py-8" in:fade>
+    <h1 class="text-4xl text-primary lg:text-6xl">
         Subscribe to <span class="italic">{plan.data.name}</span>
     </h1>
     <div class="card bg-neutral text-neutral-content md:flex-row">
         <div class="card-body md:w-1/2">
-            <h2 class="card-title text-2xl text-primary">{plan.data.name}</h2>
-            <p>
-                <span class="text-4xl font-bold text-primary"
-                    >{usd(price.value, {
-                        maximumFractionDigits: 0,
-                        currency: price.currency,
-                    })}</span
-                >
-                <span class="text-base-content">/{price.interval_count} {price.interval}</span>
-            </p>
-            <p class="prose max-w-none">{@html plan.data.description}</p>
+            <div class="flex justify-between">
+                <div>
+                    <h2 class="card-title text-2xl text-primary">{plan.data.name}</h2>
+                    <span class="text-4xl font-bold text-primary"
+                        >{usd(price.value, {
+                            maximumFractionDigits: 0,
+                            currency: price.currency,
+                        })}</span
+                    >
+                    {#if price.interval_count && price.interval}
+                        <span class="text-base-content">/{price.interval_count} {price.interval}</span>
+                    {/if}
+                </div>
+                {#if plan.data.discount}
+                    <div>
+                        <h2 class="card-title text-2xl text-error">- Discount</h2>
+                        <span class="text-4xl font-bold text-error">- {plan.data.discount}</span>
+                        {#if price.interval_count && price.interval}
+                            <span class="text-base-content">/{price.interval_count} {price.interval}</span>
+                        {/if}
+                    </div>
+                {/if}
+            </div>
+            <p />
+            <ul class="list-inside list-disc">
+                {#each plan.data.features as feature}
+                    <li>{feature}</li>
+                {/each}
+            </ul>
         </div>
         <div class="divider md:divider-horizontal" />
         <div class="card-body justify-center md:w-1/2">
@@ -86,7 +124,7 @@
                 >
                     <form on:submit|preventDefault={submit} class="flex h-full flex-col items-stretch">
                         <div class="flex-1">
-                            <PaymentElement />
+                            <PaymentElement options={{ layout: 'auto' }} />
                         </div>
 
                         <div class="card-actions mt-4">
@@ -95,9 +133,19 @@
                                     {error.message}
                                 </div>
                             {/if}
-                            <button type="submit" class="btn btn-secondary w-full rounded-full" disabled={processing}>
-                                {#if processing}<span class="loading loading-dots loading-md" />{/if} Purchase
-                            </button>
+                            <div class="grid w-full grid-cols-2 gap-4">
+                                <button
+                                    class="btn btn-primary"
+                                    type="button"
+                                    disabled={processing}
+                                    on:click|preventDefault={() => modal.showModal()}
+                                >
+                                    Use Coupon
+                                </button>
+                                <button type="submit" class="btn btn-secondary" disabled={processing}>
+                                    {#if processing}<span class="loading loading-dots loading-md" />{/if} Purchase
+                                </button>
+                            </div>
                         </div>
                     </form>
                 </Elements>
@@ -107,3 +155,19 @@
         </div>
     </div>
 </div>
+
+<dialog bind:this={modal} class="modal">
+    <div class="modal-box">
+        <h3 class="text-lg font-normal italic">Use Coupon Code</h3>
+        <div class="form-control mt-4">
+            <input type="text" class="input input-bordered w-full" bind:value={$form.coupon} />
+        </div>
+        <div class="modal-action">
+            <button type="button" class="btn btn-primary" on:click|preventDefault={submitCoupon}>Confirm</button>
+            <form method="dialog">
+                <button type="submit" class="btn">Close</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop"><button /></form>
+</dialog>

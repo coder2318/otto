@@ -12,7 +12,11 @@
     import { dayjs } from '@/service/dayjs'
     import Fa from 'svelte-fa'
     import { fade } from 'svelte/transition'
-    export let current: any | null, plans: { data: App.Plan[] }, upcoming: any | null, invoices: any
+    export let current: any | null,
+        plans: { data: App.Plan[] },
+        upcoming: any | null,
+        invoices: any,
+        current_plan: App.Plan
 
     let plansModal: HTMLDialogElement, confirmCancelModal: HTMLDialogElement
     let period = 'month'
@@ -108,6 +112,14 @@
                 <button class="btn btn-primary btn-outline btn-sm mt-4" on:click={() => confirmCancelModal.show()}>
                     Resume
                 </button>
+            </div>
+
+            <div class="divider" />
+        {:else if current_plan}
+            <span class="card-title text-2xl text-primary lg:text-3xl"> Permanent Access </span>
+
+            <div class="rounded-lg bg-base-200 p-4">
+                <p>Thank you for bying a full access to our application!</p>
             </div>
 
             <div class="divider" />

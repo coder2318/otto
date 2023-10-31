@@ -50,6 +50,7 @@ class SettingsController extends Controller
 
         return Inertia::render('Dashboard/Settings/Billing', [
             'current' => fn () => $user->subscription(),
+            'current_plan' => fn () => $user->plan,
             'invoices' => fn () => $user->invoices(),
             'upcoming' => fn () => $user->subscription()?->upcomingInvoice(),
             'plans' => fn () => PlanResource::collection(Plan::all()),
