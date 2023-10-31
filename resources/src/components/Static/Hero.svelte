@@ -1,6 +1,6 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia } from '@inertiajs/svelte'
+    import { inertia, page } from '@inertiajs/svelte'
     import bg from '@/assets/img/hero-bg.jpg'
 </script>
 
@@ -19,7 +19,14 @@
                 <span class="italic text-secondary">yours with OttoStory</span>.
             </h1>
 
-            <a use:inertia href="/stories" class="otto-btn-secondary"> Start Writing </a>
+            {#if $page.props?.auth?.user?.data?.subscribed}
+                <a use:inertia href="/stories" class="otto-btn-secondary">Start Writing</a>
+            {:else}
+                <span class="flex gap-4">
+                    <a use:inertia href="/plans" class="otto-btn-secondary">Start Your Book</a>
+                    <a use:inertia href="/demo" class="otto-btn-primary">Try A Free Chapter</a>
+                </span>
+            {/if}
         </div>
     </div>
 </header>

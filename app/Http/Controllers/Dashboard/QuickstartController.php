@@ -34,6 +34,6 @@ class QuickstartController extends Controller
 
         $user->save();
 
-        return redirect()->route('dashboard.demo.index');
+        return redirect()->intended(route('dashboard.demo.index'));
     }
 }

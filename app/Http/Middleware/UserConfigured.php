@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
 use Symfony\Component\HttpFoundation\Response;
 
 class UserConfigured
@@ -16,6 +17,7 @@ class UserConfigured
     public function handle(Request $request, Closure $next): Response
     {
         if (! $request->user()?->details) {
+            Session::put('url.intended', $request->url());
             return redirect()->route('dashboard.quickstart.index');
         }
 
