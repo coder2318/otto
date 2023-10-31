@@ -65,7 +65,7 @@ class DemoController extends Controller
     {
         return Inertia::render('Dashboard/Demo/Index', [
             'questions' => TimelineQuestionResource::collection(
-                TimelineQuestion::inRandomOrder()->with('cover')->take(3)->get()
+                TimelineQuestion::where('is_demo', true)->inRandomOrder()->with('cover')->take(3)->get()
             ),
         ]);
     }

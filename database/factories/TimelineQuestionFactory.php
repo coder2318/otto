@@ -21,6 +21,7 @@ class TimelineQuestionFactory extends Factory
             'question' => $this->faker->sentence(),
             'context' => $this->faker->sentence(),
             'sub_questions' => $this->faker->sentences(5),
+            'is_demo' => $this->faker->boolean(),
         ];
     }
 

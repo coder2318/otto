@@ -6,6 +6,7 @@ use App\ArrayOfStrings\ArrayOfStrings;
 use DmitryBubyakin\NovaMedialibraryField\Fields\Medialibrary;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\BelongsTo;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -54,6 +55,8 @@ class TimelineQuestion extends Resource
             Medialibrary::make('Covers')->accept('image/*')->showOnIndex(false),
 
             ArrayOfStrings::make('Sub Questions')->showOnIndex(false),
+
+            Boolean::make('Demo Question', 'is_demo')->showOnIndex(false),
 
             BelongsTo::make('Timeline', 'timeline', Timeline::class),
         ];
