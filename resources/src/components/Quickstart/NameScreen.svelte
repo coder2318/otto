@@ -20,7 +20,7 @@
                     type="text"
                     bind:value={$form.first_name}
                     placeholder="First Name"
-                    class="input w-full italic md:input-ghost lg:input-lg md:px-0"
+                    class="input w-full py-0 italic md:input-ghost lg:input-lg md:px-0 lg:!h-20"
                     name="first_name"
                     id="first_name"
                     required
@@ -34,7 +34,7 @@
                     type="text"
                     bind:value={$form.last_name}
                     placeholder="Last Name"
-                    class="input w-full italic md:input-ghost lg:input-lg md:px-0"
+                    class="input w-full italic md:input-ghost lg:input-lg md:px-0 lg:!h-20"
                     name="last_name"
                     id="last_name"
                     required
@@ -50,7 +50,7 @@
                     pattern="\d&lcub;1,2&rcub;/\d&lcub;1,2&rcub;/\d&lcub;4&rcub;"
                     bind:value={$form.birth_date}
                     placeholder="DD/MM/YYYY"
-                    class="input w-full italic md:input-ghost lg:input-lg md:px-0"
+                    class="input w-full italic md:input-ghost lg:input-lg md:px-0 lg:!h-20"
                     name="birth_date"
                     id="birth_date"
                     required
