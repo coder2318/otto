@@ -13,25 +13,25 @@
     export let elements = [
         {
             text: `OttoStory has given me the most precious gift I could ask for. The ease of recording my life story, having it transcribed flawlessly, and then seeing it beautifully wrapped in a professionally designed book is truly amazing. The attention to detail and the care they put into preserving my memories is evident in every page. I am immensely grateful for this service!`,
-            name: 'Frances Klein',
+            name: 'Verified 2023 OttoStory Customer',
             photo: replyImg1,
             key: Math.random().toString(36).slice(2, 7),
         },
         {
             text: `I am in awe of OttoStory and the incredible service they provide. As someone who wanted to share my life story but didn't know where to start, their platform made the process seamless. Recording my experiences felt like having a heartfelt conversation, and the final book is a masterpiece. The transcription accuracy and the elegant book design exceeded my expectations. I highly recommend OttoStory to anyone who wants to leave a lasting legacy.`,
-            name: 'Marco Ortiz',
+            name: 'Verified 2023 OttoStory Customer',
             photo: replyImg2,
             key: Math.random().toString(36).slice(2, 7),
         },
         {
             text: `Turning my life story into a professionally crafted book through OttoStory was an exceptional experience. The platform's recording feature made it easy for me to speak my heart out, and the accuracy with which it was transcribed was impressive. The final book presentation is beyond beautiful – it's a treasure that my family and I will cherish forever. OttoStory has made preserving memories and sharing wisdom a true pleasure.`,
-            name: 'Danna Weiss',
+            name: 'Verified 2023 OttoStory Customer',
             photo: replyImg3,
             key: Math.random().toString(36).slice(2, 7),
         },
         {
             text: `OttoStory has made me feel like a bestselling author of my own life journey! The convenience of recording my stories and then watching them transform into a polished book is unmatched. The quality of the transcription and the thoughtful design of the book truly captured the essence of my experiences. This service has not only helped me share my story but has also become a legacy that my children and grandchildren will treasure. Kudos to the OttoStory team!`,
-            name: 'Lexie Nguyen',
+            name: 'Verified 2023 OttoStory Customer',
             photo: replyImg4,
             key: Math.random().toString(36).slice(2, 7),
         },
