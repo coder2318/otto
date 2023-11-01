@@ -190,7 +190,7 @@ class StoryController extends Controller
             ->orderBy('order', 'asc')
             ->lazy();
 
-        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->download($story->title.'.pdf');
+        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream($story->title.'.pdf');
     }
 
     public function bookCover(Story $story)
@@ -204,9 +204,9 @@ class StoryController extends Controller
 
         return Pdf::loadView('pdf.book-cover', [
             'cover' => $image->encode('data-url'),
-            'width' => 2 * 158.75 + $spineWidth,
-            'height' => 235,
-        ])->download();
+            'width' => (2 * 155.18 + $spineWidth).'mm',
+            'height' => '235mm',
+        ])->stream();
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
@@ -264,10 +264,12 @@ class StoryController extends Controller
         /** @var User */
         $user = $request->user();
 
-        try {
-            $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
-        } catch (\Exception $e) {
-            return redirect()->back()->with('error', $e->getMessage());
+        if ($user->can('free-books')) {
+            try {
+                $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
         }
 
         $print = $lulu->print(
