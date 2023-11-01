@@ -318,6 +318,7 @@
 .fz_h1{
     font-size: 86px;
     line-height: 1.1;
+    color: #0C345C;
 
     @media (max-width: 1280px) {
         font-size: 68px;
@@ -332,6 +333,7 @@
     line-height: 1.1;
     position: relative;
     z-index: 2;
+    color: #0C345C;
 
     @media (max-width: 1280px) {
         font-size: 48px;
@@ -350,6 +352,83 @@
     }
     @media (max-width: 767px) {
         font-size: 32px;
+    }
+}
+
+
+.dArticle {
+    padding: 124px 0 80px;
+    .articleTop {
+        position: relative;
+        padding-bottom: 48px;
+
+        &-illustration {
+            position: absolute;
+            left: -71px;
+            top: -37px;
+        }
+    }
+    .content {
+        position: relative;
+
+        p {
+            display: block;
+            font-size: 18px;
+            line-height: 1.7;
+            margin-bottom: 16px;
+            color: #4d4d4d;
+        }
+        h2{
+            font-size: 60px;
+            line-height: 1.1;
+            position: relative;
+            z-index: 2;
+            color: #0c345c;
+            margin-top: 44px;
+            margin-bottom: 44px;
+
+            @media (max-width: 1280px) {
+                font-size: 48px;
+            }
+            @media (max-width: 767px) {
+                font-size: 36px;
+            }
+        }
+        h3 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 16px;
+            font-weight: 600;
+            font-family: 'ABC Diatype';
+        }
+        ol {
+            margin-bottom: 44px;
+            padding-left: 30px;
+            li {
+                margin-bottom: 44px;
+                list-style: auto;
+                margin-bottom: 0;
+                font-size: 18px;
+                line-height: 1.7;
+                color: #4d4d4d;
+            }
+        }
+
+        ol li p{
+            color: #333;
+            &:first-child {
+                font-weight: 500;
+            }
+        }
+        ol li ul {
+            padding-left: 24px;
+        }
+        ol li ul li {
+            list-style: disc;
+        }
+        ol li ul li p {
+            font-weight: 400 !important;
+        }
     }
 }
 
