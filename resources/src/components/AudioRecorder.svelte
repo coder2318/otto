@@ -17,8 +17,8 @@
         target: null as string | null,
     }
 
-    export let min: number = 1 * 60 * 1000
-    export let max: number = 5 * 60 * 1000
+    export let min: number | null = null
+    export let max: number | null = null
     export let recordings: Array<{ file: File; translate?: typeof translate }>
     export let maxFiles: number = null
 
@@ -66,9 +66,10 @@
             mediaRecorder.start()
             timer = 0
             interval = setInterval(() => {
-                if (max - 10 < (timer += 10)) {
-                    stopRecording()
+                if (max && max < timer) {
+                    return stopRecording()
                 }
+                timer += 10
             }, 10)
         })
     }
@@ -164,10 +165,10 @@
     {#if timer}
         <div class="flex items-center justify-center gap-2 rounded-full bg-primary/10 p-4 text-primary">
             <span class="w-12"> {msToTime(timer)}</span>
-            <progress class="progress progress-primary w-36" value={timer} {max} />
+            <progress class="progress progress-primary w-36" value={timer} max={max ?? min ?? null} />
             <span class="w-12"> {msToTime(max)}</span>
         </div>
-    {:else if !recordings?.length}
+    {:else if max && !recordings?.length}
         <div class="flex flex-col items-center justify-center gap-2">
             <h6 class="text-2xl text-primary">Press Start Recording</h6>
             <p>You have {msToTime(max)} minutes to record your answer.</p>

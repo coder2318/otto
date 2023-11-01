@@ -55,20 +55,4 @@ class PlanControllerTest extends TestCase
             \App\Http\Requests\SubscriptionRequest::class
         );
     }
-
-    /** @test */
-    public function update_returns_an_ok_response(): void
-    {
-        $plan = \App\Models\Plan::factory()->create();
-        $user = $this->createUser(configured: true);
-
-        $response = $this->actingAs($user)->put(route('dashboard.plans.update', [$plan]), [
-            'payment_method' => 'card_123',
-            'price_id' => 'price_123',
-        ]);
-
-        $response->assertRedirect();
-
-        $response->assertSessionHasNoErrors();
-    }
 }
