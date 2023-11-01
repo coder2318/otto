@@ -84,8 +84,6 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/cover', 'cover')->name('cover');
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
-            Route::get('/book', 'book')->name('book');
-            Route::get('/book-cover', 'bookCover')->name('book-cover');
             Route::get('/order', 'order')->name('order');
             Route::patch('/order', 'orderCost')->name('order.cost');
             Route::post('/order', 'orderPurchase')->name('order.purchase');
