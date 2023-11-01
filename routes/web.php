@@ -24,7 +24,7 @@ Route::controller(StaticController::class)->group(function () {
 Route::post('/search', GlobalSearchController::class)->name('search')->middleware('auth');
 
 // Book contents
-Route::controller(StoryController::class)->group(function () {
+Route::controller(StoryController::class)->prefix('/stories/{story}')->group(function () {
     Route::get('/book', 'book')->name('book');
     Route::get('/book-cover', 'bookCover')->name('book-cover');
 });
