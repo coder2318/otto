@@ -13,11 +13,13 @@
     import { dayjs } from '@/service/dayjs'
     import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
-    import background from '@/assets/img/stories-bg.jpg'
+    import background from '@/assets/img/chapters-bgi.jpg'
     import { faClose, faArrowDownLong, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import CreateStory from '@/components/Stories/CreateStory.svelte'
     import Fa from 'svelte-fa'
     import { onMount } from 'svelte'
     import { strRandom } from '@/service/helpers'
+    import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -95,12 +97,11 @@
     <title>{import.meta.env.VITE_APP_NAME} - My Stories</title>
 </svelte:head>
 
-<header class="hero relative bg-top" style="background-image: url({background})" in:fade>
-    <div class="hero-overlay absolute bg-gradient-to-br from-primary/90 to-primary/60" />
-    <div
-        class="container hero-content my-8 flex-col items-stretch justify-between text-primary-content md:my-12 lg:my-16"
-    >
-        <!-- <div class="breadcrumbs text-sm">
+<section class="chaptersHero relative" in:fade>
+    <div class="otto-container">
+        <div class="wrap">
+            <img class="chaptersHero-illustration" src={smallBannerIllustration} alt="Figure" />
+            <!-- <div class="breadcrumbs text-sm">
             <ul>
                 <li><a href="/stories" use:inertia>Stories</a></li>
                 <li>
@@ -115,198 +116,437 @@
                 </li>
             </ul>
         </div> -->
-        <div class="flex justify-between">
-            <h1 class="text-3xl font-bold md:text-4xl lg:text-5xl">
-                <span class="font-normal italic text-neutral">Explore Your</span>
-                <button
-                    on:click={() => dropdownDialog.showModal()}
-                    class="inline-flex items-center rounded-full border-none bg-neutral/30 px-8 py-4 backdrop-blur hover:clear-none"
-                >
-                    <i class="mr-20 font-normal text-neutral"
-                        >{timelines.data[query?.filter?.timeline_id - 1]?.title ?? 'Timeline'}</i
-                    >
-                    <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
-                </button>
-                <dialog bind:this={dropdownDialog} class="modal">
-                    <form method="dialog" class="modal-backdrop bg-primary/80">
-                        <button />
-                    </form>
-                    <div class="modal-box bg-transparent shadow-none">
-                        <ul class="flex flex-col gap-4">
-                            {#each timelines.data as timeline}
-                                <li class="text-center">
-                                    <button
-                                        class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
-                                        class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
-                                        on:click={selectOption}
-                                        value={timeline.id}
-                                    >
-                                        {timeline.title}
-                                    </button>
-                                </li>
-                            {/each}
-                        </ul>
-                    </div>
-                </dialog>
-                <span class="font-normal text-neutral">With These Questions</span>
-            </h1>
-        </div>
-    </div>
-</header>
-
-<section class="container m-4 mx-auto flex place-content-between gap-4 px-4 pb-4 md:pb-0 lg:my-4" in:fade>
-    <div class="tabs flex-1 border-b-2 border-neutral/40 md:gap-4">
-        <button
-            class="tab -mb-0.5"
-            class:tab-active={query?.filter?.status == undefined}
-            class:tab-bordered={query?.filter?.status == undefined}
-            class:text-primary={query?.filter?.status == undefined}
-            class:!border-primary={query?.filter?.status == undefined}
-            on:click|preventDefault={() => removeFilter('status')}
-        >
-            All
-        </button>
-        <button
-            class="tab -mb-0.5"
-            class:tab-active={query?.filter?.status == 'undone'}
-            class:tab-bordered={query?.filter?.status == 'undone'}
-            class:text-primary={query?.filter?.status == 'undone'}
-            class:!border-primary={query?.filter?.status == 'undone'}
-            on:click|preventDefault={() => ($filter.status = 'undone')}
-        >
-            Undone
-        </button>
-        <button
-            class="tab -mb-0.5"
-            class:tab-active={query?.filter?.status == 'draft'}
-            class:tab-bordered={query?.filter?.status == 'draft'}
-            class:text-primary={query?.filter?.status == 'draft'}
-            class:!border-primary={query?.filter?.status == 'draft'}
-            on:click|preventDefault={() => ($filter.status = 'draft')}
-        >
-            In Progress
-        </button>
-        <button
-            class="tab -mb-0.5"
-            class:tab-active={query?.filter?.status == 'published'}
-            class:tab-bordered={query?.filter?.status == 'published'}
-            class:text-primary={query?.filter?.status == 'published'}
-            class:!border-primary={query?.filter?.status == 'published'}
-            on:click|preventDefault={() => ($filter.status = 'published')}
-        >
-            Completed
-        </button>
-    </div>
-
-    <div>
-        <div class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content">
-            Pages: <span class="text-primary">{story.data.pages}</span>
+            <div class="block" style="background-image: url({background})">
+                <div class="chaptersHero-overlay" />
+                <h1 class="fz_h3 title">
+                    <span class="font-normal italic text-neutral">Write About Your</span>
+                    <button on:click={() => dropdownDialog.showModal()}>
+                        <p>
+                            <i class="text-neutral"
+                                >{timelines.data[query?.filter?.timeline_id - 1]?.title ?? 'Timeline'}</i
+                            >
+                        </p>
+                        <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
+                    </button>
+                    <dialog bind:this={dropdownDialog} class="modal">
+                        <form method="dialog" class="modal-backdrop bg-primary/80">
+                            <button />
+                        </form>
+                        <div class="modal-box bg-transparent shadow-none">
+                            <ul class="flex flex-col gap-4">
+                                {#each timelines.data as timeline}
+                                    <li class="text-center">
+                                        <button
+                                            class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
+                                            class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
+                                            on:click={selectOption}
+                                            value={timeline.id}
+                                        >
+                                            {timeline.title}
+                                        </button>
+                                    </li>
+                                {/each}
+                            </ul>
+                        </div>
+                    </dialog>
+                    <span class="font-normal text-neutral">With These Questions</span>
+                </h1>
+            </div>
         </div>
     </div>
 </section>
 
-<main class="container mx-auto flex flex-col items-center justify-center gap-8 p-4 lg:py-8" in:fade>
-    <div class="grid w-full grid-cols-1 justify-center gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {#if query?.filter?.timeline_id}
-            <div
-                class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
-                style="background-image: url({customChapter})"
+<CreateStory {story} />
+
+<section class="chaptersTabs" in:fade>
+    <div class="otto-container">
+        <div class="tabs">
+            <button
+                class="tab -mb-0.5"
+                class:tab-active={query?.filter?.status == undefined}
+                class:tab-bordered={query?.filter?.status == undefined}
+                class:text-primary={query?.filter?.status == undefined}
+                class:!border-primary={query?.filter?.status == undefined}
+                on:click|preventDefault={() => removeFilter('status')}
             >
-                <div class="card-body items-center justify-end">
-                    <div class="card-actions justify-between">
-                        <a
-                            href="/stories/{story.data.id}/chapters/create?timeline_id={query?.filter?.timeline_id}"
-                            use:inertia
-                            class="btn btn-neutral btn-lg rounded-full"
-                        >
-                            Create Custom Question
-                        </a>
+                All
+            </button>
+            <button
+                class="tab -mb-0.5"
+                class:tab-active={query?.filter?.status == 'undone'}
+                class:tab-bordered={query?.filter?.status == 'undone'}
+                class:text-primary={query?.filter?.status == 'undone'}
+                class:!border-primary={query?.filter?.status == 'undone'}
+                on:click|preventDefault={() => ($filter.status = 'undone')}
+            >
+                Undone
+            </button>
+            <button
+                class="tab -mb-0.5"
+                class:tab-active={query?.filter?.status == 'draft'}
+                class:tab-bordered={query?.filter?.status == 'draft'}
+                class:text-primary={query?.filter?.status == 'draft'}
+                class:!border-primary={query?.filter?.status == 'draft'}
+                on:click|preventDefault={() => ($filter.status = 'draft')}
+            >
+                In Progress
+            </button>
+            <button
+                class="tab -mb-0.5"
+                class:tab-active={query?.filter?.status == 'published'}
+                class:tab-bordered={query?.filter?.status == 'published'}
+                class:text-primary={query?.filter?.status == 'published'}
+                class:!border-primary={query?.filter?.status == 'published'}
+                on:click|preventDefault={() => ($filter.status = 'published')}
+            >
+                Completed
+            </button>
+        </div>
+    </div>
+    <!-- <div>
+        <div class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content">
+            Pages: <span class="text-primary">{story.data.pages}</span>
+        </div>
+    </div> -->
+</section>
+
+<section class="chapters" in:fade>
+    <div class="otto-container">
+        <div class="wrap">
+            {#if query?.filter?.timeline_id}
+                <!-- <div
+                    class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
+                    style="background-image: url({customChapter})"
+                >
+                    <div class="card-body items-center justify-end">
+                        <div class="card-actions justify-between">
+                            <a
+                                href="/stories/{story.data.id}/chapters/create?timeline_id={query?.filter?.timeline_id}"
+                                use:inertia
+                                class="btn btn-neutral btn-lg rounded-full"
+                            >
+                                Create Custom Question
+                            </a>
+                        </div>
                     </div>
-                </div>
-            </div>
-        {/if}
-        {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
-            <a
-                class="group card min-h-[36rem] bg-neutral transition-transform hover:scale-105"
-                href={chapter.type === 'question'
-                    ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
-                    : `/chapters/${chapter.id}/edit`}
-                use:inertia
-                in:fade
-            >
-                <div class="card-body">
-                    <figure class="mb-2 max-h-[300px]">
+                </div> -->
+            {/if}
+            {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
+                <a
+                    class="chapterCard"
+                    href={chapter.type === 'question'
+                        ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
+                        : `/chapters/${chapter.id}/edit`}
+                    use:inertia
+                    in:fade
+                >
+                    <div class="chapterCard__img">
                         <img
                             src={chapter.cover ??
                                 `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${strRandom(
                                     10
                                 )}`}
                             alt={chapter.title}
-                            class="h-full rounded-xl object-contain"
                         />
-                    </figure>
-                    <h2 class="card-title block text-2xl font-normal">
-                        {chapter.context ?? ''} <i>{chapter.title}</i>
-                    </h2>
-                    <p />
-                    <div class="card-actions justify-between">
-                        <div>
-                            {#if chapter.status === 'undone' && !chapter.guest_id}
-                                <div class="card-actions">
-                                    <button
-                                        class="btn btn-secondary btn-sm"
-                                        on:click|preventDefault={() => modal.invite(chapter)}
-                                    >
-                                        Invite Guest
-                                    </button>
-                                </div>
-                            {/if}
-                            {#if chapter.type === 'chapter'}
-                                Started: {dayjs(chapter.created_at).format('MMM DD, YYYY')}
-                            {/if}
-                        </div>
-                        <div class="badge badge-outline">
-                            {chapter.status}
+                    </div>
+
+                    <div class="chapterCard__content">
+                        <h2 class="chapterCard-title">
+                            {chapter.context ?? ''} <i>{chapter.title}</i>
+                        </h2>
+
+                        <div class="card-actions justify-between">
+                            <div
+                                class="chapterCard-badge"
+                                class:badge-published={chapter.status === 'published'}
+                                class:badge-progress={chapter.status === 'draft'}
+                            >
+                                {chapter.status}
+                            </div>
+                            <div>
+                                {#if chapter.status === 'undone' && !chapter.guest_id}
+                                    <div class="card-actions">
+                                        <button
+                                            class="btn btn-secondary btn-sm"
+                                            on:click|preventDefault={() => modal.invite(chapter)}
+                                        >
+                                            Invite Guest
+                                        </button>
+                                    </div>
+                                {/if}
+                                <!-- {#if chapter.type === 'chapter'}
+                                    Started: {dayjs(chapter.created_at).format('MMM DD, YYYY')}
+                                {/if} -->
+                            </div>
                         </div>
                     </div>
                     {#if chapter.type === 'chapter'}
                         <div class="absolute right-4 top-4">
                             <button
-                                class="btn btn-circle btn-error btn-outline btn-sm opacity-0 transition-opacity group-hover:opacity-100"
+                                class="btn-trash btn btn-circle btn-error btn-outline btn-sm"
                                 on:click|preventDefault={() => deleteChapter(chapter.id)}
                             >
                                 <Fa icon={faTrash} />
                             </button>
                         </div>
                     {/if}
+                </a>
+            {/each}
+        </div>
+
+        <dialog bind:this={dialog} class="modal">
+            <form method="dialog" class="modal-backdrop">
+                <button />
+            </form>
+            <form method="dialog" class="modal-box">
+                <div class="flex justify-end">
+                    <button class="btn btn-circle btn-sm bg-white" on:click={() => dialog.close()}>
+                        <Fa icon={faClose} />
+                    </button>
                 </div>
-            </a>
-        {/each}
+                <h3 class="text-center text-[30px] text-xl font-normal leading-[33px]">
+                    Are you sure <i>want to delete this chapter?</i>
+                </h3>
+                <div class="modal-action mt-12 flex justify-around">
+                    <button
+                        class="btn btn-primary btn-sm w-[150px] rounded-full"
+                        on:click|preventDefault={confirmDelete}>Yes</button
+                    >
+                    <button class="btn btn-sm w-[150px] rounded-full py-1" on:click={() => dialog.close()}> No </button>
+                </div>
+            </form>
+        </dialog>
+
+        <Paginator class="flex flex-wrap items-center justify-center gap-y-2" meta={questions_chapters.meta} />
     </div>
-
-    <dialog bind:this={dialog} class="modal">
-        <form method="dialog" class="modal-backdrop">
-            <button />
-        </form>
-        <form method="dialog" class="modal-box">
-            <div class="flex justify-end">
-                <button class="btn btn-circle btn-sm bg-white" on:click={() => dialog.close()}>
-                    <Fa icon={faClose} />
-                </button>
-            </div>
-            <h3 class="text-center text-[30px] text-xl font-normal leading-[33px]">
-                Are you sure <i>want to delete this chapter?</i>
-            </h3>
-            <div class="modal-action mt-12 flex justify-around">
-                <button class="btn btn-primary btn-sm w-[150px] rounded-full" on:click|preventDefault={confirmDelete}
-                    >Yes</button
-                >
-                <button class="btn btn-sm w-[150px] rounded-full py-1" on:click={() => dialog.close()}> No </button>
-            </div>
-        </form>
-    </dialog>
-
-    <Paginator class="flex-wrap items-center justify-center gap-y-2" meta={questions_chapters.meta} />
-</main>
+</section>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
+
+<style lang="scss">
+    .chaptersHero {
+        position: relative;
+        padding-top: 32px;
+
+        .wrap {
+            position: relative;
+        }
+
+        &-illustration {
+            position: absolute;
+            left: -100px;
+            top: -160px;
+            width: 380px;
+        }
+
+        .title {
+            font-weight: 400;
+            display: flex;
+            line-height: 1;
+            flex-wrap: wrap;
+
+            span {
+                display: flex;
+                align-items: center;
+                line-height: 1.1;
+            }
+
+            button {
+                display: flex;
+                align-items: center;
+                margin: 0 24px;
+                background-color: rgba(255, 255, 255, 0.2);
+                padding: 10px 32px;
+                border-radius: 30px;
+
+                p {
+                    font-size: 42px;
+                    margin-right: 20px;
+                }
+            }
+        }
+
+        .block {
+            position: relative;
+            min-height: 170px;
+            padding: 50px 40px;
+            border-radius: 24px;
+            overflow: hidden;
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        &-overlay {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            // background-color: #000;
+            background: linear-gradient(0deg, rgba(12, 52, 92, 0.7), rgba(12, 52, 92, 0.7)),
+                linear-gradient(0deg, rgba(226, 218, 207, 0.2), rgba(226, 218, 207, 0.2));
+        }
+
+        h1 {
+            position: relative;
+            z-index: 2;
+        }
+    }
+
+    .chaptersTabs {
+        position: relative;
+        padding-bottom: 32px;
+        .tabs {
+            .tab {
+                font-size: 20px;
+                color: #808080;
+                padding: 16px 24px;
+                height: auto;
+                line-height: 1;
+                transition: 0.3s;
+                margin-right: 8px;
+
+                &:focus {
+                    outline: none;
+                    box-shadow: none;
+                }
+
+                &:hover {
+                    color: #0c345c;
+                }
+
+                &.tab-active {
+                    color: #0c345c;
+                }
+            }
+        }
+    }
+
+    .chapters {
+        padding-bottom: 100px;
+
+        .wrap {
+            display: flex;
+            flex-wrap: wrap;
+            margin-right: -24px;
+            margin-bottom: 50px;
+        }
+    }
+
+    .chapterCard {
+        background-color: rgba(255, 255, 255, 0.6);
+        flex-basis: calc(100% / 3 - 24px);
+        padding: 24px;
+        border-radius: 24px;
+        margin-right: 24px;
+        margin-bottom: 24px;
+        transition: 0.3s;
+        display: flex;
+        flex-direction: column;
+
+        &-badge {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 40px;
+            padding: 5px 10px;
+            background-color: #f16041;
+            color: #fff;
+            font-size: 20px;
+            line-height: 1;
+            font-weight: 300;
+
+            &.badge-published {
+                background-color: #8ebff0;
+            }
+            &.badge-progress {
+                background-color: #1d80e2;
+            }
+        }
+
+        &-title {
+            font-size: 24px;
+            line-height: 1.3;
+            margin-bottom: 32px;
+            color: #4d4d4d;
+
+            i {
+                color: #1a1a1a;
+            }
+        }
+
+        .btn-trash {
+            transition: 0.3s;
+        }
+
+        &__img {
+            position: relative;
+            min-height: 180px;
+            overflow: hidden;
+            border-radius: 14px;
+            margin-bottom: 16px;
+
+            img {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+            }
+        }
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+        }
+
+        &:hover {
+            transform: scale(1.05);
+
+            .btn-trash {
+                opacity: 1;
+            }
+        }
+    }
+
+    @media (max-width: 991px) {
+        .chapterCard {
+            flex-basis: calc(100% / 2 - 24px);
+        }
+    }
+    @media (max-width: 767px) {
+        .chaptersHero {
+            .block {
+                padding: 40px 20px;
+            }
+
+            .title {
+                button {
+                    margin: 15px 0;
+                    p {
+                        font-size: 32px;
+                    }
+                }
+            }
+        }
+
+        .chaptersTabs {
+            .tabs {
+                .tab {
+                    font-size: 16px;
+                    margin-right: 0;
+                    padding: 12px 12px;
+                }
+            }
+        }
+
+        .chapterCard {
+            flex-basis: calc(100%);
+        }
+    }
+</style>

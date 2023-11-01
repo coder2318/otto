@@ -30,3 +30,11 @@
         </div>
     </div>
 </header>
+
+<style lang="scss">
+    .hero {
+        .fz_h1 {
+            color: #fff;
+        }
+    }
+</style>

@@ -11,14 +11,11 @@
     import finishYourBook from '@/assets/img/finishyourbook.jpg'
     import beginYourBookIcon from '@/assets/img/begin-your-book-icon.svg'
     import finishYourBookIcon from '@/assets/img/finishyourbookicon.svg'
-    import createOttoStoryIllustration from '@/assets/img/create-otto-story-illustration.svg'
-    import createOttos1 from '@/assets/img/create-ottos-1.svg'
-    import createOttos2 from '@/assets/img/create-ottos-2.svg'
-    import createOttos3 from '@/assets/img/create-ottos-3.svg'
     import designCoverIllustration from '@/assets/img/design-cover-illustration.svg'
     import coverAddIcon from '@/assets/img/cover-add-icon.svg'
     import QuoteIcon from '@/components/SVG/quote-icon.svg.svelte'
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
+    import CreateStory from '@/components/Stories/CreateStory.svelte'
     export let story: { data: App.Story }
 </script>
 
@@ -40,7 +37,7 @@
     <div class="otto-container">
         <div class="block">
             <div class="wrap">
-                <a use:inertia href="/stories/{story.data.id}/chapters" class="nCard">
+                <a use:inertia href="/stories/{story.data.id}/chapters" class="nCard beginYourBook">
                     <img class="nCard-bgi" src={beginYourBook} alt="writing room" />
 
                     <div class="nCard__content">
@@ -61,7 +58,7 @@
                     </div>
                 </a>
 
-                <a use:inertia href="/stories/{story.data.id}/edit" class="nCard">
+                <a use:inertia href="/stories/{story.data.id}/edit" class="nCard finishYourBook">
                     <img class="nCard-bgi" src={finishYourBook} alt="Continue Editing" />
 
                     <div class="nCard__content">
@@ -86,48 +83,7 @@
     </div>
 </section>
 
-<section class="createStory">
-    <div class="otto-container">
-        <div class="createStory_wrapper">
-            <img class="createStory-illustration" src={createOttoStoryIllustration} alt="Illustartion" />
-            <h2 class="fz_h2 title">Create new OttoStory</h2>
-            <div class="wrap">
-                <div class="createStory__description">
-                    <p>
-                        Chat with Otto and relive a cherished memory. Turn this treasured moment into a brand new
-                        chapter.
-                    </p>
-                </div>
-                <div class="createStory__blocks">
-                    <a
-                        class="createStory__block"
-                        href="/stories/{story.data.id}/chapters/create?redirect=record"
-                        use:inertia
-                    >
-                        <img src={createOttos1} alt="icon" />
-                        <h3 class="createStory__block-title">Record your Answer</h3>
-                    </a>
-                    <a
-                        class="createStory__block"
-                        href="/stories/{story.data.id}/chapters/create?redirect=upload"
-                        use:inertia
-                    >
-                        <img src={createOttos2} alt="icon" />
-                        <h3 class="createStory__block-title">Upload File</h3>
-                    </a>
-                    <a
-                        class="createStory__block"
-                        href="/stories/{story.data.id}/chapters/create?redirect=write"
-                        use:inertia
-                    >
-                        <img src={createOttos3} alt="icon" />
-                        <h3 class="createStory__block-title">Type your Story</h3>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+<CreateStory {story} />
 
 <section class="designCover">
     <div class="otto-container">
@@ -143,8 +99,8 @@
                     </div>
                     <div class="bookProgress">
                         <div class="bookProgress__content">
-                            <span class="bookProgress-count">10%</span>
-                            <span class="bookProgress-title">complete</span>
+                            <span class="bookProgress-count text-primary">10%</span>
+                            <span class="bookProgress-title text-primary">complete</span>
                         </div>
                         <progress class="progress progress-primary" value="40" max="100"></progress>
                     </div>
@@ -152,8 +108,8 @@
 
                 <div class="designCover__content">
                     <div class="designCover__content_top">
-                        <h3 class="title fz_h3">Design your Cover</h3>
-                        <div class="quote">
+                        <h3 class="title fz_h3 text-primary">Design your Cover</h3>
+                        <div class="quote text-primary">
                             <div class="quote-icon">
                                 <QuoteIcon />
                             </div>
@@ -164,7 +120,7 @@
                             <span class="quote-name font-serif"> ― Steve Cosgroves </span>
                         </div>
                     </div>
-                    <div class="statistics">
+                    <div class="statistics text-primary">
                         <div class="statistics__block">
                             <span class="statistics-count">1000</span>
                             <span class="statistics-subtitle">Words Written</span>
@@ -191,11 +147,11 @@
         position: relative;
         overflow: hidden;
 
-        .block {
-            background-color: #eae4dc;
-            border-radius: 24px;
-            padding: 50px;
-        }
+        // .block {
+        //     background-color: #eae4dc;
+        //     border-radius: 24px;
+        //     padding: 50px;
+        // }
 
         .wrap {
             display: flex;
@@ -211,7 +167,8 @@
         flex-basis: calc(100% / 2 - 30px);
         margin-right: 30px;
         overflow: hidden;
-        aspect-ratio: 16/11.8;
+        aspect-ratio: 16/10.8;
+        min-height: 280px;
 
         &::after {
             content: '';
@@ -254,13 +211,13 @@
             margin-bottom: 10px;
 
             span {
-                color: #d2e5f9;
+                color: #fff;
                 transition: 0.3s;
             }
         }
 
         &-subtitle {
-            color: #d2e5f9;
+            color: #fff;
             font-size: 18px;
             line-height: 1.33;
             font-weight: 400;
@@ -306,11 +263,57 @@
                 }
             }
         }
+
+        &.beginYourBook {
+            .nCard-title span {
+                color: #ffd885;
+            }
+            .nCard-subtitle {
+                color: #ffd885;
+            }
+            .nCard__btn {
+                background-color: #ffd885;
+            }
+            &:hover {
+                .nCard__btn {
+                    background-color: #ffbe33;
+                }
+                .nCard-subtitle {
+                    color: #ffbe33;
+                }
+                .nCard-title span {
+                    color: #ffbe33;
+                }
+            }
+        }
+
+        &.finishYourBook {
+            .nCard-title span {
+                color: #cfe3f3;
+            }
+            .nCard-subtitle {
+                color: #cfe3f3;
+            }
+            .nCard__btn {
+                background-color: #cfe3f3;
+            }
+            &:hover {
+                .nCard__btn {
+                    background-color: #8ebff0;
+                }
+                .nCard-subtitle {
+                    color: #8ebff0;
+                }
+                .nCard-title span {
+                    color: #8ebff0;
+                }
+            }
+        }
     }
 
     .smallBanner {
         width: 100%;
-        padding: 30px 0;
+        padding: 20px 0;
 
         .otto-container {
             position: relative;
@@ -336,10 +339,9 @@
             display: flex;
             align-items: center;
             width: 100%;
-            min-height: 200px;
             border-radius: 24px;
             background-color: #222;
-            padding: 30px 70px;
+            padding: 24px 50px;
             position: relative;
             overflow: hidden;
 
@@ -355,8 +357,8 @@
         }
 
         .title {
-            font-size: 54px;
-            line-height: 1.2;
+            font-size: 42px;
+            line-height: 1.1;
             color: #fff;
             position: relative;
             z-index: 2;
@@ -364,87 +366,10 @@
         }
     }
 
-    .createStory {
-        padding: 30px 0;
-
-        &-illustration {
-            position: absolute;
-            left: 0;
-            top: 0;
-        }
-
-        .title {
-            font-size: 46px;
-            color: #0c345c;
-            margin-bottom: 36px;
-        }
-
-        &_wrapper {
-            background-color: #fff7e5;
-            padding: 50px;
-            border-radius: 24px;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .wrap {
-            position: relative;
-            display: flex;
-            align-items: center;
-        }
-
-        &__blocks {
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            margin-right: -12px;
-        }
-
-        &__block {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex-basis: calc(100% / 3 - 12px);
-            margin-right: 12px;
-            height: 180px;
-            background-color: #fff;
-            border: 3px solid transparent;
-            transition: 0.3s linear;
-            border-radius: 24px;
-            cursor: pointer;
-            padding: 10px;
-
-            &:hover {
-                border: 3px solid #ffd886;
-            }
-
-            &-title {
-                font-size: 32px;
-                line-height: 1.25;
-                text-align: center;
-                color: #0c345c;
-            }
-        }
-
-        &__description {
-            width: 100%;
-            max-width: 378px;
-            margin-right: 36px;
-
-            p {
-                font-size: 18px;
-                color: #06192d;
-            }
-        }
-    }
-
     .designCover {
         padding-bottom: 100px;
 
         .title {
-            color: #0c345c;
             margin-bottom: 65px;
         }
 
@@ -526,13 +451,11 @@
             }
             &-count {
                 font-size: 36px;
-                color: #0c345c;
                 line-height: 1;
                 margin-right: 5px;
             }
             &-title {
                 font-size: 18px;
-                color: #0c345c;
                 line-height: 1;
             }
 
@@ -561,16 +484,16 @@
             }
             &-count {
                 font-size: 56px;
-                color: #0c345c;
                 line-height: 1;
                 margin-bottom: 10px;
                 text-align: center;
+                color: inherit;
             }
             &-subtitle {
                 font-size: 18px;
-                color: #0c345c;
                 line-height: 1;
                 text-align: center;
+                color: inherit;
             }
         }
 
@@ -595,22 +518,19 @@
             }
             &-name {
                 font-size: 24px;
-                color: #0c345c;
+                color: inherit;
             }
             blockquote {
                 font-size: 18px;
-                color: #0c345c;
                 margin-bottom: 5px;
                 max-width: 532px;
+                color: inherit;
             }
         }
     }
 
     @media (max-width: 1199px) {
         .yourNarrative {
-            .block {
-                padding: 30px;
-            }
             .wrap {
                 margin-right: -24px;
             }
@@ -620,7 +540,7 @@
             flex-basis: calc(50% - 24px);
             margin-right: 24px;
             &__content {
-                padding: 20px;
+                padding: 25px 20px;
             }
             &-title {
                 font-size: 32px;
@@ -630,23 +550,6 @@
             }
             &__btn {
                 transform: scale(0.9);
-            }
-        }
-
-        .createStory {
-            &_wrapper {
-                padding: 30px;
-            }
-            .title {
-                margin-bottom: 16px;
-            }
-            &__description {
-                max-width: 100%;
-                margin-bottom: 36px;
-            }
-            .wrap {
-                flex-direction: column;
-                align-items: flex-start;
             }
         }
 
@@ -678,40 +581,11 @@
 
     @media (max-width: 767px) {
         .smallBanner {
-            .block {
-                padding: 30px 20px;
-                min-height: 160px;
-            }
+            // .block {
+            //     padding: 30px 20px;
+            // }
             .title {
                 font-size: 32px;
-            }
-        }
-
-        .yourNarrative {
-            .block {
-                padding: 20px;
-            }
-        }
-
-        .createStory {
-            .title {
-                font-size: 36px;
-            }
-            &_wrapper {
-                padding: 30px 20px;
-            }
-
-            &__blocks {
-                width: auto;
-            }
-
-            &__block {
-                flex-basis: calc(100%);
-                margin-bottom: 12px;
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
             }
         }
 
