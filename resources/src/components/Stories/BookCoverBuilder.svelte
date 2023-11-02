@@ -10,7 +10,6 @@
 
     let svg: HTMLElement | SVGElement
 
-    $: cover = template.cover ?? import.meta.env.VITE_APP_URL + '/build/assets/cover-background.png'
     $: sizes = getSize(pages)
     $: updateSvg(parameters)
 
@@ -94,32 +93,6 @@
     style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
-    <image
-        href={parameters.background ?? cover}
-        preserveAspectRatio="xMinYMin slice"
-        x={0}
-        y={0}
-        width={sizes.width + 2 * sizes.safetyMargin}
-        height={sizes.height + 2 * sizes.safetyMargin}
-    />
-
-    <!-- <svg
-        x={sizes.bleedArea}
-        y={sizes.bleedArea}
-        width={sizes.width + 2 * sizes.safetyMargin}
-        height={sizes.height + 2 * sizes.safetyMargin}
-    >
-        {@html template.back ?? ''}
-    </svg>
-    <svg
-        x={sizes.bleedArea}
-        y={sizes.bleedArea}
-        width={sizes.spineWidth}
-        height={sizes.height + 2 * sizes.safetyMargin}
-    >
-        {@html template.spine ?? ''}
-    </svg> -->
-
     <svg x={0} y={0} width={sizes.width + 2 * sizes.safetyMargin} height={sizes.height + 2 * sizes.safetyMargin}>
         {@html template.front ?? ''}
     </svg>

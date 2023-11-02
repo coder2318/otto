@@ -1,10 +1,6 @@
 name: Legend
 
 fields:
-  # Background Cover
-  ## Cover should be included at every template otherwise it will not be editable from editor
-  ## Fields should be present in the template in a format
-  ## `data-[key]="[attribute to be set]"`
   - name: Cover Background
     key: background
     type: image
@@ -28,29 +24,31 @@ fields:
 ## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
 back: ''
 
-spine: |
-  <style>
-    @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
-  </style>
-  <rect x="0" y="0" width="100%" height="100%" fill="white" />
-  <text
-      x="50%"
-      y="50%"
-      width="100%"
-      text-anchor="middle"
-      dominant-baseline="middle"
-      height="100%"
-      font-family="Corbel"
-      style="transform-origin:center;transform:rotate(-90deg);"
-      font-size="calc(var(--spine-width) * 0.666)"
-      data-spine="innerText"
-  ></text>
+spine: ''
 
 front: |
   <style>
     @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
     @import url('https://fonts.cdnfonts.com/css/lunchtype22');
   </style>
+  <defs>
+    <linearGradient id="top-grad" x1="0" y1="0" x2="0" y2="1" >
+      <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+      <stop offset="100%" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="bot-grad" x1="0" y1="1" x2="0" y2="0" >
+        <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+        <stop offset="100%" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <image
+      href="/build/assets/cover-background-legend.jpg"
+      data-background="href"
+      preserveAspectRatio="xMinYMin slice"
+      x="0" y="0" width="100%" height="100%"
+  />
+  <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
+  <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
   <text
     x="288" y="75"
     font-size="3rem"
@@ -61,8 +59,8 @@ front: |
     data-text-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
-    fill="black"
-    style="text-transform:uppercase"
+    fill="white"
+    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
   >Author</text>
   <text
     x="288" y="814"
@@ -75,6 +73,6 @@ front: |
     font-family="Lunchtype22"
     font-weight="bold"
     letter-spacing="0.1em"
-    fill="black"
-    style="text-transform:uppercase"
+    fill="white"
+    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
   >Title</text>
