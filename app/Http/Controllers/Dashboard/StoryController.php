@@ -264,13 +264,13 @@ class StoryController extends Controller
         /** @var User */
         $user = $request->user();
 
-        if ($user->can('free-books')) {
-            try {
-                $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
-            } catch (\Exception $e) {
-                return redirect()->back()->with('error', $e->getMessage());
-            }
-        }
+        // if ($user->can('free-books')) {
+        //     try {
+        //         $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
+        //     } catch (\Exception $e) {
+        //         return redirect()->back()->with('error', $e->getMessage());
+        //     }
+        // }
 
         $print = $lulu->print(
             config('mail.from.address'),
