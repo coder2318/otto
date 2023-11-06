@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
@@ -40,6 +41,13 @@ Route::controller(SocialAuthController::class)
 Route::get('/guests/{guest:sqid}/login', GuestAuthController::class)
     ->name('login.guests')
     ->middleware(['signed']);
+
+// Subscription Plans
+Route::controller(PlanController::class)->middleware(['subscribed:0'])->name('plans.')->group(function () {
+    Route::get('/plans', 'index')->name('index');
+    Route::get('/plans/{plan}', 'show')->name('show')->middleware('auth');
+    Route::post('/plans/{plan}', 'update')->name('update')->middleware('auth');
+});
 
 // Guests Dashboard
 Route::group(['middleware' => ['auth:web,web-guest'], 'as' => 'guests.', 'prefix' => 'guests'], function () {
