@@ -5,7 +5,6 @@
 
 <script lang="ts">
     import Navbar from '@/components/Static/Navbar.svelte'
-    import PageHeader from '@/components/Static/PageHeader.svelte'
     import Footer from '@/components/Static/Footer.svelte'
     import PrivacyPolicy from '@/assets/md/privacy.md'
     import titleWithIllustration from '@/assets/img/title-with-illustration.svg'

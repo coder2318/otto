@@ -6,8 +6,6 @@
 
 <script lang="ts">
     import { inertia, page } from '@inertiajs/svelte'
-    import Fa from 'svelte-fa'
-    import { faBars } from '@fortawesome/free-solid-svg-icons'
 
     const links = [
         { href: '/settings/notifications', label: 'Notifications' },
@@ -65,7 +63,6 @@
             align-items: center;
         }
 
-        button,
         h1 {
             position: relative;
             z-index: 2;

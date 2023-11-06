@@ -10,8 +10,6 @@
     import { fade } from 'svelte/transition'
     import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
-    import { dayjs } from '@/service/dayjs'
-    import customChapter from '@/assets/img/custom-chapter.jpg'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
     import background from '@/assets/img/chapters-bgi.jpg'
     import { faClose, faArrowDownLong, faTrash } from '@fortawesome/free-solid-svg-icons'

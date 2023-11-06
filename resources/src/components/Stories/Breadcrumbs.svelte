@@ -1,7 +1,5 @@
 <script lang="ts">
     import { inertia } from '@inertiajs/svelte'
-    import { faBook, faCreditCard, faList } from '@fortawesome/free-solid-svg-icons'
-    import Fa from 'svelte-fa'
     import photo from '@/assets/img/story-edit/photo.svg'
     import table from '@/assets/img/story-edit/table.svg'
     import order from '@/assets/img/story-edit/order.svg'

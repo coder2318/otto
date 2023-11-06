@@ -193,14 +193,6 @@
     .tableContents {
         padding-bottom: 100px;
 
-        .collapse[open].collapse-arrow > .collapse-title,
-        .collapse-open.collapse-arrow > .collapse-title,
-        .collapse-arrow:focus:not(.collapse-close) > .collapse-title,
-        .collapse-arrow:not(.collapse-close) > input[type='checkbox']:checked ~ .collapse-title,
-        .collapse-arrow:not(.collapse-close) > input[type='radio']:checked ~ .collapse-title {
-            color: #fff;
-        }
-
         .collapse[open].collapse-arrow > .collapse-title .collapse-arrow,
         .collapse-open.collapse-arrow > .collapse-title .collapse-arrow,
         .collapse-arrow:focus:not(.collapse-close) > .collapse-title .collapse-arrow,
@@ -272,23 +264,6 @@
                 &:hover {
                     background: #fff;
                     border: 1px solid #fff;
-
-                    :global(svg path) {
-                        stroke: #fff;
-                    }
-                }
-
-                svg {
-                    display: block;
-                    width: 24px;
-                    height: auto;
-                    position: relative;
-                    z-index: 1;
-                    transition: 0.3s;
-
-                    path {
-                        transition: 0.3s;
-                    }
                 }
             }
 
