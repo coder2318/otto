@@ -76,7 +76,12 @@
         </div>
 
         <div class="form-control mt-8 w-full">
-            <button class="btn btn-primary rounded-full" type="submit">Save Password</button>
+            <button class="btn btn-primary rounded-full" type="submit">
+                {#if $form.processing}
+                    <span class="loading loading-spinner" />
+                {/if}
+                Save Password
+            </button>
         </div>
     </form>
 </div>

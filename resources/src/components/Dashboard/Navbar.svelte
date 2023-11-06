@@ -12,7 +12,7 @@
 
 <nav class="navbar sticky top-0 z-20 bg-primary px-5 py-4 text-primary-content md:px-12">
     <div class="navbar-start">
-        <a class="relative block h-14 w-fit" href="/" use:inertia>
+        <a class="relative block h-14 w-fit" href="/stories" use:inertia>
             <Logo class="hidden h-full md:block" />
             <LogoIcon class="h-full md:hidden" />
         </a>

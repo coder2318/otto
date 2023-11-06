@@ -38,7 +38,12 @@
         </div>
 
         <div class="form-control w-full">
-            <button class="btn btn-primary rounded-full" type="submit">Resend Verification Email</button>
+            <button class="btn btn-primary rounded-full" type="submit">
+                {#if $form.processing}
+                    <span class="loading loading-spinner" />
+                {/if}
+                Resend Verification Email
+            </button>
         </div>
     </form>
 </div>

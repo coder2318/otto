@@ -13,6 +13,9 @@
     import { start, done } from '@/components/Loading.svelte'
     import { bytes } from '@/service/helpers'
     import { dayjs } from '@/service/dayjs'
+    import createOttos1 from '@/assets/img/create-ottos-1.svg'
+    import createOttos2 from '@/assets/img/create-ottos-2.svg'
+    import createOttos3 from '@/assets/img/create-ottos-3.svg'
 
     export let chapter: { data: App.Chapter }
 
@@ -56,7 +59,7 @@
 <form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
         <div class="card-body gap-4">
-            <h1 class="card-title mb-4 text-3xl font-normal italic">{chapter.data.title}</h1>
+            <h1 class=" card-title mb-4 block text-center text-3xl font-normal italic">{chapter.data.title}</h1>
 
             {#each chapter.data?.attachments as recording}
                 <div class="card bg-neutral">
@@ -100,10 +103,29 @@
                     </div>
                 </div>
             {:else}
-                <div class="card text-base-content/60">
+                <!-- <div class="card text-base-content/60">
                     <div class="card-body items-center">
                         <span>No attachments found</span>
                     </div>
+                </div> -->
+                <div class="createStory__blocks">
+                    <a
+                        class="createStory__block record bg-base-100"
+                        href="/chapters/{chapter.data.id}/record"
+                        use:inertia
+                    >
+                        <img src={createOttos1} alt="icon" />
+                        <span class="createStory__block-title">Record your Story</span>
+                    </a>
+
+                    <a class="createStory__block upload" href="/chapters/{chapter.data.id}/write" use:inertia>
+                        <img src={createOttos2} alt="icon" />
+                        <span class="createStory__block-title">Type your Story</span>
+                    </a>
+                    <a class="createStory__block type" href="/chapters/{chapter.data.id}/upload" use:inertia>
+                        <img src={createOttos3} alt="icon" />
+                        <span class="createStory__block-title">Upload File</span>
+                    </a>
                 </div>
             {/each}
         </div>
@@ -129,3 +151,47 @@
         </div>
     </form>
 </dialog>
+
+<style lang="scss">
+    .createStory__blocks {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        width: 100%;
+        max-width: 720px;
+        margin: 0 auto;
+    }
+    .createStory__block {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        flex-basis: calc(100% / 3 - 30px);
+        margin-right: 30px;
+        height: 118px;
+        background-color: #fff;
+        border: 3px solid transparent;
+        transition: 0.3s linear;
+        border-radius: 30px;
+        cursor: pointer;
+        padding: 5px;
+
+        &:hover {
+            border: 3px solid #ffd886;
+        }
+
+        &-title {
+            font-size: 20px;
+            line-height: 1.1;
+            text-align: center;
+            color: #06192d;
+            font-weight: 400;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 767px) {
+            flex-basis: calc(100%);
+            margin-bottom: 16px;
+        }
+    }
+</style>

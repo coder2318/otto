@@ -358,6 +358,9 @@
 
 .dArticle {
     padding: 124px 0 80px;
+    @media (max-width: 767px) {
+        padding: 80px 0;
+    }
     .articleTop {
         position: relative;
         padding-bottom: 48px;
@@ -368,8 +371,10 @@
             top: -37px;
         }
     }
+    
     .content {
         position: relative;
+        color: #0c345c;
 
         p {
             display: block;
@@ -383,9 +388,9 @@
             line-height: 1.1;
             position: relative;
             z-index: 2;
-            color: #0c345c;
+            color: inherit;
             margin-top: 44px;
-            margin-bottom: 44px;
+            margin-bottom: 24px;
 
             @media (max-width: 1280px) {
                 font-size: 48px;
@@ -395,11 +400,23 @@
             }
         }
         h3 {
-            font-size: 20px;
-            color: #333;
+            font-size: 48px;
+            line-height: 1.1;
             margin-bottom: 16px;
-            font-weight: 600;
-            font-family: 'ABC Diatype';
+            font-weight: 400;
+            margin-top: 44px;
+            margin-bottom: 24px;
+            color: inherit;
+            @media (max-width: 1280px) {
+                font-size: 38px;
+            }
+            @media (max-width: 767px) {
+                font-size: 28px;
+            }
+
+            &:nth-child(1){
+                margin-top: 0;
+            }
         }
         ol {
             margin-bottom: 44px;
@@ -411,24 +428,44 @@
                 font-size: 18px;
                 line-height: 1.7;
                 color: #4d4d4d;
+
+                p{
+                    color: #333;
+                    &:first-child {
+                        font-weight: 500;
+                    }
+                }
+
+                ul {
+                    padding-left: 24px;
+                    li {
+                        list-style: disc;
+                        p {
+                            font-weight: 400 !important;
+                        }
+                    }
+                }
             }
         }
 
-        ol li p{
-            color: #333;
-            &:first-child {
-                font-weight: 500;
+        ul{
+            margin-bottom: 44px;
+            padding-left: 60px;
+            li{
+                list-style: auto;
+                margin-bottom: 5px;
+                font-size: 18px;
+                line-height: 1.7;
+                color: #4d4d4d;
+
+                &:last-child{
+                    margin-bottom: 0;
+                }
             }
         }
-        ol li ul {
-            padding-left: 24px;
-        }
-        ol li ul li {
-            list-style: disc;
-        }
-        ol li ul li p {
-            font-weight: 400 !important;
-        }
+
+
     }
+
 }
 

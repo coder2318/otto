@@ -92,7 +92,12 @@
         </div>
 
         <div class="form-control mt-8 w-full">
-            <button class="btn btn-primary rounded-full" type="submit">Sign Up</button>
+            <button class="btn btn-primary rounded-full" type="submit">
+                {#if $form.processing}
+                    <span class="loading loading-spinner" />
+                {/if}
+                Sign Up
+            </button>
         </div>
 
         <div class="mt-4 text-center">

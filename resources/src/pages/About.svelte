@@ -40,7 +40,7 @@
                 <div class="aboutUs__desc g-text-wrap">
                     <p>
                         Everyone has a unique story, and at OttoStory, we turn it into an extraordinary autobiography.
-                        Meet Otto, your AI biographer, guiding you through a reflective journey of your life's
+                        Meet OttoStory, your AI biographer, guiding you through a reflective journey of your life's
                         experiences.
                     </p>
                     <p>
@@ -75,11 +75,17 @@
     </div>
 </section>
 
-<main
-    class="!container prose mx-auto mb-16 px-4 lg:prose-lg xl:prose-xl prose-h1:mt-16 prose-h1:font-normal prose-h1:text-primary"
->
-    <About />
-</main>
+<section class="dArticle">
+    <div class="otto-container">
+        <div class="articleTop">
+            <h2 class="fz_h2 title">The OttoStory Adventure: Changing How We Tell Stories</h2>
+            <img class="articleTop-illustration" src={titleWithIllustration} alt="Illustration" />
+        </div>
+        <div class="content">
+            <About />
+        </div>
+    </div>
+</section>
 
 <Footer />
 

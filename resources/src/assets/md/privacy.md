@@ -1,6 +1,6 @@
 This Privacy Policy describes how ottostory.com ("we," "our," or "us") collects, uses, and shares your personal information when you use our book writing platform. We are committed to protecting your privacy and ensuring the security of your personal data. By using ottostory.com, you agree to the terms outlined in this Privacy Policy.
 
-## Information We Collect
+### Information We Collect
 
 ### Personal Information
 - When you register on ottostory.com, we may collect your name, email address, and password.
@@ -12,7 +12,7 @@ This Privacy Policy describes how ottostory.com ("we," "our," or "us") collects,
 ### Usage Data
 - We collect data about your interactions with ottostory.com, including the pages you visit, the features you use, and the content you access.
 
-## How We Use Your Information
+### How We Use Your Information
 
 We use your personal information for the following purposes:
 
@@ -23,7 +23,7 @@ We use your personal information for the following purposes:
 - To maintain the security and integrity of our platform.
 - To comply with legal obligations and protect our rights.
 
-## Data Sharing
+### Data Sharing
 
 We do not sell your personal information to third parties. However, we may share your information with:
 
@@ -31,11 +31,11 @@ We do not sell your personal information to third parties. However, we may share
 - Law enforcement and government agencies as required by law.
 - In the event of a business merger, acquisition, or sale, your data may be transferred as part of the transaction.
 
-## Data Security
+### Data Security
 
 We take reasonable measures to protect your personal information from unauthorized access, disclosure, alteration, or destruction using encryption and private cloud storage. However, no data transmission over the internet can be guaranteed to be completely secure. We cannot ensure the security of the information you transmit to us, and you do so at your own risk.
 
-## Your Choices
+### Your Choices
 
 You have the right to:
 - Access, correct, or delete your personal information.
@@ -43,15 +43,15 @@ You have the right to:
 
 To exercise these rights, please contact us at social@ottostory.com.
 
-## Cookies
+### Cookies
 
 We use cookies and similar tracking technologies to enhance your experience on ottostory.com. You can control cookies through your browser settings.
 
-## Changes to this Privacy Policy
+### Changes to this Privacy Policy
 
 We may update this Privacy Policy to reflect changes in our practices or for other operational, legal, or regulatory reasons. We will notify you of any significant changes by posting a notice on our website or sending you an email.
 
-## Contact Us
+### Contact Us
 
 If you have any questions or concerns about this Privacy Policy or our data practices, please contact us at social@ottostory.com.
 

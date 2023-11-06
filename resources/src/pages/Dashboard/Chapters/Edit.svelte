@@ -60,7 +60,7 @@
                 use:autosize={{ offset: 2 }}
                 bind:value={$form.title}
             />
-            <div class="grid grid-cols-1 gap-8 p-4 md:grid-cols-3">
+            <div class="3455 grid grid-cols-1 gap-8 p-4 md:grid-cols-3">
                 <a
                     class="card bg-neutral transition-transform hover:scale-105"
                     href="/chapters/{chapter.data.id}/record"
