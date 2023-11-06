@@ -135,7 +135,7 @@
             <button type="submit" class="btn btn-secondary rounded-full" disabled={$form.processing}>
                 {#if $form.processing}
                     <span class="loading loading-spinner" />
-                {/if} 
+                {/if}
                 Save
             </button>
         {/if}

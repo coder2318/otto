@@ -25,9 +25,6 @@
     import manIllustration from '@/assets/img/man-illustration.png'
     import whiteOrangeFigure from '@/assets/img/white-orange-figure.svg'
     import yellowWhiteFigure from '@/assets/img/yellow-white-figure.svg'
-    export let story: { data: App.Story }
-
-    console.log(story)
 </script>
 
 <svelte:head>
