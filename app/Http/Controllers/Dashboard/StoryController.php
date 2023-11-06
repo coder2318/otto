@@ -71,7 +71,7 @@ class StoryController extends Controller
     public function show(Story $story)
     {
         return Inertia::render('Dashboard/Stories/ShowV2', [
-            'story' => fn () => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story->load('cover')),
         ]);
     }
 
@@ -83,7 +83,7 @@ class StoryController extends Controller
                 BookCoverTemplate::when(
                     $tmpl = $request->query('template'),
                     fn ($query) => $query->where('id', $tmpl)
-                )->firstOrFail()
+                )->orderBy('created_at')->firstOrFail()
             ),
         ]);
     }
@@ -200,13 +200,56 @@ class StoryController extends Controller
         /** @var Media $cover */
         $image = Image::make($cover->stream());
 
-        $spineWidth = (($story->pages > 32 ? $story->pages : 32) / 444 + 0.06) * 25.4;
-
         return Pdf::loadView('pdf.book-cover', [
             'cover' => $image->encode('data-url'),
-            'width' => (2 * 155.18 + $spineWidth).'mm',
-            'height' => '235mm',
+            'width' => (2 * 178.181 + $this->spineWidth($story->pages)).'mm',
+            'height' => '278mm',
         ])->stream();
+    }
+
+    protected function spineWidth(int $pages): float
+    {
+        if ($pages < 24) {
+            return 0.25 * 25.4;
+        }
+
+        $stops = [
+            24 => 0.25,
+            85 => 0.5,
+            141 => 0.625,
+            169 => 0.688,
+            195 => 0.75,
+            223 => 0.813,
+            251 => 0.875,
+            279 => 0.938,
+            307 => 1,
+            335 => 1.063,
+            361 => 1.125,
+            389 => 1.188,
+            417 => 1.25,
+            445 => 1.313,
+            473 => 1.375,
+            501 => 1.438,
+            529 => 1.5,
+            557 => 1.563,
+            583 => 1.625,
+            611 => 1.688,
+            639 => 1.75,
+            667 => 1.813,
+            695 => 1.875,
+            723 => 1.938,
+            751 => 2,
+            779 => 2.063,
+            800 => 2.12,
+        ];
+
+        foreach ($stops as $_pages => $width) {
+            if ($pages > $_pages) {
+                return $width * 25.4;
+            }
+        }
+
+        return 2.12 * 25.4;
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
@@ -238,7 +281,7 @@ class StoryController extends Controller
         $cost = rescue(fn () => $lulu->cost(
             LineItem::from([
                 'page_count' => $story->pages,
-                'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
+                'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
                 'quantity' => 1,
             ]),
             $request->shippingAddress(),
@@ -277,7 +320,7 @@ class StoryController extends Controller
             LineItem::from([
                 'printable_normalization' => PrintableNormalization::from([
                     //         'external_id' => $payment->external_id, // @phpstan-ignore-line
-                    'pod_package_id' => '0600X0900FCSTDPB080CW444GXX',
+                    'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
                     'cover' => ['source_url' => route('dashboard.stories.book-cover', compact('story'))],
                     'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
                 ]),

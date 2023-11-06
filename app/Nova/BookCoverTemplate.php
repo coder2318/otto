@@ -47,11 +47,13 @@ class BookCoverTemplate extends Resource
                 ->sortable()
                 ->rules('required', 'max:254'),
 
-            Code::make('Front')->language('xml'),
+            Code::make('Base')->language('xml')->height('auto'),
 
-            Code::make('Spine')->language('xml'),
+            Code::make('Front')->language('xml')->height('auto'),
 
-            Code::make('Back')->language('xml'),
+            Code::make('Spine')->language('xml')->height('auto'),
+
+            Code::make('Back')->language('xml')->height('auto'),
 
             BookCoverParams::make('Fields'),
         ];

@@ -105,7 +105,7 @@
                 {#each stories.data as story}
                     <div class="book">
                         <div class="book__cover">
-                            <img src={story.cover} alt="cover" />
+                            <img src={story.cover} class="aspect-[2/3] h-full object-cover object-right" alt="cover" />
                         </div>
                         <div class="book__wrap">
                             <div class="book__content">
@@ -318,23 +318,13 @@
             }
 
             &__cover {
-                min-width: 133px;
-                max-width: 133px;
+                min-width: 120px;
                 height: 180px;
                 position: relative;
                 overflow: hidden;
                 background-color: #ece6df;
                 border-radius: 10px;
                 margin-right: 24px;
-
-                img {
-                    position: absolute;
-                    left: 0;
-                    top: 0;
-                    width: 100%;
-                    height: 100%;
-                    object-fit: cover;
-                }
             }
 
             &__wrap {

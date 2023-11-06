@@ -120,7 +120,7 @@
                             `https://placehold.co/600x400?${new URLSearchParams({
                                 text: story.title,
                             })}`}
-                        class="h-full object-contain"
+                        class="aspect-[2/3] h-full object-cover object-right"
                         alt={story.title}
                     />
                 </figure>

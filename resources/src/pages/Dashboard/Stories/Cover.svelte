@@ -95,7 +95,7 @@
 
 <form on:submit|preventDefault={submit} in:fade id="book-cover">
     <section class="bookCover">
-        <div class="otto-container">
+        <div class="container mx-auto">
             <div class="wrap">
                 <div class="bookCover__block">
                     <img class="bookCover-illustration-1" src={bookCoverIllustration1} alt="Illustration" />
@@ -154,7 +154,7 @@
                         </div>
                     {/if}
                 </div>
-                <div class="bookCover__cover">
+                <div class="bookCover__cover flex items-center justify-center">
                     <BookCoverBuilder
                         bind:this={builder}
                         class="select-none {!editing ? 'hidden' : ''}"

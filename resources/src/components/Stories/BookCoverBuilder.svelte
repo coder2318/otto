@@ -59,21 +59,60 @@
         })
     }
 
+    function getSpineWidth(pages) {
+        if (pages < 24) {
+            return 0.25
+        }
+
+        const stops = {
+            24: 0.25,
+            85: 0.5,
+            141: 0.625,
+            169: 0.688,
+            195: 0.75,
+            223: 0.813,
+            251: 0.875,
+            279: 0.938,
+            307: 1,
+            335: 1.063,
+            361: 1.125,
+            389: 1.188,
+            417: 1.25,
+            445: 1.313,
+            473: 1.375,
+            501: 1.438,
+            529: 1.5,
+            557: 1.563,
+            583: 1.625,
+            611: 1.688,
+            639: 1.75,
+            667: 1.813,
+            695: 1.875,
+            723: 1.938,
+            751: 2,
+            779: 2.063,
+            800: 2.12,
+        }
+
+        for (const [key, value] of Object.entries(stops)) {
+            if (pages > key) {
+                return value
+            }
+        }
+        return 2.12
+    }
+
     export function getSize(pages) {
-        let width = 5.5,
-            height = 8.5,
-            safetyMargin = 0.25,
-            bleedArea = 0.125,
-            spineWidth = (pages > 32 ? pages : 32) / 444 + 0.06 // https://blog.lulu.com/book-spine/
+        let width = 6.265,
+            height = 9.46,
+            spineWidth = getSpineWidth(pages) // https://blog.lulu.com/book-spine/
 
         const sizes = {
-            totalHeight: height + 2 * safetyMargin,
-            totalWidth: width + 2 * safetyMargin,
+            totalHeight: height,
+            totalWidth: 2 * width + spineWidth,
             width,
             height,
             spineWidth,
-            bleedArea,
-            safetyMargin,
         }
 
         Object.keys(sizes).forEach((key) => (sizes[key] = sizes[key] * 96))
@@ -82,7 +121,7 @@
     }
 
     export function getCoverAspectRatio() {
-        return (sizes.width + 2 * sizes.safetyMargin) / (sizes.height + 2 * sizes.safetyMargin)
+        return sizes.width / sizes.height
     }
 </script>
 
@@ -93,7 +132,13 @@
     style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
-    <svg x={0} y={0} width={sizes.width + 2 * sizes.safetyMargin} height={sizes.height + 2 * sizes.safetyMargin}>
+    <svg x={0} y={0} width={sizes.width} height={sizes.height}>
+        {@html template.back ?? ''}
+    </svg>
+    <svg x={sizes.width} y={0} width={sizes.spineWidth} height={sizes.height}>
+        {@html template.spine ?? ''}
+    </svg>
+    <svg x={sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height}>
         {@html template.front ?? ''}
     </svg>
 </svg>

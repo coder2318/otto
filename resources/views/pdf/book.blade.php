@@ -3,10 +3,10 @@
     <title>{{ $story->title }}</title>
     <style>
         @page {
-            sheet-size: 6.25in 9.25in;
-            margin: 1in;
-            margin-bottom: 1.25in;
-            margin-footer: 1in;
+            sheet-size: 6.39in 9.46in;
+            margin: 0.8in;
+            margin-bottom: 1in;
+            margin-footer: 0.8in;
             header: page-header;
             footer: page-footer;
         }

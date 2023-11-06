@@ -2,12 +2,12 @@
 <head>
     <style>
         @page {
-            margin: 0.125in;
+            margin: 0.75in;
             sheet-size: {{ $width }} {{ $height }};
         }
     </style>
 </head>
 <body>
-    <img src="{{ $cover }}" style="float:right;margin-bottom:-1mm" height="100%" />
+    <img src="{{ $cover }}" width="100%" height="100%" />
 </body>
 </html>

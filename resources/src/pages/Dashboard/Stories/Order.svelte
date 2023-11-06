@@ -257,7 +257,11 @@
 
                     <div class="bookInfo grid grid-cols-4 items-center justify-center gap-2">
                         <div class="col-span-1">
-                            <img src={story.data.cover} alt="cover" class="w-full" />
+                            <img
+                                src={story.data.cover}
+                                alt="cover"
+                                class="aspect-[2/3] w-full object-cover object-right"
+                            />
                         </div>
                         <div class="col-span-3 text-primary">
                             <h4 class="bookInfo-author font-serif">
