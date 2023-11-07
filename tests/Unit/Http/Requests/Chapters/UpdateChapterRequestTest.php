@@ -61,7 +61,7 @@ class UpdateChapterRequestTest extends TestCase
                 'required',
                 'file',
                 'mimes:webm,weba,wav,mp3,text,txt,pdf,docx,m4a,m2a',
-                'max:20480',
+                'max:51200',
             ],
             'attachments.*.options' => [
                 'nullable',

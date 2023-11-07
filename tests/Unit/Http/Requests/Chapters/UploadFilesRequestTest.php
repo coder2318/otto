@@ -33,7 +33,7 @@ class UploadFilesRequestTest extends TestCase
                 'required',
                 'file',
                 'mimetypes:audio/*,text/plain,document/*',
-                'max:20480',
+                'max:51200',
             ],
         ], $actual);
     }
