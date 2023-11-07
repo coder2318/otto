@@ -64,7 +64,7 @@ return [
         'fake' => env('OPENAI_FAKE', env('APP_ENV', 'production') !== 'production'),
         'models' => [
             'audio' => 'whisper-1',
-            'chat' => 'gpt-3.5-turbo',
+            'chat' => 'gpt-4-1106-preview',
             'completions' => 'text-davinci-003',
             'edits' => 'text-davinci-edit-001',
         ],
