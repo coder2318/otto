@@ -8,6 +8,6 @@
     </style>
 </head>
 <body>
-    <img src="{{ $cover->getTemporaryUrl(now()->addMinutes(5)) }}" width="100%" height="100%" />
+    <img src="{{ $cover->getUrl() }}" width="100%" height="100%" />
 </body>
 </html>
