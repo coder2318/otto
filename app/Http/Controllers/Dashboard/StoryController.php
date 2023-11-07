@@ -204,14 +204,17 @@ class StoryController extends Controller
     {
         ini_set('pcre.backtrack_limit', '5000000');
         abort_unless((bool) $cover = $story->cover, 404);
-        /** @var Media $cover */
-        $image = Image::make($cover->stream());
 
-        return Pdf::loadView('pdf.book-cover', [
-            'cover' => $image->encode('data-url'),
+        $pdf = Pdf::loadView('pdf.book-cover', [
+            'cover' => $cover,
             'width' => (2 * 178.181 + $this->spineWidth($story->pages)).'mm',
             'height' => '278mm',
-        ])->stream();
+        ]);
+        /** @var Mpdf */
+        $mpdf = $pdf->getMpdf();
+        $mpdf->curlAllowUnsafeSslRequests = true;
+
+        return $pdf->stream($story->title.'.pdf');
     }
 
     protected function spineWidth(int $pages): float
