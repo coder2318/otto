@@ -9,7 +9,6 @@
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import type { FilePond as FilePondType } from 'filepond'
     import { createCropperForFilepond } from '@/service/cropper'
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
@@ -22,7 +21,7 @@
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
 
-    let element: HTMLElement, modal: HTMLDialogElement, filepond: FilePondType, builder: BookCoverBuilder, editor: any
+    let element: HTMLElement, modal: HTMLDialogElement, builder: BookCoverBuilder, editor: any
 
     let parameters = {} as any
 
@@ -128,7 +127,6 @@
                                         <FilePond
                                             name={field.key}
                                             server={false}
-                                            bind:pond={filepond}
                                             onpreparefile={async (file, blob) =>
                                                 (parameters[field.key] = await fileToBase64(blob))}
                                             onremovefile={() => (parameters[field.key] = null)}
