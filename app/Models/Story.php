@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mccarlosen\LaravelMpdf\LaravelMpdf;
+use Mpdf\Mpdf;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -68,17 +69,19 @@ class Story extends Model implements HasMedia
     protected function pages(): Attribute
     {
         return Attribute::get(function () {
-            /** @var LaravelMpdf */
-            $pdf = tap(Pdf::loadView('pdf.book', [
-                'story' => $this,
-                'chapters' => $this->chapters()
-                    ->where('status', ChapterStatus::PUBLISHED)
-                    ->orderBy('timeline_id', 'asc')
-                    ->orderBy('order', 'asc')
-                    ->lazy(),
-            ]), fn (LaravelMpdf $pdf) => $pdf->output());
+            $chapters = $this->chapters()
+                ->with('images')
+                ->where('status', Status::PUBLISHED)
+                ->orderBy('timeline_id', 'asc')
+                ->orderBy('order', 'asc')
+                ->lazy();
 
-            return $pdf->getMpdf()->page; // @phpstan-ignore-line
+            $pdf = Pdf::loadView('pdf.book', ['story' => $this, 'chapters' => $chapters]);
+            /** @var Mpdf */
+            $mpdf = $pdf->getMpdf();
+            $mpdf->curlAllowUnsafeSslRequests = true;
+            $pdf->output();
+            return $mpdf->page;
         })->shouldCache();
     }
 

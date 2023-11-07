@@ -103,7 +103,7 @@
             @foreach ($chapter->images as $image)
                 <pagebreak/>
                 <figure style="text-align:center;height:100%;display:table-cell;vertical-align:middle">
-                    <img src="{{ \Image::make($image->stream())->encode('data-url') }}" width="100%" style="margin-bottom:0.5rem" />
+                    <img src="{{ $image->getTemporaryUrl(now()->addMinutes(5)) }}" width="100%" style="margin-bottom:0.5rem" />
                     <figcaption style="font-size:0.8rem;font-style:italic">{{ $image->getCustomProperty('caption') }}</figcaption>
                 </figure>
             @endforeach

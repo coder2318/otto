@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Intervention\Image\Facades\Image;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
+use Mpdf\Mpdf;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
@@ -185,12 +186,18 @@ class StoryController extends Controller
     public function book(Story $story)
     {
         $chapters = $story->chapters()
+            ->with('images')
             ->where('status', Status::PUBLISHED)
             ->orderBy('timeline_id', 'asc')
             ->orderBy('order', 'asc')
             ->lazy();
 
-        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream($story->title.'.pdf');
+        $pdf = Pdf::loadView('pdf.book', compact('story', 'chapters'));
+        /** @var Mpdf */
+        $mpdf = $pdf->getMpdf();
+        $mpdf->curlAllowUnsafeSslRequests = true;
+
+        return $pdf->stream($story->title.'.pdf');
     }
 
     public function bookCover(Story $story)
