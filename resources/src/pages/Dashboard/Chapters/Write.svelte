@@ -9,7 +9,7 @@
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import { onMount } from 'svelte'
@@ -21,11 +21,13 @@
 
     let editor: Editor
     let modal: HTMLDialogElement
+    let input: HTMLInputElement
 
     const form = useForm({
         content: chapter.data.content ?? '',
         title: chapter.data.title,
         status: chapter.data.status,
+        images: [],
     })
 
     $: words =
@@ -68,11 +70,30 @@
         $form
             .transform((data) => ({
                 ...data,
+                _method: 'PUT',
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(`/chapters/${chapter.data.id}`, {
+            .post(`/chapters/${chapter.data.id}`, {
                 preserveScroll: true,
+                onSuccess: () => {
+                    $form.images = []
+                    $form.defaults({
+                        content: chapter.data.content ?? '',
+                        title: chapter.data.title,
+                        status: chapter.data.status,
+                        images: [],
+                    })
+                },
             })
+    }
+
+    function addImages(event) {
+        $form.images.push({
+            file: event.target.files[0],
+            caption: prompt('Please enter image caption'),
+        })
+
+        $form.images = $form.images
     }
 </script>
 
@@ -110,6 +131,36 @@
                 bind:content={$form.content}
                 placeholder="Write your story here..."
             />
+            <input bind:this={input} type="file" accept="image/*" class="hidden" on:change={addImages} />
+            {#if chapter.data.images?.length}
+                <div class="border border-neutral-content/20 bg-neutral p-4">
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        {#each chapter.data.images as image}
+                            <figure class="flex w-96 flex-col rounded-xl bg-base-100" in:fade>
+                                <img src={image.url} alt={image.caption} class="w-full bg-base-200" />
+                                <figcaption class="p-2 italic">{image.caption}</figcaption>
+                            </figure>
+                        {/each}
+                    </div>
+                </div>
+            {:else if $form.images?.length}
+                <div class="border border-neutral-content/20 bg-neutral p-4">
+                    <div class="flex flex-wrap items-center justify-center gap-4">
+                        {#each $form.images as image (image.file.name)}
+                            <figure class="flex w-96 flex-col rounded-xl bg-base-100" in:fade>
+                                <img src={URL.createObjectURL(image.file)} alt={image.caption} class="w-full" />
+                                <figcaption class="p-2 italic">{image.caption}</figcaption>
+                            </figure>
+                        {/each}
+                    </div>
+                </div>
+            {:else}
+                <div class="border border-neutral-content/20 bg-neutral p-4">
+                    <button type="button" class="btn btn-ghost btn-sm" on:click|preventDefault={() => input.click()}>
+                        <Fa icon={faPlus} /> Add Image
+                    </button>
+                </div>
+            {/if}
             {#if $form.errors.content}
                 <span class="label-text-alt mt-1 text-left text-error">
                     {$form.errors.content}
@@ -123,7 +174,7 @@
             <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
             Go Back
         </a>
-        {#if $form.content != chapter.data.content}
+        {#if $form.isDirty}
             <button type="submit" class="btn btn-secondary rounded-full" data-status="draft"> Save & Next </button>
         {:else}
             <div class="flex gap-4">

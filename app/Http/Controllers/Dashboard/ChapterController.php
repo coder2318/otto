@@ -81,7 +81,7 @@ class ChapterController extends Controller
     public function write(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Write', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn () => ChapterResource::make($chapter->load('images')),
             'transcriptions' => fn () => session('transcriptions'),
         ]);
     }
@@ -270,6 +270,13 @@ class ChapterController extends Controller
             if ($transcription = $service->transcribe($record, $source, $target)) {
                 $transcriptions[$record->file_name] = $transcription;
             }
+        }
+
+        foreach ($request->validated('images') ?? [] as $image) {
+            $chapter->clearMediaCollection('images');
+            $record = $chapter->addMedia($image['file'])
+                ->withCustomProperties(['caption' => $image['caption'] ?? null])
+                ->toMediaCollection('images', 's3');
         }
 
         if (isset($transcriptions)) {

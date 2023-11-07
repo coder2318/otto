@@ -87,6 +87,7 @@ declare namespace App {
         cover: string | null
         attachments: Attachment[] | null
         question?: TimelineQuestion | null
+        images?: any[] | null
         status: string
         story_id: number | null
         story?: Story

@@ -98,6 +98,16 @@
             @endif
             @endforeach
         </section>
+
+        @if($chapter->images)
+            @foreach ($chapter->images as $image)
+                <pagebreak/>
+                <figure style="text-align:center;height:100%;display:table-cell;vertical-align:middle">
+                    <img src="{{ $image->getUrl() }}" width="100%" />
+                    <figcaption style="font-size:0.8rem;margin-top:0.2rem;font-style:italic">{{ $image->getCustomProperty('caption') }}</figcaption>
+                </figure>
+            @endforeach
+        @endif
     </article>
     @endforeach
 </body>

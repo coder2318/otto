@@ -33,7 +33,7 @@
     })
 </script>
 
-<div class="prose mx-auto my-4 max-w-none focus:outline-none">
+<div class="prose mx-auto max-w-none focus:outline-none">
     <slot name="top" />
     <div class="w-full" bind:this={element} {...$$restProps} />
 </div>

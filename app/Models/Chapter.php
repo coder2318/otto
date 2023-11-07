@@ -66,6 +66,11 @@ class Chapter extends Model implements HasMedia
         );
     }
 
+    public function images(): MorphMany
+    {
+        return $this->media()->where('collection_name', 'images');
+    }
+
     public function attachments(): MorphMany
     {
         return $this->media()->where('collection_name', 'attachments');

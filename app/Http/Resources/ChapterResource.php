@@ -42,6 +42,13 @@ class ChapterResource extends JsonResource
                     'created_at' => $record->created_at,
                 ]
             )),
+            'images' => $this->whenLoaded('images', fn () => $this->resource->images->map(
+                fn (Media $record) => [
+                    'id' => $record->id,
+                    'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
+                    'caption' => $record->getCustomProperty('caption'),
+                ],
+            )),
             'guest' => $this->whenLoaded('guest', fn () => GuestResource::make($this->resource->guest)),
             'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question)),
         ]);
