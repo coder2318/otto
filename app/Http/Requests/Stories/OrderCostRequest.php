@@ -3,7 +3,9 @@
 namespace App\Http\Requests\Stories;
 
 use App\Data\Lulu\ShippingAddress;
+use App\Data\Lulu\ShippingOption;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rules\Enum;
 
 class OrderCostRequest extends FormRequest
 {
@@ -19,6 +21,8 @@ class OrderCostRequest extends FormRequest
             'state_code' => ['sometimes', 'required', 'string'],
             'city' => ['sometimes', 'required', 'string'],
             'postal_code' => ['sometimes', 'required', 'string'],
+            'shipping_method' => ['sometimes', 'required', new Enum(ShippingOption::class)],
+            'quantity' => ['sometimes', 'required', 'integer', 'min:1'],
         ];
     }
 

@@ -282,10 +282,10 @@ class StoryController extends Controller
             LineItem::from([
                 'page_count' => $story->pages,
                 'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
-                'quantity' => 1,
+                'quantity' => $request->validated('quantity'),
             ]),
             $request->shippingAddress(),
-            ShippingOption::EXPRESS,
+            ShippingOption::from($request->validated('shipping_method')),
         ), fn ($e) => Session::flash('error', $e->getMessage()));
 
         if ($cost) {
@@ -324,11 +324,11 @@ class StoryController extends Controller
                     'cover' => ['source_url' => route('dashboard.stories.book-cover', compact('story'))],
                     'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
                 ]),
-                'quantity' => $story->created_at->diffInMonths(now()) < 6 ? 3 : 1,
+                'quantity' => $request->validated('quantity'),
                 'title' => $story->title,
             ]),
             $request->shippingAddress(),
-            ShippingOption::EXPRESS,
+            ShippingOption::from($request->validated('shipping_method')),
         );
 
         $story->printJobs()->create([

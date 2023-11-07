@@ -26,7 +26,40 @@
         country_code: new URLSearchParams(window.location.search).get('country_code') ?? '',
         state_code: '',
         postal_code: '',
+        shipping_method: 'EXPRESS',
+        quantity: 1,
     })
+
+    const shipping_methods = [
+        {
+            id: 'MAIL',
+            name: 'Mail',
+        },
+        {
+            id: 'PRIORITY_MAIL',
+            name: 'Priority Mail',
+        },
+        {
+            id: 'GROUND_HD',
+            name: 'Ground (HD)',
+        },
+        {
+            id: 'GROUND_BUS',
+            name: 'Ground (Business)',
+        },
+        {
+            id: 'GROUND',
+            name: 'Ground',
+        },
+        {
+            id: 'EXPEDITED',
+            name: 'Expedited',
+        },
+        {
+            id: 'EXPRESS',
+            name: 'Express',
+        },
+    ]
 
     function submit(event: SubmitEvent) {
         $form.submit(event.submitter.dataset.method, window.location.pathname, {
@@ -246,6 +279,45 @@
                             {#if $form.errors.postal_code}
                                 <span class="label-text-alt mt-1 text-left text-error">
                                     {$form.errors.postal_code}
+                                </span>
+                            {/if}
+                        </div>
+                        <div class="form-control">
+                            <label class="label" for="shipping_method">
+                                <span class="label-text">Shipping Method</span>
+                            </label>
+                            <select
+                                class="select select-bordered select-ghost"
+                                bind:value={$form.shipping_method}
+                                disabled={!!price}
+                            >
+                                {#each shipping_methods as method}
+                                    <option value={method.id}>{method.name}</option>
+                                {/each}
+                            </select>
+                            {#if $form.errors.shipping_method}
+                                <span class="label-text-alt mt-1 text-left text-error">
+                                    {$form.errors.shipping_method}
+                                </span>
+                            {/if}
+                        </div>
+                        <div class="form-control">
+                            <label class="label" for="quantity">
+                                <span class="label-text">Quantity</span>
+                            </label>
+                            <input
+                                bind:value={$form.quantity}
+                                type="number"
+                                name="quantity"
+                                id="quantity"
+                                placeholder="Quantity"
+                                class="input input-bordered input-ghost"
+                                disabled={!!price}
+                                min="1"
+                            />
+                            {#if $form.errors.quantity}
+                                <span class="label-text-alt mt-1 text-left text-error">
+                                    {$form.errors.quantity}
                                 </span>
                             {/if}
                         </div>
