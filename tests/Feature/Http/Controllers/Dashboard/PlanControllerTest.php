@@ -20,7 +20,7 @@ class PlanControllerTest extends TestCase
         \App\Models\Plan::factory()->times(3)->create();
         $user = $this->createUser(configured: true);
 
-        $response = $this->actingAs($user)->get(route('dashboard.plans.index'));
+        $response = $this->actingAs($user)->get(route('plans.index'));
 
         $response->assertOk();
 
@@ -37,7 +37,7 @@ class PlanControllerTest extends TestCase
 
         $this->mock(Request::class, fn ($mock) => $mock->shouldReceive('user->createSetupIntent')->andReturn());
 
-        $response = $this->actingAs($user)->get(route('dashboard.plans.show', [$plan]));
+        $response = $this->actingAs($user)->get(route('plans.show', [$plan]));
 
         $response->assertOk();
 
