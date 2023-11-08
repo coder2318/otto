@@ -20,7 +20,7 @@ class ChapterResource extends JsonResource
             'attachments' => $this->whenLoaded('attachments', fn () => $this->resource->attachments->map(
                 fn (Media $record) => [
                     'id' => $record->id,
-                    'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
+                    'url' => $record->getTemporaryUrl(now()->addHour()),
                     'name' => $record->file_name,
                     'size' => $record->size,
                     'transcribed' => $record->hasCustomProperty('transcript'),
@@ -45,7 +45,7 @@ class ChapterResource extends JsonResource
             'images' => $this->whenLoaded('images', fn () => $this->resource->images->map(
                 fn (Media $record) => [
                     'id' => $record->id,
-                    'url' => $record->getTemporaryUrl(now()->addMinutes(5)),
+                    'url' => $record->getTemporaryUrl(now()->addHour()),
                     'caption' => $record->getCustomProperty('caption'),
                 ],
             )),

@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Dashboard\PlanController;
-use App\Http\Controllers\Dashboard\StoryController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
 use App\Http\Controllers\SocialAuthController;
@@ -30,12 +29,6 @@ Route::controller(StaticController::class)->group(function () {
 
 // Search
 Route::post('/search', GlobalSearchController::class)->name('search')->middleware('auth');
-
-// Book contents
-Route::controller(StoryController::class)->prefix('/stories/{story}')->name('dashboard.stories.')->group(function () {
-    Route::get('/book', 'book')->name('book');
-    Route::get('/book-cover', 'bookCover')->name('book-cover');
-});
 
 // Auth
 Route::controller(SocialAuthController::class)

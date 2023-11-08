@@ -6,7 +6,7 @@
             sheet-size: 6.39in 9.46in;
             margin: 0.8in;
             margin-bottom: 1in;
-            margin-footer: 0.8in;
+            margin-footer: 0.75in;
             header: page-header;
             footer: page-footer;
         }
@@ -101,9 +101,8 @@
 
         @if($chapter->images)
             @foreach ($chapter->images as $image)
-                <pagebreak/>
-                <figure style="text-align:center;height:100%;display:table-cell;vertical-align:middle">
-                    <img src="{{ $image->getTemporaryUrl(now()->addMinutes(5)) }}" width="100%" style="margin-bottom:0.5rem" />
+                <figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem">
+                    <img src="{{ $image->getTemporaryUrl(now()->addMinute()) }}" style="margin-bottom:0.5rem;max-height:7in;width:100%" />
                     <figcaption style="font-size:0.8rem;font-style:italic">{{ $image->getCustomProperty('caption') }}</figcaption>
                 </figure>
             @endforeach

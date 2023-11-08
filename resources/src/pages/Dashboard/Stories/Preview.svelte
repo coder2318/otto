@@ -22,7 +22,7 @@
         Book Preview - <i>{story.data.title}</i>
     </h1>
     <embed
-        src="/pdf/web/viewer.html?file=/stories/{story.data.id}/book"
+        src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book)}"
         width="100%"
         class="min-h-[500px] flex-1 bg-base-300"
         type="application/pdf"

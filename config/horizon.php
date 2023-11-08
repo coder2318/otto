@@ -193,19 +193,6 @@ return [
             'timeout' => 60,
             'nice' => 0,
         ],
-        'supervisor-2' => [
-            'connection' => 'redis',
-            'queue' => ['enhance'],
-            'balance' => 'auto',
-            'autoScalingStrategy' => 'time',
-            'maxProcesses' => 1,
-            'maxTime' => 0,
-            'maxJobs' => 0,
-            'memory' => 512,
-            'tries' => 1,
-            'timeout' => 600,
-            'nice' => 0,
-        ],
     ],
 
     'environments' => [

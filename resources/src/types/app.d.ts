@@ -63,6 +63,7 @@ declare namespace App {
         status: string
         user_id: number
         user?: User
+        book?: any | null
         pages?: number
         timeline_id: number
         timeline?: Timeline

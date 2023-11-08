@@ -13,6 +13,7 @@ use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
+use App\Jobs\RegenerateBook;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Story;
@@ -163,6 +164,10 @@ class ChapterController extends Controller
             'status' => Status::PUBLISHED,
         ]);
 
+        if ($chapter->wasChanged('status')) {
+            dispatch(new RegenerateBook($chapter->story));
+        }
+
         return Inertia::render('Dashboard/Chapters/Finish', [
             'chapter' => fn () => ChapterResource::make($chapter),
             'questions' => fn () => TimelineQuestionResource::collection((
@@ -272,15 +277,23 @@ class ChapterController extends Controller
             }
         }
 
+        $addedImages = false;
+
         foreach ($request->validated('images') ?? [] as $image) {
             $chapter->clearMediaCollection('images');
             $record = $chapter->addMedia($image['file'])
                 ->withCustomProperties(['caption' => $image['caption'] ?? null])
                 ->toMediaCollection('images', config('media-library.private_disk_name'));
+
+            $addedImages = true;
         }
 
         if (isset($transcriptions)) {
             Session::flash('transcriptions', $transcriptions);
+        }
+
+        if ($chapter->wasChanged(['status', 'content', 'title']) || $addedImages) {
+            dispatch(new RegenerateBook($chapter->story));
         }
 
         if ($redirect = $request->validated('redirect')) {
@@ -295,6 +308,8 @@ class ChapterController extends Controller
     public function destroy(Chapter $chapter)
     {
         $chapter->delete();
+
+        dispatch(new RegenerateBook($chapter->story));
 
         return redirect()->route('dashboard.stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
     }

@@ -16,6 +16,8 @@ class StoryResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
+            'book' => $this->whenLoaded('book', fn () => $this->resource->book->getTemporaryUrl(now()->addHour())),
+            'book_cover' => $this->whenLoaded('book_cover', fn () => $this->resource->book_cover->getTemporaryUrl(now()->addHour())),
         ]);
     }
 }

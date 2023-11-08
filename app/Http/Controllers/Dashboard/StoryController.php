@@ -18,6 +18,8 @@ use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\StoryTypeResource;
 use App\Http\Resources\TimelineResource;
+use App\Jobs\RegenerateBook;
+use App\Jobs\RegenerateBookCover;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
@@ -27,8 +29,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
-use Mpdf\Mpdf;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
@@ -109,17 +109,18 @@ class StoryController extends Controller
         if ($request->hasFile('cover')) {
             $story->cover?->delete();
             $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+
+            dispatch(new RegenerateBookCover($story));
         }
+
+        dispatch(new RegenerateBook($story));
 
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Story updated successfully!');
     }
 
     public function destroy(Story $story)
     {
-        DB::transaction(function () use ($story) {
-            $story->cover?->delete();
-            $story->delete();
-        });
+        $story->delete();
 
         return redirect()->route('dashboard.stories.index')->with('message', 'Story deleted successfully!');
     }
@@ -171,93 +172,16 @@ class StoryController extends Controller
             }
         });
 
+        dispatch(new RegenerateBook($story));
+
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Contents saved successfully!');
     }
 
     public function preview(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Preview', [
-            'story' => fn () => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story->load('book')),
         ]);
-    }
-
-    public function book(Story $story)
-    {
-        $chapters = $story->chapters()
-            ->with('images')
-            ->where('status', Status::PUBLISHED)
-            ->orderBy('timeline_id', 'asc')
-            ->orderBy('order', 'asc')
-            ->lazy();
-
-        $pdf = Pdf::loadView('pdf.book', compact('story', 'chapters'));
-        /** @var Mpdf */
-        $mpdf = $pdf->getMpdf();
-        $mpdf->curlAllowUnsafeSslRequests = true;
-
-        return $pdf->stream($story->title.'.pdf');
-    }
-
-    public function bookCover(Story $story)
-    {
-        ini_set('pcre.backtrack_limit', '5000000');
-        abort_unless((bool) $cover = $story->cover, 404);
-
-        $pdf = Pdf::loadView('pdf.book-cover', [
-            'cover' => $cover,
-            'width' => (2 * 178.181 + $this->spineWidth($story->pages)).'mm',
-            'height' => '278mm',
-        ]);
-        /** @var Mpdf */
-        $mpdf = $pdf->getMpdf();
-        $mpdf->curlAllowUnsafeSslRequests = true;
-
-        return $pdf->stream($story->title.'.pdf');
-    }
-
-    protected function spineWidth(int $pages): float
-    {
-        if ($pages < 24) {
-            return 0.25 * 25.4;
-        }
-
-        $stops = [
-            24 => 0.25,
-            85 => 0.5,
-            141 => 0.625,
-            169 => 0.688,
-            195 => 0.75,
-            223 => 0.813,
-            251 => 0.875,
-            279 => 0.938,
-            307 => 1,
-            335 => 1.063,
-            361 => 1.125,
-            389 => 1.188,
-            417 => 1.25,
-            445 => 1.313,
-            473 => 1.375,
-            501 => 1.438,
-            529 => 1.5,
-            557 => 1.563,
-            583 => 1.625,
-            611 => 1.688,
-            639 => 1.75,
-            667 => 1.813,
-            695 => 1.875,
-            723 => 1.938,
-            751 => 2,
-            779 => 2.063,
-            800 => 2.12,
-        ];
-
-        foreach ($stops as $_pages => $width) {
-            if ($pages > $_pages) {
-                return $width * 25.4;
-            }
-        }
-
-        return 2.12 * 25.4;
     }
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
@@ -308,6 +232,14 @@ class StoryController extends Controller
 
     public function orderPurchase(Story $story, LuluService $lulu, OrderCostRequest $request)
     {
+        if (! $story->book) {
+            return redirect()->back()->with('error', trans('Book is being processed. Please wait!'));
+        }
+
+        if (! $story->book_cover) {
+            return redirect()->back()->with('error', trans('Your book has no cover or it is being processed. Please wait!'));
+        }
+
         abort_unless(Session::has("print-cost-{$story->id}"), 403);
 
         $cost = Session::get("print-cost-{$story->id}");
@@ -329,8 +261,8 @@ class StoryController extends Controller
                 'printable_normalization' => PrintableNormalization::from([
                     // 'external_id' => $payment->external_id,
                     'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
-                    'cover' => ['source_url' => route('dashboard.stories.book-cover', compact('story'))],
-                    'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
+                    'cover' => ['source_url' => $story->book_cover->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
+                    'interior' => ['source_url' => $story->book->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
                 ]),
                 'quantity' => $request->validated('quantity'),
                 'title' => $story->title,
@@ -341,7 +273,7 @@ class StoryController extends Controller
 
         $story->printJobs()->create([
             'lulu_id' => $print['id'],
-            'details' => $details = PrintJobDetails::from($print),
+            'details' => PrintJobDetails::from($print),
         ]);
 
         Session::forget("print-cost-{$story->id}");

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Data\Story\Book;
 use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -11,8 +10,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
-use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
-use Mpdf\Mpdf;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
@@ -33,7 +30,6 @@ class Story extends Model implements HasMedia
 
     protected $casts = [
         'status' => Status::class,
-        'book' => Book::class,
     ];
 
     public function cover(): MorphOne
@@ -64,24 +60,25 @@ class Story extends Model implements HasMedia
         return $this->belongsTo(StoryType::class);
     }
 
+    public function book(): MorphOne
+    {
+        return $this->media()->one()->ofMany(
+            ['id' => 'MAX'],
+            fn ($query) => $query->where('collection_name', 'book')
+        );
+    }
+
+    public function book_cover(): MorphOne
+    {
+        return $this->media()->one()->ofMany(
+            ['id' => 'MAX'],
+            fn ($query) => $query->where('collection_name', 'book-cover')
+        );
+    }
+
     protected function pages(): Attribute
     {
-        return Attribute::get(function () {
-            $chapters = $this->chapters()
-                ->with('images')
-                ->where('status', Status::PUBLISHED)
-                ->orderBy('timeline_id', 'asc')
-                ->orderBy('order', 'asc')
-                ->lazy();
-
-            $pdf = Pdf::loadView('pdf.book', ['story' => $this, 'chapters' => $chapters]);
-            /** @var Mpdf */
-            $mpdf = $pdf->getMpdf();
-            $mpdf->curlAllowUnsafeSslRequests = true;
-            $pdf->output();
-
-            return $mpdf->page;
-        })->shouldCache();
+        return Attribute::get(fn () => $this->book?->getCustomProperty('pages')); // @phpstan-ignore-line
     }
 
     public function toSearchableArray()

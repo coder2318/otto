@@ -14,51 +14,6 @@ class StoryControllerTest extends TestCase
     use RefreshDatabase;
 
     /** @test */
-    public function book_returns_an_ok_response(): void
-    {
-        $user = $this->createUser(configured: true, subscribed: true);
-        $story = \App\Models\Story::factory()->create([
-            'user_id' => $user->id,
-        ]);
-
-        ob_start();
-        $response = $this->actingAs($user)->get(route('dashboard.stories.book', [$story]));
-        ob_end_clean();
-
-        $response->assertOk();
-    }
-
-    /** @test */
-    public function book_cover_returns_an_ok_response(): void
-    {
-        $user = $this->createUser(configured: true, subscribed: true);
-        $story = \App\Models\Story::factory()->create([
-            'user_id' => $user->id,
-        ]);
-        $story->addMediaFromUrl(fake()->imageUrl())->toMediaCollection('cover');
-
-        ob_start();
-        $response = $this->actingAs($user)->get(route('dashboard.stories.book-cover', [$story]));
-        ob_end_clean();
-
-        $response->assertOk();
-    }
-
-    /** @test */
-    public function book_cover_aborts_with_a_404(): void
-    {
-        $user = $this->createUser(configured: true, subscribed: true);
-        $story = \App\Models\Story::factory()->create([
-            'user_id' => $user->id,
-        ]);
-        $story->clearMediaCollection('cover');
-
-        $response = $this->actingAs($user)->get(route('dashboard.stories.book-cover', [$story]));
-
-        $response->assertNotFound();
-    }
-
-    /** @test */
     public function cover_returns_an_ok_response(): void
     {
         $user = $this->createUser(configured: true, subscribed: true);
