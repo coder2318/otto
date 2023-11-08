@@ -327,7 +327,7 @@ class StoryController extends Controller
             config('mail.from.address'),
             LineItem::from([
                 'printable_normalization' => PrintableNormalization::from([
-                    //         'external_id' => $payment->external_id, // @phpstan-ignore-line
+                    // 'external_id' => $payment->external_id,
                     'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
                     'cover' => ['source_url' => route('dashboard.stories.book-cover', compact('story'))],
                     'interior' => ['source_url' => route('dashboard.stories.book', compact('story'))],
