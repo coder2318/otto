@@ -6,8 +6,15 @@ use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
+use App\Http\Controllers\StorageController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
+
+// Temporary URLs for local files
+Route::get('temp/local/{path}', [StorageController::class, 'local'])
+    ->where('path', '.*')
+    ->name('temp.url')
+    ->middleware('signed');
 
 // Static Pages
 Route::controller(StaticController::class)->group(function () {

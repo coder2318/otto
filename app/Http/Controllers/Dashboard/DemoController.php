@@ -108,7 +108,7 @@ class DemoController extends Controller
         foreach ($request->validated('attachments') ?? [] as $attachment) {
             $record = $chapter->addMedia($attachment['file'])
                 ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
-                ->toMediaCollection('attachments', 's3');
+                ->toMediaCollection('attachments', config('media-library.private_disk_name'));
 
             if ($transcription = $service->transcribe($record)) {
                 $transcriptions[$record->file_name] = $transcription;

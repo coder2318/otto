@@ -262,7 +262,7 @@ class ChapterController extends Controller
         foreach ($request->validated('attachments') ?? [] as $attachment) {
             $record = $chapter->addMedia($attachment['file'])
                 ->withCustomProperties(['mime-type' => $attachment['file']->getMimeType()] + ($attachment['options'] ?? []))
-                ->toMediaCollection('attachments', 's3');
+                ->toMediaCollection('attachments', config('media-library.private_disk_name'));
 
             $source = $attachment['translate']['source'] ?? null;
             $target = $attachment['translate']['target'] ?? null;
@@ -276,7 +276,7 @@ class ChapterController extends Controller
             $chapter->clearMediaCollection('images');
             $record = $chapter->addMedia($image['file'])
                 ->withCustomProperties(['caption' => $image['caption'] ?? null])
-                ->toMediaCollection('images', 's3');
+                ->toMediaCollection('images', config('media-library.private_disk_name'));
         }
 
         if (isset($transcriptions)) {

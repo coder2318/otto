@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use DateTime;
 use Google\Cloud\Translate\V2\TranslateClient;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
 use Inertia\Inertia;
 use Laravel\Pennant\Middleware\EnsureFeaturesAreActive;
@@ -32,6 +35,14 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TranslateClient::class, fn () => new TranslateClient([
             'key' => config('services.google.translate.key'),
         ]));
+
+        Storage::disk('local')->buildTemporaryUrlsUsing(
+            fn (string $path, DateTime $expiration, array $options) => URL::temporarySignedRoute(
+                'temp.url',
+                $expiration,
+                array_merge($options, ['path' => $path]),
+            ),
+        );
 
         EnsureFeaturesAreActive::whenInactive(fn (Request $request) => $request->wantsJson()
             ? response()->json(['message' => 'This feature is not available'], 418)
