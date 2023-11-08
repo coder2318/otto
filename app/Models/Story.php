@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Data\Chapter\Status as ChapterStatus;
 use App\Data\Story\Book;
 use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Casts\Attribute;
@@ -13,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
-use Mccarlosen\LaravelMpdf\LaravelMpdf;
 use Mpdf\Mpdf;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -81,6 +79,7 @@ class Story extends Model implements HasMedia
             $mpdf = $pdf->getMpdf();
             $mpdf->curlAllowUnsafeSslRequests = true;
             $pdf->output();
+
             return $mpdf->page;
         })->shouldCache();
     }

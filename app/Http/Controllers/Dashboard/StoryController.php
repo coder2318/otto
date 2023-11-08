@@ -27,13 +27,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-use Intervention\Image\Facades\Image;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mpdf\Mpdf;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
 use Sokil\IsoCodes\IsoCodesFactory;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class StoryController extends Controller
 {
