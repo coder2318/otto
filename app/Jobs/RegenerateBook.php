@@ -38,8 +38,13 @@ class RegenerateBook implements ShouldQueue
 
         $this->story->clearMediaCollection('book');
 
+        $size = config('media-library.max_file_size');
+        config(['media-library.max_file_size' => INF]);
+
         $this->story->addMedia($path)
             ->withCustomProperties(['pages' => $mpdf->page])
             ->toMediaCollection('book', config('media-library.private_disk_name'));
+
+        config(['media-library.max_file_size' => $size]);
     }
 }
