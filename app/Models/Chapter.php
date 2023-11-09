@@ -9,8 +9,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Laravel\Scout\Searchable;
+use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
+use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Znck\Eloquent\Relations\BelongsToThrough;
 use Znck\Eloquent\Traits\BelongsToThrough as HasBelongsToThrough;
 
@@ -74,6 +76,14 @@ class Chapter extends Model implements HasMedia
     public function attachments(): MorphMany
     {
         return $this->media()->where('collection_name', 'attachments');
+    }
+
+    public function registerMediaConversions(?Media $media = null): void
+    {
+        $this->addMediaConversion('optimized')
+            ->performOnCollections('images')
+            ->fit(Manipulations::FIT_MAX, 480, 672)
+            ->optimize();
     }
 
     public function toSearchableArray()
