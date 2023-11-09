@@ -46,5 +46,7 @@ class RegenerateBook implements ShouldQueue
             ->toMediaCollection('book', config('media-library.private_disk_name'));
 
         config(['media-library.max_file_size' => $size]);
+
+        dispatch(new RegenerateBookCover($this->story));
     }
 }

@@ -60,46 +60,35 @@
     }
 
     function getSpineWidth(pages) {
-        if (pages < 24) {
-            return 0.25
+        switch (true) {
+            case pages < 24: throw new Error('Book must have at least 24 pages.')
+            case pages < 85: return 0.25
+            case pages < 141: return 0.5
+            case pages < 169: return 0.625
+            case pages < 195: return 0.688
+            case pages < 223: return 0.75
+            case pages < 251: return 0.813
+            case pages < 279: return 0.875
+            case pages < 307: return 0.938
+            case pages < 335: return 1
+            case pages < 361: return 1.063
+            case pages < 389: return 1.125
+            case pages < 417: return 1.188
+            case pages < 445: return 1.25
+            case pages < 473: return 1.313
+            case pages < 501: return 1.375
+            case pages < 529: return 1.438
+            case pages < 557: return 1.5
+            case pages < 583: return 1.563
+            case pages < 611: return 1.625
+            case pages < 639: return 1.688
+            case pages < 667: return 1.75
+            case pages < 695: return 1.813
+            case pages < 723: return 1.875
+            case pages < 751: return 1.938
+            case pages < 779: return 2
+            default: return 2.12
         }
-
-        const stops = {
-            24: 0.25,
-            85: 0.5,
-            141: 0.625,
-            169: 0.688,
-            195: 0.75,
-            223: 0.813,
-            251: 0.875,
-            279: 0.938,
-            307: 1,
-            335: 1.063,
-            361: 1.125,
-            389: 1.188,
-            417: 1.25,
-            445: 1.313,
-            473: 1.375,
-            501: 1.438,
-            529: 1.5,
-            557: 1.563,
-            583: 1.625,
-            611: 1.688,
-            639: 1.75,
-            667: 1.813,
-            695: 1.875,
-            723: 1.938,
-            751: 2,
-            779: 2.063,
-            800: 2.12,
-        }
-
-        for (const [key, value] of Object.entries(stops)) {
-            if (pages > key) {
-                return value
-            }
-        }
-        return 2.12
     }
 
     export function getSize(pages) {

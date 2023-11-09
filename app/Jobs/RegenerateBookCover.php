@@ -26,7 +26,7 @@ class RegenerateBookCover implements ShouldQueue
             return;
         }
 
-        $spine = $this->spineWidth($this->story->book->getCustomProperty('pages')); // @phpstan-ignore-line
+        $spine = $this->spineWidth($this->story->book->getCustomProperty('pages')) * 25.4; // @phpstan-ignore-line
 
         $pdf = Pdf::loadView('pdf.book-cover', [
             'cover' => $cover,
@@ -47,46 +47,34 @@ class RegenerateBookCover implements ShouldQueue
 
     protected function spineWidth(int $pages): float
     {
-        if ($pages < 24) {
-            return 0.25 * 25.4;
-        }
-
-        $stops = [
-            24 => 0.25,
-            85 => 0.5,
-            141 => 0.625,
-            169 => 0.688,
-            195 => 0.75,
-            223 => 0.813,
-            251 => 0.875,
-            279 => 0.938,
-            307 => 1,
-            335 => 1.063,
-            361 => 1.125,
-            389 => 1.188,
-            417 => 1.25,
-            445 => 1.313,
-            473 => 1.375,
-            501 => 1.438,
-            529 => 1.5,
-            557 => 1.563,
-            583 => 1.625,
-            611 => 1.688,
-            639 => 1.75,
-            667 => 1.813,
-            695 => 1.875,
-            723 => 1.938,
-            751 => 2,
-            779 => 2.063,
-            800 => 2.12,
-        ];
-
-        foreach ($stops as $_pages => $width) {
-            if ($pages > $_pages) {
-                return $width * 25.4;
-            }
-        }
-
-        return 2.12 * 25.4;
+        return match (true) {
+            $pages < 24 => throw new \Exception('Book must have at least 24 pages.'),
+            $pages < 85 => 0.25,
+            $pages < 141 => 0.5,
+            $pages < 169 => 0.625,
+            $pages < 195 => 0.688,
+            $pages < 223 => 0.75,
+            $pages < 251 => 0.813,
+            $pages < 279 => 0.875,
+            $pages < 307 => 0.938,
+            $pages < 335 => 1,
+            $pages < 361 => 1.063,
+            $pages < 389 => 1.125,
+            $pages < 417 => 1.188,
+            $pages < 445 => 1.25,
+            $pages < 473 => 1.313,
+            $pages < 501 => 1.375,
+            $pages < 529 => 1.438,
+            $pages < 557 => 1.5,
+            $pages < 583 => 1.563,
+            $pages < 611 => 1.625,
+            $pages < 639 => 1.688,
+            $pages < 667 => 1.75,
+            $pages < 695 => 1.813,
+            $pages < 723 => 1.875,
+            $pages < 751 => 1.938,
+            $pages < 779 => 2,
+            default => 2.12,
+        };
     }
 }
