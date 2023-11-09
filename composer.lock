@@ -134,16 +134,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.285.2",
+            "version": "3.285.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "93165f8e241678b17f15212523dfe96f50307af1"
+                "reference": "41c7a9491455f89052cba62c4e4f0c748af51265"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/93165f8e241678b17f15212523dfe96f50307af1",
-                "reference": "93165f8e241678b17f15212523dfe96f50307af1",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/41c7a9491455f89052cba62c4e4f0c748af51265",
+                "reference": "41c7a9491455f89052cba62c4e4f0c748af51265",
                 "shasum": ""
             },
             "require": {
@@ -223,9 +223,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.285.2"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.285.0"
             },
-            "time": "2023-11-09T01:20:37+00:00"
+            "time": "2023-11-07T19:33:47+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -2988,16 +2988,16 @@
         },
         {
             "name": "laravel/cashier",
-            "version": "v14.13.1",
+            "version": "v14.13.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/laravel/cashier-stripe.git",
-                "reference": "39d3f1f2a27c6601edc53d8a14ccc9a333ccfca5"
+                "reference": "223b3333c6c04ed2a281e0cf6baaff0d6ba0fc6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/39d3f1f2a27c6601edc53d8a14ccc9a333ccfca5",
-                "reference": "39d3f1f2a27c6601edc53d8a14ccc9a333ccfca5",
+                "url": "https://api.github.com/repos/laravel/cashier-stripe/zipball/223b3333c6c04ed2a281e0cf6baaff0d6ba0fc6a",
+                "reference": "223b3333c6c04ed2a281e0cf6baaff0d6ba0fc6a",
                 "shasum": ""
             },
             "require": {
@@ -3071,7 +3071,7 @@
                 "issues": "https://github.com/laravel/cashier/issues",
                 "source": "https://github.com/laravel/cashier"
             },
-            "time": "2023-11-08T15:24:23+00:00"
+            "time": "2023-11-07T17:56:31+00:00"
         },
         {
             "name": "laravel/fortify",
@@ -6987,16 +6987,16 @@
         },
         {
             "name": "php-http/promise",
-            "version": "1.2.1",
+            "version": "1.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/php-http/promise.git",
-                "reference": "44a67cb59f708f826f3bec35f22030b3edb90119"
+                "reference": "ef4905bfb492ff389eb7f12e26925a0f20073050"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/php-http/promise/zipball/44a67cb59f708f826f3bec35f22030b3edb90119",
-                "reference": "44a67cb59f708f826f3bec35f22030b3edb90119",
+                "url": "https://api.github.com/repos/php-http/promise/zipball/ef4905bfb492ff389eb7f12e26925a0f20073050",
+                "reference": "ef4905bfb492ff389eb7f12e26925a0f20073050",
                 "shasum": ""
             },
             "require": {
@@ -7033,9 +7033,9 @@
             ],
             "support": {
                 "issues": "https://github.com/php-http/promise/issues",
-                "source": "https://github.com/php-http/promise/tree/1.2.1"
+                "source": "https://github.com/php-http/promise/tree/1.2.0"
             },
-            "time": "2023-11-08T12:57:08+00:00"
+            "time": "2023-10-24T09:20:26+00:00"
         },
         {
             "name": "phpdocumentor/reflection-common",
@@ -14167,16 +14167,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "13.5.1",
+            "version": "13.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "56cc6c142289c31606fc29402f79b3837ef55e22"
+                "reference": "8c15ffb20cf6a4742dbb1aa384ec617fdd1e5041"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/56cc6c142289c31606fc29402f79b3837ef55e22",
-                "reference": "56cc6c142289c31606fc29402f79b3837ef55e22",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/8c15ffb20cf6a4742dbb1aa384ec617fdd1e5041",
+                "reference": "8c15ffb20cf6a4742dbb1aa384ec617fdd1e5041",
                 "shasum": ""
             },
             "require": {
@@ -14223,7 +14223,7 @@
                 "issues": "https://github.com/Laravel-Lang/lang/issues",
                 "source": "https://github.com/Laravel-Lang/lang"
             },
-            "time": "2023-11-08T22:59:10+00:00"
+            "time": "2023-11-08T10:10:45+00:00"
         },
         {
             "name": "laravel-lang/locales",
