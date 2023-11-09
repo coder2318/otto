@@ -78,7 +78,7 @@ class Chapter extends Model implements HasMedia
         return $this->media()->where('collection_name', 'attachments');
     }
 
-    public function registerMediaConversions(?Media $media = null): void
+    public function registerMediaConversions(Media $media = null): void
     {
         $this->addMediaConversion('optimized')
             ->performOnCollections('images')
