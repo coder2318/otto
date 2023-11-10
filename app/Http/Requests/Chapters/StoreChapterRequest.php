@@ -14,7 +14,7 @@ class StoreChapterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string'],
+            'title' => ['required', 'string', 'max:255'],
             'timeline_id' => ['required', 'integer', 'exists:timelines,id'],
             'cover' => ['sometimes', 'image', 'max:10240'],
         ];

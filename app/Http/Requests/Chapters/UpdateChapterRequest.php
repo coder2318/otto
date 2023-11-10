@@ -16,7 +16,7 @@ class UpdateChapterRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['sometimes', 'required', 'string'],
+            'title' => ['sometimes', 'required', 'string', 'max:255'],
             'content' => ['sometimes', 'required', 'string'],
             'edit' => ['sometimes', 'nullable', 'string'],
             'timeline_id' => ['sometimes', 'required', 'integer', 'exists:timelines,id'],
