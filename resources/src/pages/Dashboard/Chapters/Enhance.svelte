@@ -212,7 +212,7 @@
                     type="submit"
                     class="btn btn-secondary rounded-full"
                     data-status="draft"
-                    data-redirect="dashboard.stories.chapters.index"
+                    data-redirect="dashboard.chapters.congratulation"
                 >
                     Save & Next
                 </button>
@@ -339,7 +339,7 @@
                     type="submit"
                     class="btn btn-secondary rounded-full"
                     data-status="draft"
-                    data-redirect="dashboard.stories.chapters.index"
+                    data-redirect="dashboard.chapters.congratulation"
                 >
                     Save & Next
                 </button>

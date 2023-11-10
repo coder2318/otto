@@ -177,6 +177,21 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function congratulation(Chapter $chapter)
+    {
+        $chapter->update([
+            'status' => Status::DRAFT,
+        ]);
+
+        if ($chapter->wasChanged('status')) {
+            dispatch(new RegenerateBook($chapter->story));
+        }
+
+        return Inertia::render('Dashboard/Chapters/Congratulation', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
     public function create(Story $story, TimelineQuestion $question = null)
     {
         if ($question) {
