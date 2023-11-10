@@ -61,33 +61,60 @@
 
     function getSpineWidth(pages) {
         switch (true) {
-            case pages < 24: throw new Error('Book must have at least 24 pages.')
-            case pages < 85: return 0.25
-            case pages < 141: return 0.5
-            case pages < 169: return 0.625
-            case pages < 195: return 0.688
-            case pages < 223: return 0.75
-            case pages < 251: return 0.813
-            case pages < 279: return 0.875
-            case pages < 307: return 0.938
-            case pages < 335: return 1
-            case pages < 361: return 1.063
-            case pages < 389: return 1.125
-            case pages < 417: return 1.188
-            case pages < 445: return 1.25
-            case pages < 473: return 1.313
-            case pages < 501: return 1.375
-            case pages < 529: return 1.438
-            case pages < 557: return 1.5
-            case pages < 583: return 1.563
-            case pages < 611: return 1.625
-            case pages < 639: return 1.688
-            case pages < 667: return 1.75
-            case pages < 695: return 1.813
-            case pages < 723: return 1.875
-            case pages < 751: return 1.938
-            case pages < 779: return 2
-            default: return 2.12
+            case pages < 24:
+                throw new Error('Book must have at least 24 pages.')
+            case pages < 85:
+                return 0.25
+            case pages < 141:
+                return 0.5
+            case pages < 169:
+                return 0.625
+            case pages < 195:
+                return 0.688
+            case pages < 223:
+                return 0.75
+            case pages < 251:
+                return 0.813
+            case pages < 279:
+                return 0.875
+            case pages < 307:
+                return 0.938
+            case pages < 335:
+                return 1
+            case pages < 361:
+                return 1.063
+            case pages < 389:
+                return 1.125
+            case pages < 417:
+                return 1.188
+            case pages < 445:
+                return 1.25
+            case pages < 473:
+                return 1.313
+            case pages < 501:
+                return 1.375
+            case pages < 529:
+                return 1.438
+            case pages < 557:
+                return 1.5
+            case pages < 583:
+                return 1.563
+            case pages < 611:
+                return 1.625
+            case pages < 639:
+                return 1.688
+            case pages < 667:
+                return 1.75
+            case pages < 695:
+                return 1.813
+            case pages < 723:
+                return 1.875
+            case pages < 751:
+                return 1.938
+            case pages < 779:
+                return 2
+            default:
+                return 2.12
         }
     }
 
