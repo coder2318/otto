@@ -17,6 +17,7 @@ use App\Notifications\DemoFinishedNotification;
 use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
@@ -175,6 +176,13 @@ class DemoController extends Controller
     public function process(Request $request, OpenAIService $service)
     {
         [$chapter] = $this->data($request);
+        $user = Auth::user();
+
+        if ($user->enhances <= 0) {
+            return;
+        }
+
+        $user->decrement('enhances');
 
         return new StreamedResponse(function () use ($chapter, $service) {
             foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
@@ -193,6 +201,12 @@ class DemoController extends Controller
     public function enhance(Request $request)
     {
         [$chapter] = $this->data($request);
+
+        $user = Auth::user();
+
+        if ($user->enhances <= 0) {
+            return redirect()->back()->with('error', "You've used all your enhances for demo");
+        }
 
         return Inertia::render('Dashboard/Demo/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter),
