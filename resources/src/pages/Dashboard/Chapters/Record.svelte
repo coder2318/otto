@@ -74,7 +74,12 @@
             <div class="wrap" class:withoutSlider={!chapter.data?.question?.covers?.length}>
                 <div class="col">
                     <div class="recordAudio">
-                        <AudioRecorder min={1} maxFiles={1} bind:recordings={$form.attachments} />
+                        <AudioRecorder
+                            min={1000 * 60}
+                            max={1000 * 60 * 10}
+                            maxFiles={1}
+                            bind:recordings={$form.attachments}
+                        />
                     </div>
                 </div>
                 {#if chapter.data?.question?.covers?.length}

@@ -111,7 +111,8 @@ declare namespace App {
         id: number
         question: string
         order: number
-        cover: string
+        cover?: string
+        covers?: string[]
         sub_questions: string[] | null
     }
 

@@ -1,20 +1,21 @@
 <script lang="ts">
+    import { fade } from 'svelte/transition'
     import { msToTime } from '@/service/helpers'
-    import { faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import { faMicrophone, faPause, faRepeat, faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
     import { flash } from './Toast.svelte'
     import languages from '@/data/translate_languages.json'
     import microphone from '@/assets/img/microphone.svg'
-    import Repeat from '@/components/SVG/player-btn-repeat.svg.svelte'
-    import Stop from '@/components/SVG/player-btn-stop.svg.svelte'
-    import Pause from '@/components/SVG/player-btn-pause.svg.svelte'
+    import AudioBubble from './AudioBubble.svelte'
 
     let dialog: HTMLDialogElement
     let player: HTMLAudioElement
     let mediaRecorder: MediaRecorder
     let interval: number
     let timer: number
+    let paused: boolean = false
+    let heights = []
 
     let translate = {
         source: null as string | null,
@@ -33,7 +34,39 @@
         recordings = recordings
     }
 
+    function createBubbles(stream: MediaStream, bubbles: number = 3) {
+        const audioContext = new AudioContext()
+        const source = audioContext.createMediaStreamSource(stream)
+        const analyser = audioContext.createAnalyser()
+        source.connect(analyser)
+
+        analyser.fftSize = 32
+        const dataArray = new Uint8Array(bubbles)
+
+        function draw() {
+            requestAnimationFrame(draw)
+
+            if (paused) {
+                return
+            }
+
+            analyser.getByteFrequencyData(dataArray)
+
+            heights.length = 0
+
+            for (let i = 0; i < bubbles; i++) {
+                heights.push(dataArray[i])
+            }
+        }
+
+        draw()
+    }
+
     function startRecording() {
+        if (!stopRecording()) {
+            return
+        }
+
         navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
             const recordedChunks = []
             mediaRecorder = new MediaRecorder(stream)
@@ -67,28 +100,51 @@
                 ]
             })
 
+            createBubbles(stream)
+
             mediaRecorder.start()
             timer = 0
             interval = setInterval(() => {
                 if (max && max < timer) {
                     return stopRecording()
                 }
-                timer += 10
-            }, 10)
+                timer += 100
+            }, 100)
         })
     }
 
     function stopRecording() {
-        if (timer < min) {
-            return flash({
+        if (timer && timer < min) {
+            flash({
                 message: `Minimum recording time is ${msToTime(min)}`,
                 type: 'alert-warning',
             })
+
+            return false
         }
         timer = null
         clearInterval(interval)
-        mediaRecorder.stop()
+        mediaRecorder?.stop()
         mediaRecorder = null
+
+        return true
+    }
+
+    function pauseRecording() {
+        if (!paused) {
+            mediaRecorder.pause()
+            clearInterval(interval)
+        } else {
+            mediaRecorder.resume()
+            interval = setInterval(() => {
+                if (max && max < timer) {
+                    return stopRecording()
+                }
+                timer += 100
+            }, 100)
+        }
+
+        paused = !paused
     }
 
     let deleting: number = null
@@ -114,25 +170,21 @@
         {/if}
     </span>
 
-    <button
-        type="button"
-        class="startRecordBtn"
-        disabled={maxFiles !== null && recordings?.length >= maxFiles}
-        on:click|preventDefault={() => (mediaRecorder ? stopRecording() : startRecording())}
-    >
-        <label class="swap swap-rotate">
-            <input type="checkbox" checked={!!mediaRecorder} />
-            <div class="swap-on text-secondary">
-                <Fa icon={faStop} />
-            </div>
-            <div class="swap-off text-primary">
-                <img src={microphone} alt="Microphone" />
-            </div>
-        </label>
-    </button>
+    {#if !mediaRecorder}
+        <button
+            type="button"
+            class="startRecordBtn my-8"
+            disabled={maxFiles !== null && recordings?.length >= maxFiles}
+            on:click|preventDefault={() => (mediaRecorder ? stopRecording() : startRecording())}
+            in:fade
+        >
+            <img src={microphone} alt="Microphone" />
+        </button>
+    {:else}
+        <AudioBubble {heights} />
+    {/if}
 
     {#if !timer}
-        <p class="recordAudio-notification">You have to 10 mins per question</p>
         <div class="form-control">
             <label class="label flex">
                 <span class="label-text">Source Language:</span>
@@ -147,15 +199,6 @@
                     {/each}
                 </select>
             </label>
-            <!-- <label class="label flex gap-4">
-                <span class="label-text">Target Language:</span>
-                <select class="select select-bordered select-ghost" name="language" bind:value={translate.target}>
-                    <option value={null}>Do not translate</option>
-                    {#each languages as language}
-                        <option value={language.code}>{language.language}</option>
-                    {/each}
-                </select>
-            </label> -->
         </div>
     {:else}
         <div class="palyerControls">
@@ -164,14 +207,26 @@
                 <span class="palyerTime-static">/ {msToTime(max)}</span>
             </div>
             <div class="palyerControls__buttons">
-                <button>
-                    <Repeat />
+                <!-- <button
+                    class="btn btn-circle btn-neutral border border-neutral-content/50"
+                    type="button"
+                    on:click|preventDefault={startRecording}
+                >
+                    <Fa icon={faRepeat} />
+                </button> -->
+                <button
+                    class="btn btn-circle btn-neutral border border-neutral-content/50"
+                    type="button"
+                    on:click|preventDefault={stopRecording}
+                >
+                    <Fa icon={faStop} />
                 </button>
-                <button>
-                    <Stop />
-                </button>
-                <button>
-                    <Pause />
+                <button
+                    class="btn btn-circle btn-neutral border border-neutral-content/50"
+                    type="button"
+                    on:click|preventDefault={pauseRecording}
+                >
+                    <Fa icon={paused ? faMicrophone : faPause} />
                 </button>
             </div>
         </div>
@@ -189,23 +244,17 @@
             </button>
         </div>
     {/each}
-    {#if timer}
-        <div class="flex items-center justify-center gap-2 rounded-full bg-primary/10 p-4 text-primary">
-            <span class="w-12"> {msToTime(timer)}</span>
-            <progress class="progress progress-primary w-36" value={timer} max={max ?? min ?? null} />
-            <span class="w-12"> {msToTime(max)}</span>
-        </div>
-    {:else if max && !recordings?.length}
+    {#if max && !recordings?.length}
         <div class="flex flex-col items-center justify-center gap-2">
             <h6 class="text-2xl text-primary">Press Start Recording</h6>
             <p>You have {msToTime(max)} minutes to record your answer.</p>
         </div>
     {/if}
     <div class="recordAudio__tip">
-        {#if timer > 1 * 1000}
+        {#if timer > min}
             <p class="tip-first">OttoStory AI Transcription Unlocked!</p>
         {:else}
-            <p class="tip-second">Record at least 1 minute to unlock Transcribing with OttoStory AI</p>
+            <p class="tip-second">Record at least {msToTime(min)} to unlock Transcribing with OttoStory AI</p>
         {/if}
         {#if timer}
             <div class="recordAudio-progress" style="width: {(timer / 1000) * 1.66}%"></div>
@@ -235,7 +284,6 @@
         border-radius: 100%;
         transition: 0.3s;
         cursor: pointer;
-        margin-bottom: 48px;
 
         &:hover {
             transform: scale(1.1);
@@ -248,7 +296,6 @@
             color: #06192d;
             line-height: 1.1;
             text-align: center;
-            margin-bottom: 48px;
             display: block;
 
             @media (max-width: 767px) {
@@ -259,12 +306,6 @@
                 color: inherit;
                 display: block;
             }
-        }
-        &-notification {
-            font-size: 18px;
-            color: #808080;
-            text-align: center;
-            margin-bottom: 5px;
         }
 
         &__tip {
