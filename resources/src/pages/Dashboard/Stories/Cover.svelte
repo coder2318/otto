@@ -13,7 +13,7 @@
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
-    import { fileToBase64 } from '@/service/helpers'
+    import { fileToBase64, groupBy } from '@/service/helpers'
     import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
     import bookCoverIllustration2 from '@/assets/img/book-cover-illustration-2.svg'
     import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
@@ -99,58 +99,118 @@
                 <div class="bookCover__block">
                     <img class="bookCover-illustration-1" src={bookCoverIllustration1} alt="Illustration" />
                     <img class="bookCover-illustration-2" src={bookCoverIllustration2} alt="Illustration" />
-                    {#if editing}
-                        {#each template.data.fields as field}
-                            <div class="form-control">
-                                <label class="label" for={field.key}>
-                                    <span class="label-text">{field.name}</span>
-                                </label>
+                    <div class="flex flex-col gap-4">
+                        {#if editing}
+                            {#each Object.entries(groupBy(template.data.fields, 'group')) as [group, fields] (group)}
+                                {#if group}
+                                    <div class="collapse border border-base-content/60 bg-base-100">
+                                        <input type="radio" name="group" />
+                                        <div class="collapse-title text-xl font-medium">
+                                            {group}
+                                        </div>
+                                        <div class="collapse-content">
+                                            {#each fields as field}
+                                                <div class="form-control !mb-0 !flex">
+                                                    <label class="label" for={field.key}>
+                                                        <span class="label-text">{field.name}</span>
+                                                    </label>
 
-                                {#if field.type === 'text'}
-                                    <textarea
-                                        class="textarea textarea-bordered"
-                                        bind:value={parameters[field.key]}
-                                        name={field.key}
-                                        placeholder={field.name}
-                                        rows="1"
-                                    />
-                                {:else if field.type === 'color'}
-                                    <input
-                                        class="input input-bordered w-full"
-                                        bind:value={parameters[field.key]}
-                                        type="color"
-                                        name={field.key}
-                                        placeholder={field.name}
-                                    />
-                                {:else if field.type === 'image' && editor}
-                                    <div class="">
-                                        <FilePond
-                                            name={field.key}
-                                            server={false}
-                                            onpreparefile={async (file, blob) =>
-                                                (parameters[field.key] = await fileToBase64(blob))}
-                                            onremovefile={() => (parameters[field.key] = null)}
-                                            imageEditEditor={editor}
-                                            allowImageEdit={true}
-                                            allowMultiple={false}
-                                            imageEditInstantEdit={true}
-                                            styleImageEditButtonEditItemPosition="top right"
-                                            imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                                        />
+                                                    {#if field.type === 'text'}
+                                                        <textarea
+                                                            class="textarea textarea-bordered"
+                                                            bind:value={parameters[field.key]}
+                                                            name={field.key}
+                                                            placeholder={field.name}
+                                                            rows="1"
+                                                        />
+                                                    {:else if field.type === 'color'}
+                                                        <input
+                                                            class="input input-bordered w-full"
+                                                            bind:value={parameters[field.key]}
+                                                            type="color"
+                                                            name={field.key}
+                                                            placeholder={field.name}
+                                                        />
+                                                    {:else if field.type === 'image' && editor}
+                                                        <div class="">
+                                                            <FilePond
+                                                                name={field.key}
+                                                                server={false}
+                                                                onpreparefile={async (file, blob) =>
+                                                                    (parameters[field.key] = await fileToBase64(blob))}
+                                                                onremovefile={() => (parameters[field.key] = null)}
+                                                                imageEditEditor={editor}
+                                                                allowImageEdit={true}
+                                                                allowMultiple={false}
+                                                                imageEditInstantEdit={true}
+                                                                styleImageEditButtonEditItemPosition="top right"
+                                                                imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                                            />
+                                                        </div>
+                                                    {/if}
+                                                </div>
+                                            {/each}
+                                        </div>
                                     </div>
+                                {:else}
+                                    {#each fields as field}
+                                        <div class="form-control">
+                                            <label class="label" for={field.key}>
+                                                <span class="label-text">{field.name}</span>
+                                            </label>
+
+                                            {#if field.type === 'text'}
+                                                <textarea
+                                                    class="textarea textarea-bordered"
+                                                    bind:value={parameters[field.key]}
+                                                    name={field.key}
+                                                    placeholder={field.name}
+                                                    rows="1"
+                                                />
+                                            {:else if field.type === 'color'}
+                                                <input
+                                                    class="input input-bordered w-full"
+                                                    bind:value={parameters[field.key]}
+                                                    type="color"
+                                                    name={field.key}
+                                                    placeholder={field.name}
+                                                />
+                                            {:else if field.type === 'image' && editor}
+                                                <div class="">
+                                                    <FilePond
+                                                        name={field.key}
+                                                        server={false}
+                                                        onpreparefile={async (file, blob) =>
+                                                            (parameters[field.key] = await fileToBase64(blob))}
+                                                        onremovefile={() => (parameters[field.key] = null)}
+                                                        imageEditEditor={editor}
+                                                        allowImageEdit={true}
+                                                        allowMultiple={false}
+                                                        imageEditInstantEdit={true}
+                                                        styleImageEditButtonEditItemPosition="top right"
+                                                        imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                                    />
+                                                </div>
+                                            {/if}
+                                        </div>
+                                    {/each}
                                 {/if}
+                            {/each}
+                        {:else}
+                            <div class="bookCover__block_buttons">
+                                <button
+                                    type="button"
+                                    class="otto-btn-primary otto-btn"
+                                    on:click={() => (editing = true)}
+                                >
+                                    Change Cover
+                                </button>
+                                <a use:inertia href="/stories/{story.data.id}/order" class="otto-btn-outline otto-btn">
+                                    Order Book
+                                </a>
                             </div>
-                        {/each}
-                    {:else}
-                        <div class="bookCover__block_buttons">
-                            <button type="button" class="otto-btn-primary otto-btn" on:click={() => (editing = true)}>
-                                Change Cover
-                            </button>
-                            <a use:inertia href="/stories/{story.data.id}/order" class="otto-btn-outline otto-btn">
-                                Order Book
-                            </a>
-                        </div>
-                    {/if}
+                        {/if}
+                    </div>
                 </div>
                 <div class="bookCover__cover flex items-center justify-center">
                     <BookCoverBuilder

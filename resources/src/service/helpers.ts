@@ -93,3 +93,10 @@ export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number
         ''
     )
 }
+
+export function groupBy(array: Array<any>, key: string) {
+    return array.reduce((result: any, currentValue: any) => {
+        (result[currentValue[key]] = result[currentValue[key]] || []).push(currentValue)
+        return result
+    }, {})
+}
