@@ -25,10 +25,16 @@ class GlobalSearchController extends Controller
 
         return redirect()->back()->with('search', [
             'stories' => StoryResource::collection(
-                $request->user()->stories()->whereIn('id', Story::search($request->search)->keys())->get(['id', 'title'])
+                $request->user()->stories()
+                    ->whereIn('id', $order = Story::search($request->search)->keys())
+                    ->get(['id', 'title'])
+                    ->sortBy(fn ($model) => array_search($model->getKey(), $order->all()))
             ),
             'chapters' => ChapterResource::collection(
-                $request->user()->chapters()->whereIn('chapters.id', Chapter::search($request->search)->keys())->get(['chapters.id', 'chapters.content', 'chapters.title'])
+                $request->user()->chapters()
+                    ->whereIn('chapters.id', $order = Chapter::search($request->search)->keys())
+                    ->get(['chapters.id', 'chapters.content', 'chapters.title'])
+                    ->sortBy(fn ($model) => array_search($model->getKey(), $order->all()))
             ),
         ]);
     }
