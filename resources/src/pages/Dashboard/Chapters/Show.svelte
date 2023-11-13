@@ -3,4 +3,3 @@
     import Dashboard from '@/components/Layouts/Dashboard.svelte'
     export const layout = [Base, Dashboard]
 </script>
-

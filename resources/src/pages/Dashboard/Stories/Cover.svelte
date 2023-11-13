@@ -13,13 +13,22 @@
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
-    import { fileToBase64, groupBy } from '@/service/helpers'
+    import { fileToBase64, groupBy, listFonts } from '@/service/helpers'
     import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
     import bookCoverIllustration2 from '@/assets/img/book-cover-illustration-2.svg'
     import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
+
+    $: grouped = Object.entries(groupBy(template.data.fields, 'group')) as [
+        string,
+        Array<{
+            name: string
+            type: string
+            key: string
+        }>,
+    ][]
 
     let element: HTMLElement, modal: HTMLDialogElement, builder: BookCoverBuilder, editor: any
 
@@ -28,6 +37,8 @@
     let editing: boolean = !story.data.cover
 
     let loading: boolean = false
+
+    let fonts = []
 
     onMount(() => {
         editor = createCropperForFilepond(element, {
@@ -39,6 +50,13 @@
                 modal.showModal()
             },
         })
+
+        listFonts().then(
+            (list) =>
+                (fonts = list
+                    .map((font) => font.family)
+                    .filter((value, index, array) => array.indexOf(value) === index))
+        )
 
         return () => {
             editor.clear()
@@ -101,7 +119,7 @@
                     <img class="bookCover-illustration-2" src={bookCoverIllustration2} alt="Illustration" />
                     <div class="flex flex-col gap-4">
                         {#if editing}
-                            {#each Object.entries(groupBy(template.data.fields, 'group')) as [group, fields] (group)}
+                            {#each grouped as [group, fields] (group)}
                                 {#if group}
                                     <div class="collapse border border-base-content/60 bg-base-100">
                                         <input type="radio" name="group" />
@@ -110,7 +128,7 @@
                                         </div>
                                         <div class="collapse-content">
                                             {#each fields as field}
-                                                <div class="form-control !mb-0 !flex">
+                                                <div class="form-control">
                                                     <label class="label" for={field.key}>
                                                         <span class="label-text">{field.name}</span>
                                                     </label>
@@ -123,6 +141,24 @@
                                                             placeholder={field.name}
                                                             rows="1"
                                                         />
+                                                    {:else if field.type === 'number'}
+                                                        <input
+                                                            class="input input-bordered"
+                                                            bind:value={parameters[field.key]}
+                                                            type="number"
+                                                            name={field.key}
+                                                            placeholder={field.name}
+                                                        />
+                                                    {:else if field.type === 'font'}
+                                                        <select
+                                                            class="select select-bordered"
+                                                            bind:value={parameters[field.key]}
+                                                            name={field.key}
+                                                        >
+                                                            {#each fonts as font}
+                                                                <option value={font}>{font}</option>
+                                                            {/each}
+                                                        </select>
                                                     {:else if field.type === 'color'}
                                                         <input
                                                             class="input input-bordered w-full"
