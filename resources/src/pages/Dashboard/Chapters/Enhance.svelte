@@ -177,8 +177,7 @@
                             bind:editor={enhance}
                             bind:content={$form.enhanced}
                             placeholder="Write your story here..."
-                        >
-                        </TipTap>
+                        ></TipTap>
                     </div>
 
                     {#if compare}
@@ -187,8 +186,7 @@
                                 bind:editor={original}
                                 bind:content={$form.original}
                                 placeholder="Write your story here..."
-                            >
-                            </TipTap>
+                            ></TipTap>
                         </div>
                     {/if}
                 </div>

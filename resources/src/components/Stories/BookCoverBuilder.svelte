@@ -2,24 +2,21 @@
     import { toBlob } from 'html-to-image'
     import { draggable } from '@/service/svelte'
     import { svgTextWrap } from '@/service/helpers'
-    import { onMount } from 'svelte'
+    import { onMount, afterUpdate } from 'svelte'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
     export let pages: number = 32
 
     let svg: HTMLElement | SVGElement
+    let oldParams = {}
 
     $: sizes = getSize(pages)
-    $: updateSvg(parameters)
 
     let dragHooks = []
 
     function updateSvg(parameters) {
         if (!svg) return
-
-        dragHooks.forEach((element) => element.destroy())
-        dragHooks = []
 
         Object.entries(parameters).forEach(([key, value]) => {
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
@@ -36,10 +33,6 @@
                 }
             )
         })
-
-        svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
-            dragHooks.push(draggable(node, svg as SVGElement))
-        })
     }
 
     onMount(() => {
@@ -50,6 +43,21 @@
         return () => {
             dragHooks.forEach((element) => element.destroy())
         }
+    })
+
+    afterUpdate(() => {
+        const diff = Object.keys(parameters).reduce((diff, key) => {
+            if (parameters[key] !== oldParams[key]) {
+                diff[key] = parameters[key]
+            }
+            return diff
+        }, {})
+
+        if (Object.keys(diff).length) {
+            updateSvg(diff)
+        }
+
+        oldParams = { ...parameters }
     })
 
     export async function getFile() {

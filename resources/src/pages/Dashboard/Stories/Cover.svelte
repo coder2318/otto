@@ -46,7 +46,6 @@
         }
     })
 
-    
     function canvelEdit() {
         modal.close()
         editor.oncancel()
