@@ -1,10 +1,14 @@
 <script lang="ts">
     import { msToTime } from '@/service/helpers'
-    import { faMicrophone, faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import { faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
     import { flash } from './Toast.svelte'
     import languages from '@/data/translate_languages.json'
+    import microphone from '@/assets/img/microphone.svg'
+    import Repeat from '@/components/SVG/player-btn-repeat.svg.svelte'
+    import Stop from '@/components/SVG/player-btn-stop.svg.svelte'
+    import Pause from '@/components/SVG/player-btn-pause.svg.svelte'
 
     let dialog: HTMLDialogElement
     let player: HTMLAudioElement
@@ -101,45 +105,49 @@
     }
 </script>
 
-<div class="flex flex-col items-center justify-center gap-4">
-    <div class="mask mask-circle bg-primary/5 p-4">
-        <div class="mask mask-circle bg-primary/10 p-4">
-            <div class="mask mask-circle bg-primary/30 p-4">
-                <div class="mask mask-circle bg-primary p-4" class:animate-pulse={!!mediaRecorder}>
-                    <div class="mask mask-circle bg-neutral">
-                        <button
-                            type="button"
-                            class="btn btn-circle btn-ghost btn-lg text-4xl"
-                            disabled={maxFiles !== null && recordings?.length >= maxFiles}
-                            on:click|preventDefault={() => (mediaRecorder ? stopRecording() : startRecording())}
-                        >
-                            <label class="swap swap-rotate">
-                                <input type="checkbox" checked={!!mediaRecorder} />
-                                <div class="swap-on text-secondary">
-                                    <Fa icon={faStop} />
-                                </div>
-                                <div class="swap-off text-primary">
-                                    <Fa icon={faMicrophone} />
-                                </div>
-                            </label>
-                        </button>
-                    </div>
-                </div>
+<div class="flex flex-col items-center justify-center">
+    <span class="recordAudio-title font-serif">
+        {#if !timer}
+            <p>Press to Start Recording</p>
+        {:else}
+            <p>Recording in progress</p>
+        {/if}
+    </span>
+
+    <button
+        type="button"
+        class="startRecordBtn"
+        disabled={maxFiles !== null && recordings?.length >= maxFiles}
+        on:click|preventDefault={() => (mediaRecorder ? stopRecording() : startRecording())}
+    >
+        <label class="swap swap-rotate">
+            <input type="checkbox" checked={!!mediaRecorder} />
+            <div class="swap-on text-secondary">
+                <Fa icon={faStop} />
             </div>
-        </div>
-    </div>
+            <div class="swap-off text-primary">
+                <img src={microphone} alt="Microphone" />
+            </div>
+        </label>
+    </button>
+
     {#if !timer}
+        <p class="recordAudio-notification">You have to 10 mins per question</p>
         <div class="form-control">
-            <label class="label flex gap-4">
+            <label class="label flex">
                 <span class="label-text">Source Language:</span>
-                <select class="select select-bordered select-ghost" name="language" bind:value={translate.source}>
+                <select
+                    class="selectLanguage select select-bordered select-ghost"
+                    name="language"
+                    bind:value={translate.source}
+                >
                     <option value={null}>Recognize</option>
                     {#each languages as language}
                         <option value={language.code}>{language.language}</option>
                     {/each}
                 </select>
             </label>
-            <label class="label flex gap-4">
+            <!-- <label class="label flex gap-4">
                 <span class="label-text">Target Language:</span>
                 <select class="select select-bordered select-ghost" name="language" bind:value={translate.target}>
                     <option value={null}>Do not translate</option>
@@ -147,9 +155,28 @@
                         <option value={language.code}>{language.language}</option>
                     {/each}
                 </select>
-            </label>
+            </label> -->
+        </div>
+    {:else}
+        <div class="palyerControls">
+            <div class="palyerTime">
+                <span class="palyerTime-variable">{msToTime(timer)}</span>
+                <span class="palyerTime-static">/ {msToTime(max)}</span>
+            </div>
+            <div class="palyerControls__buttons">
+                <button>
+                    <Repeat />
+                </button>
+                <button>
+                    <Stop />
+                </button>
+                <button>
+                    <Pause />
+                </button>
+            </div>
         </div>
     {/if}
+
     {#each recordings ?? [] as recording, i (recording.file.name)}
         <div class="group relative flex items-center justify-center gap-2 transition-all">
             <audio bind:this={player} src={URL.createObjectURL(recording.file)} controls />
@@ -174,6 +201,16 @@
             <p>You have {msToTime(max)} minutes to record your answer.</p>
         </div>
     {/if}
+    <div class="recordAudio__tip">
+        {#if timer > 1 * 1000}
+            <p class="tip-first">OttoStory AI Transcription Unlocked!</p>
+        {:else}
+            <p class="tip-second">Record at least 1 minute to unlock Transcribing with OttoStory AI</p>
+        {/if}
+        {#if timer}
+            <div class="recordAudio-progress" style="width: {(timer / 1000) * 1.66}%"></div>
+        {/if}
+    </div>
 </div>
 
 <dialog bind:this={dialog} class="modal">
@@ -185,3 +222,143 @@
         </div>
     </form>
 </dialog>
+
+<style lang="scss">
+    .startRecordBtn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        background-color: #ffbe33;
+        width: 120px;
+        height: 120px;
+        border-radius: 100%;
+        transition: 0.3s;
+        cursor: pointer;
+        margin-bottom: 48px;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .recordAudio {
+        &-title {
+            font-size: 42px;
+            color: #06192d;
+            line-height: 1.1;
+            text-align: center;
+            margin-bottom: 48px;
+            display: block;
+
+            @media (max-width: 767px) {
+                font-size: 32px;
+            }
+
+            p {
+                color: inherit;
+                display: block;
+            }
+        }
+        &-notification {
+            font-size: 18px;
+            color: #808080;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+
+        &__tip {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 216, 133, 0.6);
+            width: 100%;
+            padding: 12px 10px;
+            border-radius: 12px;
+            margin-top: 20px;
+
+            p {
+                font-size: 24px;
+                color: #0c345c;
+                text-align: center;
+                font-weight: 500;
+                line-height: 1.1;
+
+                @media (max-width: 767px) {
+                    font-size: 18px;
+                }
+            }
+        }
+
+        &-progress {
+            height: 10px;
+            width: auto;
+            max-width: 100%;
+            background-color: #0c345c;
+            border-radius: 40px;
+            margin-top: 10px;
+            transition: width 0s ease;
+        }
+    }
+
+    .label-text {
+        font-size: 18px;
+        margin-right: 20px;
+        color: #1a1a1a;
+    }
+
+    .selectLanguage {
+        max-width: 150px;
+        min-height: auto;
+        height: 42px;
+        border-radius: 40px;
+        border: 1px solid #1d80e2;
+        font-size: 18px;
+        color: #1a1a1a;
+        font-weight: 700;
+        padding-left: 16px;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+
+        &:focus {
+            box-shadow: none;
+            outline: none;
+            background-color: #fff;
+        }
+    }
+
+    .palyerControls {
+        display: flex;
+
+        .palyerTime {
+            display: flex;
+            align-items: center;
+            margin-right: 40px;
+
+            &-variable {
+                margin-right: 6px;
+                font-size: 24px;
+                color: #1a1a1a;
+            }
+
+            &-static {
+                font-size: 24px;
+                color: #bfbfbf;
+            }
+        }
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+
+            button {
+                margin: 0 5px;
+                transition: 0.3s;
+
+                &:hover {
+                    transform: scale(1.1);
+                }
+            }
+        }
+    }
+</style>

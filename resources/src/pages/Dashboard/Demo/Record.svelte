@@ -64,7 +64,7 @@
 <Breadcrumbs step={2} />
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
+    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4 yes">
         <div class="card-body gap-4 p-4 md:p-8">
             <textarea
                 class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"

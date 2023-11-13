@@ -7,18 +7,17 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
-    import bg from '@/assets/img/hero-bg.jpg'
-    import Fa from 'svelte-fa'
-    import Logo from '@/components/SVG/temp-logo.svg.svelte'
-    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
-    import Otto from '@/components/SVG/otto.svg.svelte'
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
     import { strToHtml } from '@/service/helpers'
-    import languages from '@/data/translate_languages.json'
+    // import languages from '@/data/translate_languages.json'
+    import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
+    import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
+    import enhanceIcon from '@/assets/img/enhance-icon.svg'
+    import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
+    import CompleteBtn from '@/components/SVG/buttons/complete-btn.svg.svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -26,8 +25,8 @@
     let original: Editor
     let loading: boolean = true
     let compare: boolean = false
-    let language: string | null = null
-    let initialText = ''
+    // let language: string | null = null
+    // let initialText = ''
 
     const form = useForm({
         original: chapter.data.content,
@@ -40,18 +39,18 @@
 
     start()
 
-    $: wordsOriginal =
-        $form.original
-            ?.replace(/(<([^>]+)>)/gi, '')
-            .replace(/&nbsp;/gi, ' ')
-            .trim()
-            .split(/\s+/).length ?? 0
-    $: wordsEnhanced =
-        $form.enhanced
-            ?.replace(/(<([^>]+)>)/gi, '')
-            .replace(/&nbsp;/gi, ' ')
-            .trim()
-            .split(/\s+/).length ?? 0
+    // $: wordsOriginal =
+    //     $form.original
+    //         ?.replace(/(<([^>]+)>)/gi, '')
+    //         .replace(/&nbsp;/gi, ' ')
+    //         .trim()
+    //         .split(/\s+/).length ?? 0
+    // $: wordsEnhanced =
+    //     $form.enhanced
+    //         ?.replace(/(<([^>]+)>)/gi, '')
+    //         .replace(/&nbsp;/gi, ' ')
+    //         .trim()
+    //         .split(/\s+/).length ?? 0
 
     const controller = new AbortController()
 
@@ -68,37 +67,37 @@
             })
     }
 
-    async function translate(language = null) {
-        if (import.meta.env.SSR) return
+    // async function translate(language = null) {
+    //     if (import.meta.env.SSR) return
 
-        const axios = (await import('axios')).default
+    //     const axios = (await import('axios')).default
 
-        if (!language || loading) {
-            $form.enhanced = initialText
-            enhance?.commands.setContent(strToHtml($form.enhanced), false)
-            return
-        }
+    //     if (!language || loading) {
+    //         $form.enhanced = initialText
+    //         enhance?.commands.setContent(strToHtml($form.enhanced), false)
+    //         return
+    //     }
 
-        loading = true
-        enhance?.setOptions({ editable: false })
+    //     loading = true
+    //     enhance?.setOptions({ editable: false })
 
-        axios
-            .post('/translate', {
-                text: initialText,
-                options: {
-                    target: language,
-                    format: 'text',
-                },
-            })
-            .finally(() => {
-                enhance?.setOptions({ editable: true })
-                loading = false
-            })
-            .then((res) => {
-                $form.enhanced = res.data.text
-                enhance?.commands.setContent(strToHtml($form.enhanced), false)
-            })
-    }
+    //     axios
+    //         .post('/translate', {
+    //             text: initialText,
+    //             options: {
+    //                 target: language,
+    //                 format: 'text',
+    //             },
+    //         })
+    //         .finally(() => {
+    //             enhance?.setOptions({ editable: true })
+    //             loading = false
+    //         })
+    //         .then((res) => {
+    //             $form.enhanced = res.data.text
+    //             enhance?.commands.setContent(strToHtml($form.enhanced), false)
+    //         })
+    // }
 
     onMount(() => {
         original?.setOptions({ editable: false })
@@ -111,7 +110,7 @@
                     if (done) {
                         original?.setOptions({ editable: true })
                         enhance?.setOptions({ editable: true })
-                        initialText = $form.enhanced
+                        // initialText = $form.enhanced
                         loading = false
                         return
                     }
@@ -136,214 +135,188 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={3} />
+<ChapterNameBanner title={chapter.data.title} />
+<ChapterTipBanner
+    title="OttoStory Transcription Tool Tips:"
+    tip="This is your transcription. Edit any misspellings in proper nouns, or city names. You can also add more text via typing or rerecord additional information."
+/>
 
-<section
-    class="container card relative m-4 mx-auto rounded-xl bg-cover bg-center md:p-12 lg:p-16"
-    style="background-image: url({bg})"
-    in:fade
->
-    <div class="absolute inset-0 rounded-xl bg-gradient-to-r from-primary/80 to-primary/40" />
-    <div class="card-body z-10 gap-8 text-primary-content">
-        {#if !compare}
-            <p class="flex items-center gap-8 text-2xl">
-                <Logo class="h-16" />
-                <span>This answer is generated by OTTO AI</span>
-            </p>
-        {/if}
-        <h1 class="card-title font-serif text-5xl font-normal italic">
-            {chapter.data.title}
-        </h1>
-    </div>
-</section>
-
-<form on:submit|preventDefault={submit} class="flex flex-col gap-8 p-4" in:fade>
-    <section class="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row">
-        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
-            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Go Back
-        </a>
-        <div class="flex gap-4">
-            {#if !compare && !loading}
-                <button
-                    type="button"
-                    class="btn btn-primary btn-outline rounded-full"
-                    on:click={() => {
-                        compare = true
-                        $form.use = null
-                    }}
-                >
-                    Compare with My Writing
-                </button>
-            {/if}
-            {#if $form.isDirty && $form.use && !loading}
-                <button
-                    type="submit"
-                    class="btn btn-primary rounded-full"
-                    data-status="published"
-                    data-redirect="dashboard.chapters.finish"
-                >
-                    Complete & Finish this Chapter
-                </button>
-            {/if}
-        </div>
-        <div class="flex gap-4">
-            {#if !loading}
-                <div class="form-control flex-row gap-2">
-                    <label class="label" for="language">
-                        <span class="label-text">Output Language:</span>
-                    </label>
-                    <select
-                        name="language"
-                        id="language"
-                        class="select select-primary"
-                        bind:value={language}
-                        on:change={() => translate(language)}
-                    >
-                        <option value={null}>Default</option>
-                        {#each languages as language}
-                            <option value={language.code}>{language.language}</option>
-                        {/each}
-                    </select>
+<form on:submit|preventDefault={submit} class="flex flex-col" in:fade>
+    <section class:lg:grid-cols-2={compare} class="enhance">
+        <div class="otto-container">
+            <div class="enhance__top">
+                <div class="enhance__top_col">
+                    <img src={enhanceIcon} alt="icon" />
+                    <span>Enhanced with OttoStory</span>
                 </div>
-            {/if}
-            {#if $form.isDirty && $form.use && !loading}
-                <button
-                    type="submit"
-                    class="btn btn-secondary rounded-full"
-                    data-status="draft"
-                    data-redirect="dashboard.chapters.congratulation"
-                >
-                    Save & Next
-                </button>
-            {/if}
-        </div>
-    </section>
-
-    <main class:lg:grid-cols-2={compare} class="container mx-auto grid grid-cols-1 gap-8">
-        <div class="form-control join join-vertical transition-all">
-            <div class="alert alert-success flex items-center rounded-b-none">
-                <span>You have shared {wordsEnhanced} words in this chapter</span>
-                <span>|</span>
-                <span>{Math.ceil(wordsEnhanced / 500)} pages</span>
-            </div>
-            <TipTap
-                class="rounded-t-none border border-neutral-content/20 bg-[#FAFCFF] p-4 font-medium text-primary lg:text-lg"
-                bind:editor={enhance}
-                bind:content={$form.enhanced}
-                placeholder="Write your story here..."
-            >
-                <div slot="top">
-                    <h2
-                        class="m-0 flex items-center justify-between gap-4 rounded-none border border-b-0 border-neutral-content/20 bg-[#FAFCFF] p-4 text-2xl font-normal text-primary md:text-3xl lg:text-4xl"
-                    >
-                        <span class="flex items-center gap-4"
-                            ><Otto class="h-10" />
-                            <span>Otto's <i>Enhance</i></span></span
-                        >
+                <div class="enhance__top_col">
+                    {#if compare}
                         {#if !loading}
                             <button
-                                class="btn btn-primary btn-xs font-sans"
-                                class:btn-outline={$form.use == 'enhanced'}
+                                class="otto-btn-outline small font-sans"
+                                class:otto-btn-primary={$form.use == 'enhanced'}
                                 disabled={$form.use == 'enhanced'}
                                 on:click|preventDefault={() => ($form.use = 'enhanced')}>Use OTTO Writing</button
                             >
                         {/if}
-                    </h2>
-                </div>
-            </TipTap>
-        </div>
-        {#if compare}
-            <div class="form-control join join-vertical transition-all">
-                <div class="alert alert-info flex items-center rounded-b-none">
-                    <span>You have shared {wordsOriginal} words in this chapter</span>
-                    <span>|</span>
-                    <span>{Math.ceil(wordsOriginal / 500)} pages</span>
-                </div>
-                <TipTap
-                    class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 lg:text-lg"
-                    bind:editor={original}
-                    bind:content={$form.original}
-                    placeholder="Write your story here..."
-                >
-                    <h2
-                        slot="top"
-                        class="m-0 flex items-center justify-between gap-4 rounded-none border border-b-0 border-neutral-content/20 bg-neutral p-4 text-2xl md:text-3xl lg:text-4xl"
-                    >
-                        <span>Original Writing</span>
                         {#if !loading}
                             <button
-                                class="btn btn-primary btn-xs font-sans"
-                                class:btn-outline={$form.use == 'original'}
+                                class="otto-btn-outline small btn-original font-sans"
+                                class:otto-btn-primary={$form.use == 'original'}
                                 disabled={$form.use == 'original'}
                                 on:click|preventDefault={() => ($form.use = 'original')}>Use Original Writing</button
                             >
                         {/if}
-                    </h2>
-                </TipTap>
-            </div>
-        {/if}
-    </main>
-
-    <section class="container mx-auto flex flex-col items-center justify-between gap-4 md:flex-row">
-        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
-            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Go Back
-        </a>
-        <div class="flex gap-4">
-            {#if !compare && !loading}
-                <button
-                    type="button"
-                    class="btn btn-primary btn-outline rounded-full"
-                    on:click={() => {
-                        compare = true
-                        $form.use = null
-                    }}
-                >
-                    Compare with My Writing
-                </button>
-            {/if}
-            {#if $form.isDirty && $form.use && !loading}
-                <button
-                    type="submit"
-                    class="btn btn-primary rounded-full"
-                    data-status="published"
-                    data-redirect="dashboard.chapters.finish"
-                >
-                    Complete & Finish this Chapter
-                </button>
-            {/if}
-        </div>
-        <div class="flex gap-4">
-            {#if !loading}
-                <div class="form-control flex-row gap-2">
-                    <label class="label" for="language">
-                        <span class="label-text">Output Language:</span>
-                    </label>
-                    <select
-                        name="language"
-                        id="language"
-                        class="select select-primary"
-                        bind:value={language}
-                        on:change={() => translate(language)}
-                    >
-                        <option value={null}>Default</option>
-                        {#each languages as language}
-                            <option value={language.code}>{language.language}</option>
-                        {/each}
-                    </select>
+                    {/if}
                 </div>
-            {/if}
-            {#if $form.isDirty && $form.use && !loading}
-                <button
-                    type="submit"
-                    class="btn btn-secondary rounded-full"
-                    data-status="draft"
-                    data-redirect="dashboard.chapters.congratulation"
-                >
-                    Save & Next
-                </button>
-            {/if}
+            </div>
+            <div class="transcriptionEditor block">
+                <div class="wrap">
+                    <div class="form-control transition-all">
+                        <TipTap
+                            bind:editor={enhance}
+                            bind:content={$form.enhanced}
+                            placeholder="Write your story here..."
+                        >
+                        </TipTap>
+                    </div>
+
+                    {#if compare}
+                        <div class="form-control transition-all">
+                            <TipTap
+                                bind:editor={original}
+                                bind:content={$form.original}
+                                placeholder="Write your story here..."
+                            >
+                            </TipTap>
+                        </div>
+                    {/if}
+                </div>
+
+                <div class="enhance__buttons">
+                    <div class="enhance__buttons_col">
+                        <a href="/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
+                            <img src={goBackLinkIcon} alt="Record" />
+                            <span>Record more</span>
+                        </a>
+                    </div>
+                    <div class="enhance__buttons_col gap-4">
+                        {#if !compare && !loading}
+                            <button
+                                type="button"
+                                class="otto-btn-outline small"
+                                on:click={() => {
+                                    compare = true
+                                    $form.use = null
+                                }}
+                            >
+                                Compare with My Writing
+                            </button>
+                        {/if}
+                        {#if $form.isDirty && $form.use && !loading}
+                            <button
+                                type="submit"
+                                class="otto-btn-secondary small"
+                                data-status="draft"
+                                data-redirect="dashboard.chapters.congratulation"
+                            >
+                                Save & Next
+                            </button>
+                        {/if}
+                        {#if $form.isDirty && $form.use && !loading}
+                            <button
+                                type="submit"
+                                class="otto-btn-svg"
+                                data-status="published"
+                                data-redirect="dashboard.chapters.finish"
+                            >
+                                <CompleteBtn />
+                            </button>
+                        {/if}
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 </form>
+
+<style lang="scss">
+    .enhance {
+        position: relative;
+        padding-bottom: 100px;
+
+        &__top {
+            background-color: #ffd885;
+            padding: 12px 32px 12px 32px;
+            border-radius: 24px 24px 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .btn-original {
+                margin-left: 12px;
+            }
+
+            &_col {
+                display: flex;
+                align-items: center;
+            }
+
+            span {
+                font-size: 20px;
+                font-weight: 700;
+                color: #0c345c;
+                margin-left: 10px;
+            }
+        }
+
+        .block {
+            background-color: #fff;
+            border: 1px solid #cfe3f3;
+            border-top: none;
+            border-radius: 0 0 24px 24px;
+            padding: 24px 32px 32px 32px;
+
+            @media (max-width: 991px) {
+                padding: 16px;
+            }
+        }
+
+        .wrap {
+            display: flex;
+
+            // @media (max-width: 991px) {
+            //     flex-direction: column;
+            // }
+        }
+
+        .form-control {
+            display: block;
+            position: relative;
+            width: 100%;
+            margin-right: 15px;
+
+            &:last-child {
+                margin-right: 0;
+                border-left: 1px solid #cfe3f3;
+                padding-left: 15px;
+            }
+            &:first-child {
+                border-left: none;
+                padding-left: 0;
+            }
+        }
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 32px;
+
+            &_col {
+                display: flex;
+                align-items: center;
+            }
+        }
+    }
+</style>

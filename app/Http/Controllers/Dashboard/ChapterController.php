@@ -124,7 +124,7 @@ class ChapterController extends Controller
     public function record(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Record', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('question')),
+            'chapter' => fn () => ChapterResource::make($chapter->load('question.covers')),
         ]);
     }
 

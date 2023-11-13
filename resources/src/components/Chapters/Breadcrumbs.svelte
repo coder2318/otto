@@ -8,7 +8,7 @@
 </script>
 
 <header
-    class="container m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 {guest
+    class="container z-10 m-4 mx-auto hidden grid-cols-1 gap-8 md:grid md:grid-cols-2 {guest
         ? 'md:grid-cols-3'
         : 'lg:grid-cols-4'}"
 >

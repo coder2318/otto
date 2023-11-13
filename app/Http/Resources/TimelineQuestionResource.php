@@ -16,6 +16,7 @@ class TimelineQuestionResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
+            'covers' => $this->whenLoaded('covers', fn () => $this->resource->covers->map(fn ($cover) => $cover->getUrl())),
         ]);
     }
 }

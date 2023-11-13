@@ -7,14 +7,14 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
-    import Fa from 'svelte-fa'
-    import { faArrowLeft, faPlus } from '@fortawesome/free-solid-svg-icons'
     import TipTap from '@/components/TipTap.svelte'
     import type { Editor } from '@tiptap/core'
     import { onMount } from 'svelte'
     import { strToHtml } from '@/service/helpers'
-    import { autosize } from '@/service/svelte'
+    import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
+    import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
+    import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
+    import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -101,9 +101,9 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={2} />
+<!-- <Breadcrumbs step={2} /> -->
 
-<section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
+<!-- <section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
     <div class="card-body gap-4">
         <textarea
             class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
@@ -112,86 +112,51 @@
             rows="1"
         />
     </div>
-</section>
-<form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto">
-        <div class="form-control join join-vertical">
-            <div class="alert alert-success flex flex-wrap items-center rounded-b-none">
-                <span>You have shared {words} words in this chapter</span>
-                <span>|</span>
-                <span class="flex-1">{pages} pages</span>
+</section> -->
 
-                {#if transcriptions}
-                    <span class="italic"> Please check transcription for any possible errors before continue. </span>
+<ChapterNameBanner title={$form.title} />
+<ChapterTipBanner
+    title="OttoStory recording tip:"
+    tip="This is your transcription. Edit any misspellings in proper nouns, or city names. You can also add more text via typing or rerecord additional information."
+/>
+
+<form on:submit|preventDefault={submit} in:fade>
+    <main class="transcribe">
+        <div class="otto-container">
+            <div class="transcriptionEditor block">
+                <TipTap bind:editor bind:content={$form.content} placeholder="Write your story here..." />
+                {#if $form.errors.content}
+                    <span class="text-error">
+                        {$form.errors.content}
+                    </span>
                 {/if}
+
+                <div class="transcribe__buttons">
+                    <div class="transcribe__buttons_col">
+                        <a href="/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
+                            <img src={goBackLinkIcon} alt="Record" />
+                            <span>Record more</span>
+                        </a>
+                    </div>
+                    <div class="transcribe__buttons_col gap-4">
+                        {#if $form.content != chapter.data.content}
+                            <button type="submit" class="otto-btn-secondary medium" data-status="draft">
+                                Save & Next
+                            </button>
+                        {:else}
+                            <a use:inertia class="otto-btn-outline small" href="/chapters/{chapter.data.id}/finish">
+                                Complete chapter
+                            </a>
+
+                            <a class="otto-btn-svg" href="/chapters/{chapter.data.id}/enhance" use:inertia>
+                                <EnhanceBtn />
+                            </a>
+                        {/if}
+                    </div>
+                </div>
             </div>
-            <TipTap
-                class="rounded-t-none border border-neutral-content/20 bg-neutral p-4 lg:text-lg"
-                bind:editor
-                bind:content={$form.content}
-                placeholder="Write your story here..."
-            />
-            <input bind:this={input} type="file" accept="image/*" class="hidden" on:change={addImages} />
-            {#if chapter.data.images?.length}
-                <div class="border border-neutral-content/20 bg-neutral p-4">
-                    <div class="flex flex-wrap items-center justify-center gap-4">
-                        {#each chapter.data.images as image}
-                            <figure class="flex w-96 flex-col rounded-xl bg-base-100" in:fade>
-                                <img src={image.url} alt={image.caption} class="w-full bg-base-200" />
-                                <figcaption class="p-2 italic">{image.caption}</figcaption>
-                            </figure>
-                        {/each}
-                    </div>
-                </div>
-            {:else if $form.images?.length}
-                <div class="border border-neutral-content/20 bg-neutral p-4">
-                    <div class="flex flex-wrap items-center justify-center gap-4">
-                        {#each $form.images as image (image.file.name)}
-                            <figure class="flex w-96 flex-col rounded-xl bg-base-100" in:fade>
-                                <img src={URL.createObjectURL(image.file)} alt={image.caption} class="w-full" />
-                                <figcaption class="p-2 italic">{image.caption}</figcaption>
-                            </figure>
-                        {/each}
-                    </div>
-                </div>
-            {:else}
-                <div class="border border-neutral-content/20 bg-neutral p-4">
-                    <button type="button" class="btn btn-ghost btn-sm" on:click|preventDefault={() => input.click()}>
-                        <Fa icon={faPlus} /> Add Image
-                    </button>
-                </div>
-            {/if}
-            {#if $form.errors.content}
-                <span class="label-text-alt mt-1 text-left text-error">
-                    {$form.errors.content}
-                </span>
-            {/if}
         </div>
     </main>
-
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
-            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Go Back
-        </a>
-        {#if $form.isDirty}
-            <button type="submit" class="btn btn-secondary rounded-full" data-status="draft"> Save & Next </button>
-        {:else}
-            <div class="flex gap-4">
-                <a
-                    use:inertia
-                    class="btn btn-primary btn-outline rounded-full"
-                    href="/chapters/{chapter.data.id}/finish"
-                >
-                    Complete &<br /> Finish this Chapter
-                </a>
-
-                <a href="/chapters/{chapter.data.id}/enhance" class="btn btn-primary rounded-full" use:inertia>
-                    Ask Otto AI to<br />enhance the Writing
-                </a>
-            </div>
-        {/if}
-    </section>
 </form>
 
 <dialog bind:this={modal} class="modal">
@@ -219,3 +184,53 @@
         </div>
     </form>
 </dialog>
+
+<style lang="scss">
+    .transcribe {
+        position: relative;
+        padding-bottom: 100px;
+
+        .block {
+            background: #fff;
+            padding: 24px 32px 32px 32px;
+            border: 1px solid rgba(191, 191, 191, 0.4);
+            border-radius: 24px;
+        }
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-top: 32px;
+
+            &_col {
+                display: flex;
+                align-items: center;
+            }
+
+            .otto-btn-outline {
+                padding: 0 16px;
+                font-weight: 700;
+                font-size: 18px;
+                border: 1px solid #c6b59f;
+
+                &:hover {
+                    background: #c6b59f;
+                }
+            }
+        }
+
+        .text-error {
+            display: block;
+            width: fit-content;
+            font-size: 20px;
+            color: #0c345c;
+            font-weight: 700;
+            background: rgba(247, 163, 146, 0.6);
+            padding: 10px 16px;
+            border-radius: 40px;
+            margin: 0 auto;
+            line-height: 1.1;
+        }
+    }
+</style>

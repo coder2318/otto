@@ -7,15 +7,19 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
-    import { faArrowLeft, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import { faTrash } from '@fortawesome/free-solid-svg-icons'
     import { start, done } from '@/components/Loading.svelte'
     import { bytes } from '@/service/helpers'
     import { dayjs } from '@/service/dayjs'
     import createOttos1 from '@/assets/img/create-ottos-1.svg'
     import createOttos2 from '@/assets/img/create-ottos-2.svg'
     import createOttos3 from '@/assets/img/create-ottos-3.svg'
+    import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
+    import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
+    import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
+    import microphoneBtn from '@/assets/img/microphone-btn.svg'
+    import TranscribeBtn from '@/components/SVG/buttons/transcribe-btn.svg.svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -54,92 +58,103 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={2} />
+<ChapterNameBanner title={chapter.data.title} />
+<ChapterTipBanner
+    title="OttoStory Tool Tips:"
+    tip="This is your memory box – where all your previous recordings and responses are stored.  You can click on a version or recording to transcribe and edit."
+/>
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
-        <div class="card-body gap-4">
-            <h1 class=" card-title mb-4 block text-center text-3xl font-normal italic">{chapter.data.title}</h1>
-
-            {#each chapter.data?.attachments as recording}
-                <div class="card bg-neutral">
-                    <div
-                        class="card-body grid auto-rows-min grid-cols-4 flex-row items-center justify-between gap-4 lg:flex"
-                    >
-                        <input
-                            type="checkbox"
-                            class="checkbox-primary checkbox col-span-1"
-                            class:checkbox-success={recording.transcribed}
-                            on:change={(e) => select(recording.id, e.currentTarget.checked)}
-                        />
-                        <div class="col-span-3 flex flex-1 flex-col gap-2 lg:col-span-1">
-                            <span>{recording.name}</span>
-                            <span class="flex gap-2 text-xs opacity-50">
-                                <span>Size: {bytes(recording.size)}</span>
-                                <span>Transcribed: {recording.transcribed ? 'Yes' : 'No'}</span>
-                                <span>Uploaded: {dayjs(recording.created_at).format('YYYY-MM-DD HH:mm')}</span>
-                            </span>
-                        </div>
-                        <div class="col-span-4 mx-auto">
-                            {#if recording.is_media}
-                                <audio src={recording.url} controls />
-                            {:else}
-                                <a
-                                    href={recording.url}
-                                    target="_blank"
-                                    class="btn btn-primary btn-outline btn-xs rounded-full">Preview</a
+    <main class="attachments">
+        <div class="otto-container">
+            <div class="block">
+                <div class="block__top">
+                    <h3 class="fz_h3 title">Select Recordings</h3>
+                    {#if $form.attachments.length}
+                        <button type="submit" class="otto-btn-svg">
+                            <TranscribeBtn />
+                        </button>
+                    {/if}
+                </div>
+                <div class="attachments__records">
+                    {#each chapter.data?.attachments as recording}
+                        <div class="card bg-neutral">
+                            <div class="card__col">
+                                <div class="form-control">
+                                    <label class="label cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            class="checkbox-secondary checkbox"
+                                            class:checkbox-success={recording.transcribed}
+                                            on:change={(e) => select(recording.id, e.currentTarget.checked)}
+                                        />
+                                    </label>
+                                </div>
+                                <div class="col-span-3 flex flex-1 flex-col lg:col-span-1">
+                                    <span class="name">{recording.name}</span>
+                                    <span class="record-info flex gap-2 text-xs opacity-50">
+                                        <span>Size: {bytes(recording.size)}</span>
+                                        <span>Transcribed: {recording.transcribed ? 'Yes' : 'No'}</span>
+                                        <span>Uploaded: {dayjs(recording.created_at).format('YYYY-MM-DD HH:mm')}</span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="card__col">
+                                <div class="col-span-4 mx-auto">
+                                    {#if recording.is_media}
+                                        <audio src={recording.url} controls />
+                                    {:else}
+                                        <a
+                                            href={recording.url}
+                                            target="_blank"
+                                            class="btn btn-primary btn-outline btn-xs rounded-full">Preview</a
+                                        >
+                                    {/if}
+                                </div>
+                                <button
+                                    type="button"
+                                    class="btn btn-error btn-sm"
+                                    on:click|preventDefault={() => deleteRecording(recording.id)}
                                 >
-                            {/if}
+                                    <Fa icon={faTrash} />
+                                </button>
+                            </div>
                         </div>
-                        <div class="col-span-4 mx-auto">
-                            <button
-                                type="button"
-                                class="btn btn-error btn-sm"
-                                on:click|preventDefault={() => deleteRecording(recording.id)}
+                    {:else}
+                        <div class="createStory__blocks">
+                            <a
+                                class="createStory__block record bg-base-100"
+                                href="/chapters/{chapter.data.id}/record"
+                                use:inertia
                             >
-                                <Fa icon={faTrash} />
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            {:else}
-                <!-- <div class="card text-base-content/60">
-                    <div class="card-body items-center">
-                        <span>No attachments found</span>
-                    </div>
-                </div> -->
-                <div class="createStory__blocks">
-                    <a
-                        class="createStory__block record bg-base-100"
-                        href="/chapters/{chapter.data.id}/record"
-                        use:inertia
-                    >
-                        <img src={createOttos1} alt="icon" />
-                        <span class="createStory__block-title">Record your Story</span>
-                    </a>
+                                <img src={createOttos1} alt="icon" />
+                                <span class="createStory__block-title">Record your Story</span>
+                            </a>
 
-                    <a class="createStory__block upload" href="/chapters/{chapter.data.id}/write" use:inertia>
-                        <img src={createOttos2} alt="icon" />
-                        <span class="createStory__block-title">Type your Story</span>
-                    </a>
-                    <a class="createStory__block type" href="/chapters/{chapter.data.id}/upload" use:inertia>
-                        <img src={createOttos3} alt="icon" />
-                        <span class="createStory__block-title">Upload File</span>
-                    </a>
+                            <a class="createStory__block upload" href="/chapters/{chapter.data.id}/write" use:inertia>
+                                <img src={createOttos2} alt="icon" />
+                                <span class="createStory__block-title">Type your Story</span>
+                            </a>
+                            <a class="createStory__block type" href="/chapters/{chapter.data.id}/upload" use:inertia>
+                                <img src={createOttos3} alt="icon" />
+                                <span class="createStory__block-title">Upload File</span>
+                            </a>
+                        </div>
+                    {/each}
+                    {#if chapter.data?.attachments}
+                        <a href="/chapters/{chapter.data.id}/edit" class="addNewRecord" use:inertia>
+                            <span>Add New Recording</span>
+                            <img src={microphoneBtn} alt="microphone" />
+                        </a>
+                    {/if}
                 </div>
-            {/each}
+            </div>
+            <a href="/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
+                <img src={goBackLinkIcon} alt="Record" />
+                <span>Record more</span>
+            </a>
         </div>
     </main>
-
-    <section class="container mx-auto mb-8 flex justify-between">
-        <a href="/chapters/{chapter.data.id}/edit" class="btn btn-neutral rounded-full pl-0 font-normal" use:inertia>
-            <span class="badge mask badge-accent mask-circle p-4"><Fa icon={faArrowLeft} /></span>
-            Go Back
-        </a>
-        {#if $form.attachments.length}
-            <button type="submit" class="btn btn-secondary rounded-full"> Transcribe </button>
-        {/if}
-    </section>
 </form>
 
 <dialog bind:this={dialog} class="modal">
@@ -153,6 +168,139 @@
 </dialog>
 
 <style lang="scss">
+    .attachments {
+        position: relative;
+        padding-bottom: 100px;
+
+        .block {
+            position: relative;
+            background: #fff;
+            padding: 32px 48px 48px 48px;
+            border-radius: 24px;
+            margin-bottom: 20px;
+
+            @media (max-width: 767px) {
+                padding: 16px;
+            }
+
+            &__top {
+                margin-bottom: 32px;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+
+                .title {
+                    color: #06192d;
+                }
+            }
+        }
+
+        .card {
+            border: 1px solid #1d80e2;
+            margin-bottom: 16px;
+            border-radius: 28px;
+            padding: 10px 20px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+
+            @media (max-width: 991px) {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            &__col {
+                display: flex;
+                align-items: center;
+
+                &:nth-child(1) {
+                    padding-right: 15px;
+
+                    @media (max-width: 991px) {
+                        margin-bottom: 10px;
+                        align-items: flex-start;
+                    }
+                }
+                &:nth-child(2) {
+                    @media (max-width: 767px) {
+                        flex-direction: column;
+                        align-items: flex-start;
+                    }
+                }
+            }
+
+            .checkbox {
+                border: 2px solid #0c345c;
+                width: 24px;
+                height: 24px;
+                margin-right: 16px;
+                transition: 0s !important;
+
+                &:checked {
+                    background-image: linear-gradient(-45deg, transparent 65%, #0c345c 65.99%),
+                        linear-gradient(45deg, transparent 75%, #0c345c 75.99%),
+                        linear-gradient(-45deg, #0c345c 40%, transparent 40.99%),
+                        linear-gradient(45deg, #0c345c 30%, #ffffff 30.99%, #ffffff 40%, transparent 40.99%),
+                        linear-gradient(-45deg, #ffffff 50%, #0c345c 50.99%);
+                }
+            }
+
+            .btn-error {
+                margin-left: 10px;
+                @media (max-width: 767px) {
+                    margin-top: 1px;
+                }
+            }
+
+            .name {
+                font-size: 20px;
+                color: #0c345c;
+                line-height: 1.3;
+                margin: 0;
+            }
+
+            .record-info {
+                line-height: 1.3;
+                @media (max-width: 767px) {
+                    flex-direction: column;
+                    align-items: flex-start;
+                    gap: 0;
+                }
+                span {
+                    color: #1a1a1a;
+                    opacity: 0.5;
+                    font-size: 16px;
+                    @media (max-width: 767px) {
+                        margin: 0;
+                        padding: 0;
+                    }
+                }
+            }
+        }
+
+        .addNewRecord {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px dashed #bfbfbf;
+            border-radius: 28px;
+            height: 76px;
+            cursor: pointer;
+            transition: 0.3s;
+
+            &:hover {
+                background-color: rgba(191, 191, 191, 0.2);
+            }
+
+            span {
+                color: #0c345c;
+                font-size: 24px;
+                margin-right: 16px;
+            }
+        }
+    }
+
     .createStory__blocks {
         display: flex;
         flex-wrap: wrap;

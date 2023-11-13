@@ -16,6 +16,7 @@
     import QuoteIcon from '@/components/SVG/quote-icon.svg.svelte'
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
     import CreateStory from '@/components/Stories/CreateStory.svelte'
+    import EditCoverBtn from '@/components/SVG/buttons/edit-cover-btn.svg.svelte'
     export let story: { data: App.Story }
 </script>
 
@@ -92,17 +93,35 @@
             <div class="wrap">
                 <div class="block">
                     <div class="cover">
-                        <button class="cover-add">
-                            <img src={coverAddIcon} alt="plus" />
-                        </button>
-                        <img class="cover-img" src={beginYourBook} alt="Cover" />
+                        {#if !story.data.cover}
+                            <a href="/stories/{story.data.id}/cover" use:inertia class="cover-add">
+                                <img src={coverAddIcon} alt="plus" />
+                            </a>
+                        {:else}
+                            <img
+                                class="aspect-[2/3] h-full object-cover object-right"
+                                src={story.data.cover}
+                                alt="Cover"
+                            />
+                        {/if}
                     </div>
-                    <div class="bookProgress">
-                        <div class="bookProgress__content">
-                            <span class="bookProgress-count text-primary">10%</span>
-                            <span class="bookProgress-title text-primary">complete</span>
+                    <div
+                        class="block__bottom"
+                        class:justify-center={!story.data.cover}
+                        class:justify-between={story.data.cover}
+                    >
+                        <div class="bookProgress">
+                            <div class="bookProgress__content">
+                                <span class="bookProgress-count text-primary">10%</span>
+                                <span class="bookProgress-title text-primary">complete</span>
+                            </div>
+                            <progress class="progress progress-primary" value="40" max="100"></progress>
                         </div>
-                        <progress class="progress progress-primary" value="40" max="100"></progress>
+                        {#if story.data.cover}
+                            <a class="otto-btn-svg" href="/stories/{story.data.id}/cover" use:inertia>
+                                <EditCoverBtn />
+                            </a>
+                        {/if}
                     </div>
                 </div>
 
@@ -398,6 +417,10 @@
             background-color: #fff;
             margin-right: 36px;
             border-radius: 24px;
+
+            &__bottom {
+                display: flex;
+            }
         }
 
         .cover {
@@ -407,6 +430,8 @@
             aspect-ratio: 16/14;
             margin-bottom: 24px;
             overflow: hidden;
+            display: flex;
+            justify-content: center;
 
             &-add {
                 display: flex;
@@ -429,15 +454,14 @@
                 }
             }
 
-            &-img {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                display: none;
-            }
+            // &-img {
+            //     position: absolute;
+            //     left: 0;
+            //     top: 0;
+            //     width: 100%;
+            //     height: 100%;
+            //     object-fit: cover;
+            // }
         }
 
         .bookProgress {

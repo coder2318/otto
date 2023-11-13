@@ -63,7 +63,6 @@
         } else {
             $filter.timeline_id = e.target.value
         }
-
         dropdownDialog.close()
     }
 
@@ -99,21 +98,6 @@
     <div class="otto-container">
         <div class="wrap">
             <img class="chaptersHero-illustration" src={smallBannerIllustration} alt="Figure" />
-            <!-- <div class="breadcrumbs text-sm">
-            <ul>
-                <li><a href="/stories" use:inertia>Stories</a></li>
-                <li>
-                    <a href="/stories/{story.data.id}" use:inertia
-                        >{truncate(story.data.title, 20)}</a
-                    >
-                </li>
-                <li>
-                    <a href="/stories/{story.data.id}" use:inertia
-                        >Writing Room</a
-                    >
-                </li>
-            </ul>
-        </div> -->
             <div class="block" style="background-image: url({background})">
                 <div class="chaptersHero-overlay" />
                 <h1 class="fz_h3 title">
@@ -121,7 +105,8 @@
                     <button on:click={() => dropdownDialog.showModal()}>
                         <p>
                             <i class="text-neutral"
-                                >{timelines.data[query?.filter?.timeline_id - 1]?.title ?? 'Timeline'}</i
+                                >{timelines.data.find((el) => el.id == query?.filter?.timeline_id)?.title ??
+                                    'Timeline'}</i
                             >
                         </p>
                         <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
@@ -322,76 +307,6 @@
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
 
 <style lang="scss">
-    .chaptersHero {
-        position: relative;
-        padding-top: 32px;
-
-        .wrap {
-            position: relative;
-        }
-
-        &-illustration {
-            position: absolute;
-            left: -100px;
-            top: -160px;
-            width: 380px;
-        }
-
-        .title {
-            font-weight: 400;
-            display: flex;
-            line-height: 1;
-            flex-wrap: wrap;
-
-            span {
-                display: flex;
-                align-items: center;
-                line-height: 1.1;
-            }
-
-            button {
-                display: flex;
-                align-items: center;
-                margin: 0 24px;
-                background-color: rgba(255, 255, 255, 0.2);
-                padding: 10px 32px;
-                border-radius: 30px;
-
-                p {
-                    font-size: 42px;
-                    margin-right: 20px;
-                }
-            }
-        }
-
-        .block {
-            position: relative;
-            min-height: 170px;
-            padding: 50px 40px;
-            border-radius: 24px;
-            overflow: hidden;
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-        }
-
-        &-overlay {
-            position: absolute;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            // background-color: #000;
-            background: linear-gradient(0deg, rgba(12, 52, 92, 0.7), rgba(12, 52, 92, 0.7)),
-                linear-gradient(0deg, rgba(226, 218, 207, 0.2), rgba(226, 218, 207, 0.2));
-        }
-
-        h1 {
-            position: relative;
-            z-index: 2;
-        }
-    }
-
     .chaptersTabs {
         position: relative;
         padding-bottom: 32px;
@@ -518,21 +433,6 @@
         }
     }
     @media (max-width: 767px) {
-        .chaptersHero {
-            .block {
-                padding: 40px 20px;
-            }
-
-            .title {
-                button {
-                    margin: 15px 0;
-                    p {
-                        font-size: 32px;
-                    }
-                }
-            }
-        }
-
         .chaptersTabs {
             .tabs {
                 .tab {
