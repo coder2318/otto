@@ -21,7 +21,6 @@
 
     let editor: Editor
     let modal: HTMLDialogElement
-    let input: HTMLInputElement
 
     const form = useForm({
         content: chapter.data.content ?? '',
@@ -29,14 +28,6 @@
         status: chapter.data.status,
         images: [],
     })
-
-    $: words =
-        $form.content
-            ?.replace(/(<([^>]+)>)/gi, '')
-            .replace(/&nbsp;/gi, ' ')
-            .trim()
-            .split(/\s+/).length ?? 0
-    $: pages = Math.ceil(words / 500)
 
     onMount(() => {
         if (transcriptions) {
@@ -86,33 +77,11 @@
                 },
             })
     }
-
-    function addImages(event) {
-        $form.images.push({
-            file: event.target.files[0],
-            caption: prompt('Please enter image caption'),
-        })
-
-        $form.images = $form.images
-    }
 </script>
 
 <svelte:head>
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
-
-<!-- <Breadcrumbs step={2} /> -->
-
-<!-- <section class="container card m-4 mx-auto rounded-xl bg-base-200 px-4" in:fade>
-    <div class="card-body gap-4">
-        <textarea
-            class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
-            bind:value={$form.title}
-            use:autosize={{ offset: 2 }}
-            rows="1"
-        />
-    </div>
-</section> -->
 
 <ChapterNameBanner title={$form.title} />
 <ChapterTipBanner

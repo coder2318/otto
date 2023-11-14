@@ -1,7 +1,7 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { msToTime } from '@/service/helpers'
-    import { faMicrophone, faPause, faRepeat, faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import { faMicrophone, faPause, faStop, faTrash } from '@fortawesome/free-solid-svg-icons'
     import dayjs from 'dayjs'
     import Fa from 'svelte-fa'
     import { flash } from './Toast.svelte'
@@ -209,13 +209,6 @@
                 <span class="palyerTime-static">/ {msToTime(max)}</span>
             </div>
             <div class="palyerControls__buttons">
-                <!-- <button
-                    class="btn btn-circle btn-neutral border border-neutral-content/50"
-                    type="button"
-                    on:click|preventDefault={startRecording}
-                >
-                    <Fa icon={faRepeat} />
-                </button> -->
                 <button
                     class="btn btn-circle btn-neutral border border-neutral-content/50"
                     type="button"

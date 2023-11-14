@@ -186,7 +186,7 @@ class StoryController extends Controller
                     ->orderBy('timeline_id', 'asc')
                     ->orderBy('order', 'asc')
                     ->get(['id', 'title'])
-            )
+            ),
         ]);
     }
 
