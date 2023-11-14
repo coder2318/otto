@@ -181,6 +181,12 @@ class StoryController extends Controller
     {
         return Inertia::render('Dashboard/Stories/Preview', [
             'story' => fn () => StoryResource::make($story->load('book')),
+            'chapters' => fn () => ChapterResource::collection(
+                $story->chapters()->where('status', Status::PUBLISHED)
+                    ->orderBy('timeline_id', 'asc')
+                    ->orderBy('order', 'asc')
+                    ->get(['id', 'title'])
+            )
         ]);
     }
 
