@@ -98,6 +98,8 @@
                         ),
                     },
                 ]
+
+                stream.getTracks().forEach((track) => track.stop())
             })
 
             createBubbles(stream)
