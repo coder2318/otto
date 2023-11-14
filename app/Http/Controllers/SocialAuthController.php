@@ -39,7 +39,7 @@ class SocialAuthController extends Controller
         if (! $user = User::where('email', $email = $userData->getEmail())->first()) {
             /** @var User */
             $user = User::create([
-                'name' => $userData->getName(),
+                'name' => $userData->getNickname(),
                 'email' => $email,
                 'avatar' => $userData->getAvatar(),
                 'password' => Hash::make($password = Str::random()),
