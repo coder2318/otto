@@ -33,7 +33,7 @@ class SocialAuthControllerTest extends TestCase
         /** @var Mockery\LegacyMockInterface|User */
         $abstractUser = Mockery::mock(User::class);
         $abstractUser
-            ->shouldReceive('getEmail', 'getName', 'getAvatar')
+            ->shouldReceive('getEmail', 'getNickname', 'getAvatar')
             ->andReturn(fake()->email(), fake()->name(), fake()->imageUrl());
 
         Socialite::shouldReceive('driver->user')->andReturn($abstractUser);
