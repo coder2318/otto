@@ -7,9 +7,10 @@
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
     export let pages: number = 32
+    export let change = () => {}
 
     let svg: HTMLElement | SVGElement
-    let oldParams = {}
+    let oldParams = { ...parameters }
 
     $: sizes = getSize(pages)
 
@@ -37,8 +38,10 @@
 
     onMount(() => {
         svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
-            dragHooks.push(draggable(node, svg as SVGElement))
+            dragHooks.push(draggable(node, svg as SVGElement, change))
         })
+
+        updateSvg(parameters)
 
         return () => {
             dragHooks.forEach((element) => element.destroy())
@@ -54,6 +57,7 @@
         }, {})
 
         if (Object.keys(diff).length) {
+            change()
             updateSvg(diff)
         }
 

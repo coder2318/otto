@@ -12,7 +12,7 @@ export function autosize(node: HTMLTextAreaElement, options: any = { offset: 0 }
     }
 }
 
-export function draggable(node: SVGElement, root: SVGElement) {
+export function draggable(node: SVGElement, root: SVGElement, callback: Function) {
     let selected: SVGElement | null = null
     let offset: { x: number; y: number } | null = null
 
@@ -50,6 +50,7 @@ export function draggable(node: SVGElement, root: SVGElement) {
     function drag(event: MouseEvent) {
         if (!selected || !offset) return
         event.preventDefault()
+        callback()
         const pos = getMousePosition(event)
         selected.setAttributeNS(null, 'x', (pos.x - offset.x).toString())
         selected.setAttributeNS(null, 'y', (pos.y - offset.y).toString())

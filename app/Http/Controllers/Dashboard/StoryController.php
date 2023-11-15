@@ -26,6 +26,7 @@ use App\Models\StoryType;
 use App\Models\User;
 use App\Services\LuluService;
 use Illuminate\Http\Request;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -108,7 +109,28 @@ class StoryController extends Controller
 
         if ($request->hasFile('cover')) {
             $story->cover?->delete();
-            $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+
+            $files = [];
+            $parameters = [];
+
+            foreach ($request->validated('meta', []) as $key => $value) {
+                $value instanceof UploadedFile
+                    ? $files[$key] = $value
+                    : $parameters[$key] = $value;
+            }
+
+            /** @var \App\Models\Media */
+            $cover = $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+
+            foreach ($files as $key => $value) {
+                $cover->addMedia($value)->toMediaCollection($key);
+            }
+
+            foreach ($parameters as $key => $value) {
+                $cover->setCustomProperty($key, $value);
+            }
+
+            $cover->save();
 
             dispatch(new RegenerateBookCover($story));
         }

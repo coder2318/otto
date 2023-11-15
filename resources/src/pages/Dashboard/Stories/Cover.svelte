@@ -17,6 +17,8 @@
     import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
     import bookCoverIllustration2 from '@/assets/img/book-cover-illustration-2.svg'
     import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
+    import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
+    import Fa from 'svelte-fa'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -31,13 +33,10 @@
     ][]
 
     let element: HTMLElement, modal: HTMLDialogElement, builder: BookCoverBuilder, editor: any
-
-    let parameters = {} as any
-
-    let editing: boolean = !story.data.cover
-
+    let changed = false
+    let parameters = createParameters() as any
+    let hiddenParams = {} as any
     let loading: boolean = false
-
     let fonts = []
 
     onMount(() => {
@@ -64,6 +63,18 @@
         }
     })
 
+    function createParameters() {
+        if (template.data.id == story.data?.cover?.meta?.template_id) {
+            return story.data?.cover?.meta
+        }
+
+        changed = true
+
+        return {
+            template_id: template.data.id,
+        }
+    }
+
     function canvelEdit() {
         modal.close()
         editor.oncancel()
@@ -78,6 +89,14 @@
         editor?.clear()
     }
 
+    async function prepareFile(key: string, blob: File) {
+        hiddenParams[key] = new File([blob], blob.name, {
+            type: blob.type,
+            lastModified: blob.lastModified,
+        })
+        parameters[key] = await fileToBase64(blob)
+    }
+
     async function submit() {
         if (loading) return
 
@@ -89,6 +108,10 @@
             `/stories/${story.data.id}`,
             {
                 cover: file,
+                meta: {
+                    ...parameters,
+                    ...hiddenParams,
+                },
                 _method: 'PUT',
                 redirect: 'dashboard.stories.order',
             },
@@ -118,149 +141,131 @@
                     <img class="bookCover-illustration-1" src={bookCoverIllustration1} alt="Illustration" />
                     <img class="bookCover-illustration-2" src={bookCoverIllustration2} alt="Illustration" />
                     <div class="flex flex-col gap-4">
-                        {#if editing}
-                            {#each grouped as [group, fields] (group)}
-                                {#if group}
-                                    <div class="collapse border border-base-content/60 bg-base-100">
-                                        <input type="radio" name="group" />
-                                        <div class="collapse-title text-xl font-medium">
-                                            {group}
-                                        </div>
-                                        <div class="collapse-content">
-                                            {#each fields as field}
-                                                <div class="form-control">
-                                                    <label class="label" for={field.key}>
-                                                        <span class="label-text">{field.name}</span>
-                                                    </label>
-
-                                                    {#if field.type === 'text'}
-                                                        <textarea
-                                                            class="textarea textarea-bordered"
-                                                            bind:value={parameters[field.key]}
-                                                            name={field.key}
-                                                            placeholder={field.name}
-                                                            rows="1"
-                                                        />
-                                                    {:else if field.type === 'number'}
-                                                        <input
-                                                            class="input input-bordered"
-                                                            bind:value={parameters[field.key]}
-                                                            type="number"
-                                                            name={field.key}
-                                                            placeholder={field.name}
-                                                        />
-                                                    {:else if field.type === 'font'}
-                                                        <select
-                                                            class="select select-bordered"
-                                                            bind:value={parameters[field.key]}
-                                                            name={field.key}
-                                                        >
-                                                            {#each fonts as font}
-                                                                <option value={font}>{font}</option>
-                                                            {/each}
-                                                        </select>
-                                                    {:else if field.type === 'color'}
-                                                        <input
-                                                            class="input input-bordered w-full"
-                                                            bind:value={parameters[field.key]}
-                                                            type="color"
-                                                            name={field.key}
-                                                            placeholder={field.name}
-                                                        />
-                                                    {:else if field.type === 'image' && editor}
-                                                        <div class="">
-                                                            <FilePond
-                                                                name={field.key}
-                                                                server={false}
-                                                                onpreparefile={async (file, blob) =>
-                                                                    (parameters[field.key] = await fileToBase64(blob))}
-                                                                onremovefile={() => (parameters[field.key] = null)}
-                                                                imageEditEditor={editor}
-                                                                allowImageEdit={true}
-                                                                allowMultiple={false}
-                                                                imageEditInstantEdit={true}
-                                                                styleImageEditButtonEditItemPosition="top right"
-                                                                imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
-                                                            />
-                                                        </div>
-                                                    {/if}
-                                                </div>
-                                            {/each}
-                                        </div>
+                        {#each grouped as [group, fields] (group)}
+                            {#if group}
+                                <div class="collapse border border-base-content/60 bg-base-100">
+                                    <input type="radio" name="group" />
+                                    <div class="collapse-title text-xl font-medium">
+                                        {group}
                                     </div>
-                                {:else}
-                                    {#each fields as field}
-                                        <div class="form-control">
-                                            <label class="label" for={field.key}>
-                                                <span class="label-text">{field.name}</span>
-                                            </label>
+                                    <div class="collapse-content">
+                                        {#each fields as field}
+                                            <div class="form-control">
+                                                <label class="label" for={field.key}>
+                                                    <span class="label-text">{field.name}</span>
+                                                </label>
 
-                                            {#if field.type === 'text'}
-                                                <textarea
-                                                    class="textarea textarea-bordered"
-                                                    bind:value={parameters[field.key]}
-                                                    name={field.key}
-                                                    placeholder={field.name}
-                                                    rows="1"
-                                                />
-                                            {:else if field.type === 'color'}
-                                                <input
-                                                    class="input input-bordered w-full"
-                                                    bind:value={parameters[field.key]}
-                                                    type="color"
-                                                    name={field.key}
-                                                    placeholder={field.name}
-                                                />
-                                            {:else if field.type === 'image' && editor}
-                                                <div class="">
-                                                    <FilePond
+                                                {#if field.type === 'text'}
+                                                    <textarea
+                                                        class="textarea textarea-bordered"
+                                                        bind:value={parameters[field.key]}
                                                         name={field.key}
-                                                        server={false}
-                                                        onpreparefile={async (file, blob) =>
-                                                            (parameters[field.key] = await fileToBase64(blob))}
-                                                        onremovefile={() => (parameters[field.key] = null)}
-                                                        imageEditEditor={editor}
-                                                        allowImageEdit={true}
-                                                        allowMultiple={false}
-                                                        imageEditInstantEdit={true}
-                                                        styleImageEditButtonEditItemPosition="top right"
-                                                        imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                                        placeholder={field.name}
+                                                        rows="1"
                                                     />
-                                                </div>
-                                            {/if}
-                                        </div>
-                                    {/each}
-                                {/if}
-                            {/each}
-                        {:else}
-                            <div class="bookCover__block_buttons">
-                                <button
-                                    type="button"
-                                    class="otto-btn-primary otto-btn"
-                                    on:click={() => (editing = true)}
-                                >
-                                    Change Cover
-                                </button>
-                                <a use:inertia href="/stories/{story.data.id}/order" class="otto-btn-outline otto-btn">
-                                    Order Book
-                                </a>
-                            </div>
-                        {/if}
+                                                {:else if field.type === 'number'}
+                                                    <input
+                                                        class="input input-bordered"
+                                                        bind:value={parameters[field.key]}
+                                                        type="number"
+                                                        name={field.key}
+                                                        placeholder={field.name}
+                                                    />
+                                                {:else if field.type === 'font'}
+                                                    <select
+                                                        class="select select-bordered"
+                                                        bind:value={parameters[field.key]}
+                                                        name={field.key}
+                                                    >
+                                                        {#each fonts as font}
+                                                            <option value={font}>{font}</option>
+                                                        {/each}
+                                                    </select>
+                                                {:else if field.type === 'color'}
+                                                    <input
+                                                        class="input input-bordered w-full"
+                                                        bind:value={parameters[field.key]}
+                                                        type="color"
+                                                        name={field.key}
+                                                        placeholder={field.name}
+                                                    />
+                                                {:else if field.type === 'image' && editor}
+                                                    <div class="">
+                                                        <FilePond
+                                                            name={field.key}
+                                                            server={false}
+                                                            onpreparefile={async (file, blob) =>
+                                                                (parameters[field.key] = await fileToBase64(blob))}
+                                                            onremovefile={() => (parameters[field.key] = null)}
+                                                            imageEditEditor={editor}
+                                                            allowImageEdit={true}
+                                                            allowMultiple={false}
+                                                            imageEditInstantEdit={true}
+                                                            styleImageEditButtonEditItemPosition="top right"
+                                                            imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                                        />
+                                                    </div>
+                                                {/if}
+                                            </div>
+                                        {/each}
+                                    </div>
+                                </div>
+                            {:else}
+                                {#each fields as field}
+                                    <div class="form-control">
+                                        <label class="label" for={field.key}>
+                                            <span class="label-text">{field.name}</span>
+                                        </label>
+
+                                        {#if field.type === 'text'}
+                                            <textarea
+                                                class="textarea textarea-bordered"
+                                                bind:value={parameters[field.key]}
+                                                name={field.key}
+                                                placeholder={field.name}
+                                                rows="1"
+                                            />
+                                        {:else if field.type === 'color'}
+                                            <input
+                                                class="input input-bordered w-full"
+                                                bind:value={parameters[field.key]}
+                                                type="color"
+                                                name={field.key}
+                                                placeholder={field.name}
+                                            />
+                                        {:else if field.type === 'image' && editor}
+                                            <div class="">
+                                                <FilePond
+                                                    name={field.key}
+                                                    server={false}
+                                                    onpreparefile={(file, blob) => prepareFile(field.key, blob)}
+                                                    onremovefile={() => (parameters[field.key] = null)}
+                                                    imageEditEditor={editor}
+                                                    allowImageEdit={true}
+                                                    allowMultiple={false}
+                                                    imageEditInstantEdit={true}
+                                                    styleImageEditButtonEditItemPosition="top right"
+                                                    imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
+                                                />
+                                            </div>
+                                        {/if}
+                                    </div>
+                                {/each}
+                            {/if}
+                        {/each}
                     </div>
                 </div>
                 <div class="bookCover__cover flex items-center justify-center">
                     <BookCoverBuilder
                         bind:this={builder}
-                        class="select-none {!editing ? 'hidden' : ''}"
+                        class="select-none"
                         pages={story.data.pages ?? 0}
                         {parameters}
+                        change={() => {
+                            changed = true
+                        }}
                         template={template.data}
                     />
-                    {#if !editing}
-                        <div class="flex h-full items-center justify-center">
-                            <img src={story.data.cover} alt="" class="h-full w-full object-cover" />
-                        </div>
-                    {/if}
                 </div>
             </div>
 
@@ -271,22 +276,22 @@
                     </span>
                     <p>Back</p>
                 </a>
-                {#if editing}
-                    <div class="flex">
-                        <a href="/stories/{story.data.id}/covers" use:inertia class="otto-btn-primary"> More Covers </a>
-                        <button class="otto-btn-with-arrow" disabled={loading} type="submit">
+                <div class="flex gap-4">
+                    <a href="/stories/{story.data.id}/covers" use:inertia class="btn btn-primary rounded-full">
+                        More Covers
+                    </a>
+                    {#if changed}
+                        <button class="btn btn-secondary rounded-full pr-0" disabled={loading} type="submit">
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <p>Save & Next</p>
-                            <span class="icon">
-                                <BtnArrow />
-                            </span>
+                            <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                         </button>
-                    </div>
-                {:else}
-                    <a href="/stories/{story.data.id}/order" class="btn btn-secondary rounded-full" use:inertia>
-                        Continue
-                    </a>
-                {/if}
+                    {:else}
+                        <a href="/stories/{story.data.id}/order" class="btn btn-secondary rounded-full" use:inertia>
+                            Continue
+                        </a>
+                    {/if}
+                </div>
             </div>
         </div>
     </section>
@@ -388,18 +393,6 @@
                     }
                 }
             }
-
-            &_buttons {
-                display: flex;
-                flex-direction: column;
-                width: 100%;
-                z-index: 2;
-                padding-top: 60px;
-                .otto-btn {
-                    width: 100%;
-                    margin-bottom: 20px;
-                }
-            }
         }
 
         &__cover {
@@ -414,12 +407,6 @@
             align-items: center;
             justify-content: space-between;
             position: relative;
-
-            .otto-btn-primary {
-                height: 54px;
-                margin-right: 24px;
-                padding: 0 30px;
-            }
         }
     }
 

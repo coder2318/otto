@@ -330,7 +330,7 @@
                     <div class="bookInfo grid grid-cols-4 items-center justify-center gap-2">
                         <div class="col-span-1">
                             <img
-                                src={story.data.cover}
+                                src={story.data.cover.url}
                                 alt="cover"
                                 class="aspect-[2/3] w-full object-cover object-right"
                             />

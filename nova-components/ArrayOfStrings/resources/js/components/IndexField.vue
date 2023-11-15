@@ -8,7 +8,6 @@ export default {
 
   computed: {
     fieldValue() {
-        console.log(this.field.value)
       return this.field.displayedAs || this.field.value
     },
   }

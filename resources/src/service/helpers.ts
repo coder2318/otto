@@ -40,7 +40,7 @@ export function bytes(bytes: number): string {
     return bytes.toFixed(bytes < 10 && l > 0 ? 1 : 0) + ' ' + units[l]
 }
 
-export function fileToBase64(file: File): Promise<string> {
+export function fileToBase64(file: Blob): Promise<string> {
     return new Promise((resolve, reject) => {
         const reader = new FileReader()
         reader.onload = () => resolve(reader.result as string)

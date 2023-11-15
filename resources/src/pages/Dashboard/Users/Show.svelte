@@ -105,7 +105,11 @@
                 {#each stories.data as story}
                     <div class="book">
                         <div class="book__cover">
-                            <img src={story.cover} class="aspect-[2/3] h-full object-cover object-right" alt="cover" />
+                            <img
+                                src={story.cover.url}
+                                class="aspect-[2/3] h-full object-cover object-right"
+                                alt="cover"
+                            />
                         </div>
                         <div class="book__wrap">
                             <div class="book__content">

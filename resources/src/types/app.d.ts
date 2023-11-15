@@ -59,7 +59,10 @@ declare namespace App {
     interface Story {
         id: number
         title: string
-        cover: string
+        cover?: {
+            url: string
+            meta: any
+        }
         status: string
         user_id: number
         user?: User
