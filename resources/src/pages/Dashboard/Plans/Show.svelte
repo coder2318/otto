@@ -104,8 +104,7 @@
                     </div>
                 {/if}
             </div>
-            <p />
-            <ul class="list-inside list-disc">
+            <ul class="flex-1 list-inside list-disc">
                 {#each plan.data.features as feature}
                     <li>{feature}</li>
                 {/each}

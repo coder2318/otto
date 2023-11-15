@@ -106,7 +106,7 @@
                     <div class="card-actions">
                         {#if outline?.chapter}
                             <a
-                                href="/chapters/{outline.chapter.id}/edit"
+                                href="/chapters/{outline.chapter.id}/write"
                                 use:inertia
                                 class="btn btn-primary btn-outline w-full rounded-full">Edit Chapter</a
                             >
