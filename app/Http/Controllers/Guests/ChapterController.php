@@ -9,6 +9,7 @@ use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Models\Chapter;
 use App\Models\Guest;
+use App\Models\Media;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
@@ -18,7 +19,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class ChapterController extends Controller
 {
@@ -109,7 +109,7 @@ class ChapterController extends Controller
 
     public function transcribe(Chapter $chapter, TranscribeRequest $request, MediaService $service)
     {
-        /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> */
+        /** @var \Illuminate\Support\Collection<int,\App\Models\Media> */
         $media = $chapter->attachments()->whereIn('id', $request->validated('attachments'))->get();
 
         $transcriptions = null;

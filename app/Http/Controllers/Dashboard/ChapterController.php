@@ -16,6 +16,7 @@ use App\Http\Resources\TimelineResource;
 use App\Jobs\RegenerateBook;
 use App\Models\Chapter;
 use App\Models\Guest;
+use App\Models\Media;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Notifications\GuestChapterInviteNotification;
@@ -25,7 +26,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ChapterController extends Controller
@@ -35,36 +35,7 @@ class ChapterController extends Controller
         $this->authorizeResource(Chapter::class, 'chapter');
         $this->middleware('can:update,chapter')
             ->only(['write', 'attachments', 'transcribe', 'deleteAttachments', 'record', 'upload', 'enhance', 'finish']);
-
-        // $this->middleware(fn (...$args) => $this->preventAccessFromProcessing(...$args))
-        //     ->only([
-        //         'write',
-        //         'attachments',
-        //         'transcribe',
-        //         'deleteAttachments',
-        //         'record',
-        //         'upload',
-        //         'process',
-        //         'finish',
-        //         'destroy',
-        //     ]);
     }
-
-    // protected function preventAccessFromProcessing(Request $request, callable $next)
-    // {
-    //     /** @var Chapter */
-    //     $chapter = $request->route('chapter');
-
-    //     if ($chapter->edit) {
-    //         return redirect()->route('dashboard.chapters.enhance', compact('chapter'))->with('message', 'Please review your chapter enhancement first!');
-    //     }
-
-    //     if ($chapter->processing) {
-    //         return redirect()->route('dashboard.chapters.edit', compact('chapter'))->with('error', 'Chapter is being processed, please wait!');
-    //     }
-
-    //     return $next($request);
-    // }
 
     public function index(Story $story, ChaptersRequest $request)
     {
@@ -104,7 +75,7 @@ class ChapterController extends Controller
 
         $transcriptions = null;
 
-        /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> $media */
+        /** @var \Illuminate\Support\Collection<int,\App\Models\Media> $media */
         foreach ($media as $record) {
             if ($transcription = $service->transcribe($record)) {
                 $transcriptions[$record->file_name] = $transcription;

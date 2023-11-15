@@ -10,6 +10,7 @@ use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Models\Chapter;
+use App\Models\Media;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
@@ -21,7 +22,6 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class DemoController extends Controller
@@ -142,7 +142,7 @@ class DemoController extends Controller
     {
         [$chapter] = $this->data($request);
 
-        /** @var \Illuminate\Support\Collection<int,\Spatie\MediaLibrary\MediaCollections\Models\Media> */
+        /** @var \Illuminate\Support\Collection<int,\App\Models\Media> */
         $media = $chapter->attachments()->whereIn('id', $request->validated('attachments'))->get();
 
         $transcriptions = null;

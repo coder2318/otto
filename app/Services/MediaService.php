@@ -2,9 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Media;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\PdfToText\Pdf;
 
 class MediaService

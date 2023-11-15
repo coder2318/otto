@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Chapters;
 
 use App\Models\Chapter;
+use App\Models\Media;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use Illuminate\Contracts\Database\Eloquent\Builder;
@@ -10,7 +11,6 @@ use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Facades\DB;
-use Spatie\MediaLibrary\MediaCollections\Models\Media;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
 
