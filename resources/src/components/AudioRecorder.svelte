@@ -239,7 +239,7 @@
             </button>
         </div>
     {/each}
-    {#if max && !recordings?.length}
+    {#if max && !recordings?.length && !timer}
         <div class="flex flex-col items-center justify-center gap-2">
             <h6 class="text-2xl text-primary">Press Start Recording</h6>
             <p>You have {msToTime(max)} minutes to record your answer.</p>

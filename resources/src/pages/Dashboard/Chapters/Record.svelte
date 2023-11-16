@@ -40,6 +40,8 @@
     }
 
     onMount(() => {
+        if (!carousel) return
+
         let timer = 0
         const interval = setInterval(() => {
             timer += 500
