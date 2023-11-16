@@ -32,8 +32,14 @@ class UpdateStoryRequestTest extends TestCase
             ],
             'cover' => [
                 'sometimes',
+                'required_with:meta',
                 'nullable',
                 'image',
+            ],
+            'meta' => [
+                'sometimes',
+                'nullable',
+                'array',
             ],
             'book_cover' => [
                 'sometimes',
