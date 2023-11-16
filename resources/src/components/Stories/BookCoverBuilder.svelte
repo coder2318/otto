@@ -74,7 +74,7 @@
     function getSpineWidth(pages) {
         switch (true) {
             case pages < 24:
-                throw new Error('Book must have at least 24 pages.')
+                return 0.25
             case pages < 85:
                 return 0.25
             case pages < 141:

@@ -1,0 +1,90 @@
+name: Open
+
+fields:
+  - name: Cover Background
+    key: background
+    type: image
+
+  - name: Author
+    key: author
+    type: text
+
+  - name: Title
+    key: title
+    type: text
+
+  - name: SubTitle
+    key: subtitle
+    type: text
+
+# Template parameters (back, spine, front)
+## Template parameters are 3 components of SVG elements representing book spine, back and front.
+## Any valid SVG works
+## You can access CSS variable `var(--spine-width)` to adjust styles based on spine width
+## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
+back: ''
+
+spine: ''
+
+front: |
+  <style>
+  @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap);
+  </style>
+  <defs>
+  <linearGradient id="top-grad" x1="0" y1="0" x2="0" y2="1" >
+  <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+  <stop offset="100%" stop-opacity="0"/>
+  </linearGradient>
+  <linearGradient id="bot-grad" x1="0" y1="1" x2="0" y2="0" >
+  <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+  <stop offset="100%" stop-opacity="0"/>
+  </linearGradient>
+  </defs>
+  <image
+  href="/build/assets/cover-background-open.jpeg"
+  data-background="href"
+  preserveAspectRatio="xMinYMin slice"
+  x="0" y="0" width="100%" height="100%"
+  />
+  <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
+  <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
+  <text
+  x="305" y="185"
+  font-size="140pt"
+  text-anchor="middle"
+  font-family="Noto Sans Devanagari"
+  text-shadow="#FC0 1px 0 10px"
+  data-title="innerText"
+  data-text-color="fill"
+  data-draggable="true"
+  letter-spacing="0.1em"
+  fill="white"
+  style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+  >OPEN</text>
+  <text
+  x="295" y="240"
+  font-size="36.14pt"
+  text-anchor="middle"
+  font-family="Noto Sans Devanagari"
+  text-shadow="#FC0 1px 0 10px"
+  data-subtitle="innerText"
+  data-text-color="fill"
+  data-draggable="true"
+  letter-spacing="0.1em"
+  fill="white"
+  style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+  >AN AUTOBIOGRAPHY</text>
+  <text
+  x="298" y="874"
+  font-size="51.24pt"
+  text-anchor="middle"
+  data-author="innerText"
+  data-text-color="fill"
+  data-draggable="true"
+  text-shadow="#FC0 1px 0 10px"
+  font-family="Noto Sans Devanagari"
+  font-weight="bold"
+  letter-spacing="0.1em"
+  fill="white"
+  style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+  >Andre Agassi</text>
