@@ -66,7 +66,11 @@
 <section class="chaptersHero relative" in:fade>
     <div class="otto-container">
         <div class="wrap">
-            <div class="block" style="background-image: url({background})">
+            <div
+                class="block border-error"
+                class:border={$form.errors.timeline_id}
+                style="background-image: url({background})"
+            >
                 <div class="chaptersHero-overlay" />
                 <h1 class="fz_h3 title">
                     <span class="font-normal italic text-neutral">Write About Your</span>
@@ -102,6 +106,11 @@
                     <span class="font-normal text-neutral">With These Questions</span>
                 </h1>
             </div>
+            {#if $form.errors.timeline_id}
+                <span class="label-text-alt mt-1 text-left text-error">
+                    {$form.errors.timeline_id}
+                </span>
+            {/if}
         </div>
     </div>
 </section>
