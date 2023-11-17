@@ -10,6 +10,7 @@
     import AudioBubble from './AudioBubble.svelte'
 
     let dialog: HTMLDialogElement
+    let dialogStop: HTMLDialogElement
     let player: HTMLAudioElement
     let mediaRecorder: MediaRecorder
     let interval: number
@@ -132,6 +133,15 @@
         return true
     }
 
+    function confirmStopRecording() {
+        timer = null
+        clearInterval(interval)
+        mediaRecorder?.stop()
+        mediaRecorder = null
+
+        dialogStop.close()
+    }
+
     function pauseRecording() {
         if (!paused) {
             mediaRecorder.pause()
@@ -212,7 +222,7 @@
                 <button
                     class="btn btn-circle btn-neutral border border-neutral-content/50"
                     type="button"
-                    on:click|preventDefault={stopRecording}
+                    on:click|preventDefault={dialogStop.showModal()}
                 >
                     <Fa icon={faStop} />
                 </button>
@@ -263,6 +273,16 @@
         <div class="modal-action">
             <button class="btn btn-error btn-sm" on:click|preventDefault={confirmDelete}>Delete</button>
             <button class="btn btn-sm" on:click={() => dialog.close()}>Close</button>
+        </div>
+    </form>
+</dialog>
+
+<dialog bind:this={dialogStop} class="modal">
+    <form method="dialog" class="modal-box">
+        <h3 class="text-lg font-bold">Are you sure you want to stop this recording?</h3>
+        <div class="modal-action">
+            <button class="btn btn-error btn-sm" on:click|preventDefault={confirmStopRecording}>Stop</button>
+            <button class="btn btn-sm" on:click={() => dialogStop.close()}>Close</button>
         </div>
     </form>
 </dialog>
