@@ -26,6 +26,7 @@ class Story extends Model implements HasMedia
         'print_job_id',
         'user_id',
         'story_type_id',
+        'shopify_id',
     ];
 
     protected $casts = [
