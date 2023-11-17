@@ -10,7 +10,7 @@ class StoryObserver
 {
     public function updated(Story $story)
     {
-        if (!$story->isDirty('status')) {
+        if (! $story->isDirty('status')) {
             return;
         }
 
@@ -19,7 +19,7 @@ class StoryObserver
                 'title' => $story->title,
             ]);
 
-            $story->update(['shopify_id' => $product->id]);
+            $story->update(['shopify_id' => $product->id]); // @phpstan-ignore-line
         } elseif ($story->shopify_id) {
             Shopify::deleteProduct($story->shopify_id);
 
@@ -48,7 +48,7 @@ class StoryObserver
                 'title' => $story->title,
             ]);
 
-            $story->update(['shopify_id' => $product->id]);
+            $story->update(['shopify_id' => $product->id]); // @phpstan-ignore-line
         }
     }
 }
