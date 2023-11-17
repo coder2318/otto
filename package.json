@@ -24,7 +24,7 @@
         "@tiptap/pm": "^2.1.12",
         "@tiptap/starter-kit": "^2.1.12",
         "@tsconfig/svelte": "^5.0.2",
-        "@types/node": "^20.9.0",
+        "@types/node": "^20.9.1",
         "@types/sortablejs": "^1.15.5",
         "@typescript-eslint/eslint-plugin": "^6.11.0",
         "@typescript-eslint/parser": "^6.11.0",
@@ -70,7 +70,7 @@
         "vite": "^4.5.0",
         "vite-plugin-eslint": "^1.8.1",
         "vite-plugin-pwa": "^0.16.7",
-        "vite-plugin-static-copy": "^0.17.0"
+        "vite-plugin-static-copy": "^0.17.1"
     },
     "dependencies": {
         "@inertiajs/core": "^1.0.14",
