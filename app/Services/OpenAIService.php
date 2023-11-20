@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use OpenAI\Laravel\Facades\OpenAI;
-use Soundasleep\Html2Text;
 use TextAnalysis\Tokenizers\SentenceTokenizer;
 
 class OpenAIService
@@ -37,7 +36,7 @@ class OpenAIService
         }
         $result = '';
 
-        foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
+        foreach ($this->segmentate($input) as $segment) {
             $messages = [
                 ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
             ];
@@ -49,7 +48,7 @@ class OpenAIService
 
             $messages[] = [
                 'role' => 'user',
-                'content' => Html2Text::convert($segment),
+                'content' => $segment,
             ];
 
             $chat = OpenAI::chat()->create([
@@ -77,7 +76,7 @@ class OpenAIService
             return true;
         }
 
-        foreach ($this->segmentate(Html2Text::convert($input)) as $segment) {
+        foreach ($this->segmentate($input) as $segment) {
             $messages = [
                 ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
             ];
@@ -89,7 +88,7 @@ class OpenAIService
 
             $messages[] = [
                 'role' => 'user',
-                'content' => Html2Text::convert($segment),
+                'content' => $segment,
             ];
 
             $stream = OpenAI::chat()->createStreamed([

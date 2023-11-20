@@ -217,13 +217,9 @@ class DemoController extends Controller
     {
         [$chapter, $story] = $this->data($request);
 
-        if ($story->status !== StoryStatus::PUBLISHED) {
+        if ($chapter->status !== ChapterStatus::PUBLISHED) {
             $request->user()->notify(new DemoFinishedNotification($story));
         }
-
-        $story->update([
-            'status' => StoryStatus::PUBLISHED,
-        ]);
 
         $chapter->update([
             'status' => ChapterStatus::PUBLISHED,

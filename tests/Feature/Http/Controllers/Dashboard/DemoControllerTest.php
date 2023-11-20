@@ -4,6 +4,7 @@ namespace Tests\Feature\Http\Controllers\Dashboard;
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Inertia\Testing\AssertableInertia;
+use Signifly\Shopify\Support\Facades\Shopify;
 use Tests\TestCase;
 
 /**
