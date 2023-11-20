@@ -7,26 +7,21 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
-    import TipTap from '@/components/TipTap.svelte'
-    import type { Editor } from '@tiptap/core'
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
-    import { strToHtml } from '@/service/helpers'
-    // import languages from '@/data/translate_languages.json'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
     import enhanceIcon from '@/assets/img/enhance-icon.svg'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import CompleteBtn from '@/components/SVG/buttons/complete-btn.svg.svelte'
+    import { autosize } from '@/service/svelte'
 
     export let chapter: { data: App.Chapter }
 
-    let enhance: Editor
-    let original: Editor
+    let enhance: HTMLTextAreaElement
+    let original: HTMLTextAreaElement
     let loading: boolean = true
     let compare: boolean = false
-    // let language: string | null = null
-    // let initialText = ''
 
     const form = useForm({
         original: chapter.data.content,
@@ -38,19 +33,6 @@
     $form.use = 'enhanced'
 
     start()
-
-    // $: wordsOriginal =
-    //     $form.original
-    //         ?.replace(/(<([^>]+)>)/gi, '')
-    //         .replace(/&nbsp;/gi, ' ')
-    //         .trim()
-    //         .split(/\s+/).length ?? 0
-    // $: wordsEnhanced =
-    //     $form.enhanced
-    //         ?.replace(/(<([^>]+)>)/gi, '')
-    //         .replace(/&nbsp;/gi, ' ')
-    //         .trim()
-    //         .split(/\s+/).length ?? 0
 
     const controller = new AbortController()
 
@@ -67,63 +49,42 @@
             })
     }
 
-    // async function translate(language = null) {
-    //     if (import.meta.env.SSR) return
-
-    //     const axios = (await import('axios')).default
-
-    //     if (!language || loading) {
-    //         $form.enhanced = initialText
-    //         enhance?.commands.setContent(strToHtml($form.enhanced), false)
-    //         return
-    //     }
-
-    //     loading = true
-    //     enhance?.setOptions({ editable: false })
-
-    //     axios
-    //         .post('/translate', {
-    //             text: initialText,
-    //             options: {
-    //                 target: language,
-    //                 format: 'text',
-    //             },
-    //         })
-    //         .finally(() => {
-    //             enhance?.setOptions({ editable: true })
-    //             loading = false
-    //         })
-    //         .then((res) => {
-    //             $form.enhanced = res.data.text
-    //             enhance?.commands.setContent(strToHtml($form.enhanced), false)
-    //         })
-    // }
-
     onMount(() => {
-        original?.setOptions({ editable: false })
-        enhance?.setOptions({ editable: false })
+        if (original) original.disabled = true
+        if (enhance) enhance.disabled = true
 
         fetch(`/chapters/${chapter.data.id}/enhance/stream`, { signal: controller.signal })
+            .then((res) => {
+                if (res.ok) return res
+
+                throw new Error('Network response was not ok.')
+            })
             .then((res) => res.body.pipeThrough(new TextDecoderStream()).getReader())
             .then((reader) =>
                 reader.read().then(function pump({ done, value }) {
+                    if (controller.signal.aborted) return
+
                     if (done) {
-                        original?.setOptions({ editable: true })
-                        enhance?.setOptions({ editable: true })
-                        // initialText = $form.enhanced
+                        if (original) original.disabled = false
+                        if (enhance) enhance.disabled = false
+                        if (enhance) enhance.disabled = false
                         loading = false
                         return
                     }
 
                     $form.enhanced += value
-                    enhance?.commands.setContent(strToHtml($form.enhanced), false)
 
                     if ($form.enhanced) {
                         finish()
                     }
+
                     return reader.read().then(pump)
                 })
             )
+            .catch(() => {
+                loading = false
+                finish()
+            })
 
         return () => {
             controller.abort()
@@ -170,23 +131,33 @@
                     {/if}
                 </div>
             </div>
-            <div class="transcriptionEditor block">
+            <div class="block">
                 <div class="wrap">
                     <div class="form-control transition-all">
-                        <TipTap
-                            bind:editor={enhance}
-                            bind:content={$form.enhanced}
-                            placeholder="Write your story here..."
-                        ></TipTap>
+                        <textarea
+                            class="textarea textarea-bordered textarea-ghost w-full rounded-xl bg-primary/10 font-sans text-2xl text-primary"
+                            class:input-error={$form.errors.enhanced}
+                            bind:value={$form.enhanced}
+                            bind:this={enhance}
+                            name="enhanced"
+                            rows="10"
+                            use:autosize={{ offset: 2 }}
+                            placeholder="Type Your Story here..."
+                        />
                     </div>
 
                     {#if compare}
                         <div class="form-control transition-all">
-                            <TipTap
-                                bind:editor={original}
-                                bind:content={$form.original}
-                                placeholder="Write your story here..."
-                            ></TipTap>
+                            <textarea
+                                class="textarea textarea-bordered w-full rounded-xl font-sans text-2xl"
+                                class:input-error={$form.errors.original}
+                                bind:value={$form.original}
+                                bind:this={original}
+                                name="original"
+                                rows="10"
+                                use:autosize={{ offset: 2 }}
+                                placeholder="Type Your Story here..."
+                            />
                         </div>
                     {/if}
                 </div>

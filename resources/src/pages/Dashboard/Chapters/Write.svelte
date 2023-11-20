@@ -7,19 +7,16 @@
 <script lang="ts">
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
-    import TipTap from '@/components/TipTap.svelte'
-    import type { Editor } from '@tiptap/core'
     import { onMount } from 'svelte'
-    import { strToHtml } from '@/service/helpers'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
+    import { autosize } from '@/service/svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
 
-    let editor: Editor
     let modal: HTMLDialogElement
 
     const form = useForm({
@@ -38,19 +35,13 @@
     function paste(mode: string) {
         switch (mode) {
             case 'start':
+                $form.content = Object.values(transcriptions).join('\n\n') + '\n\n' + $form.content
+                break
             case 'end':
-                editor
-                    .chain()
-                    .focus(mode)
-                    .insertContent(strToHtml(Object.values(transcriptions).join('\n\n')), {
-                        parseOptions: {
-                            preserveWhitespace: false,
-                        },
-                    })
-                    .run()
+                $form.content += '\n\n' + Object.values(transcriptions).join('\n\n')
                 break
             case 'replace':
-                editor.commands.setContent(strToHtml(Object.values(transcriptions).join('\n\n')), true)
+                $form.content = Object.values(transcriptions).join('\n\n')
                 break
         }
 
@@ -90,30 +81,43 @@
 />
 
 <form on:submit|preventDefault={submit} in:fade>
-    <main class="transcribe">
-        <div class="otto-container">
-            <div class="transcriptionEditor block">
-                <TipTap bind:editor bind:content={$form.content} placeholder="Write your story here..." />
-                {#if $form.errors.content}
-                    <span class="text-error">
-                        {$form.errors.content}
-                    </span>
-                {/if}
-
-                <div class="transcribe__buttons">
-                    <div class="transcribe__buttons_col">
+    <main class="otto-container">
+        <div class="card bg-neutral text-neutral-content">
+            <div class="card-body gap-4">
+                <div class="form-control gap-2">
+                    <textarea
+                        class="textarea textarea-bordered rounded-xl font-sans text-2xl"
+                        class:textarea-error={$form.errors.content}
+                        bind:value={$form.content}
+                        name="content"
+                        rows="10"
+                        use:autosize={{ offset: 2 }}
+                        placeholder="Type Your Story here..."
+                    />
+                    {#if $form.errors.content}
+                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
+                            {$form.errors.content}
+                        </span>
+                    {/if}
+                </div>
+                <div class="flex justify-between">
+                    <div class="flex items-center gap-4">
                         <a href="/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
                             <img src={goBackLinkIcon} alt="Record" />
                             <span>Record more</span>
                         </a>
                     </div>
-                    <div class="transcribe__buttons_col gap-4">
+                    <div class="flex items-center gap-4">
                         {#if $form.content != chapter.data.content}
                             <button type="submit" class="otto-btn-secondary medium" data-status="draft">
                                 Save & Next
                             </button>
                         {:else}
-                            <a use:inertia class="otto-btn-outline small" href="/chapters/{chapter.data.id}/finish">
+                            <a
+                                use:inertia
+                                class="btn btn-primary btn-outline rounded-full text-lg"
+                                href="/chapters/{chapter.data.id}/finish"
+                            >
                                 Complete chapter
                             </a>
 
@@ -153,53 +157,3 @@
         </div>
     </form>
 </dialog>
-
-<style lang="scss">
-    .transcribe {
-        position: relative;
-        padding-bottom: 100px;
-
-        .block {
-            background: #fff;
-            padding: 24px 32px 32px 32px;
-            border: 1px solid rgba(191, 191, 191, 0.4);
-            border-radius: 24px;
-        }
-
-        &__buttons {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 32px;
-
-            &_col {
-                display: flex;
-                align-items: center;
-            }
-
-            .otto-btn-outline {
-                padding: 0 16px;
-                font-weight: 700;
-                font-size: 18px;
-                border: 1px solid #c6b59f;
-
-                &:hover {
-                    background: #c6b59f;
-                }
-            }
-        }
-
-        .text-error {
-            display: block;
-            width: fit-content;
-            font-size: 20px;
-            color: #0c345c;
-            font-weight: 700;
-            background: rgba(247, 163, 146, 0.6);
-            padding: 10px 16px;
-            border-radius: 40px;
-            margin: 0 auto;
-            line-height: 1.1;
-        }
-    }
-</style>

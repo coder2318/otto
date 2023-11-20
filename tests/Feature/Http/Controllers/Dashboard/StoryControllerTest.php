@@ -209,7 +209,7 @@ class StoryControllerTest extends TestCase
         $response->assertOk();
 
         $response->assertInertia(fn (AssertableInertia $page) => $page
-            ->component('Dashboard/Stories/ShowV2')
+            ->component('Dashboard/Stories/Show')
         );
     }
 

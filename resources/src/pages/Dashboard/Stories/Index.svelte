@@ -116,7 +116,7 @@
             >
                 <figure class="max-h-[300px] bg-base-200">
                     <img
-                        src={story.cover.url ??
+                        src={story?.cover?.url ??
                             `https://placehold.co/600x400?${new URLSearchParams({
                                 text: story.title,
                             })}`}

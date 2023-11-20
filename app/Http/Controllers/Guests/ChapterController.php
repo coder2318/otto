@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Jobs\RegenerateBook;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Media;
@@ -15,10 +16,12 @@ use App\Models\TimelineQuestion;
 use App\Models\User;
 use App\Notifications\GuestChapterInviteNotification;
 use App\Services\MediaService;
+use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class ChapterController extends Controller
 {
@@ -164,8 +167,50 @@ class ChapterController extends Controller
             'status' => Status::PUBLISHED,
         ]);
 
+        if ($chapter->wasChanged('status')) {
+            dispatch(new RegenerateBook($chapter->story));
+        }
+
         return Inertia::render('Guests/Chapters/Finish', [
             'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
+    public function congratulation(Chapter $chapter)
+    {
+        $chapter->update([
+            'status' => Status::DRAFT,
+        ]);
+
+        if ($chapter->wasChanged('status')) {
+            dispatch(new RegenerateBook($chapter->story));
+        }
+
+        return Inertia::render('Guests/Chapters/Congratulation', [
+            'chapter' => fn () => ChapterResource::make($chapter),
+        ]);
+    }
+
+    public function process(Chapter $chapter, OpenAIService $service)
+    {
+        return new StreamedResponse(function () use ($chapter, $service) {
+            foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
+                if (connection_aborted()) {
+                    return;
+                }
+
+                echo $chunk;
+
+                ob_flush();
+                flush();
+            }
+        }, headers: ['X-Accel-Buffering' => 'no']);
+    }
+
+    public function enhance(Chapter $chapter)
+    {
+        return Inertia::render('Guests/Chapters/Enhance', [
+            'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
         ]);
     }
 
@@ -190,6 +235,10 @@ class ChapterController extends Controller
 
         if (isset($transcriptions)) {
             Session::flash('transcriptions', $transcriptions);
+        }
+
+        if ($chapter->wasChanged(['status', 'content', 'title'])) {
+            dispatch(new RegenerateBook($chapter->story));
         }
 
         if ($redirect = $request->validated('redirect')) {

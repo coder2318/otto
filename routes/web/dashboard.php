@@ -22,7 +22,7 @@ Route::resource('quickstart', QuickstartController::class)
 Route::middleware('user-configured')->group(function () {
     // Demo
     Route::controller(DemoController::class)->middleware(['subscribed:0'])->prefix('/demo')->name('demo.')->group(function () {
-        Route::get('/', 'index')->name('index')->middleware('demo:pending,published');
+        Route::get('/', 'index')->name('index')->middleware('demo:draft,published');
         Route::get('/write', 'write')->name('write')->middleware('demo:published');
         Route::get('/record', 'record')->name('record')->middleware('demo:published');
         Route::get('/files', 'attachments')->name('attachments')->middleware('demo:published');

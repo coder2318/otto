@@ -176,11 +176,10 @@ class DemoController extends Controller
     public function process(Request $request, OpenAIService $service)
     {
         [$chapter] = $this->data($request);
-        $user = Auth::user();
 
-        if ($user->enhances <= 0) {
-            return;
-        }
+        $user = $request->user();
+
+        abort_unless($request->user()->enhances > 0, 40);
 
         $user->decrement('enhances');
 

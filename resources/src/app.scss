@@ -333,7 +333,7 @@
         font-weight: 700;
         margin-left: 10px;
     }
-    
+
     &:hover{
         opacity: 0.7;
     }
@@ -423,7 +423,7 @@
             top: -37px;
         }
     }
-    
+
     .content {
         position: relative;
         color: #0c345c;
@@ -624,26 +624,25 @@
 // Transcription Editor
 .transcriptionEditor{
     .prose{
-        max-height: 450px;
-        overflow: auto;
+        overflow: hidden;
         padding-right: 15px;
 
     &::-webkit-scrollbar {
-        width: 6px; 
+        width: 6px;
       }
-      
+
       &::-webkit-scrollbar-track {
-        background: #fff; 
+        background: #fff;
         border-radius: 40px;
       }
-      
+
       &::-webkit-scrollbar-thumb {
-        background: rgba(191, 191, 191, 0.40); 
+        background: rgba(191, 191, 191, 0.40);
         border-radius: 40px;
       }
-      
+
       &::-webkit-scrollbar-thumb:hover {
-        background: rgba(191, 191, 191, 0.80); 
+        background: rgba(191, 191, 191, 0.80);
       }
     }
 

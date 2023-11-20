@@ -44,7 +44,7 @@
                 status: event.submitter.dataset?.status ?? data.status,
                 redirect: event.submitter.dataset?.redirect ?? null,
             }))
-            .put(`/demo`, {
+            .put(`/guests/chapters/${chapter.data.id}`, {
                 preserveScroll: true,
             })
     }
@@ -53,7 +53,7 @@
         if (original) original.disabled = true
         if (enhance) enhance.disabled = true
 
-        fetch(`/demo/enhance/stream`, { signal: controller.signal })
+        fetch(`/guests/chapters/${chapter.data.id}/enhance/stream`, { signal: controller.signal })
             .then((res) => {
                 if (res.ok) return res
 
@@ -164,7 +164,7 @@
 
                 <div class="enhance__buttons">
                     <div class="enhance__buttons_col">
-                        <a href="/demo/record" class="goBackLink" use:inertia>
+                        <a href="/guests/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
                             <img src={goBackLinkIcon} alt="Record" />
                             <span>Record more</span>
                         </a>
@@ -185,9 +185,19 @@
                         {#if $form.isDirty && $form.use && !loading}
                             <button
                                 type="submit"
+                                class="otto-btn-secondary small"
+                                data-status="draft"
+                                data-redirect="guests.chapters.congratulation"
+                            >
+                                Save & Next
+                            </button>
+                        {/if}
+                        {#if $form.isDirty && $form.use && !loading}
+                            <button
+                                type="submit"
                                 class="otto-btn-svg"
                                 data-status="published"
-                                data-redirect="dashboard.demo.finish"
+                                data-redirect="guests.chapters.finish"
                             >
                                 <CompleteBtn />
                             </button>

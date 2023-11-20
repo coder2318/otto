@@ -17,8 +17,11 @@ Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name(
     Route::get('/write', 'write')->name('write');
     Route::get('/upload', 'upload')->name('upload');
     Route::get('/record', 'record')->name('record');
+    Route::get('/enhance', 'enhance')->name('enhance');
+    Route::get('/enhance/stream', 'process')->name('enhance.stream');
     Route::get('/files', 'attachments')->name('attachments');
     Route::post('/files', 'transcribe')->name('attachments.transcribe');
     Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
+    Route::get('/congratulation', 'congratulation')->name('congratulation');
     Route::get('/finish', 'finish')->name('finish');
 });
