@@ -14,23 +14,21 @@
     import enhanceIcon from '@/assets/img/enhance-icon.svg'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import CompleteBtn from '@/components/SVG/buttons/complete-btn.svg.svelte'
-    import { autosize } from '@/service/svelte'
+    import TipTap from '@/components/TipTap.svelte'
 
     export let chapter: { data: App.Chapter }
 
-    let enhance: HTMLTextAreaElement
-    let original: HTMLTextAreaElement
     let loading: boolean = true
     let compare: boolean = false
 
     const form = useForm({
         original: chapter.data.content,
-        enhanced: '',
-        use: null,
+        enhanced: null,
+        use: 'enhanced',
         status: chapter.data.status,
     })
 
-    $form.use = 'enhanced'
+    $form.enhanced = ''
 
     start()
 
@@ -50,9 +48,6 @@
     }
 
     onMount(() => {
-        if (original) original.disabled = true
-        if (enhance) enhance.disabled = true
-
         fetch(`/guests/chapters/${chapter.data.id}/enhance/stream`, { signal: controller.signal })
             .then((res) => {
                 if (res.ok) return res
@@ -65,10 +60,6 @@
                     if (controller.signal.aborted) return
 
                     if (done) {
-                        if (original) original.disabled = false
-                        if (enhance) enhance.disabled = false
-                        if (enhance) enhance.disabled = false
-                        loading = false
                         return
                     }
 
@@ -81,7 +72,7 @@
                     return reader.read().then(pump)
                 })
             )
-            .catch(() => {
+            .finally(() => {
                 loading = false
                 finish()
             })
@@ -132,42 +123,38 @@
                 </div>
             </div>
             <div class="block">
-                <div class="wrap">
-                    <div class="form-control transition-all">
-                        <textarea
-                            class="textarea textarea-bordered textarea-ghost w-full rounded-xl bg-primary/10 font-sans text-2xl text-primary"
-                            class:input-error={$form.errors.enhanced}
-                            bind:value={$form.enhanced}
-                            bind:this={enhance}
-                            name="enhanced"
-                            rows="10"
-                            use:autosize={{ offset: 2 }}
-                            placeholder="Type Your Story here..."
-                        />
-                    </div>
+                <div class="flex flex-col items-stretch gap-4 md:flex-row">
+                    <TipTap
+                        class="textarea textarea-bordered textarea-ghost h-full transition-transform
+                            {$form.use == 'enhanced' ? 'scale-[1.01]' : ''}
+                            {$form.errors.original ? 'textarea-error' : ''}
+                            rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
+                        bind:content={$form.enhanced}
+                        placeholder="Type Your Story here..."
+                    />
 
                     {#if compare}
-                        <div class="form-control transition-all">
-                            <textarea
-                                class="textarea textarea-bordered w-full rounded-xl font-sans text-2xl"
-                                class:input-error={$form.errors.original}
-                                bind:value={$form.original}
-                                bind:this={original}
-                                name="original"
-                                rows="10"
-                                use:autosize={{ offset: 2 }}
-                                placeholder="Type Your Story here..."
-                            />
-                        </div>
+                        <TipTap
+                            class="textarea textarea-bordered h-full transition-transform
+                                {$form.use == 'original' ? 'scale-[1.01]' : ''}
+                                {$form.errors.original ? 'textarea-error' : ''}
+                                rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
+                            bind:content={$form.original}
+                            placeholder="Type Your Story here..."
+                        />
                     {/if}
                 </div>
 
                 <div class="enhance__buttons">
                     <div class="enhance__buttons_col">
-                        <a href="/guests/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
+                        <button
+                            disabled={loading || $form.isDirty || $form.processing}
+                            use:inertia={{ href: `/guests/chapters/${chapter.data.id}/edit` }}
+                            class="goBackLink"
+                        >
                             <img src={goBackLinkIcon} alt="Record" />
                             <span>Record more</span>
-                        </a>
+                        </button>
                     </div>
                     <div class="enhance__buttons_col gap-4">
                         {#if !compare && !loading}
@@ -248,31 +235,6 @@
 
             @media (max-width: 991px) {
                 padding: 16px;
-            }
-        }
-
-        .wrap {
-            display: flex;
-
-            // @media (max-width: 991px) {
-            //     flex-direction: column;
-            // }
-        }
-
-        .form-control {
-            display: block;
-            position: relative;
-            width: 100%;
-            margin-right: 15px;
-
-            &:last-child {
-                margin-right: 0;
-                border-left: 1px solid #cfe3f3;
-                padding-left: 15px;
-            }
-            &:first-child {
-                border-left: none;
-                padding-left: 0;
             }
         }
 

@@ -93,7 +93,7 @@
             <div class="wrap">
                 <div class="block">
                     <div class="cover">
-                        {#if !story.data.cover.url}
+                        {#if !story.data.cover?.url}
                             <a href="/stories/{story.data.id}/cover" use:inertia class="cover-add">
                                 <img src={coverAddIcon} alt="plus" />
                             </a>
@@ -107,8 +107,8 @@
                     </div>
                     <div
                         class="block__bottom"
-                        class:justify-center={!story.data.cover.url}
-                        class:justify-between={story.data.cover.url}
+                        class:justify-center={!story.data.cover?.url}
+                        class:justify-between={story.data.cover?.url}
                     >
                         <div class="bookProgress">
                             <div class="bookProgress__content">
@@ -117,7 +117,7 @@
                             </div>
                             <progress class="progress progress-primary" value="40" max="100"></progress>
                         </div>
-                        {#if story.data.cover.url}
+                        {#if story.data.cover?.url}
                             <a class="otto-btn-svg" href="/stories/{story.data.id}/cover" use:inertia>
                                 <EditCoverBtn />
                             </a>

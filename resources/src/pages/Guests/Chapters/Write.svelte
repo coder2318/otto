@@ -12,7 +12,7 @@
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
-    import { autosize } from '@/service/svelte'
+    import TipTap from '@/components/TipTap.svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -55,16 +55,18 @@
                 _method: 'PUT',
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .post(`/chapters/${chapter.data.id}`, {
+            .post(`/guests/chapters/${chapter.data.id}`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     $form.images = []
-                    $form.defaults({
-                        content: chapter.data.content ?? '',
-                        title: chapter.data.title,
-                        status: chapter.data.status,
-                        images: [],
-                    })
+                    $form
+                        .defaults({
+                            content: chapter.data.content ?? '',
+                            title: chapter.data.title,
+                            status: chapter.data.status,
+                            images: [],
+                        })
+                        .reset()
                 },
             })
     }
@@ -85,13 +87,11 @@
         <div class="card bg-neutral text-neutral-content">
             <div class="card-body gap-4">
                 <div class="form-control gap-2">
-                    <textarea
-                        class="textarea textarea-bordered rounded-xl font-sans text-2xl"
-                        class:textarea-error={$form.errors.content}
-                        bind:value={$form.content}
-                        name="content"
-                        rows="10"
-                        use:autosize={{ offset: 2 }}
+                    <TipTap
+                        class="{$form.errors.content
+                            ? 'textarea-error'
+                            : ''} textarea textarea-bordered textarea-ghost w-full rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
+                        bind:content={$form.content}
                         placeholder="Type Your Story here..."
                     />
                     {#if $form.errors.content}

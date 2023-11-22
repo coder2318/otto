@@ -6,6 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
+    import { strToHtml } from '@/service/helpers'
 
     export let story: { data: App.Story }
 </script>
@@ -21,7 +22,7 @@
         {#each story.data.chapters as chapter}
             <h2>{chapter.title}</h2>
 
-            {@html chapter.content}
+            {@html strToHtml(chapter.content)}
         {/each}
     </div>
 </main>

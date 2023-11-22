@@ -49,10 +49,17 @@ export function fileToBase64(file: Blob): Promise<string> {
     })
 }
 
-export function strToHtml(str: string): string {
+export function strToHtml(str: string, trim: boolean = false): string {
     return str
         .split('\n\n')
-        .map((x) => '<p>' + x.trim().replaceAll('\n', '<br/>') + '</p>')
+        .map((x) => {
+            if (!trim) {
+                x = x
+                    .replace(/^\s*/, '&nbsp;'.repeat(x.length - x.trimStart().length))
+                    .replace(/\s*$/, '&nbsp;'.repeat(x.length - x.trimEnd().length))
+            }
+            return '<p>' + x.trim().replaceAll('\n', '<br/>') + '</p>'
+        })
         .join('')
 }
 

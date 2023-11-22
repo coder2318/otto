@@ -1,15 +1,16 @@
 <script lang="ts">
     import { Editor } from '@tiptap/core'
-    import StarterKit from '@tiptap/starter-kit'
-    import Focus from '@tiptap/extension-focus'
     import { onMount } from 'svelte'
     import { strToHtml } from '@/service/helpers'
+    import StarterKit from '@tiptap/starter-kit'
+    import Focus from '@tiptap/extension-focus'
+    import Placeholder from '@tiptap/extension-placeholder'
 
     let element: HTMLElement
+
     export let editor: Editor = null
     export let content = ''
     export let autofocus = false
-    let isFocused = false
 
     onMount(() => {
         editor = new Editor({
@@ -19,10 +20,21 @@
                 },
             },
             element: element,
-            extensions: [StarterKit, Focus],
-            content: strToHtml(content),
+            extensions: [
+                StarterKit,
+                Placeholder.configure({
+                    placeholder: element.getAttribute('placeholder') ?? 'Write something...',
+                }),
+                // @ts-ignore
+                Focus,
+            ],
+            content: strToHtml(content, true),
             onTransaction: () => (editor = editor),
-            onUpdate: ({ editor }) => (content = editor.getText({ blockSeparator: '\n\n' })),
+            onUpdate: ({ editor }) => {
+                const newText = editor.getText({ blockSeparator: '\n\n' })
+                if (newText == content) return
+                content = newText
+            },
             onCreate: ({ editor }) => {
                 if (autofocus) {
                     editor.chain().focus('end').run()
@@ -30,38 +42,24 @@
             },
         })
 
-        editor.on('focus', () => {
-            isFocused = true
-        })
-
-        editor.on('blur', () => {
-            isFocused = false
-        })
-
         return () => editor?.destroy()
     })
 
-    $: isEditorEmpty = !content.trim()
+    function updateContent(content: string) {
+        editor?.commands.setContent(strToHtml(content, false), false)
+    }
+
+    $: updateContent(content)
 </script>
 
-<div
-    class="prose mx-auto min-h-[450px] max-w-none rounded-3xl border border-[##FFF9ED] bg-[#fff9ed] px-6 pb-6 pt-5 focus:outline-none"
->
+<div class="prose mx-auto w-full max-w-none focus:outline-none">
     <slot name="top" />
-    {#if isEditorEmpty && !isFocused}
-        <div class="placeholder" on:click={() => editor.chain().focus('start').run()}>Type Your Story here...</div>
-    {/if}
     <div class="w-full" bind:this={element} {...$$restProps} />
 </div>
 
-<style>
-    .placeholder {
-        position: absolute;
-        font-family: serif;
-        font-size: 28px;
-        line-height: 1.3;
-        color: #808080;
-        font-style: italic;
-        cursor: text;
+<style lang="scss">
+    :global(.tiptap p.is-editor-empty:first-child::before) {
+        @apply pointer-events-none float-left h-0 text-neutral-content/60;
+        content: attr(data-placeholder);
     }
 </style>

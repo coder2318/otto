@@ -179,7 +179,7 @@ class DemoController extends Controller
 
         $user = $request->user();
 
-        abort_unless($request->user()->enhances > 0, 40);
+        abort_unless($request->user()->enhances > 0, 403);
 
         $user->decrement('enhances');
 

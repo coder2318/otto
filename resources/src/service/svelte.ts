@@ -12,6 +12,20 @@ export function autosize(node: HTMLTextAreaElement, options: any = { offset: 0 }
     }
 }
 
+export function textEdit(node: HTMLElement) {
+    const paste = (event: ClipboardEvent) => {
+        event.preventDefault()
+        const text = event.clipboardData?.getData('text/plain') || ''
+        document.execCommand('insertText', false, text)
+    }
+
+    node.addEventListener('paste', paste)
+
+    return {
+        destroy: () => node.removeEventListener('paste', paste),
+    }
+}
+
 export function draggable(node: SVGElement, root: SVGElement, callback: Function) {
     let selected: SVGElement | null = null
     let offset: { x: number; y: number } | null = null
