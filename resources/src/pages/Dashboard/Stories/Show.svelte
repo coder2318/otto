@@ -100,7 +100,7 @@
                         {:else}
                             <img
                                 class="aspect-[2/3] h-full object-cover object-right"
-                                src={story.data.cover.url}
+                                src={story.data.cover?.url}
                                 alt="Cover"
                             />
                         {/if}

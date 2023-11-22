@@ -8,7 +8,6 @@
     import qs from 'qs'
     import { writable } from 'svelte/store'
     import { fade } from 'svelte/transition'
-    import Paginator from '@/components/Paginator.svelte'
     import { inertia, page, router } from '@inertiajs/svelte'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
     import background from '@/assets/img/chapters-bgi.jpg'
@@ -32,6 +31,9 @@
     let dropdownDialog: HTMLDialogElement
     let chapterId: number = null
 
+    let questionsChapters = [...questions_chapters.data]
+    let loading: boolean = false
+
     $: query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
 
     const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter || {})
@@ -45,6 +47,26 @@
             delete value[key]
             return value
         })
+    }
+
+    function loadMoreChapters() {
+        if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
+            loading = true
+
+            if (!questions_chapters.links.next) {
+                return
+            }
+
+            router.visit(questions_chapters.links.next, {
+                only: ['questions_chapters'],
+                preserveState: true,
+                preserveScroll: true,
+                onSuccess: () => {
+                    questionsChapters = [...questionsChapters, ...questions_chapters.data]
+                    loading = false
+                },
+            })
+        }
     }
 
     function deleteChapter(id: number) {
@@ -74,6 +96,10 @@
                 $filter = JSON.parse(localStorage.getItem('chapters-filter'))
             }
         }
+
+        window.addEventListener('scroll', function () {
+            loadMoreChapters()
+        })
 
         window.addEventListener('beforeunload', updateFilter)
 
@@ -214,7 +240,7 @@
                     </div>
                 </div> -->
             {/if}
-            {#each questions_chapters.data as chapter (chapter.type + chapter.id)}
+            {#each questionsChapters as chapter}
                 <a
                     class="chapterCard"
                     href={chapter.type === 'question'
@@ -277,6 +303,12 @@
             {/each}
         </div>
 
+        {#if loading}
+            <div class="flex items-center justify-center">
+                <span class="loader"></span>
+            </div>
+        {/if}
+
         <dialog bind:this={dialog} class="modal">
             <form method="dialog" class="modal-backdrop">
                 <button />
@@ -299,14 +331,31 @@
                 </div>
             </form>
         </dialog>
-
-        <Paginator class="flex flex-wrap items-center justify-center gap-y-2" meta={questions_chapters.meta} />
     </div>
 </section>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
 
 <style lang="scss">
+    .loader {
+        width: 48px;
+        height: 48px;
+        border: 5px solid #0b335a;
+        border-bottom-color: transparent;
+        border-radius: 50%;
+        display: inline-block;
+        box-sizing: border-box;
+        animation: rotation 1s linear infinite;
+    }
+
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
     .chaptersTabs {
         position: relative;
         padding-bottom: 32px;
