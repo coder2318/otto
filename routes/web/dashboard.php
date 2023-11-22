@@ -5,7 +5,6 @@ use App\Http\Controllers\Dashboard\BookController;
 use App\Http\Controllers\Dashboard\ChapterController;
 use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\NotificationController;
-use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\Dashboard\QuickstartController;
 use App\Http\Controllers\Dashboard\SettingsController;
 use App\Http\Controllers\Dashboard\StoryController;
@@ -68,8 +67,6 @@ Route::middleware('user-configured')->group(function () {
     // Invoices
     Route::get('/user/invoice/{invoice}', InvoiceController::class)->name('invoice.show');
 
-    Route::post('/plans/coupon', [PlanController::class, 'useCoupon'])->name('plans.coupon');
-
     Route::post('translate', TranslateController::class)->name('translate');
 
     Route::middleware(['subscribed:1'])->group(function () {
@@ -104,5 +101,3 @@ Route::middleware('user-configured')->group(function () {
         Route::post('/stories/{story}/questions/{question}/invite', [GuestsChapterController::class, 'invite'])->name('guest.chapters.invite');
     });
 });
-
-Route::inertia('/test-prompt', 'Dashboard/PromptTest')->middleware(['features:'.BetaAccess::class])->name('test.prompt');
