@@ -15,6 +15,12 @@
     import Honeypot from '@/components/Honeypot.svelte'
     import { addHoneypot } from '@/service/honeypot'
     import titleWithIllustration from '@/assets/img/title-with-illustration.svg'
+    import { imask } from '@imask/svelte'
+
+    const options = {
+        mask: '+{1}(000)000-000',
+        lazy: false,
+    }
 
     const form = useForm(
         addHoneypot($page?.props?.honeypot)({
@@ -98,6 +104,7 @@
                     <input
                         type="tel"
                         name="phone"
+                        use:imask={options}
                         placeholder="Phone Number"
                         class:input-error={$form.errors.phone}
                         class="input input-bordered input-ghost input-lg"
