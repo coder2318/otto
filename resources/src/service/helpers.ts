@@ -53,12 +53,13 @@ export function strToHtml(str: string, trim: boolean = false): string {
     return str
         .split('\n\n')
         .map((x) => {
+            x = x.replaceAll('\n', '<br/>')
             if (!trim) {
                 x = x
                     .replace(/^\s*/, '&nbsp;'.repeat(x.length - x.trimStart().length))
                     .replace(/\s*$/, '&nbsp;'.repeat(x.length - x.trimEnd().length))
             }
-            return '<p>' + x.trim().replaceAll('\n', '<br/>') + '</p>'
+            return '<p>' + x.trim() + '</p>'
         })
         .join('')
 }

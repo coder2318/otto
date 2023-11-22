@@ -9,7 +9,6 @@ use App\Models\TimelineQuestion;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Pagination\AbstractPaginator;
 use Illuminate\Support\Facades\DB;
 use Spatie\QueryBuilder\AllowedFilter;
 use Spatie\QueryBuilder\QueryBuilder;
@@ -77,33 +76,57 @@ class ChaptersRequest extends FormRequest
                 ->pluck('timeline_question_id')
             ));
 
-        return $this->crutchCovers($chapters->union($questions)
-            ->with(['question', 'cover'])
+        $query = $chapters->union($questions);
+
+        $query = Chapter::from(DB::raw("({$query->toSql()}) as a"))
+            ->select('a.*')
+            ->addBinding($query->getBindings());
+
+        return $this->loadRelations($query
             ->orderBy('created_at', 'desc')
-            ->paginate(6)
+            ->cursorPaginate(6)
             ->appends($this->query())
         );
     }
 
-    protected function crutchCovers(AbstractPaginator $results)
+    protected function loadRelations($results)
     {
         $questions = $results->where('type', 'question')->pluck('id')->merge(
-            $results->where('type', 'chapter')->pluck('timeline_question_id')
-        )->unique();
+            $questionsRelations = $results->where('type', 'chapter')->pluck('timeline_question_id')->filter()
+        )->unique()->values();
+
+        $chapters = $results->where('type', 'chapter')->pluck('id')->unique()->values();
 
         $covers = Media::query()
-            ->where('model_type', TimelineQuestion::class)
-            ->whereIn('model_id', $questions)
+            ->where('collection_name', 'cover')
+            ->where(fn ($q) => $q
+                ->where('model_type', TimelineQuestion::class)
+                ->whereIn('model_id', $questions)
+            )
+            ->orWhere(fn ($q) => $q
+                ->where('model_type', Chapter::class)
+                ->whereIn('model_id', $chapters)
+            )
             ->get()
-            ->keyBy('model_id');
+            ->groupBy('model_type')
+            ->map(fn ($q) => $q->keyBy('model_id'));
 
-        $results->getCollection()->transform(function (Chapter $questionChapter) use ($covers) {
-            if ($questionChapter->type === 'question') { // @phpstan-ignore-line
-                $questionChapter->setRelation('cover', $covers->get($questionChapter->id));
+        $questionsRelations = TimelineQuestion::query()
+            ->whereIn('id', $questionsRelations)
+            ->get()
+            ->keyBy('id');
+
+        $results->getCollection()->transform(function ($questionChapter) use ($covers) {
+            if ($questionChapter->type === 'question') {
+                $questionChapter->cover = $covers->get(TimelineQuestion::class)?->get($questionChapter->id);
+                $questionChapter->question = null;
             }
 
             if ($questionChapter->type === 'chapter') {
-                $questionChapter->setRelation('cover', $covers->get($questionChapter->timeline_question_id));
+                $questionChapter->cover = $covers->get(Chapter::class)?->get($questionChapter->id) ??
+                    $covers->get(TimelineQuestion::class)?->get($questionChapter->timeline_question_id);
+
+                $questionChapter->question = $questionsRelations[$questionChapter->timeline_question_id] ?? null;
             }
 
             return $questionChapter;

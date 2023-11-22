@@ -39,11 +39,17 @@ class ChapterController extends Controller
 
     public function index(Story $story, ChaptersRequest $request)
     {
+        $chapters = fn () => QuestionsChaptersResource::collection(
+            $request->chaptersQuestions($story)
+        );
+
+        if ($request->wantsJson()) {
+            return $chapters();
+        }
+
         return Inertia::render('Dashboard/Chapters/Index', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
-            'questions_chapters' => fn () => QuestionsChaptersResource::collection(
-                $request->chaptersQuestions($story)
-            ),
+            'questions_chapters' => $chapters,
             'timelines' => fn () => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),

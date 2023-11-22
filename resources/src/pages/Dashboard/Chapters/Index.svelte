@@ -7,7 +7,7 @@
 <script lang="ts">
     import qs from 'qs'
     import { writable } from 'svelte/store'
-    import { fade } from 'svelte/transition'
+    import { blur, fade } from 'svelte/transition'
     import { inertia, page, router } from '@inertiajs/svelte'
     import InviteGuestModal from '@/components/Chapters/InviteGuestModal.svelte'
     import background from '@/assets/img/chapters-bgi.jpg'
@@ -15,8 +15,8 @@
     import CreateStory from '@/components/Stories/CreateStory.svelte'
     import Fa from 'svelte-fa'
     import { onMount } from 'svelte'
-    import { strRandom } from '@/service/helpers'
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
+    import axios from 'axios'
 
     export let questions_chapters: {
         data: App.Chapter[]
@@ -32,6 +32,7 @@
     let chapterId: number = null
 
     let questionsChapters = [...questions_chapters.data]
+    let next = questions_chapters.links?.next
     let loading: boolean = false
 
     $: query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
@@ -39,7 +40,13 @@
     const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter || {})
 
     filter.subscribe((value) => {
-        router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), { only: ['questions_chapters'] })
+        router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), {
+            only: ['questions_chapters'],
+            onSuccess() {
+                questionsChapters = [...questions_chapters.data]
+                next = questions_chapters.links?.next
+            },
+        })
     })
 
     function removeFilter(key: string) {
@@ -50,23 +57,19 @@
     }
 
     function loadMoreChapters() {
-        if (window.innerHeight + Math.round(window.scrollY) >= document.body.offsetHeight) {
-            loading = true
-
-            if (!questions_chapters.links.next) {
-                return
-            }
-
-            router.visit(questions_chapters.links.next, {
-                only: ['questions_chapters'],
-                preserveState: true,
-                preserveScroll: true,
-                onSuccess: () => {
-                    questionsChapters = [...questionsChapters, ...questions_chapters.data]
-                    loading = false
-                },
-            })
+        if (!next || loading || window.innerHeight + Math.round(window.scrollY) < document.body.offsetHeight) {
+            return
         }
+
+        loading = true
+
+        axios
+            .get(next)
+            .finally(() => (loading = false))
+            .then(({ data }) => {
+                questionsChapters = [...questionsChapters, ...data.data]
+                next = data.links?.next
+            })
     }
 
     function deleteChapter(id: number) {
@@ -212,35 +215,12 @@
             </button>
         </div>
     </div>
-    <!-- <div>
-        <div class="flex gap-2 rounded-full bg-base-200 px-8 py-4 text-base-content">
-            Pages: <span class="text-primary">{story.data.pages}</span>
-        </div>
-    </div> -->
 </section>
 
 <section class="chapters" in:fade>
     <div class="otto-container">
         <div class="wrap">
-            {#if query?.filter?.timeline_id}
-                <!-- <div
-                    class="card min-h-[36rem] bg-cover bg-center bg-no-repeat"
-                    style="background-image: url({customChapter})"
-                >
-                    <div class="card-body items-center justify-end">
-                        <div class="card-actions justify-between">
-                            <a
-                                href="/stories/{story.data.id}/chapters/create?timeline_id={query?.filter?.timeline_id}"
-                                use:inertia
-                                class="btn btn-neutral btn-lg rounded-full"
-                            >
-                                Create Custom Question
-                            </a>
-                        </div>
-                    </div>
-                </div> -->
-            {/if}
-            {#each questionsChapters as chapter}
+            {#each questionsChapters as chapter (chapter.type + chapter.id)}
                 <a
                     class="chapterCard"
                     href={chapter.type === 'question'
@@ -252,9 +232,9 @@
                     <div class="chapterCard__img">
                         <img
                             src={chapter.cover ??
-                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${strRandom(
-                                    10
-                                )}`}
+                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${
+                                    chapter.type + chapter.id
+                                }`}
                             alt={chapter.title}
                         />
                     </div>
@@ -304,8 +284,8 @@
         </div>
 
         {#if loading}
-            <div class="flex items-center justify-center">
-                <span class="loader"></span>
+            <div class="flex items-center justify-center pb-16" transition:blur>
+                <span class="loading loading-spinner loading-lg"></span>
             </div>
         {/if}
 
@@ -337,25 +317,6 @@
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
 
 <style lang="scss">
-    .loader {
-        width: 48px;
-        height: 48px;
-        border: 5px solid #0b335a;
-        border-bottom-color: transparent;
-        border-radius: 50%;
-        display: inline-block;
-        box-sizing: border-box;
-        animation: rotation 1s linear infinite;
-    }
-
-    @keyframes rotation {
-        0% {
-            transform: rotate(0deg);
-        }
-        100% {
-            transform: rotate(360deg);
-        }
-    }
     .chaptersTabs {
         position: relative;
         padding-bottom: 32px;
@@ -386,8 +347,6 @@
     }
 
     .chapters {
-        padding-bottom: 100px;
-
         .wrap {
             display: flex;
             flex-wrap: wrap;

@@ -16,6 +16,7 @@ class QuestionsChaptersResource extends JsonResource
     {
         return array_merge(parent::toArray($request), [
             'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
+            'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question)),
         ]);
     }
 }
