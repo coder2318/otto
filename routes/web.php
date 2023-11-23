@@ -47,7 +47,7 @@ Route::controller(PlanController::class)->middleware(['subscribed:0'])->name('pl
     Route::get('/plans', 'index')->name('index');
     Route::post('/plans/coupon', 'useCoupon')->name('coupon')->middleware('auth');
     Route::get('/plans/{plan}', 'show')->name('show')->middleware('auth');
-    Route::post('/plans/{plan}', 'update')->name('update')->middleware('auth');
+    Route::put('/plans/{plan}', 'update')->name('update')->middleware('auth');
 });
 
 // Guests Dashboard
