@@ -51,7 +51,7 @@ Route::middleware('user-configured')->group(function () {
     Route::resource('books', BookController::class)->middleware('features:'.BetaAccess::class)->only('show');
 
     // Settings
-    Route::controller(SettingsController::class)->prefix('settings')->middleware('features:'.BetaAccess::class)->name('settings.')->group(function () {
+    Route::controller(SettingsController::class)->prefix('settings')->name('settings.')->group(function () {
         Route::redirect('/', '/settings/notifications', 303);
 
         Route::get('/notifications', 'notifications')->name('notifications');
