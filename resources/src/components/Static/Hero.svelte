@@ -24,7 +24,7 @@
             {:else}
                 <span class="flex gap-4">
                     <a use:inertia href="/plans" class="otto-btn-secondary">Start Your Book</a>
-                    <a use:inertia href="/demo" class="otto-btn-primary">Try A Free Chapter</a>
+                    <a use:inertia href="/register" class="otto-btn-primary">Try A Free Chapter</a>
                 </span>
             {/if}
         </div>

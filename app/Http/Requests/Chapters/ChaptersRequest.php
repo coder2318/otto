@@ -78,7 +78,7 @@ class ChaptersRequest extends FormRequest
 
         $query = $chapters->union($questions);
 
-        $query = Chapter::from(DB::raw("({$query->toSql()}) as a"))
+        $query = Chapter::from(DB::raw("({$query->toSql()}) as a")) // @phpstan-ignore-line
             ->select('a.*')
             ->addBinding($query->getBindings());
 
@@ -116,7 +116,7 @@ class ChaptersRequest extends FormRequest
             ->get()
             ->keyBy('id');
 
-        $results->getCollection()->transform(function ($questionChapter) use ($covers) {
+        $results->getCollection()->transform(function ($questionChapter) use ($covers, $questionsRelations) {
             if ($questionChapter->type === 'question') {
                 $questionChapter->cover = $covers->get(TimelineQuestion::class)?->get($questionChapter->id);
                 $questionChapter->question = null;
@@ -126,7 +126,7 @@ class ChaptersRequest extends FormRequest
                 $questionChapter->cover = $covers->get(Chapter::class)?->get($questionChapter->id) ??
                     $covers->get(TimelineQuestion::class)?->get($questionChapter->timeline_question_id);
 
-                $questionChapter->question = $questionsRelations[$questionChapter->timeline_question_id] ?? null;
+                $questionChapter->question = $questionsRelations->get($questionChapter->timeline_question_id) ?? null;
             }
 
             return $questionChapter;

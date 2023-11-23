@@ -123,7 +123,7 @@
                                             <span class="collapse-content-title font-serif">{chapter.title}</span>
                                         </div>
 
-                                        <a href="/chapters/{chapter.id}/edit" class="collapse-content-pencil">
+                                        <a href="/chapters/{chapter.id}/write" class="collapse-content-pencil">
                                             <img src={pencil} alt="Pencil" />
                                         </a>
                                     </li>

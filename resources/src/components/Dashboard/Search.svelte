@@ -98,7 +98,7 @@
 
                 {#each search.chapters.data as chapter}
                     <li>
-                        <a href="/chapters/{chapter.id}/edit" class="block" use:inertia>
+                        <a href="/chapters/{chapter.id}/write" class="block" use:inertia>
                             {#if chapter.title}
                                 <div>{@html highlight(chapter.title)}</div>
                             {/if}
