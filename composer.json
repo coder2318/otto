@@ -35,7 +35,7 @@
         "limedeck/nova-cashier-overview": "^4.2",
         "maatwebsite/excel": "^3.1",
         "meilisearch/meilisearch-php": "^1.4",
-        "openai-php/laravel": "^0.7",
+        "openai-php/laravel": "^0.8",
         "pusher/pusher-php-server": "^7.2",
         "signifly/laravel-shopify": "^1.2",
         "sokil/php-isocodes": "^4.2",

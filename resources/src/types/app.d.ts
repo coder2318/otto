@@ -153,4 +153,15 @@ declare namespace App {
     }
 
     interface Country extends Language {}
+
+    interface Prompt {
+        id: number
+        title: string
+        description: string
+        icon: string
+        perspective: boolean
+        content: string
+        created_at: Date | string
+        updated_at: Date | string
+    }
 }

@@ -63,7 +63,7 @@ class OpenAIService
         return trim($result);
     }
 
-    public function chatEditStreamed(string $input, string $question, string $prompt = null)
+    public function chatEditStreamed(string $input, string $question, string $prompt = null, string $name = null)
     {
         if ($this->fake) {
             sleep(1);
@@ -80,6 +80,18 @@ class OpenAIService
             $messages = [
                 ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
             ];
+
+            if ($name) {
+                $messages[] = [
+                    'role' => 'assistant',
+                    'content' => "What's your name?",
+                ];
+
+                $messages[] = [
+                    'role' => 'user',
+                    'content' => $name,
+                ];
+            }
 
             $messages[] = [
                 'role' => 'assistant',

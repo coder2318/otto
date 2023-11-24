@@ -9,6 +9,7 @@ use App\Http\Requests\Chapters\StoreChapterRequest;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Http\Resources\PromptResource;
 use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
@@ -17,6 +18,7 @@ use App\Jobs\RegenerateBook;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Media;
+use App\Models\Prompt;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Notifications\GuestChapterInviteNotification;
@@ -24,6 +26,7 @@ use App\Services\MediaService;
 use App\Services\OpenAIService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -112,10 +115,24 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function process(Chapter $chapter, OpenAIService $service)
+    public function process(Chapter $chapter, OpenAIService $service, Request $request)
     {
-        return new StreamedResponse(function () use ($chapter, $service) {
-            foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
+        return new StreamedResponse(function () use ($chapter, $service, $request) {
+            $request->validate([
+                'tone_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+                'perspective_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+            ]);
+
+            $tone = $request->tone_id ? Prompt::where('id', $request->input('tone_id'))->value('content') : null;
+            $perspective = $request->perspective_id ? Prompt::where('id', $request->input('perspective_id'))->value('content') : null;
+            $prompt = collect([$tone, $perspective])->filter()->join(PHP_EOL.PHP_EOL);
+
+            foreach ($service->chatEditStreamed(
+                $chapter->content,
+                $chapter->title,
+                empty($prompt) ? null : $prompt,
+                Auth::user()->full_name, // @phpstan-ignore-line
+            ) as $chunk) {
                 if (connection_aborted()) {
                     return;
                 }
@@ -132,6 +149,9 @@ class ChapterController extends Controller
     {
         return Inertia::render('Dashboard/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
+            'prompts' => fn () => PromptResource::collection(
+                Prompt::all(['id', 'title', 'description', 'icon', 'perspective'])
+            ),
         ]);
     }
 
