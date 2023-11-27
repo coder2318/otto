@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -80,6 +81,13 @@ class Story extends Model implements HasMedia
     protected function pages(): Attribute
     {
         return Attribute::get(fn () => $this->book?->getCustomProperty('pages')); // @phpstan-ignore-line
+    }
+
+    protected function words(): Attribute
+    {
+        return Attribute::get(fn () => $this->chapters()
+            ->get(DB::raw('SUM(LENGTH(content) - LENGTH(REPLACE(content, " ", "")) + 1) as total_words'))
+        );
     }
 
     public function toSearchableArray()

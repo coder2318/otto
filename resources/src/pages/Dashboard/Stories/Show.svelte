@@ -18,6 +18,7 @@
     import CreateStory from '@/components/Stories/CreateStory.svelte'
     import EditCoverBtn from '@/components/SVG/buttons/edit-cover-btn.svg.svelte'
     export let story: { data: App.Story }
+    export let auth: { user: { data: App.User } }
 </script>
 
 <svelte:head>
@@ -29,7 +30,9 @@
         <img class="smallBanner-illustration" src={smallBannerIllustration} alt="Figure" />
         <div class="block">
             <img class="smallBanner-bgi" src={smallBanner} alt="ImageBanner" />
-            <h2 class="title font-serif">Good morning, John. What are you up to today?</h2>
+            <h2 class="title font-serif">
+                Good morning, {auth?.user?.data?.details?.first_name ?? 'User'}. What are you up to today?
+            </h2>
         </div>
     </div>
 </section>
