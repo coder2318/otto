@@ -85,9 +85,12 @@ class Story extends Model implements HasMedia
 
     protected function words(): Attribute
     {
-        return Attribute::get(fn () => $this->chapters()
-            ->get(DB::raw('SUM(LENGTH(content) - LENGTH(REPLACE(content, " ", "")) + 1) as total_words'))
-        );
+        return Attribute::get(fn () => rescue(
+            fn () => $this->chapters()
+                ->select(DB::raw('SUM(LENGTH(content) - LENGTH(REPLACE(content, " ", "")) + 1) as words'))
+                ->value('words'),
+            report: false,
+        ));
     }
 
     public function toSearchableArray()
