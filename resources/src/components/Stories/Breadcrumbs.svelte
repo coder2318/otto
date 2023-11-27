@@ -11,19 +11,19 @@
 <div class="otto-breadcrumb">
     <div class="otto-container">
         <div class="wrap">
-            <a class="step-breadcrumb" class:inactive={step < 1} href="/stories/{story.data.id}/edit" use:inertia>
-                <div class="step-icon">
-                    <img src={photo} alt="Icon" />
-                </div>
-                <p>Table of contents</p>
-                <span class="step-line"></span>
-            </a>
-
-            <a class="step-breadcrumb" class:inactive={step < 2} href="/stories/{story.data.id}/cover" use:inertia>
+            <a class="step-breadcrumb" class:inactive={step < 1} href="/stories/{story.data.id}/cover" use:inertia>
                 <div class="step-icon">
                     <img src={table} alt="Icon" />
                 </div>
                 <p>Make a book cover</p>
+                <span class="step-line"></span>
+            </a>
+
+            <a class="step-breadcrumb" class:inactive={step < 2} href="/stories/{story.data.id}/edit" use:inertia>
+                <div class="step-icon">
+                    <img src={photo} alt="Icon" />
+                </div>
+                <p>Table of contents</p>
                 <span class="step-line"></span>
             </a>
 

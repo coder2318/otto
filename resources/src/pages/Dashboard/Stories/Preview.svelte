@@ -77,7 +77,7 @@
 </svelte:head>
 
 <section class="container mx-auto flex min-h-[calc(100vh-67px)] flex-col items-stretch gap-4 px-4 pb-4">
-    <Breadcrumbs step={1} {story} />
+    <Breadcrumbs step={2} {story} />
     <h1 class="text-3xl text-primary">
         Book Preview - <i>{story.data.title}</i>
     </h1>
@@ -125,10 +125,6 @@
                 <Fa icon={faArrowLeft} />
             </span>
             Go Back
-        </a>
-        <a href="/stories/{story.data.id}/cover" class="btn btn-secondary rounded-full pr-0" use:inertia>
-            Save & Next
-            <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
         </a>
     </div>
 </section>

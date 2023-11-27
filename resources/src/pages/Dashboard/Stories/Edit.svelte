@@ -69,7 +69,7 @@
 </svelte:head>
 
 <section in:fade>
-    <Breadcrumbs step={1} {story} />
+    <Breadcrumbs step={2} {story} />
 </section>
 
 <form on:submit|preventDefault={submit}>

@@ -59,7 +59,7 @@
                     </div>
                 </a>
 
-                <a use:inertia href="/stories/{story.data.id}/edit" class="nCard finishYourBook">
+                <a use:inertia href="/stories/{story.data.id}/cover" class="nCard finishYourBook">
                     <img class="nCard-bgi" src={finishYourBook} alt="Continue Editing" />
 
                     <div class="nCard__content">

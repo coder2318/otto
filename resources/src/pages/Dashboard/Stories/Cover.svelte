@@ -113,7 +113,7 @@
                     ...hiddenParams,
                 },
                 _method: 'PUT',
-                redirect: 'dashboard.stories.order',
+                redirect: 'dashboard.stories.edit',
             },
             {
                 forceFormData: true,
@@ -130,7 +130,7 @@
 </svelte:head>
 
 <section class="container mx-auto px-4" in:fade>
-    <Breadcrumbs step={2} {story} />
+    <Breadcrumbs step={1} {story} />
 </section>
 
 <form on:submit|preventDefault={submit} in:fade id="book-cover">
@@ -287,7 +287,7 @@
                             <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                         </button>
                     {:else}
-                        <a href="/stories/{story.data.id}/order" class="btn btn-secondary rounded-full" use:inertia>
+                        <a href="/stories/{story.data.id}/edit" class="btn btn-secondary rounded-full" use:inertia>
                             Continue
                         </a>
                     {/if}
