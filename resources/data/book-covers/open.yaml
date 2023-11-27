@@ -1,30 +1,41 @@
+extends: layout/base.yaml
 name: Open
 
 fields:
-  - name: Cover Background
-    key: background
+  - name: Front Background
+    key: front
     type: image
-
-  - name: Author
-    key: author
-    type: text
+    group: Front
 
   - name: Title
     key: title
     type: text
+    group: Front
 
-  - name: SubTitle
+  - name: Title Color
+    key: titleColor
+    type: color
+    group: Front
+
+  - name: Subtitle
     key: subtitle
     type: text
+    group: Front
 
-# Template parameters (back, spine, front)
-## Template parameters are 3 components of SVG elements representing book spine, back and front.
-## Any valid SVG works
-## You can access CSS variable `var(--spine-width)` to adjust styles based on spine width
-## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
-back: ''
+  - name: Subtitle Color
+    key: subtitleColor
+    type: color
+    group: Front
 
-spine: ''
+  - name: Author
+    key: author
+    type: text
+    group: Front
+
+  - name: Author Color
+    key: authorColor
+    type: color
+    group: Front
 
 front: |
   <style>
@@ -55,7 +66,7 @@ front: |
     font-family="Noto Sans Devanagari"
     text-shadow="#FC0 1px 0 10px"
     data-title="innerText"
-    data-text-color="fill"
+    data-title-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
     fill="white"
@@ -68,7 +79,7 @@ front: |
     font-family="Noto Sans Devanagari"
     text-shadow="#FC0 1px 0 10px"
     data-subtitle="innerText"
-    data-text-color="fill"
+    data-subtitle-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
     fill="white"
@@ -79,7 +90,7 @@ front: |
     font-size="51.24pt"
     text-anchor="middle"
     data-author="innerText"
-    data-text-color="fill"
+    data-author-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"
     font-family="Noto Sans Devanagari"

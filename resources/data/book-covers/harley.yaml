@@ -1,34 +1,41 @@
+extends: layout/base.yaml
 name: Harley
 
 fields:
-  - name: Cover Background
-    key: background
+  - name: Front Background
+    key: front
     type: image
-
-  - name: Author
-    key: author
-    type: text
+    group: Front
 
   - name: Title
     key: title
     type: text
+    group: Front
 
-  - name: SubTitle
+  - name: Title Color
+    key: titleColor
+    type: color
+    group: Front
+
+  - name: Subtitle
     key: subtitle
     type: text
+    group: Front
 
-  - name: Text Color
-    key: textColor
+  - name: Subtitle Color
+    key: subtitleColor
     type: color
+    group: Front
 
-# Template parameters (back, spine, front)
-## Template parameters are 3 components of SVG elements representing book spine, back and front.
-## Any valid SVG works
-## You can access CSS variable `var(--spine-width)` to adjust styles based on spine width
-## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
-back: ''
+  - name: Author
+    key: author
+    type: text
+    group: Front
 
-spine: ''
+  - name: Author Color
+    key: authorColor
+    type: color
+    group: Front
 
 front: |
   <style>
@@ -40,16 +47,14 @@ front: |
       preserveAspectRatio="xMinYMin slice"
       x="0" y="0" width="100%" height="100%"
   />
-  <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
-  <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
   <text
     x="305" y="105"
     font-size="90pt"
-    text-title="middle"
+    text-anchor="middle"
     font-family="Raleway"
     text-shadow="#FC0 1px 0 10px"
     data-title="innerText"
-    data-text-color="fill"
+    data-title-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
     fill="gold"
@@ -62,18 +67,18 @@ front: |
     font-family="Raleway"
     text-shadow="#FC0 1px 0 10px"
     data-subtitle="innerText"
-    data-text-color="fill"
+    data-subtitle-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
     fill="white"
     style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >A reckoning</text>
+  >A reckoning McLEE COREY</text>
   <text
     x="288" y="814"
     font-size="40pt"
     text-anchor="middle"
     data-author="innerText"
-    data-text-color="fill"
+    data-author-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"
     font-family="Raleway"
@@ -81,4 +86,4 @@ front: |
     letter-spacing="0.1em"
     fill="white"
     style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >McLEE COREY</text>
+  ></text>

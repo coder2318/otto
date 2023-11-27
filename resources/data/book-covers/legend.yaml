@@ -1,30 +1,31 @@
+extends: layout/base.yaml
 name: Legend
 
 fields:
-  - name: Cover Background
-    key: background
+  - name: Front Background
+    key: front
     type: image
-
-  - name: Author
-    key: author
-    type: text
+    group: Front
 
   - name: Title
     key: title
     type: text
+    group: Front
 
-  - name: Text Color
-    key: textColor
+  - name: Title Color
+    key: titleColor
     type: color
+    group: Front
 
-# Template parameters (back, spine, front)
-## Template parameters are 3 components of SVG elements representing book spine, back and front.
-## Any valid SVG works
-## You can access CSS variable `var(--spine-width)` to adjust styles based on spine width
-## Ex.: `font-size="calc(var(--spine-width) * 0.666)"` - font size 2/3 of spine width
-back: ''
+  - name: Author
+    key: author
+    type: text
+    group: Front
 
-spine: ''
+  - name: Author Color
+    key: authorColor
+    type: color
+    group: Front
 
 front: |
   <style>
@@ -37,15 +38,15 @@ front: |
       <stop offset="100%" stop-opacity="0"/>
     </linearGradient>
     <linearGradient id="bot-grad" x1="0" y1="1" x2="0" y2="0" >
-        <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
-        <stop offset="100%" stop-opacity="0"/>
+      <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+      <stop offset="100%" stop-opacity="0"/>
     </linearGradient>
   </defs>
   <image
-      href="/build/assets/cover-background-legend.jpg"
-      data-background="href"
-      preserveAspectRatio="xMinYMin slice"
-      x="0" y="0" width="100%" height="100%"
+    href="/build/assets/cover-background-legend.jpg"
+    data-background="href"
+    preserveAspectRatio="xMinYMin slice"
+    x="0" y="0" width="100%" height="100%"
   />
   <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
   <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
@@ -56,18 +57,18 @@ front: |
     font-family="Corbel"
     text-shadow="#FC0 1px 0 10px"
     data-author="innerText"
-    data-text-color="fill"
+    data-author-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
     fill="white"
     style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
   >Author</text>
   <text
-    x="288" y="814"
+    x="288" y="864"
     font-size="5rem"
     text-anchor="middle"
     data-title="innerText"
-    data-text-color="fill"
+    data-title-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"
     font-family="Lunchtype22"

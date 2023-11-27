@@ -18,8 +18,15 @@ class BookCoverTemplateFactory extends Factory
     {
         $files = glob(resource_path('data/book-covers/*.{yaml,yml}'), GLOB_BRACE);
 
-        $file = $this->faker->randomElement($files);
+        $file = $this->faker->unique()->randomElement($files);
 
-        return yaml_parse_file($file);
+        $data = yaml_parse_file($file);
+
+        if ($layout = $data['extends']) {
+            unset($data['extends']);
+            $data = array_merge_recursive(yaml_parse_file(resource_path("data/book-covers/$layout")), $data);
+        }
+
+        return $data;
     }
 }

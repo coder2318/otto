@@ -25,7 +25,11 @@
                     switch (node.dataset[key]) {
                         case 'innerText':
                         case 'innerHTML':
-                            svgTextWrap(node as SVGTextElement, value as string, sizes.width)
+                            svgTextWrap(
+                                node as SVGTextElement,
+                                value as string,
+                                parseFloat(node.dataset['maxWidth'] || sizes.width + '')
+                            )
                             break
                         default:
                             node.setAttribute(node.dataset[key], value as string)
@@ -160,6 +164,7 @@
     style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
+    {@html template.base ?? ''}
     <svg x={0} y={0} width={sizes.width} height={sizes.height}>
         {@html template.back ?? ''}
     </svg>

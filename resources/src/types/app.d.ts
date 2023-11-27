@@ -139,6 +139,7 @@ declare namespace App {
         back: string
         spine: string
         front: string
+        base: string
         cover?: string
         fields: Array<{
             name: string
