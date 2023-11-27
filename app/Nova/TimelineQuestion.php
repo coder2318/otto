@@ -52,7 +52,7 @@ class TimelineQuestion extends Resource
 
             Text::make('Question')->rules('required', 'max:254'),
 
-            Medialibrary::make('Covers')->accept('image/*')->showOnIndex(false),
+            Medialibrary::make('Covers', 'covers')->accept('image/*')->showOnIndex(false),
 
             ArrayOfStrings::make('Sub Questions')->showOnIndex(false),
 
