@@ -34,7 +34,7 @@ front: |
   </style>
   <image
     href="/build/assets/cover-background-women.jpg"
-    data-background="href"
+    data-front="href"
     preserveAspectRatio="xMinYMin slice"
     x="0" y="0" width="100%" height="100%"
   />

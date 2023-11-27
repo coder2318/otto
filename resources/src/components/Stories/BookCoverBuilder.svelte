@@ -164,6 +164,9 @@
     style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
+    <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight}>
+        {@html template.base ?? ''}
+    </svg>
     {@html template.base ?? ''}
     <svg x={0} y={0} width={sizes.width} height={sizes.height}>
         {@html template.back ?? ''}
