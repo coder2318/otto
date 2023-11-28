@@ -13,6 +13,14 @@
         <meta name="msapplication-TileColor" content="#F1EDE7">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
+        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_tag') }}"></script>
+        <script>
+            window.dataLayer = window.dataLayer || [];
+            const gtag = (...args) => dataLayer.push(args);
+            gtag('js', new Date());
+            gtag('config', "{{ config('services.google.analytics_tag') }}");
+        </script>
+
         @inertiaHead
         @vite('resources/src/app.ts')
     </head>
