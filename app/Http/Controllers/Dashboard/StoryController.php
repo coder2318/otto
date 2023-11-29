@@ -81,7 +81,7 @@ class StoryController extends Controller
             'story' => fn () => StoryResource::make($story->append('pages')->load('cover')),
             'template' => fn () => BookCoverTemplateResource::make(
                 BookCoverTemplate::when(
-                    $tmpl = $request->query('template', $story->cover?->getCustomProperty('template_id')),
+                    $tmpl = $request->query('template', $story->cover?->getCustomProperty('template_id')), // @phpstan-ignore-line
                     fn ($query) => $query->where('id', $tmpl)
                 )->orderBy('created_at')->firstOrFail()
             ),

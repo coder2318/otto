@@ -46,7 +46,11 @@
     })
 
     function updateContent(content: string) {
-        editor?.commands.setContent(strToHtml(content, false), false)
+        if (!editor || editor.getText({ blockSeparator: '\n\n' }) == content) return
+
+        const { from, to } = editor.state.selection
+        editor.commands.setContent(strToHtml(content, true), false)
+        editor.commands.setTextSelection({ from, to })
     }
 
     $: updateContent(content)
