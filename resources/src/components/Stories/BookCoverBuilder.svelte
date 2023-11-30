@@ -16,6 +16,13 @@
 
     let dragHooks = []
 
+    function setTextValue(node: SVGTextElement, value: string | null = null) {
+        if (node.dataset.max && value) {
+            value = value.toString().slice(0, parseInt(node.dataset.max))
+        }
+        svgTextWrap(node, value, parseFloat(node.dataset['maxWidth'] || sizes.width + ''))
+    }
+
     function updateSvg(params) {
         if (!svg) return
 
@@ -23,17 +30,13 @@
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
                     switch (node.dataset[key]) {
+                        case 'font-size':
+                            node.style.fontSize = value + 'px'
+                            setTextValue(node as SVGTextElement)
+                            break
                         case 'innerText':
                         case 'innerHTML':
-                            if (node.dataset.max && value) {
-                                value = value.toString().slice(0, parseInt(node.dataset.max))
-                            }
-
-                            svgTextWrap(
-                                node as SVGTextElement,
-                                value as string,
-                                parseFloat(node.dataset['maxWidth'] || sizes.width + '')
-                            )
+                            setTextValue(node as SVGTextElement, value as string)
                             break
                         default:
                             node.setAttribute(node.dataset[key], value as string)

@@ -74,6 +74,15 @@ export function strRandom(length: number): string {
 }
 
 export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number) {
+    if (!text) {
+        text = ''
+        if (node.children.length > 1) {
+            node.childNodes.forEach((n) => (text += n.textContent + ' '))
+        } else {
+            text = node.textContent
+        }
+        text = text.trim()
+    }
     const words = text.split(' ').filter((w) => w)
     const test = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
     node.innerHTML = ''

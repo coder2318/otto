@@ -32,6 +32,7 @@
         "no-console": ["warn", { "allow": ["warn", "error"] }],
         "indent": ["warn", 4, { "SwitchCase": 1 }],
         "camelcase": ["off"],
+        "no-fallthrough": ["off"],
 
         // Typescript
         "@typescript-eslint/no-unused-vars": ["warn", {"argsIgnorePattern": "^_", "varsIgnorePattern": "^_", "caughtErrorsIgnorePattern": "^_"}],
