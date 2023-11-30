@@ -225,7 +225,7 @@ class StoryController extends Controller
                 'name' => $country->getName(),
                 'code' => $country->getAlpha2(),
             ]),
-            'payment' => Auth::user()->defaultPaymentMethod(),
+            'payment' => fn () => $request->user()->defaultPaymentMethod(),
             'states' => fn () => $request->has('country_code') ? collect($iso->getSubdivisions()->getAllByCountryCode($request->validated('country_code')))
                 ->map(fn (Subdivision $subdivision) => [
                     'name' => $subdivision->getName(),
@@ -277,19 +277,19 @@ class StoryController extends Controller
         /** @var User */
         $user = $request->user();
 
-        // if ($user->can('free-books')) {
-        //     try {
-        //         $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
-        //     } catch (\Exception $e) {
-        //         return redirect()->back()->with('error', $e->getMessage());
-        //     }
-        // }
+        if (! $user->can('free-books')) {
+            try {
+                $payment = $user->charge($cost * 100, $user->paymentMethods()->first()->id);
+            } catch (\Exception $e) {
+                return redirect()->back()->with('error', $e->getMessage());
+            }
+        }
 
         $print = $lulu->print(
             config('mail.from.address'),
             LineItem::from([
                 'printable_normalization' => PrintableNormalization::from([
-                    // 'external_id' => $payment->external_id,
+                    'external_id' => $payment ? $payment->external_id : null,
                     'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
                     'cover' => ['source_url' => $story->book_cover->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
                     'interior' => ['source_url' => $story->book->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
@@ -304,6 +304,10 @@ class StoryController extends Controller
         $story->printJobs()->create([
             'lulu_id' => $print['id'],
             'details' => PrintJobDetails::from($print),
+        ]);
+
+        $story->update([
+            'status' => Status::PUBLISHED,
         ]);
 
         Session::forget("print-cost-{$story->id}");

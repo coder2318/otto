@@ -374,8 +374,14 @@
                                 <td>Hard Cover</td>
                             </tr>
                             <tr>
-                                <td>Payment Card</td>
-                                <td>**** **** **** {payment?.card?.last4}</td>
+                                <td>Payment Method</td>
+                                <td>
+                                    {#if payment}
+                                        **** **** **** {payment?.card?.last4}
+                                    {:else}
+                                        -
+                                    {/if}
+                                </td>
                             </tr>
                             {#if price}
                                 <tr>

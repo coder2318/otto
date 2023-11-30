@@ -12,7 +12,10 @@ class ChapterPolicy
      */
     public function viewAny(User $user): bool
     {
-        return true;
+        /** @var \App\Models\Story */
+        $story = request('story');
+
+        return $user->id === $story->user_id;
     }
 
     /**
