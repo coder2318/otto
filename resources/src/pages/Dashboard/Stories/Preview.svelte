@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import { faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
+    import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import { inertia } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import Fa from 'svelte-fa'
@@ -91,7 +91,7 @@
     <section class="grid grid-flow-row grid-cols-4 gap-4">
         <iframe
             title={story.data.title}
-            src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book)}&origin={window.location.host}"
+            src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book)}"
             width="100%"
             class="col-span-3 min-h-[500px] flex-1 bg-base-300"
             bind:this={frame}

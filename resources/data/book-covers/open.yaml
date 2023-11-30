@@ -12,6 +12,11 @@ fields:
     type: text
     group: Front
 
+  - name: Title Size
+    key: titleSize
+    type: number
+    group: Front
+
   - name: Title Color
     key: titleColor
     type: color
@@ -22,6 +27,11 @@ fields:
     type: text
     group: Front
 
+  - name: Subtitle Size
+    key: subtitleSize
+    type: number
+    group: Front
+
   - name: Subtitle Color
     key: subtitleColor
     type: color
@@ -30,6 +40,11 @@ fields:
   - name: Author
     key: author
     type: text
+    group: Front
+
+  - name: Author Size
+    key: authorSize
+    type: number
     group: Front
 
   - name: Author Color
@@ -66,6 +81,8 @@ front: |
     font-family="Noto Sans Devanagari"
     text-shadow="#FC0 1px 0 10px"
     data-title="innerText"
+    data-title-size="font-size"
+    data-max="50"
     data-title-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
@@ -79,6 +96,8 @@ front: |
     font-family="Noto Sans Devanagari"
     text-shadow="#FC0 1px 0 10px"
     data-subtitle="innerText"
+    data-subtitle-size="font-size"
+    data-max="50"
     data-subtitle-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
@@ -90,6 +109,8 @@ front: |
     font-size="51.24pt"
     text-anchor="middle"
     data-author="innerText"
+    data-author-size="font-size"
+    data-max="50"
     data-author-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"

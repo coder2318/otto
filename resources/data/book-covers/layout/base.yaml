@@ -41,7 +41,7 @@ spine: |
       text-anchor="middle"
       dominant-baseline="middle"
       fill="white"
-      style="transform-origin:center;transform:rotate(-90deg);"
+      style="transform-origin:center;transform:rotate(90deg);"
       font-size="calc(var(--spine-width) * 0.666)"
       data-spine="innerText"
       data-spine-text-color="fill"

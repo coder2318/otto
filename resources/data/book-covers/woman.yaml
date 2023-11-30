@@ -12,6 +12,11 @@ fields:
     type: text
     group: Front
 
+  - name: Title Size
+    key: titleSize
+    type: number
+    group: Front
+
   - name: Title Color
     key: titleColor
     type: color
@@ -20,6 +25,11 @@ fields:
   - name: Author
     key: author
     type: text
+    group: Front
+
+  - name: Author Size
+    key: authorSize
+    type: number
     group: Front
 
   - name: Author Color
@@ -45,6 +55,8 @@ front: |
     font-family="Arsenal"
     text-shadow="#FC0 1px 0 10px"
     data-author="innerText"
+    data-author-size="font-size"
+    data-max="50"
     data-author-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
@@ -56,6 +68,8 @@ front: |
     font-size="55pt"
     text-anchor="end"
     data-title="innerText"
+    data-title-size="font-size"
+    data-max="50"
     data-title-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"

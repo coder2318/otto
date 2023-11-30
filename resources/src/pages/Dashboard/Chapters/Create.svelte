@@ -18,7 +18,7 @@
     export let timelines: { data: App.Timeline[] }
     let dropdownDialog: HTMLDialogElement
 
-    let query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
+    let query = qs.parse($page.url.split('?').slice(1).join('?'))
 
     let el: HTMLFormElement
     const form = useForm({

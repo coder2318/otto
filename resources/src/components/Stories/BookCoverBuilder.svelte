@@ -16,15 +16,19 @@
 
     let dragHooks = []
 
-    function updateSvg(parameters) {
+    function updateSvg(params) {
         if (!svg) return
 
-        Object.entries(parameters).forEach(([key, value]) => {
+        Object.entries(params).forEach(([key, value]) => {
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
                     switch (node.dataset[key]) {
                         case 'innerText':
                         case 'innerHTML':
+                            if (node.dataset.max) {
+                                value = value.toString().slice(0, parseInt(node.dataset.max))
+                            }
+
                             svgTextWrap(
                                 node as SVGTextElement,
                                 value as string,

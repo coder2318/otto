@@ -12,6 +12,11 @@ fields:
     type: text
     group: Front
 
+  - name: Title Size
+    key: titleSize
+    type: number
+    group: Front
+
   - name: Title Color
     key: titleColor
     type: color
@@ -22,6 +27,11 @@ fields:
     type: text
     group: Front
 
+  - name: Subtitle Size
+    key: subtitleSize
+    type: number
+    group: Front
+
   - name: Subtitle Color
     key: subtitleColor
     type: color
@@ -30,6 +40,11 @@ fields:
   - name: Author
     key: author
     type: text
+    group: Front
+
+  - name: Author Size
+    key: authorSize
+    type: number
     group: Front
 
   - name: Author Color
@@ -49,11 +64,13 @@ front: |
   />
   <text
     x="305" y="105"
-    font-size="90pt"
+    font-size="75pt"
     text-anchor="middle"
     font-family="Raleway"
     text-shadow="#FC0 1px 0 10px"
     data-title="innerText"
+    data-title-size="font-size"
+    data-max="50"
     data-title-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
@@ -61,12 +78,14 @@ front: |
     style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
   >Harley</text>
   <text
-    x="288" y="175"
-    font-size="30pt"
+    x="300" y="175"
+    font-size="24pt"
     text-anchor="middle"
     font-family="Raleway"
     text-shadow="#FC0 1px 0 10px"
     data-subtitle="innerText"
+    data-max="50"
+    data-subtitle-size="font-size"
     data-subtitle-color="fill"
     data-draggable="true"
     letter-spacing="0.1em"
@@ -78,6 +97,8 @@ front: |
     font-size="40pt"
     text-anchor="middle"
     data-author="innerText"
+    data-max="50"
+    data-author-size="font-size"
     data-author-color="fill"
     data-draggable="true"
     text-shadow="#FC0 1px 0 10px"

@@ -2,7 +2,7 @@
 <head>
     <style>
         @page {
-            margin: 0.75in;
+            margin: 0.5in;
             sheet-size: {{ $width }} {{ $height }};
         }
     </style>

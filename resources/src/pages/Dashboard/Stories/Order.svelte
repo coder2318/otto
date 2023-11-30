@@ -6,6 +6,7 @@
 </script>
 
 <script lang="ts">
+    import qs from 'qs'
     import { useForm, page, router } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { usd } from '@/service/helpers'
@@ -16,6 +17,8 @@
     export let countries = []
     export let states = []
 
+    let query = qs.parse($page.url.split('?').slice(1).join('?'))
+
     const form = useForm({
         first_name: '',
         last_name: '',
@@ -23,7 +26,7 @@
         email: '',
         address: '',
         city: '',
-        country_code: new URLSearchParams(window.location.search).get('country_code') ?? '',
+        country_code: query?.country_code ?? '',
         state_code: '',
         postal_code: '',
         shipping_method: 'EXPRESS',

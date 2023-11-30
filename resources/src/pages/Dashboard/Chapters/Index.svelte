@@ -35,11 +35,13 @@
     let next = questions_chapters.links?.next
     let loading: boolean = false
 
-    $: query = qs.parse($page.url.replace(window.location.pathname, '').slice(1))
+    $: query = qs.parse($page.url.split('?').slice(1).join('?'))
 
-    const filter = writable(qs.parse($page.url.replace(window.location.pathname, '').slice(1))?.filter || {})
+    const filter = writable(qs.parse($page.url.split('?').slice(1).join('?'))?.filter || {})
 
     filter.subscribe((value) => {
+        if (import.meta.env.SSR) return
+
         router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), {
             only: ['questions_chapters'],
             onSuccess() {
@@ -100,10 +102,7 @@
             }
         }
 
-        window.addEventListener('scroll', function () {
-            loadMoreChapters()
-        })
-
+        window.addEventListener('scroll', loadMoreChapters)
         window.addEventListener('beforeunload', updateFilter)
 
         function updateFilter() {
@@ -114,6 +113,7 @@
 
         return () => {
             updateFilter()
+            window.removeEventListener('scroll', loadMoreChapters)
             window.removeEventListener('beforeunload', updateFilter)
         }
     })
