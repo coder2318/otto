@@ -25,7 +25,7 @@
                     switch (node.dataset[key]) {
                         case 'innerText':
                         case 'innerHTML':
-                            if (node.dataset.max) {
+                            if (node.dataset.max && value) {
                                 value = value.toString().slice(0, parseInt(node.dataset.max))
                             }
 
