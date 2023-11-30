@@ -76,16 +76,20 @@
 
     function deleteChapter(id: number) {
         chapterId = id
-        const index = questionsChapters.findIndex((obj) => obj.id === id)
-
-        questionsChapters.splice(index, 1)
 
         dialog.showModal()
     }
 
     function confirmDelete() {
         dialog.close()
-        router.delete(`/chapters/${chapterId}`)
+        router.delete(`/chapters/${chapterId}`, {
+            preserveScroll: true,
+            onSuccess() {
+                questionsChapters = questionsChapters.filter(
+                    (chapter) => chapter.id !== chapterId && chapter.type === 'chapter'
+                )
+            },
+        })
     }
 
     function selectOption(e) {
