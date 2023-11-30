@@ -27,6 +27,7 @@ use App\Models\User;
 use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -224,6 +225,7 @@ class StoryController extends Controller
                 'name' => $country->getName(),
                 'code' => $country->getAlpha2(),
             ]),
+            'payment' => Auth::user()->defaultPaymentMethod(),
             'states' => fn () => $request->has('country_code') ? collect($iso->getSubdivisions()->getAllByCountryCode($request->validated('country_code')))
                 ->map(fn (Subdivision $subdivision) => [
                     'name' => $subdivision->getName(),

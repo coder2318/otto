@@ -16,6 +16,7 @@
     export let story: { data: App.Story }
     export let countries = []
     export let states = []
+    export let payment = null
 
     let query = qs.parse($page.url.split('?').slice(1).join('?'))
 
@@ -372,10 +373,14 @@
                                 <td>Binding Type</td>
                                 <td>Hard Cover</td>
                             </tr>
+                            <tr>
+                                <td>Payment Card</td>
+                                <td>**** **** **** {payment?.card?.last4}</td>
+                            </tr>
                             {#if price}
                                 <tr>
                                     <th>Total</th>
-                                    <th>{usd(price)}</th>
+                                    <th class="text-end">{usd(price)}</th>
                                 </tr>
                             {/if}
                         </tbody>
