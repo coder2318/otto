@@ -8,6 +8,7 @@
     import languages from '@/data/translate_languages.json'
     import microphone from '@/assets/img/microphone.svg'
     import AudioBubble from './AudioBubble.svelte'
+    import { onDestroy } from 'svelte'
 
     let dialog: HTMLDialogElement
     let dialogStop: HTMLDialogElement
@@ -171,6 +172,12 @@
         recordings = recordings.length ? recordings : null
         dialog.close()
     }
+
+    onDestroy(() => {
+        clearInterval(interval)
+        mediaRecorder?.stop()
+        mediaRecorder = null
+    })
 </script>
 
 <div class="flex flex-col items-center justify-center">
