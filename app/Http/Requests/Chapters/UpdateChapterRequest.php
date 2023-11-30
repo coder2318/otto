@@ -3,6 +3,7 @@
 namespace App\Http\Requests\Chapters;
 
 use App\Data\Chapter\Status;
+use App\Rules\MinWordsRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rules\Enum;
 
@@ -17,7 +18,7 @@ class UpdateChapterRequest extends FormRequest
     {
         return [
             'title' => ['sometimes', 'required', 'string', 'max:255'],
-            'content' => ['sometimes', 'required', 'string'],
+            'content' => ['sometimes', 'required', 'string', new MinWordsRule(150)],
             'edit' => ['sometimes', 'nullable', 'string'],
             'timeline_id' => ['sometimes', 'required', 'integer', 'exists:timelines,id'],
             'cover' => ['sometimes', 'required', 'image', 'max:10240'],
