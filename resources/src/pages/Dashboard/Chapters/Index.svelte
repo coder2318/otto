@@ -76,6 +76,10 @@
 
     function deleteChapter(id: number) {
         chapterId = id
+        const index = questionsChapters.findIndex((obj) => obj.id === id)
+
+        questionsChapters.splice(index, 1)
+
         dialog.showModal()
     }
 
