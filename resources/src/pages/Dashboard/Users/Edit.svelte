@@ -152,20 +152,38 @@
 
                     <div class="grid grid-cols-1 gap-4 md:grid-cols-2">
                         <div class="form-control">
-                            <label class="label" for="full_name">
-                                <span class="label-text">Full Name</span>
+                            <label class="label" for="first_name">
+                                <span class="label-text">First Name</span>
                             </label>
                             <input
                                 class="input input-bordered"
-                                class:input-error={$form.errors['details.name']}
-                                bind:value={$form.details.name}
+                                class:input-error={$form.errors['details.first_name']}
+                                bind:value={$form.details.first_name}
                                 type="text"
                                 name="name"
-                                placeholder="Full Name"
+                                placeholder="First Name"
                             />
-                            {#if $form.errors['details.full_name']}
+                            {#if $form.errors['details.first_name']}
                                 <span class="label-text-alt mt-1 text-left text-error">
-                                    {$form.errors['details.full_name']}
+                                    {$form.errors['details.first_name']}
+                                </span>
+                            {/if}
+                        </div>
+                        <div class="form-control">
+                            <label class="label" for="last_name">
+                                <span class="label-text">Last Name</span>
+                            </label>
+                            <input
+                                class="input input-bordered"
+                                class:input-error={$form.errors['details.last_name']}
+                                bind:value={$form.details.last_name}
+                                type="text"
+                                name="name"
+                                placeholder="Last Name"
+                            />
+                            {#if $form.errors['details.last_name']}
+                                <span class="label-text-alt mt-1 text-left text-error">
+                                    {$form.errors['details.last_name']}
                                 </span>
                             {/if}
                         </div>
@@ -184,6 +202,24 @@
                             {#if $form.errors.name}
                                 <span class="label-text-alt mt-1 text-left text-error">
                                     {$form.errors.name}
+                                </span>
+                            {/if}
+                        </div>
+                        <div class="form-control">
+                            <label class="label" for="pronouns">
+                                <span class="label-text">Pronouns</span>
+                            </label>
+                            <input
+                                class="input input-bordered"
+                                class:input-error={$form.errors['details.pronouns']}
+                                bind:value={$form.details.pronouns}
+                                type="text"
+                                name="name"
+                                placeholder="Pronouns"
+                            />
+                            {#if $form.errors['details.pronouns']}
+                                <span class="label-text-alt mt-1 text-left text-error">
+                                    {$form.errors['details.pronouns']}
                                 </span>
                             {/if}
                         </div>

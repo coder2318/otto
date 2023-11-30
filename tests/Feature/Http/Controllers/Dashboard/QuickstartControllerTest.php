@@ -46,6 +46,7 @@ class QuickstartControllerTest extends TestCase
         $response = $this->actingAs($user)->post(route('dashboard.quickstart.store'), $data = [
             'first_name' => 'John',
             'last_name' => 'Doe',
+            'pronouns' => 'he/him',
             'birth_date' => '01/01/2000',
             'name' => 'John Doe',
             'phone' => '123456789',

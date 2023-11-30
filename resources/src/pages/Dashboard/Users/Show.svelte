@@ -106,7 +106,7 @@
                     <div class="book">
                         <div class="book__cover">
                             <img
-                                src={story.cover.url}
+                                src={story?.cover?.url}
                                 class="aspect-[2/3] h-full object-cover object-right"
                                 alt="cover"
                             />

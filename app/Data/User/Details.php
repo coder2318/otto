@@ -24,6 +24,12 @@ class Details extends Data
     public ?string $last_name = null;
 
     /**
+     * User pronouns
+     */
+    #[StringType, Max(255), Sometimes]
+    public ?string $pronouns = null;
+
+    /**
      * User full name
      */
     #[StringType, Max(255), Sometimes]
