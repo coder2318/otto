@@ -18,6 +18,7 @@ class TimelineQuestionResource extends JsonResource
             'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
             'covers' => $this->whenLoaded('covers', fn () => $this->resource->covers->map(fn ($cover) => $cover->getUrl())),
             'chapters' => $this->whenLoaded('chapters', fn () => ChapterResource::collection($this->resource->chapters)),
+            'chapter' => $this->whenLoaded('chapter', fn () => ChapterResource::make($this->resource->chapter)),
         ]);
     }
 }
