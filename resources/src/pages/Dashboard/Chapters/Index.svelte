@@ -238,9 +238,7 @@
                 >
                     <div class="chapterCard__img">
                         <img
-                            src={question.chapter?.cover ??
-                                question?.cover ??
-                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${question.id}`}
+                            src={question.chapter?.cover ?? question?.cover ?? `/random-image?key=${question.id}`}
                             alt={question.question}
                         />
                     </div>

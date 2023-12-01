@@ -3,6 +3,7 @@
 use App\Http\Controllers\Dashboard\PlanController;
 use App\Http\Controllers\GlobalSearchController;
 use App\Http\Controllers\Guests\AuthController as GuestAuthController;
+use App\Http\Controllers\RandomImageController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\StorageController;
@@ -26,6 +27,9 @@ Route::controller(StaticController::class)->group(function () {
     Route::get('/contact', 'contact')->name('contact');
     Route::post('/contact', 'postContact')->name('contact.store')->middleware('anti-spam');
 });
+
+// Random Image
+Route::get('/random-image', RandomImageController::class)->name('random.image');
 
 // Search
 Route::post('/search', GlobalSearchController::class)->name('search')->middleware('auth');
