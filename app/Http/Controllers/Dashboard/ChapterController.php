@@ -10,7 +10,6 @@ use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\PromptResource;
-use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
@@ -42,17 +41,19 @@ class ChapterController extends Controller
 
     public function index(Story $story, ChaptersRequest $request)
     {
-        $chapters = fn () => QuestionsChaptersResource::collection(
-            $request->chaptersQuestions($story)
+        $questions = fn () => TimelineQuestionResource::collection(
+            $request->questions($story)
+                ->simplePaginate(6)
+                ->appends($request->query())
         );
 
         if ($request->wantsJson()) {
-            return $chapters();
+            return $questions();
         }
 
         return Inertia::render('Dashboard/Chapters/Index', [
             'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
-            'questions_chapters' => $chapters,
+            'questions' => $questions,
             'timelines' => fn () => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),

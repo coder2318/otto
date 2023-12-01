@@ -18,21 +18,20 @@
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
     import axios from 'axios'
 
-    export let questions_chapters: {
-        data: App.Chapter[]
-        links: App.PaginationLinks
-        meta: App.PaginationMeta
-    }
     export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
+    export let questions: { data: App.TimelineQuestion[]; links: App.PaginationLinks; meta: App.PaginationMeta }
 
     let modal: InviteGuestModal
     let dialog: HTMLDialogElement
     let dropdownDialog: HTMLDialogElement
     let chapterId: number = null
 
-    let questionsChapters = [...questions_chapters.data]
-    let next = questions_chapters.links?.next
+    const cache = {
+        next: null,
+        questions: [...questions.data],
+    }
+
     let loading: boolean = false
 
     $: query = qs.parse($page.url.split('?').slice(1).join('?'))
@@ -43,10 +42,10 @@
         if (import.meta.env.SSR) return
 
         router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), {
-            only: ['questions_chapters'],
+            only: ['questions'],
             onSuccess() {
-                questionsChapters = [...questions_chapters.data]
-                next = questions_chapters.links?.next
+                cache.questions = [...questions.data]
+                cache.next = questions.links?.next
             },
         })
     })
@@ -59,18 +58,18 @@
     }
 
     function loadMoreChapters() {
-        if (!next || loading || window.innerHeight + Math.round(window.scrollY) < document.body.offsetHeight) {
+        if (!cache.next || loading || window.innerHeight + Math.round(window.scrollY) < document.body.offsetHeight) {
             return
         }
 
         loading = true
 
         axios
-            .get(next)
+            .get(cache.next)
             .finally(() => (loading = false))
             .then(({ data }) => {
-                questionsChapters = [...questionsChapters, ...data.data]
-                next = data.links?.next
+                cache.questions = [...cache.questions, ...data.data]
+                cache.next = data.links?.next
             })
     }
 
@@ -85,9 +84,9 @@
         router.delete(`/chapters/${chapterId}`, {
             preserveScroll: true,
             onSuccess() {
-                questionsChapters = questionsChapters.filter(
-                    (chapter) => chapter.id !== chapterId && chapter.type === 'chapter'
-                )
+                chapterId = null
+                cache.questions = [...questions.data]
+                cache.next = questions.links?.next
             },
         })
     }
@@ -228,44 +227,47 @@
 <section class="chapters" in:fade>
     <div class="otto-container">
         <div class="wrap">
-            {#each questionsChapters as chapter (chapter.type + chapter.id)}
+            {#each cache.questions as question (question.id)}
                 <a
                     class="chapterCard"
-                    href={chapter.type === 'question'
-                        ? `/stories/${story.data.id}/questions/${chapter.id}/chapters/create`
-                        : `/chapters/${chapter.id}/edit`}
+                    href={question.chapter
+                        ? `/chapters/${question.chapter.id}/edit`
+                        : `/stories/${story.data.id}/questions/${question.id}/chapters/create`}
                     use:inertia
                     in:fade
                 >
                     <div class="chapterCard__img">
                         <img
-                            src={chapter.cover ??
-                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${
-                                    chapter.type + chapter.id
-                                }`}
-                            alt={chapter.title}
+                            src={question.chapter?.cover ??
+                                question?.cover ??
+                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${question.id}`}
+                            alt={question.question}
                         />
                     </div>
 
                     <div class="chapterCard__content">
                         <h2 class="chapterCard-title">
-                            {chapter.context ?? ''} <i>{chapter.title}</i>
+                            {#if !question.chapter || question.chapter?.title === question.question}
+                                {question.context ?? ''} <i>{question.chapter?.title ?? question?.question}</i>
+                            {:else}
+                                {question.chapter?.title ?? question?.question}
+                            {/if}
                         </h2>
 
                         <div class="card-actions justify-between">
                             <div
                                 class="chapterCard-badge"
-                                class:badge-published={chapter.status === 'published'}
-                                class:badge-progress={chapter.status === 'draft'}
+                                class:badge-published={question.chapter?.status === 'published'}
+                                class:badge-progress={question.chapter?.status === 'draft'}
                             >
-                                {chapter.status}
+                                {question.chapter?.status ?? 'undone'}
                             </div>
                             <div>
-                                {#if chapter.status === 'undone' && !chapter.guest_id}
+                                {#if question.chapter?.status === 'undone' || !question.chapter?.status}
                                     <div class="card-actions">
                                         <button
                                             class="btn btn-secondary btn-sm"
-                                            on:click|preventDefault={() => modal.invite(chapter)}
+                                            on:click|preventDefault={() => modal.invite(question)}
                                         >
                                             Invite Guest
                                         </button>
@@ -277,11 +279,11 @@
                             </div>
                         </div>
                     </div>
-                    {#if chapter.type === 'chapter'}
+                    {#if question.chapter}
                         <div class="absolute right-4 top-4">
                             <button
                                 class="btn-trash btn btn-circle btn-error btn-outline btn-sm"
-                                on:click|preventDefault={() => deleteChapter(chapter.id)}
+                                on:click|preventDefault={() => deleteChapter(question.chapter.id)}
                             >
                                 <Fa icon={faTrash} />
                             </button>

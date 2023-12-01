@@ -113,10 +113,15 @@ declare namespace App {
     interface TimelineQuestion {
         id: number
         question: string
+        context: string | null
         order: number
         cover?: string
         covers?: string[]
+        chapter?: Chapter | null
+        chapters?: Chapter[] | null
         sub_questions: string[] | null
+        created_at: Date | string
+        updated_at: Date | string
     }
 
     interface Attachment {

@@ -5,7 +5,7 @@
 
     export let story_id: number
     let modal: HTMLDialogElement
-    let chapter: App.Chapter = null
+    let question: App.TimelineQuestion = null
 
     const form = useForm({
         name: '',
@@ -13,10 +13,9 @@
     })
 
     function submit() {
-        const url =
-            chapter.type === 'question'
-                ? `/stories/${story_id}/questions/${chapter.id}/invite`
-                : `/chapters/${chapter.id}/invite`
+        const url = question.chapter
+            ? `/chapters/${question.chapter.id}/invite`
+            : `/stories/${story_id}/questions/${question.id}/invite`
 
         $form.post(url, {
             onSuccess: () => {
@@ -25,9 +24,9 @@
         })
     }
 
-    export function invite(ch: App.Chapter) {
+    export function invite(q: App.TimelineQuestion) {
         modal.showModal()
-        chapter = ch
+        question = q
     }
 </script>
 
