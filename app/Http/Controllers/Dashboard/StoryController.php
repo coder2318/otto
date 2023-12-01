@@ -27,7 +27,6 @@ use App\Models\User;
 use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
@@ -289,7 +288,7 @@ class StoryController extends Controller
             config('mail.from.address'),
             LineItem::from([
                 'printable_normalization' => PrintableNormalization::from([
-                    'external_id' => $payment ? $payment->external_id : null,
+                    'external_id' => isset($payment) ? $payment->external_id : null, // @phpstan-ignore-line
                     'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
                     'cover' => ['source_url' => $story->book_cover->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
                     'interior' => ['source_url' => $story->book->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line

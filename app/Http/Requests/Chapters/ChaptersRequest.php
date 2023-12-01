@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\Chapters;
 
-use App\Data\Chapter\Status;
 use App\Models\Story;
 use Illuminate\Contracts\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Builder as EloquentBuilder;
@@ -17,8 +16,7 @@ class ChaptersRequest extends FormRequest
         return QueryBuilder::for($builder, $this)
             ->allowedFilters([
                 AllowedFilter::exact('timeline_id'),
-                AllowedFilter::callback('status', fn (EloquentBuilder $q, $value) =>
-                    $q->whereRaw("COALESCE(chapters.status, 'undone') = '$value'")
+                AllowedFilter::callback('status', fn (EloquentBuilder $q, $value) => $q->whereRaw("COALESCE(chapters.status, 'undone') = '$value'")
                 ),
             ]);
     }
