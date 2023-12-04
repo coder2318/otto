@@ -24,12 +24,12 @@
         status: chapter.data.status,
     })
 
-    function submit(event: SubmitEvent) {
+    function transcribe(event) {
         $form
             .transform((data) => ({
                 _method: 'PUT',
                 ...data,
-                status: event.submitter.dataset?.status ?? data.status,
+                status: event.target.dataset?.status ?? data.status,
                 redirect: 'dashboard.chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
@@ -67,7 +67,7 @@
 
 <ChapterTipBanner title="OttoStory recording tip:" questions={chapter.data.question.sub_questions} />
 
-<form on:submit|preventDefault={submit} in:fade>
+<form in:fade>
     <section class="record">
         <div class="otto-container">
             <div class="wrap" class:withoutSlider={!chapter.data?.question?.covers?.length}>
@@ -77,6 +77,7 @@
                             min={1000 * 60}
                             max={1000 * 60 * 10}
                             maxFiles={1}
+                            {transcribe}
                             bind:recordings={$form.attachments}
                         />
                     </div>
@@ -103,11 +104,6 @@
                     <img src={goBackLinkIcon} alt="Record" />
                     <span>Go Back</span>
                 </a>
-                {#if $form.isDirty}
-                    <button type="submit" class="btn btn-primary btn-outline rounded-full" data-status="draft">
-                        Transcribe
-                    </button>
-                {/if}
             </div>
         </div>
     </section>

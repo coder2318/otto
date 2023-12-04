@@ -28,6 +28,7 @@
     export let max: number | null = null
     export let recordings: Array<{ file: File; translate?: typeof translate }>
     export let maxFiles: number = null
+    export let transcribe
 
     $: setTranslation(translate)
 
@@ -102,6 +103,7 @@
                 ]
 
                 stream.getTracks().forEach((track) => track.stop())
+                transcribe(event)
             })
 
             createBubbles(stream)
@@ -139,7 +141,6 @@
         clearInterval(interval)
         mediaRecorder?.stop()
         mediaRecorder = null
-
         dialogStop.close()
     }
 
@@ -288,7 +289,7 @@
     <form method="dialog" class="modal-box">
         <h3 class="text-lg font-bold">Are you sure you want to stop this recording?</h3>
         <div class="modal-action">
-            <button class="btn btn-error btn-sm" on:click|preventDefault={confirmStopRecording}>Stop</button>
+            <button class="btn btn-error btn-sm" data-status="draft" on:click={confirmStopRecording}>Stop</button>
             <button class="btn btn-sm" on:click={() => dialogStop.close()}>Close</button>
         </div>
     </form>
