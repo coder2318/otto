@@ -94,6 +94,9 @@
 
     function submit(event: SubmitEvent) {
         $form.submit(event.submitter.dataset.method, window.location.pathname, {
+            preserveState: true,
+            preserveScroll: true,
+            replace: true,
             only: ['price', 'flash', 'errors'],
         })
     }
@@ -154,7 +157,7 @@
                                 placeholder="First Name"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.first_name}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -174,7 +177,7 @@
                                 placeholder="Last Name"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.last_name}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -194,7 +197,7 @@
                                 placeholder="Phone Number"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.phone}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -214,7 +217,7 @@
                                 placeholder="Email Address"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.email}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -234,6 +237,7 @@
                                 placeholder="Address"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
+                                on:change={onInput}
                             />
                             {#if $form.errors.address}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -296,7 +300,7 @@
                                 placeholder="City"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.city}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -316,7 +320,7 @@
                                 placeholder="Postal Code"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                             />
                             {#if $form.errors.postal_code}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -356,7 +360,7 @@
                                 placeholder="Quantity"
                                 class="input input-bordered input-ghost"
                                 disabled={$form.processing}
-                                on:input={onInput}
+                                on:change={onInput}
                                 min="1"
                             />
                             {#if $form.errors.quantity}
@@ -431,7 +435,7 @@
                             class="btn btn-primary w-full rounded-full"
                             class:btn-outline={$form.processing || !price}
                             disabled={$form.processing}
-                            data-method={price ? 'POST' : 'PATCH'}
+                            data-method={price ? 'post' : 'patch'}
                         >
                             {#if $form.processing}
                                 <span class="loading loading-spinner" />

@@ -229,7 +229,7 @@
                 <button
                     class="btn btn-circle btn-neutral border border-neutral-content/50"
                     type="button"
-                    on:click|preventDefault={dialogStop.showModal()}
+                    on:click|preventDefault={() => dialogStop.showModal()}
                 >
                     <Fa icon={faStop} />
                 </button>
