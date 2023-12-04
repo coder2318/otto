@@ -15,8 +15,8 @@ class QuestionsChaptersResource extends JsonResource
     public function toArray(Request $request): array
     {
         return array_merge(parent::toArray($request), [
-            'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl('chapters-list')),
-            'chapter' => $this->whenLoaded('chapter', fn () => ChapterResource::make($this->resource->chapter)),
+            'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
+            'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question)),
         ]);
     }
 }

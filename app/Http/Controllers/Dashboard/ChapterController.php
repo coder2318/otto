@@ -10,7 +10,6 @@ use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\PromptResource;
-use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
@@ -42,7 +41,7 @@ class ChapterController extends Controller
 
     public function index(Story $story, ChaptersRequest $request)
     {
-        $questions = fn () => QuestionsChaptersResource::collection(
+        $questions = fn () => TimelineQuestionResource::collection(
             $request->questions($story)
                 ->simplePaginate(6)
                 ->appends($request->query())

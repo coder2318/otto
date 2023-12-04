@@ -84,11 +84,6 @@ class Chapter extends Model implements HasMedia
             ->performOnCollections('images')
             ->fit(Manipulations::FIT_MAX, 480, 672)
             ->optimize();
-
-        $this->addMediaConversion('chapters-list')
-            ->performOnCollections('cover')
-            ->fit(Manipulations::FIT_MAX, 720, 360)
-            ->optimize();
     }
 
     public function toSearchableArray()

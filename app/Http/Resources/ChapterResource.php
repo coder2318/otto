@@ -16,7 +16,7 @@ class ChapterResource extends JsonResource
     public function toArray(Request $request): array
     {
         return array_merge(parent::toArray($request), [
-            'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl('chapters-list')),
+            'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl()),
             'attachments' => $this->whenLoaded('attachments', fn () => $this->resource->attachments->map(
                 fn (Media $record) => [
                     'id' => $record->id,
