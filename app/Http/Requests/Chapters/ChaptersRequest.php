@@ -36,7 +36,7 @@ class ChaptersRequest extends FormRequest
                 'timeline_questions.timeline_id',
                 DB::raw('COALESCE(`c`.`status`, "undone") as `status`'),
                 DB::raw('COALESCE(`c`.`created_at`, `timeline_questions`.`created_at`) as `created_at`'),
-            ])->getQuery();
+            ])->getQuery()->getQuery();
 
         $chapters = $story->chapters()->whereNull('timeline_question_id')
             ->select([
@@ -47,10 +47,10 @@ class ChaptersRequest extends FormRequest
                 DB::raw('NULL as `context`'),
                 'status',
                 'created_at',
-            ])->getQuery();
+            ])->getQuery()->getQuery();
 
-        $query = $questions->unionAll($chapters)->getQuery()->orderBy('created_at', 'desc');
-        $query = TimelineQuestion::from(DB::raw("({$query->toSql()}) as a"))
+        $query = $questions->union($chapters)->orderBy('created_at', 'desc');
+        $query = TimelineQuestion::from(DB::raw("({$query->toSql()}) as a")) // @phpstan-ignore-line
             ->setBindings($query->getRawBindings())
             ->with(['chapter.cover', 'cover']);
 
