@@ -34,6 +34,33 @@
         quantity: 1,
     })
 
+    function onInput() {
+        if ($form.processing) {
+            return
+        }
+
+        const valid =
+            !!$form.first_name &&
+            !!$form.last_name &&
+            !!$form.phone &&
+            !!$form.email &&
+            !!$form.address &&
+            !!$form.city &&
+            !!$form.country_code &&
+            !!$form.state_code &&
+            !!$form.postal_code &&
+            !!$form.shipping_method &&
+            !!$form.quantity
+
+        if (valid) {
+            $form.patch(window.location.pathname, {
+                preserveScroll: true,
+                preserveState: true,
+                only: ['price', 'flash', 'errors'],
+            })
+        }
+    }
+
     const shipping_methods = [
         {
             id: 'MAIL',
@@ -82,6 +109,9 @@
                 country_code: $form.country_code,
             },
             {
+                preserveState: true,
+                preserveScroll: true,
+                replace: true,
                 only: ['states'],
                 onBefore: () => {
                     $form.state_code = ''
@@ -123,7 +153,8 @@
                                 id="first_name"
                                 placeholder="First Name"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.first_name}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -142,7 +173,8 @@
                                 id="last_name"
                                 placeholder="Last Name"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.last_name}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -161,7 +193,8 @@
                                 id="phone"
                                 placeholder="Phone Number"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.phone}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -180,7 +213,8 @@
                                 id="email"
                                 placeholder="Email Address"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.email}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -199,7 +233,7 @@
                                 id="address"
                                 placeholder="Address"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
                             />
                             {#if $form.errors.address}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -215,7 +249,8 @@
                                 class="select select-bordered select-ghost"
                                 bind:value={$form.country_code}
                                 on:change={getStates}
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:change={onInput}
                             >
                                 <option value="" disabled>Country</option>
                                 {#each countries as country}
@@ -235,7 +270,8 @@
                             <select
                                 class="select select-bordered select-ghost"
                                 bind:value={$form.state_code}
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:change={onInput}
                             >
                                 <option value="" disabled>State</option>
                                 {#each states as state}
@@ -259,7 +295,8 @@
                                 id="city"
                                 placeholder="City"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.city}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -278,7 +315,8 @@
                                 id="postal_code"
                                 placeholder="Postal Code"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                             />
                             {#if $form.errors.postal_code}
                                 <span class="label-text-alt mt-1 text-left text-error">
@@ -293,7 +331,8 @@
                             <select
                                 class="select select-bordered select-ghost"
                                 bind:value={$form.shipping_method}
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:change={onInput}
                             >
                                 {#each shipping_methods as method}
                                     <option value={method.id}>{method.name}</option>
@@ -316,7 +355,8 @@
                                 id="quantity"
                                 placeholder="Quantity"
                                 class="input input-bordered input-ghost"
-                                disabled={!!price}
+                                disabled={$form.processing}
+                                on:input={onInput}
                                 min="1"
                             />
                             {#if $form.errors.quantity}
@@ -383,38 +423,25 @@
                                     {/if}
                                 </td>
                             </tr>
-                            {#if price}
-                                <tr>
-                                    <th>Total</th>
-                                    <th class="text-end">{usd(price)}</th>
-                                </tr>
-                            {/if}
                         </tbody>
                     </table>
                     <div class="card-actions">
-                        {#if !price}
-                            <button
-                                type="submit"
-                                class="otto-btn-primary"
-                                disabled={$form.processing}
-                                data-method="patch"
-                            >
-                                {#if $form.processing}
-                                    <span class="loading loading-spinner" />
-                                {/if} Calculate Price
-                            </button>
-                        {:else}
-                            <button
-                                type="submit"
-                                class="otto-btn-primary"
-                                disabled={$form.processing}
-                                data-method="post"
-                            >
-                                {#if $form.processing}
-                                    <span class="loading loading-spinner" />
-                                {/if} Order Your Book
-                            </button>
-                        {/if}
+                        <button
+                            type="submit"
+                            class="btn btn-primary w-full rounded-full"
+                            class:btn-outline={$form.processing || !price}
+                            disabled={$form.processing}
+                            data-method={price ? 'POST' : 'PATCH'}
+                        >
+                            {#if $form.processing}
+                                <span class="loading loading-spinner" />
+                            {/if}
+                            {#if price}
+                                Order Your Book <b>{usd(price)}</b>
+                            {:else}
+                                Calculate Price
+                            {/if}
+                        </button>
                     </div>
                 </div>
             </div>

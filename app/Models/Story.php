@@ -105,7 +105,7 @@ class Story extends Model implements HasMedia
             $max = Auth::user()?->plan?->metadata['pages'] ?? 250;
             $total = $this->pages / $max;
 
-            return min(round($total, 2) * 100, 100);
+            return round(min($total, 1) * 100);
         });
     }
 
