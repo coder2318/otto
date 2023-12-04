@@ -1,54 +1,42 @@
 <script lang="ts">
     import blueMicrophone from '@/assets/img/blue-microphone.svg'
-    export let tip
-    export let title
+    import { onMount } from 'svelte'
+    export let title: string
+    export let questions: string[] = []
+
+    let carousel: HTMLDivElement
+
+    onMount(() => {
+        const interval = setInterval(() => {
+            if (!carousel) return
+
+            carousel.scrollLeft =
+                carousel.scrollLeft >= carousel.scrollWidth - carousel.offsetWidth
+                    ? 0
+                    : carousel.scrollLeft + carousel.offsetWidth
+        }, 10000)
+
+        return () => clearInterval(interval)
+    })
 </script>
 
-<section class="bannerTip">
-    <div class="otto-container">
-        <div class="block">
-            <div class="wrap">
-                <img class="bannerTip-icon" src={blueMicrophone} alt="Microphone" />
-                <span class="bannerTip-subtitle">{title}</span>
+{#if questions.length > 0}
+    <section class="relative mb-5 text-primary">
+        <div class="otto-container">
+            <div class="flex flex-col gap-2 rounded-3xl bg-[#cfe3f3] p-6">
+                <div class="flex items-center gap-2">
+                    <img src={blueMicrophone} alt="Microphone" />
+                    <span class="text-xl font-bold">{title}</span>
+                </div>
+
+                <div bind:this={carousel} class="carousel rounded-box w-full">
+                    {#each questions as question}
+                        <div class="carousel-item w-full">
+                            <p class="text-3xl">{question}</p>
+                        </div>
+                    {/each}
+                </div>
             </div>
-            <p class="fz_h4">{tip}</p>
         </div>
-    </div>
-</section>
-
-<style lang="scss">
-    .bannerTip {
-        position: relative;
-        margin-bottom: 20px;
-        color: #0c345c;
-
-        .block {
-            background-color: #cfe3f3;
-            padding: 16px 30px;
-            border-radius: 24px;
-
-            @media (max-width: 767px) {
-                padding: 16px 20px;
-            }
-        }
-
-        .wrap {
-            display: flex;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-
-        &-icon {
-            margin-right: 10px;
-        }
-
-        &-subtitle {
-            font-weight: 700;
-            font-size: 20px;
-            color: inherit;
-        }
-        p {
-            color: inherit;
-        }
-    }
-</style>
+    </section>
+{/if}

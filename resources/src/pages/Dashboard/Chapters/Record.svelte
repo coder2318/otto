@@ -65,10 +65,7 @@
 
 <ChapterNameBanner title={$form.title} />
 
-<ChapterTipBanner
-    title="OttoStory recording tip:"
-    tip="Record at least 1 minute to unlock Transcribing with OttoStory AI"
-/>
+<ChapterTipBanner title="OttoStory recording tip:" questions={chapter.data.question.sub_questions} />
 
 <form on:submit|preventDefault={submit} in:fade>
     <section class="record">
