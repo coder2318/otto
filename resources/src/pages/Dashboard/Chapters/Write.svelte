@@ -13,6 +13,8 @@
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
     import TipTap from '@/components/TipTap.svelte'
+    import languages from '@/data/translate_languages.json'
+    import axios from 'axios'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
@@ -25,6 +27,13 @@
         status: chapter.data.status,
         images: [],
     })
+
+    let translate = {
+        source: null as string | null,
+        target: null as string | null,
+    }
+
+    let language: string | null = null
 
     onMount(() => {
         if (transcriptions) {
@@ -70,6 +79,20 @@
                 },
             })
     }
+
+    async function translateText(language) {
+        axios
+            .post('/translate', {
+                text: $form.content,
+                options: {
+                    target: language,
+                    format: 'text',
+                },
+            })
+            .then((res) => {
+                $form.content = res.data.text
+            })
+    }
 </script>
 
 <svelte:head>
@@ -108,6 +131,18 @@
                         </a>
                     </div>
                     <div class="flex items-center gap-4">
+                        <select
+                            name="language"
+                            id="language"
+                            class="select select-primary"
+                            bind:value={language}
+                            on:change={() => translateText(language)}
+                        >
+                            <option value={null}>Default</option>
+                            {#each languages as language}
+                                <option value={language.code}>{language.language}</option>
+                            {/each}
+                        </select>
                         {#if $form.content != chapter.data.content}
                             <button type="submit" class="otto-btn-secondary medium" data-status="draft">
                                 Save & Next
