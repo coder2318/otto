@@ -119,6 +119,7 @@ declare namespace App {
         order: number
         cover?: string
         covers?: string[]
+        chapter_id: number | undefined
         chapter?: Chapter | null
         chapters?: Chapter[] | null
         sub_questions: string[] | null

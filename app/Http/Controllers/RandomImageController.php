@@ -12,7 +12,7 @@ class RandomImageController extends Controller
     {
         $media = Media::where('model_type', TimelineQuestion::class)
             ->where('collection_name', 'cover')
-            ->inRandomOrder($request->query('key'))
+            ->inRandomOrder(intval($request->query('key')))
             ->firstOrFail();
 
         return redirect($media->getUrl());

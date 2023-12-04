@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Spatie\MediaLibrary\HasMedia;
@@ -50,8 +49,13 @@ class TimelineQuestion extends Model implements HasMedia
         return $this->hasMany(Chapter::class);
     }
 
-    public function chapter(): HasOne
+    /**
+     * Needed to correctly attach chapters using joined chapter entities (crutch)
+     *
+     * @see \App\Http\Requests\Chapters\ChaptersRequest
+     */
+    public function chapter(): BelongsTo
     {
-        return $this->chapters()->one()->latestOfMany();
+        return $this->belongsTo(Chapter::class);
     }
 }

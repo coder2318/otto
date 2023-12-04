@@ -101,6 +101,18 @@
         dropdownDialog.close()
     }
 
+    function id(question: App.TimelineQuestion) {
+        if (question.id) {
+            return 'question-' + question.id
+        }
+
+        if (question.chapter_id) {
+            return 'chapter-' + question.chapter_id
+        }
+
+        return null
+    }
+
     onMount(() => {
         if (Object.keys($filter).length === 0) {
             const storageFilters = JSON.parse(localStorage.getItem('chapters-filter') ?? '{}')
@@ -228,7 +240,7 @@
 <section class="chapters" in:fade>
     <div class="otto-container">
         <div class="wrap">
-            {#each cache.questions as question (question.id)}
+            {#each cache.questions as question (id(question))}
                 <a
                     class="chapterCard"
                     href={question.chapter
@@ -239,7 +251,7 @@
                 >
                     <div class="chapterCard__img">
                         <img
-                            src={question.chapter?.cover ?? question?.cover ?? `/random-image?key=${question.id}`}
+                            src={question.chapter?.cover ?? question?.cover ?? `/random-image?key=${id(question)}`}
                             alt={question.question}
                         />
                     </div>
