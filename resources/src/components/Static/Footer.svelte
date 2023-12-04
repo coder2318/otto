@@ -24,7 +24,7 @@
                     <br class="hidden lg:inline" />
                     in a beautiful <i>OttoStory</i>.
                 </h2>
-                <a href="/stories" use:inertia class="btn btn-secondary h-16 rounded-full px-10 text-xl text-primary">
+                <a href="/dashboard" use:inertia class="btn btn-secondary h-16 rounded-full px-10 text-xl text-primary">
                     Start Writing
                 </a>
             </div>

@@ -21,7 +21,7 @@
     </h1>
 
     <div class="grid grid-cols-2 gap-4 lg:gap-8">
-        <a use:inertia href="/stories" class="card bg-neutral transition-transform hover:scale-105">
+        <a use:inertia href="/dashboard" class="card bg-neutral transition-transform hover:scale-105">
             <figure><img src={writing} alt="writing room" /></figure>
             <div class="card-body items-center">
                 <h2 class="card-title font-normal text-primary md:text-3xl">

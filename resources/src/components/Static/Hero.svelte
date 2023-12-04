@@ -20,7 +20,7 @@
             </h1>
 
             {#if $page.props?.auth?.user?.data?.subscribed}
-                <a use:inertia href="/stories" class="otto-btn-secondary">Start Writing</a>
+                <a use:inertia href="/dashboard" class="otto-btn-secondary">Start Writing</a>
             {:else}
                 <span class="flex gap-4">
                     <a use:inertia href="/plans" class="otto-btn-secondary">Start Your Book</a>

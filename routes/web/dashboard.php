@@ -3,6 +3,7 @@
 use App\Features\BetaAccess;
 use App\Http\Controllers\Dashboard\BookController;
 use App\Http\Controllers\Dashboard\ChapterController;
+use App\Http\Controllers\Dashboard\DashboardController;
 use App\Http\Controllers\Dashboard\DemoController;
 use App\Http\Controllers\Dashboard\NotificationController;
 use App\Http\Controllers\Dashboard\QuickstartController;
@@ -71,7 +72,8 @@ Route::middleware('user-configured')->group(function () {
 
     Route::middleware(['subscribed:1'])->group(function () {
         // Stories
-        Route::resource('stories', StoryController::class);
+        Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
+        // Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
             Route::get('/cover', 'cover')->name('cover');

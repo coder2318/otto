@@ -62,4 +62,4 @@ Route::group(['middleware' => ['auth:web,web-guest'], 'as' => 'guests.', 'prefix
 // User Dashboard
 Route::group(['middleware' => ['auth', 'verified'], 'as' => 'dashboard.'], function () {
     include __DIR__.'/web/dashboard.php';
-})->middleware('features:beta-access');
+});

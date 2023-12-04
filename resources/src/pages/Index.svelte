@@ -66,7 +66,7 @@
                             <span class="cardContent__target-number"> 1 </span>
                             <p>Kick-starting Your Story</p>
                         </div>
-                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
+                        <a href="/dashboard" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
                         Your Story <i>Starts Here</i>
@@ -128,7 +128,7 @@
                             <span class="cardContent__target-number second"> 2 </span>
                             <p>Intuitive Engagement with Otto</p>
                         </div>
-                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
+                        <a href="/dashboard" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
                         Your Story, <i>Your Way</i>
@@ -187,7 +187,7 @@
                             <span class="cardContent__target-number third"> 3 </span>
                             <p>Finalizing Your Masterpiece</p>
                         </div>
-                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
+                        <a href="/dashboard" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
 
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">
@@ -248,7 +248,7 @@
                             <span class="cardContent__target-number fourth"> 4 </span>
                             <p>Share and Sell Your Autobiography</p>
                         </div>
-                        <a href="/stories" use:inertia class="otto-btn-secondary"> Start Writing </a>
+                        <a href="/dashboard" use:inertia class="otto-btn-secondary"> Start Writing </a>
                     </div>
 
                     <h5 class="fz_h2 card-title mb-8 block font-normal text-primary">

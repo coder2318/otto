@@ -82,7 +82,7 @@ class Story extends Model implements HasMedia
 
     protected function pages(): Attribute
     {
-        return Attribute::get(fn () => $this->book?->getCustomProperty('pages')); // @phpstan-ignore-line
+        return Attribute::get(fn () => $this->book?->getCustomProperty('pages') ?? 0); // @phpstan-ignore-line
     }
 
     protected function words(): Attribute
@@ -98,7 +98,7 @@ class Story extends Model implements HasMedia
     protected function progress(): Attribute
     {
         return Attribute::get(function () {
-            if (!Auth::check()) {
+            if (! Auth::check()) {
                 return 0;
             }
 

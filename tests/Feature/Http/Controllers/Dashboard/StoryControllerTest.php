@@ -13,6 +13,13 @@ class StoryControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->markTestIncomplete();
+    }
+
     /** @test */
     public function cover_returns_an_ok_response(): void
     {

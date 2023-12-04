@@ -45,5 +45,5 @@
 </section>
 
 <section class="container m-4 mx-auto flex justify-center">
-    <a href="/stories" class="btn btn-secondary rounded-full"> Go back to My Stories </a>
+    <a href="/dashboard" class="btn btn-secondary rounded-full"> Go back to My Stories </a>
 </section>

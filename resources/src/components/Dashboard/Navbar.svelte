@@ -12,7 +12,7 @@
 
 <nav class="navbar sticky top-0 z-20 bg-primary px-5 py-4 text-primary-content md:px-12">
     <div class="navbar-start">
-        <a class="relative block h-14 w-fit" href="/stories" use:inertia>
+        <a class="relative block h-14 w-fit" href="/dashboard" use:inertia>
             <Logo class="hidden h-full md:block" />
             <LogoIcon class="h-full md:hidden" />
         </a>
@@ -81,7 +81,7 @@
                         <a href="/u/{user.id}" use:inertia>Profile</a>
                     </li>
                     <li>
-                        <a href="/stories" use:inertia> Stories </a>
+                        <a href="/dashboard" use:inertia> Stories </a>
                     </li>
                     <li>
                         <a href="/guests/chapters" use:inertia> Guest Chapters </a>

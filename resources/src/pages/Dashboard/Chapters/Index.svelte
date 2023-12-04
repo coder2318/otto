@@ -42,6 +42,7 @@
         if (import.meta.env.SSR) return
 
         router.visit(window.location.pathname + '?' + qs.stringify({ filter: value }), {
+            replace: true,
             only: ['questions'],
             onSuccess() {
                 cache.questions = [...questions.data]

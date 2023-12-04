@@ -75,7 +75,7 @@ class PlanController extends Controller
 
             $user->update(['plan_id' => $plan->id]);
 
-            return redirect()->intended(route('dashboard.stories.index'))->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
+            return redirect()->intended(route('dashboard.dashboard.index'))->with('message', 'You are now subscribed to the '.$plan->name.' plan!');
         }, function (Throwable $exception) {
             return redirect()->back()->with('error', $exception->getMessage());
         });
