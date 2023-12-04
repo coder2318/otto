@@ -36,7 +36,7 @@ Route::middleware('user-configured')->group(function () {
     });
 
     // Users
-    Route::controller(UserController::class)->middleware('features:'.BetaAccess::class)->name('users.')->group(function () {
+    Route::controller(UserController::class)->name('users.')->group(function () {
         Route::get('/u/{user}', 'show')->name('show');
         Route::get('/profile', 'edit')->name('edit');
         Route::match(['put', 'patch'], '/profile', 'update')->name('update');

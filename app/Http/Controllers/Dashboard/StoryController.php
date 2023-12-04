@@ -71,7 +71,10 @@ class StoryController extends Controller
     public function show(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Show', [
-            'story' => fn () => StoryResource::make($story->load('cover')),
+            'story' => fn () => StoryResource::make($story
+                ->load('cover')
+                ->append(['pages', 'words', 'progress'])
+            ),
         ]);
     }
 

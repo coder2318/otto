@@ -115,10 +115,11 @@
                     >
                         <div class="bookProgress">
                             <div class="bookProgress__content">
-                                <span class="bookProgress-count text-primary">10%</span>
+                                <span class="bookProgress-count text-primary">{story.data.progress ?? 0}%</span>
                                 <span class="bookProgress-title text-primary">complete</span>
                             </div>
-                            <progress class="progress progress-primary" value="40" max="100"></progress>
+                            <progress class="progress progress-primary" value={story.data?.progress ?? 0} max="100"
+                            ></progress>
                         </div>
                         {#if story.data.cover?.url}
                             <a class="otto-btn-svg" href="/stories/{story.data.id}/cover" use:inertia>
@@ -142,18 +143,14 @@
                             <span class="quote-name font-serif"> ― Steve Cosgroves </span>
                         </div>
                     </div>
-                    <div class="statistics text-primary">
-                        <div class="statistics__block">
-                            <span class="statistics-count">1000</span>
-                            <span class="statistics-subtitle">Words Written</span>
+                    <div class="grid grid-cols-2 gap-4 text-primary">
+                        <div class="card bg-neutral p-6 text-center">
+                            <span class="text-6xl">{story.data.words}</span>
+                            <span class="text-lg">Words Written</span>
                         </div>
-                        <div class="statistics__block">
-                            <span class="statistics-count">60</span>
-                            <span class="statistics-subtitle">Minutes Spoken</span>
-                        </div>
-                        <div class="statistics__block">
-                            <span class="statistics-count">10</span>
-                            <span class="statistics-subtitle">Pages Written</span>
+                        <div class="card bg-neutral p-6 text-center">
+                            <span class="text-6xl">{story.data.pages}</span>
+                            <span class="text-lg">Pages Written</span>
                         </div>
                     </div>
                 </div>

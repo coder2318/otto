@@ -68,6 +68,8 @@ declare namespace App {
         user?: User
         book?: any | null
         pages?: number
+        words?: number
+        progress?: number
         timeline_id: number
         timeline?: Timeline
         pages?: number

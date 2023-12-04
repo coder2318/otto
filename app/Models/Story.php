@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Data\Chapter\Status as ChapterStatus;
 use App\Data\Story\Status;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -9,6 +10,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Laravel\Scout\Searchable;
 use Spatie\MediaLibrary\HasMedia;
@@ -86,11 +88,25 @@ class Story extends Model implements HasMedia
     protected function words(): Attribute
     {
         return Attribute::get(fn () => rescue(
-            fn () => $this->chapters()
+            fn () => $this->chapters()->where('status', ChapterStatus::PUBLISHED)
                 ->select(DB::raw('SUM(LENGTH(content) - LENGTH(REPLACE(content, " ", "")) + 1) as words'))
                 ->value('words'),
             report: false,
         ));
+    }
+
+    protected function progress(): Attribute
+    {
+        return Attribute::get(function () {
+            if (!Auth::check()) {
+                return 0;
+            }
+
+            $max = Auth::user()?->plan?->metadata['pages'] ?? 250;
+            $total = $this->pages / $max;
+
+            return min(round($total, 2) * 100, 100);
+        });
     }
 
     public function toSearchableArray()

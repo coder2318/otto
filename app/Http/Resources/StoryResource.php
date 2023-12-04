@@ -26,6 +26,9 @@ class StoryResource extends JsonResource
             ]),
             'book' => $this->whenLoaded('book', fn () => $this->resource->book->getTemporaryUrl(now()->addHour())),
             'book_cover' => $this->whenLoaded('book_cover', fn () => $this->resource->book_cover->getTemporaryUrl(now()->addHour())),
+            'pages' => $this->whenAppended('pages', fn () => $this->resource->pages),
+            'words' => $this->whenAppended('words', fn () => $this->resource->words),
+            'progress' => $this->whenAppended('progress', fn () => $this->resource->progress),
         ]);
     }
 }
