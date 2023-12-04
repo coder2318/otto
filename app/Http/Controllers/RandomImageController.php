@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Media;
 use App\Models\TimelineQuestion;
-use Illuminate\Http\Request;
 
 class RandomImageController extends Controller
 {
@@ -15,6 +14,6 @@ class RandomImageController extends Controller
             ->inRandomOrder()
             ->firstOrFail();
 
-        return redirect($media->getUrl());
+        return redirect($media->getUrl('chapters-list'));
     }
 }
