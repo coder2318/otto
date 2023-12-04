@@ -16,7 +16,7 @@ class ChaptersRequest extends FormRequest
     {
         return QueryBuilder::for($builder, $this)
             ->allowedFilters([
-                AllowedFilter::exact('timeline_id'),
+                AllowedFilter::callback('timeline_id', fn ($q, $val) => $q->where('a.timeline_id', $val)),
                 AllowedFilter::callback('status', fn ($q, $val) => $q->where('a.status', $val)),
             ]);
     }
@@ -33,6 +33,7 @@ class ChaptersRequest extends FormRequest
                 'c.id as chapter_id',
                 'timeline_questions.question',
                 'timeline_questions.context',
+                'timeline_questions.timeline_id',
                 DB::raw('COALESCE(`c`.`status`, "undone") as `status`'),
                 DB::raw('COALESCE(`c`.`created_at`, `timeline_questions`.`created_at`) as `created_at`'),
             ])->getQuery();
@@ -42,6 +43,7 @@ class ChaptersRequest extends FormRequest
                 DB::raw('NULL as `id`'),
                 'id as chapter_id',
                 'title as question',
+                'timeline_id',
                 DB::raw('NULL as `context`'),
                 'status',
                 'created_at',
