@@ -51,8 +51,6 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
             return $question;
         }
 
-        $this->getDrive();
-
         dispatch(function () use ($question, $row) {
             $question->clearMediaCollection('cover');
 
