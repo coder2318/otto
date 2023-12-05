@@ -93,7 +93,7 @@ class DemoController extends Controller
         }
 
         return Inertia::render('Dashboard/Demo/Record', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('question')),
+            'chapter' => fn () => ChapterResource::make($chapter->load('question.covers')),
         ]);
     }
 

@@ -30,16 +30,10 @@
             <div class="card bg-neutral shadow">
                 <div class="card-body gap-4">
                     <figure class="rounded-xl">
-                        <img
-                            src={question.cover ??
-                                `https://random.imagecdn.app/v1/image?width=800&height=600&category=story&format=image&key=${strRandom(
-                                    10
-                                )}`}
-                            alt=""
-                        />
+                        <img src={question.cover ?? `/random-image?key=${question.id}`} alt="" />
                     </figure>
-                    <p class="font-serif text-xl">
-                        {question.question}
+                    <p class="font-serif text-2xl">
+                        {question.context} <i>{question.question}</i>
                     </p>
                     <form class="card-actions" on:submit|preventDefault={() => submit(question.id)}>
                         <button type="submit" class="btn btn-primary btn-outline btn-lg rounded-full">
