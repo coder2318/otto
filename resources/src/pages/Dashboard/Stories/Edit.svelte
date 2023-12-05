@@ -11,10 +11,12 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { inertia, useForm, router } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { onMount } from 'svelte'
     import Sortable from 'sortablejs'
+    import Fa from 'svelte-fa'
+    import { faClose, faTrash } from '@fortawesome/free-solid-svg-icons'
 
     export let story: { data: App.Story }
     export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
@@ -28,6 +30,7 @@
     })
 
     let lists: HTMLUListElement[] = []
+    let dialog: HTMLDialogElement
 
     onMount(() => {
         const sortables = []
@@ -61,6 +64,22 @@
                     timelines: $form.timelines,
                 }),
         })
+    }
+
+    let chapterIdToDelete: number | null = null
+
+    function deleteChapter(id: number) {
+        chapterIdToDelete = id
+        dialog.showModal()
+    }
+
+    function confirmDelete() {
+        if (!chapterIdToDelete) return
+        router.delete(`/chapters/${chapterIdToDelete}`, {
+            preserveScroll: true,
+        })
+        chapterIdToDelete = null
+        dialog.close()
     }
 </script>
 
@@ -123,9 +142,18 @@
                                             <span class="collapse-content-title font-serif">{chapter.title}</span>
                                         </div>
 
-                                        <a href="/chapters/{chapter.id}/write" class="collapse-content-pencil">
-                                            <img src={pencil} alt="Pencil" />
-                                        </a>
+                                        <span class="flex gap-2">
+                                            <a href="/chapters/{chapter.id}/write" class="collapse-content-pencil">
+                                                <img src={pencil} alt="Pencil" />
+                                            </a>
+                                            <button
+                                                class="btn btn-circle btn-error btn-outline"
+                                                type="button"
+                                                on:click|preventDefault={() => deleteChapter(chapter.id)}
+                                            >
+                                                <Fa icon={faTrash} />
+                                            </button>
+                                        </span>
                                     </li>
                                 {/each}
                             </ul>
@@ -136,6 +164,28 @@
         </div>
     </section>
 </form>
+
+<dialog bind:this={dialog} class="modal">
+    <form method="dialog" class="modal-backdrop">
+        <button />
+    </form>
+    <form method="dialog" class="modal-box">
+        <div class="flex justify-end">
+            <button class="btn btn-circle btn-sm bg-white" on:click={() => dialog.close()}>
+                <Fa icon={faClose} />
+            </button>
+        </div>
+        <h3 class="text-center text-[30px] text-xl font-normal leading-[33px]">
+            Are you sure <i>want to delete this chapter?</i>
+        </h3>
+        <div class="modal-action mt-12 flex justify-around">
+            <button class="btn btn-primary btn-sm w-[150px] rounded-full" on:click|preventDefault={confirmDelete}
+                >Yes</button
+            >
+            <button class="btn btn-sm w-[150px] rounded-full py-1" on:click={() => dialog.close()}> No </button>
+        </div>
+    </form>
+</dialog>
 
 <style lang="scss">
     .otto-colapse {

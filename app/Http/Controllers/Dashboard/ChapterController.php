@@ -325,7 +325,7 @@ class ChapterController extends Controller
 
         dispatch(new RegenerateBook($chapter->story));
 
-        return redirect()->route('dashboard.stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
+        return redirect()->back()->with('message', 'Chapter deleted successfully!');
     }
 
     public function removeImage(Chapter $chapter, int $imageId)
