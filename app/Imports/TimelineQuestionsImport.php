@@ -51,18 +51,17 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
             return $question;
         }
 
-        $question->clearMediaCollection('cover');
+        dispatch(function () use ($question, $row) {
+            $question->clearMediaCollection('cover');
 
-        dump($row[4]);
+            foreach ($this->getImages($row[4]) as $file) {
+                /** @var ResponseInterface */
+                $response = $this->getDrive()->files->get($file->id, ['alt' => 'media']);
+                $question->addMediaFromStream($response->getBody())->usingFileName($file->name)->toMediaCollection('cover');
+            }
 
-        foreach ($this->getImages($row[4]) as $file) {
-            dump($file->name);
-            /** @var ResponseInterface */
-            $response = $this->getDrive()->files->get($file->id, ['alt' => 'media']);
-            $question->addMediaFromStream($response->getBody())->usingFileName($file->name)->toMediaCollection('cover');
-        }
-
-        return $question;
+            return $question;
+        });
     }
 
     /**
