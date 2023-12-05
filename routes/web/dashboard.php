@@ -34,6 +34,7 @@ Route::middleware('user-configured')->group(function () {
         Route::post('/files', 'transcribe')->name('attachments.transcribe')->middleware('demo:published');
         Route::put('/', 'update')->name('update')->middleware('demo:published');
         Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy')->middleware('demo:published');
+        Route::delete('/image/{imageId}', 'removeImage')->name('image')->middleware('demo:published');
     });
 
     // Users

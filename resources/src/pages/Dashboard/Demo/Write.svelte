@@ -6,18 +6,23 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { inertia, useForm, router } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
     import TipTap from '@/components/TipTap.svelte'
+    import languages from '@/data/translate_languages.json'
+    import Fa from 'svelte-fa'
+    import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import axios from 'axios'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
 
     let modal: HTMLDialogElement
+    let input: HTMLInputElement
 
     const form = useForm({
         content: chapter.data.content ?? '',
@@ -25,6 +30,8 @@
         status: chapter.data.status,
         images: [],
     })
+
+    let language: string | null = null
 
     onMount(() => {
         if (transcriptions) {
@@ -55,7 +62,7 @@
                 _method: 'PUT',
                 status: event.submitter.dataset?.status ?? data.status,
             }))
-            .put(`/demo`, {
+            .post(`/demo`, {
                 preserveScroll: true,
                 onSuccess: () => {
                     $form.images = []
@@ -70,6 +77,48 @@
                 },
             })
     }
+
+    async function translateText(language) {
+        if (!language) {
+            $form.content = chapter.data.content
+        }
+
+        axios
+            .post('/translate', {
+                text: chapter.data.content,
+                options: {
+                    target: language,
+                    format: 'text',
+                },
+            })
+            .then((res) => {
+                $form.content = res.data.text
+            })
+    }
+
+    function addImages(event) {
+        $form.images.push({
+            file: event.target.files[0],
+            caption: prompt('Please enter image caption'),
+            url: URL.createObjectURL(event.target.files[0]),
+        })
+
+        $form.images = $form.images
+    }
+
+    function removeImage() {
+        if (chapter.data.images?.length) {
+            router.delete(`/demo/image/${chapter.data.images[0].id}`, {
+                only: ['chapter'],
+                preserveScroll: true,
+            })
+        }
+
+        $form.images.forEach((image) => URL.revokeObjectURL(image.url))
+        $form.images = []
+    }
+
+    $: images = chapter.data.images?.length ? chapter.data.images : $form.images?.length ? $form.images : []
 </script>
 
 <svelte:head>
@@ -86,20 +135,64 @@
     <main class="otto-container">
         <div class="card bg-neutral text-neutral-content">
             <div class="card-body gap-4">
-                <div class="form-control gap-2">
+                <div
+                    class="form-control gap-2 {$form.errors.content
+                        ? 'textarea-error'
+                        : ''} textarea textarea-bordered textarea-ghost rounded-xl"
+                >
                     <TipTap
-                        class="{$form.errors.content
-                            ? 'textarea-error'
-                            : ''} textarea textarea-bordered textarea-ghost w-full rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
+                        class="w-full text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
                     />
-                    {#if $form.errors.content}
-                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
-                            {$form.errors.content}
-                        </span>
+                    <input bind:this={input} type="file" accept="image/*" class="hidden" on:change={addImages} />
+                    {#if images.length}
+                        <div class="flex flex-wrap items-center justify-center gap-4">
+                            {#each images as image, i (image.url)}
+                                <div class="relative flex flex-col items-center justify-center gap-2">
+                                    <figure
+                                        class="flex w-96 flex-col rounded-xl border-error bg-base-100"
+                                        class:border={$form.errors[`images.${i}.file`] ||
+                                            $form.errors[`images.${i}.caption`]}
+                                        in:fade
+                                    >
+                                        <button
+                                            class="btn-trash btn btn-circle btn-error btn-outline btn-sm absolute right-2 top-2"
+                                            on:click={removeImage}><Fa icon={faTrash} /></button
+                                        >
+                                        <img src={image.url} alt={image.caption} class="w-full bg-base-200" />
+                                        <figcaption class="p-2 italic">{image.caption}</figcaption>
+                                    </figure>
+                                    {#if $form.errors?.[`images.${i}.file`]}
+                                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
+                                            {$form.errors[`images.${i}.file`]}
+                                        </span>
+                                    {/if}
+                                    {#if $form.errors[`images.${i}.caption`]}
+                                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
+                                            {$form.errors?.[`images.${i}.caption`]}
+                                        </span>
+                                    {/if}
+                                </div>
+                            {/each}
+                        </div>
+                    {:else}
+                        <div class="flex">
+                            <button
+                                type="button"
+                                class="btn btn-ghost btn-sm"
+                                on:click|preventDefault={() => input.click()}
+                            >
+                                <Fa icon={faPlus} /> Add Image
+                            </button>
+                        </div>
                     {/if}
                 </div>
+                {#if $form.errors.content}
+                    <span class="badge badge-error badge-lg mx-auto text-neutral/80">
+                        {$form.errors.content}
+                    </span>
+                {/if}
                 <div class="flex justify-between">
                     <div class="flex items-center gap-4">
                         <a href="/demo/record" class="goBackLink" use:inertia>
@@ -108,7 +201,19 @@
                         </a>
                     </div>
                     <div class="flex items-center gap-4">
-                        {#if $form.content != chapter.data.content}
+                        <select
+                            name="language"
+                            id="language"
+                            class="select select-bordered select-ghost rounded-full"
+                            bind:value={language}
+                            on:change={() => translateText(language)}
+                        >
+                            <option value={null}>Default</option>
+                            {#each languages as language}
+                                <option value={language.code}>{language.language}</option>
+                            {/each}
+                        </select>
+                        {#if $form.isDirty}
                             <button type="submit" class="otto-btn-secondary medium" data-status="draft">
                                 Save & Next
                             </button>

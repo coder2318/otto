@@ -96,11 +96,8 @@
                 </div>
                 {#if plan.data.discount}
                     <div>
-                        <h2 class="card-title text-2xl text-error">- Discount</h2>
+                        <h2 class="card-title font-sans text-2xl text-error">Discount</h2>
                         <span class="text-4xl font-bold text-error">- {plan.data.discount}</span>
-                        {#if price.interval_count && price.interval}
-                            <span class="text-base-content">/{price.interval_count} {price.interval}</span>
-                        {/if}
                     </div>
                 {/if}
             </div>

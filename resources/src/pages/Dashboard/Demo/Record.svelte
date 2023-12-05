@@ -6,13 +6,13 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { useForm } from '@inertiajs/svelte'
-    import Breadcrumbs from '@/components/Demo/Breadcrumbs.svelte'
-    import Logo from '@/components/SVG/logo-o.svg.svelte'
+    import { inertia, useForm } from '@inertiajs/svelte'
     import AudioRecorder from '@/components/AudioRecorder.svelte'
     import { start, done } from '@/components/Loading.svelte'
     import { onMount } from 'svelte'
-    import { autosize } from '@/service/svelte'
+    import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
+    import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
+    import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
 
     export let chapter: { data: App.Chapter }
 
@@ -24,13 +24,13 @@
         status: chapter.data.status,
     })
 
-    function submit(event: SubmitEvent) {
+    function transcribe() {
         $form
             .transform((data) => ({
                 _method: 'PUT',
                 ...data,
                 redirect: 'dashboard.demo.write',
-                status: event.submitter.dataset?.status ?? data.status,
+                status: 'draft',
             }))
             .post(`/demo`, {
                 forceFormData: true,
@@ -40,6 +40,8 @@
     }
 
     onMount(() => {
+        if (!carousel) return
+
         let timer = 0
         const interval = setInterval(() => {
             timer += 500
@@ -61,53 +63,116 @@
     <title>{import.meta.env.VITE_APP_NAME} - {chapter.data.title}</title>
 </svelte:head>
 
-<Breadcrumbs step={2} />
+<ChapterNameBanner title={$form.title} />
 
-<form on:submit|preventDefault={submit} in:fade>
-    <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">
-        <div class="card-body gap-4 p-4 md:p-8">
-            <textarea
-                class="textarea card-title textarea-ghost resize-none font-serif text-2xl font-normal italic text-primary md:text-3xl lg:text-4xl"
-                bind:value={$form.title}
-                use:autosize={{ offset: 2 }}
-                rows="1"
-            />
+<ChapterTipBanner title="OttoStory recording tip:" questions={chapter.data.question.sub_questions} />
 
-            <div class:lg:grid-cols-2={chapter.data?.question?.sub_questions?.length} class="grid grid-cols-1 gap-8">
-                {#if chapter.data?.question?.sub_questions?.length}
-                    <div class="card min-h-[200px] rounded-xl bg-neutral-focus text-neutral-content">
-                        <div class="card-body">
-                            <div class="card-title gap-2">
-                                <Logo class="h-12" />
-                                <span>Start with a Memory:</span>
-                            </div>
+<form in:fade>
+    <section class="record">
+        <div class="otto-container">
+            <div class="wrap" class:withoutSlider={!chapter.data?.question?.covers?.length}>
+                <div class="col">
+                    <div class="recordAudio">
+                        <AudioRecorder
+                            min={1000 * 60}
+                            max={1000 * 60 * 10}
+                            maxFiles={1}
+                            onStop={transcribe}
+                            bind:recordings={$form.attachments}
+                        />
+                    </div>
+                </div>
+                {#if chapter.data?.question?.covers?.length}
+                    <div class="col">
+                        <div class="recordImage blockForImage">
                             <div class="carousel h-full overflow-hidden" bind:this={carousel}>
-                                {#each chapter.data?.question?.sub_questions as question}
-                                    <p
+                                {#each chapter.data?.question?.covers as cover}
+                                    <div
                                         class="carousel-item flex h-full w-full flex-wrap content-center justify-center text-center text-xl"
                                     >
-                                        {question}
-                                    </p>
+                                        <img src={cover} alt="Cover" />
+                                    </div>
                                 {/each}
                             </div>
                         </div>
                     </div>
                 {/if}
+            </div>
 
-                <div class="card rounded-xl bg-neutral">
-                    <div class="card-body gap-4">
-                        <AudioRecorder min={1} maxFiles={1} bind:recordings={$form.attachments} />
-                    </div>
-                </div>
+            <div class="record__buttons">
+                <a href="/demo/edit" class="goBackLink" use:inertia>
+                    <img src={goBackLinkIcon} alt="Record" />
+                    <span>Go Back</span>
+                </a>
             </div>
         </div>
-    </main>
-
-    {#if $form.isDirty}
-        <section class="container mx-auto mb-8 flex justify-end">
-            <button class="btn btn-primary btn-outline rounded-full" data-status="draft" type="submit">
-                Transcribe
-            </button>
-        </section>
-    {/if}
+    </section>
 </form>
+
+<style lang="scss">
+    .record {
+        position: relative;
+        padding-bottom: 100px;
+
+        .wrap {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-right: -30px;
+            margin-bottom: 20px;
+        }
+
+        .withoutSlider {
+            .col {
+                flex-basis: calc(100%);
+            }
+        }
+
+        .col {
+            flex-basis: calc(100% / 2 - 30px);
+            margin-right: 30px;
+
+            @media (max-width: 991px) {
+                flex-basis: calc(100%);
+                margin-bottom: 30px;
+
+                &:last-child {
+                    order: -1;
+                }
+            }
+        }
+
+        .recordAudio {
+            background: #fff;
+            padding: 48px 24px 24px 24px;
+            border-radius: 24px;
+            min-height: 520px;
+        }
+
+        .recordImage {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            background-color: #fff;
+
+            .carousel {
+                width: 100%;
+            }
+
+            .carousel-item {
+                position: relative;
+                width: 100%;
+            }
+
+            @media (max-width: 991px) {
+                aspect-ratio: 16/12;
+            }
+        }
+
+        &__buttons {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
+</style>

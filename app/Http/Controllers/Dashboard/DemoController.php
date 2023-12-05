@@ -8,9 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Http\Resources\PromptResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Models\Chapter;
 use App\Models\Media;
+use App\Models\Prompt;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
@@ -116,6 +118,13 @@ class DemoController extends Controller
             }
         }
 
+        foreach ($request->validated('images') ?? [] as $image) {
+            $chapter->clearMediaCollection('images');
+            $record = $chapter->addMedia($image['file'])
+                ->withCustomProperties(['caption' => $image['caption'] ?? null])
+                ->toMediaCollection('images', config('media-library.private_disk_name'));
+        }
+
         if (isset($transcriptions)) {
             Session::flash('transcriptions', $transcriptions);
         }
@@ -161,7 +170,7 @@ class DemoController extends Controller
         [$chapter] = $this->data($request);
 
         return Inertia::render('Dashboard/Demo/Write', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn () => ChapterResource::make($chapter->load('images')),
             'transcriptions' => fn () => session('transcriptions'),
         ]);
     }
@@ -209,6 +218,9 @@ class DemoController extends Controller
 
         return Inertia::render('Dashboard/Demo/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter),
+            'prompts' => fn () => PromptResource::collection(
+                Prompt::all(['id', 'title', 'description', 'icon', 'perspective'])
+            ),
         ]);
     }
 
@@ -231,12 +243,17 @@ class DemoController extends Controller
 
     public function book(Request $request)
     {
-        $story = $request->user()->stories()->first();
+        [$chapter, $story] = $this->data($request);
 
-        abort_if(! $story, 404);
+        return Pdf::loadView('pdf.chapter', compact('story', 'chapter'))->stream('demo.pdf');
+    }
 
-        $chapters = $story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy();
+    public function removeImage(int $imageId, Request $request)
+    {
+        [$chapter] = $this->data($request);
+        $media = $chapter->images()->where('id', $imageId)->firstOrFail();
+        $media->delete();
 
-        return Pdf::loadView('pdf.book', compact('story', 'chapters'))->stream('demo.pdf');
+        return redirect()->back()->with('message', 'Image removed successfully!');
     }
 }
