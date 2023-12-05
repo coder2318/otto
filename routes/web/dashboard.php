@@ -97,6 +97,7 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/finish', 'finish')->name('finish');
             Route::get('/congratulation', 'congratulation')->name('congratulation');
             Route::post('/invite', 'invite')->name('invite');
+            Route::delete('/image/{imageId}', 'removeImage')->name('image');
         });
 
         // Guest features

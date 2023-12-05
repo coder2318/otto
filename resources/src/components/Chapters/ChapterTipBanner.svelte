@@ -3,6 +3,7 @@
     import { onMount } from 'svelte'
     export let title: string
     export let questions: string[] = []
+    export let tip: string | null = null
 
     let carousel: HTMLDivElement
 
@@ -20,7 +21,7 @@
     })
 </script>
 
-{#if questions.length > 0}
+{#if questions.length > 0 || tip}
     <section class="relative mb-5 text-primary">
         <div class="otto-container">
             <div class="flex flex-col gap-2 rounded-3xl bg-[#cfe3f3] p-6">
@@ -29,13 +30,17 @@
                     <span class="text-xl font-bold">{title}</span>
                 </div>
 
-                <div bind:this={carousel} class="carousel rounded-box w-full">
-                    {#each questions as question}
-                        <div class="carousel-item w-full">
-                            <p class="text-3xl">{question}</p>
-                        </div>
-                    {/each}
-                </div>
+                {#if tip}
+                    <p class="text-3xl">{tip}</p>
+                {:else if questions.length > 0}
+                    <div bind:this={carousel} class="carousel rounded-box w-full">
+                        {#each questions as question}
+                            <div class="carousel-item w-full">
+                                <p class="text-3xl">{question}</p>
+                            </div>
+                        {/each}
+                    </div>
+                {/if}
             </div>
         </div>
     </section>

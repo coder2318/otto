@@ -327,4 +327,12 @@ class ChapterController extends Controller
 
         return redirect()->route('dashboard.stories.chapters.index', ['story' => $chapter->story_id])->with('message', 'Chapter deleted successfully!');
     }
+
+    public function removeImage(Chapter $chapter, int $imageId)
+    {
+        $media = $chapter->images()->where('id', $imageId)->firstOrFail();
+        $media->delete();
+
+        return redirect()->back()->with('message', 'Image removed successfully!');
+    }
 }
