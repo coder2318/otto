@@ -24,4 +24,5 @@ Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name(
     Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
     Route::get('/congratulation', 'congratulation')->name('congratulation');
     Route::get('/finish', 'finish')->name('finish');
+    Route::delete('/image/{imageId}', 'removeImage')->name('image');
 });

@@ -15,11 +15,24 @@
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import CompleteBtn from '@/components/SVG/buttons/complete-btn.svg.svelte'
     import TipTap from '@/components/TipTap.svelte'
+    import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
 
     export let chapter: { data: App.Chapter }
+    export let prompts: { data: App.Prompt[] }
 
+    $: tonePrompts = prompts.data.filter((prompt) => !prompt.perspective)
+    $: perspectivePrompts = prompts.data.filter((prompt) => prompt.perspective)
+    $: currentTone = tonePrompts.find((p) => p.id === enhanceData.tone_id)
+    $: currentPerspective = perspectivePrompts.find((p) => p.id === enhanceData.perspective_id)
+
+    let enhance: HTMLDialogElement
     let loading: boolean = true
     let compare: boolean = false
+
+    const enhanceData = {
+        tone_id: null,
+        perspective_id: null,
+    }
 
     const form = useForm({
         original: chapter.data.content,
@@ -29,8 +42,6 @@
     })
 
     $form.enhanced = ''
-
-    start()
 
     const controller = new AbortController()
 
@@ -47,14 +58,31 @@
             })
     }
 
-    onMount(() => {
-        fetch(`/guests/chapters/${chapter.data.id}/enhance/stream`, { signal: controller.signal })
+    function proccess() {
+        enhance?.close()
+
+        start()
+
+        const data = { ...enhanceData }
+
+        for (const [key, value] of Object.entries(data)) {
+            if (value === null) {
+                delete data[key]
+            }
+        }
+
+        fetch(`/guests/chapters/${chapter.data.id}/enhance/stream?${new URLSearchParams(data)}`, {
+            signal: controller.signal,
+            headers: {
+                'Content-Type': 'application/json',
+                Accept: 'application/json, text/plain',
+            },
+        })
             .then((res) => {
-                if (res.ok) return res
+                if (res.ok) return res.body.pipeThrough(new TextDecoderStream()).getReader()
 
                 throw new Error('Network response was not ok.')
             })
-            .then((res) => res.body.pipeThrough(new TextDecoderStream()).getReader())
             .then((reader) =>
                 reader.read().then(function pump({ done, value }) {
                     if (controller.signal.aborted) return
@@ -76,9 +104,13 @@
                 loading = false
                 finish()
             })
+    }
+
+    onMount(() => {
+        enhance.showModal()
 
         return () => {
-            controller.abort()
+            controller?.abort()
         }
     })
 </script>
@@ -195,6 +227,97 @@
         </div>
     </section>
 </form>
+
+<dialog bind:this={enhance} class="modal">
+    <form method="dialog" class="modal-box flex w-11/12 max-w-5xl flex-col gap-4 bg-neutral text-neutral-content">
+        <h3 class="text-2xl font-bold text-primary">How to use OttoStory AI</h3>
+        <div class="alert border-0 bg-secondary/60 text-primary">
+            We are excited you want to use our Ottostory AI. Please note this is a new feature that will take your
+            writing to the next level. In order to have the best experience – choose a tone, language, and writing
+            perspective below.
+        </div>
+        {#if tonePrompts.length > 0}
+            <div class="form-control gap-2">
+                <label class="label" for="tone">
+                    <span class="label-text">Change Tone</span>
+                </label>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="join col-span-1 items-center md:col-span-1">
+                        {#if enhanceData.tone_id}
+                            <div
+                                class="join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
+                            >
+                                {@html currentTone?.icon}
+                            </div>
+                        {/if}
+                        <select
+                            bind:value={enhanceData.tone_id}
+                            class="select join-item select-bordered select-ghost w-full"
+                        >
+                            <option disabled value={null}>Select Tone</option>
+                            {#each tonePrompts as tone}
+                                <option value={tone.id}>{tone.title}</option>
+                            {/each}
+                        </select>
+                    </div>
+                    {#if enhanceData.tone_id}
+                        <div class="col-span-2 font-serif italic text-primary">
+                            {currentTone?.description}
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+
+        {#if perspectivePrompts.length > 0}
+            <div class="form-control gap-2">
+                <label class="label" for="tone">
+                    <span class="label-text">From the Perspective of</span>
+                </label>
+                <div class="grid grid-cols-3 gap-8">
+                    <div class="join col-span-1 flex items-center md:col-span-1">
+                        {#if enhanceData.perspective_id}
+                            <div
+                                class="join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
+                            >
+                                {@html currentPerspective?.icon}
+                            </div>
+                        {/if}
+                        <select
+                            bind:value={enhanceData.perspective_id}
+                            class="select join-item select-bordered select-ghost w-full"
+                        >
+                            <option disabled value={null}>Select Perspective</option>
+                            {#each perspectivePrompts as perspective}
+                                <option value={perspective.id}>{perspective.title}</option>
+                            {/each}
+                        </select>
+                    </div>
+                    {#if enhanceData.perspective_id}
+                        <div class="col-span-2 font-serif italic text-primary">
+                            {currentPerspective?.description}
+                        </div>
+                    {/if}
+                </div>
+            </div>
+        {/if}
+
+        <div class="alert border-0 bg-secondary/60 text-primary">
+            Once you are satisfied with your selections - click the Ottostory button. On the next page – you will have a
+            chance to further edit your text and compare it to the original.
+        </div>
+
+        <div class="modal-action justify-between">
+            <a href="/guests/chapters/{chapter.data.id}/write" class="goBackLink" use:inertia>
+                <img src={goBackLinkIcon} alt="Record" />
+                <span>Back</span>
+            </a>
+            <span role="button" tabindex="0" on:click={proccess} on:keypress={(e) => e.key === 'Enter' && proccess()}>
+                <EnhanceBtn />
+            </span>
+        </div>
+    </form>
+</dialog>
 
 <style lang="scss">
     .enhance {

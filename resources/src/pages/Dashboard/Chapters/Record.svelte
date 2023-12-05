@@ -24,12 +24,12 @@
         status: chapter.data.status,
     })
 
-    function transcribe(event) {
+    function transcribe() {
         $form
             .transform((data) => ({
                 _method: 'PUT',
                 ...data,
-                status: event.target.dataset?.status ?? data.status,
+                status: 'draft',
                 redirect: 'dashboard.chapters.write',
             }))
             .post(`/chapters/${chapter.data.id}`, {
@@ -77,7 +77,7 @@
                             min={1000 * 60}
                             max={1000 * 60 * 10}
                             maxFiles={1}
-                            {transcribe}
+                            onStop={transcribe}
                             bind:recordings={$form.attachments}
                         />
                     </div>

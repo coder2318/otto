@@ -192,7 +192,12 @@ class DemoController extends Controller
 
         $user->decrement('enhances');
 
-        return new StreamedResponse(function () use ($chapter, $service) {
+        return new StreamedResponse(function () use ($chapter, $service, $request) {
+            $request->validate([
+                'tone_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+                'perspective_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+            ]);
+
             foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
                 if (connection_aborted()) {
                     return;

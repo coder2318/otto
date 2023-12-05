@@ -7,10 +7,12 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
+use App\Http\Resources\PromptResource;
 use App\Jobs\RegenerateBook;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Media;
+use App\Models\Prompt;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
@@ -96,7 +98,7 @@ class ChapterController extends Controller
     public function write(Chapter $chapter)
     {
         return Inertia::render('Guests/Chapters/Write', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn () => ChapterResource::make($chapter->load('images')),
             'transcriptions' => fn () => session('transcriptions'),
         ]);
     }
@@ -136,7 +138,7 @@ class ChapterController extends Controller
     public function record(Chapter $chapter)
     {
         return Inertia::render('Guests/Chapters/Record', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn () => ChapterResource::make($chapter->load('question.covers')),
         ]);
     }
 
@@ -191,9 +193,14 @@ class ChapterController extends Controller
         ]);
     }
 
-    public function process(Chapter $chapter, OpenAIService $service)
+    public function process(Chapter $chapter, OpenAIService $service, Request $request)
     {
-        return new StreamedResponse(function () use ($chapter, $service) {
+        return new StreamedResponse(function () use ($chapter, $service, $request) {
+            $request->validate([
+                'tone_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+                'perspective_id' => ['sometimes', 'nullable', 'numeric', 'exists:prompts,id'],
+            ]);
+
             foreach ($service->chatEditStreamed($chapter->content, $chapter->title) as $chunk) {
                 if (connection_aborted()) {
                     return;
@@ -211,6 +218,9 @@ class ChapterController extends Controller
     {
         return Inertia::render('Guests/Chapters/Enhance', [
             'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
+            'prompts' => fn () => PromptResource::collection(
+                Prompt::all(['id', 'title', 'description', 'icon', 'perspective'])
+            ),
         ]);
     }
 
@@ -233,11 +243,22 @@ class ChapterController extends Controller
             }
         }
 
+        $addedImages = false;
+
+        foreach ($request->validated('images') ?? [] as $image) {
+            $chapter->clearMediaCollection('images');
+            $record = $chapter->addMedia($image['file'])
+                ->withCustomProperties(['caption' => $image['caption'] ?? null])
+                ->toMediaCollection('images', config('media-library.private_disk_name'));
+
+            $addedImages = true;
+        }
+
         if (isset($transcriptions)) {
             Session::flash('transcriptions', $transcriptions);
         }
 
-        if ($chapter->wasChanged(['status', 'content', 'title'])) {
+        if ($chapter->wasChanged(['status', 'content', 'title']) || $addedImages) {
             dispatch(new RegenerateBook($chapter->story));
         }
 
@@ -248,5 +269,13 @@ class ChapterController extends Controller
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
+    }
+
+    public function removeImage(Chapter $chapter, int $imageId)
+    {
+        $media = $chapter->images()->where('id', $imageId)->firstOrFail();
+        $media->delete();
+
+        return redirect()->back()->with('message', 'Image removed successfully!');
     }
 }
