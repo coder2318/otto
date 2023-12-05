@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
+use App\Http\Resources\TimelineQuestionResource;
 use App\Models\Chapter;
 use App\Models\Story;
+use App\Models\TimelineQuestion;
 use Illuminate\Http\Request;
 
 class GlobalSearchController extends Controller
@@ -34,6 +36,16 @@ class GlobalSearchController extends Controller
                 $request->user()->chapters()
                     ->whereIn('chapters.id', $order = Chapter::search($request->search)->keys())
                     ->get(['chapters.id', 'chapters.content', 'chapters.title'])
+                    ->sortBy(fn ($model) => array_search($model->getKey(), $order->all()))
+            ),
+            'questions' => TimelineQuestionResource::collection(
+                TimelineQuestion::query()
+                    ->whereNotIn('id', $request->user()->chapters()
+                        ->distinct()->whereNotNull('timeline_question_id')
+                        ->pluck('timeline_question_id')
+                    )
+                    ->whereIn('id', $order = TimelineQuestion::search($request->search)->keys())
+                    ->get(['id', 'question', 'context'])
                     ->sortBy(fn ($model) => array_search($model->getKey(), $order->all()))
             ),
         ]);

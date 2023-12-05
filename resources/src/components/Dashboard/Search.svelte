@@ -6,6 +6,7 @@
     let search = $page.props?.search as {
         chapters: { data: App.Chapter[] }
         stories: { data: App.Story[] }
+        questions: { data: App.TimelineQuestion[] }
     } | null
 
     const form = useForm({
@@ -47,6 +48,9 @@
 
             $form.post('/search', {
                 only: ['search'],
+                preserveScroll: true,
+                preserveState: true,
+                replace: true,
                 onSuccess: () => {
                     search = $page.props?.search
                 },
@@ -77,9 +81,9 @@
         placeholder="Search"
         class="search input input-ghost rounded-full border-neutral pl-10"
     />
-    {#if search?.stories?.data?.length || search?.chapters?.data?.length}
+    {#if search?.stories?.data?.length || search?.chapters?.data?.length || search?.questions?.data?.length}
         <ul
-            class="menu dropdown-content rounded-box mt-2 flex max-h-[400px] min-h-fit w-96 flex-nowrap overflow-scroll bg-base-200 p-0 text-base-content drop-shadow"
+            class="menu dropdown-content rounded-box mt-2 flex max-h-[400px] min-h-fit w-96 flex-nowrap overflow-auto bg-base-200 p-0 text-base-content drop-shadow scrollbar-none"
         >
             {#if search?.stories?.data?.length}
                 <li class="menu-title bg-neutral text-neutral-content first:rounded-t-xl">Stories</li>
@@ -104,6 +108,23 @@
                             {/if}
                             {#if chapter.content}
                                 <div class="text-base-content/60">{@html highlight(chapter.content, 200)}</div>
+                            {/if}
+                        </a>
+                    </li>
+                {/each}
+            {/if}
+
+            {#if search?.questions?.data?.length}
+                <li class="menu-title bg-neutral text-neutral-content first:rounded-t-xl">Questions</li>
+
+                {#each search.questions.data as question}
+                    <li>
+                        <a href="/questions/{question.id}" class="block" use:inertia>
+                            {#if question.question}
+                                <div>{@html highlight(question.question)}</div>
+                            {/if}
+                            {#if question.context}
+                                <div class="text-base-content/60">{@html highlight(question.context, 200)}</div>
                             {/if}
                         </a>
                     </li>

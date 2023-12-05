@@ -1,5 +1,6 @@
 import daisyui from 'daisyui';
 import typography from '@tailwindcss/typography';
+import scrollbar from 'tailwind-scrollbar'
 import { fontFamily } from 'tailwindcss/defaultTheme'
 
 /** @type {import('tailwindcss').Config} */
@@ -21,6 +22,7 @@ export default {
     plugins: [
         typography,
         daisyui,
+        scrollbar,
     ],
     daisyui: {
         logs: false,

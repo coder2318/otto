@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Laravel\Scout\Searchable;
 use Spatie\Image\Manipulations;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
@@ -15,7 +16,7 @@ use Spatie\MediaLibrary\MediaCollections\Models\Media;
 
 class TimelineQuestion extends Model implements HasMedia
 {
-    use HasFactory, InteractsWithMedia;
+    use HasFactory, InteractsWithMedia, Searchable;
 
     protected $fillable = [
         'question',
@@ -67,5 +68,14 @@ class TimelineQuestion extends Model implements HasMedia
     public function chapter(): BelongsTo
     {
         return $this->belongsTo(Chapter::class);
+    }
+
+    public function toSearchableArray()
+    {
+        return [
+            'id' => $this->id,
+            'question' => $this->question,
+            'context' => $this->context,
+        ];
     }
 }
