@@ -59,9 +59,9 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
                 $response = $this->getDrive()->files->get($file->id, ['alt' => 'media']);
                 $question->addMediaFromStream($response->getBody())->usingFileName($file->name)->toMediaCollection('cover');
             }
-
-            return $question;
         });
+
+        return $question;
     }
 
     /**
