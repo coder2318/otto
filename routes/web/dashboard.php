@@ -74,7 +74,7 @@ Route::middleware('user-configured')->group(function () {
     Route::middleware(['subscribed:1'])->group(function () {
         // Stories
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
-        Route::resource('stories', StoryController::class)->only(['update', 'edit']);
+        Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
             Route::get('/cover', 'cover')->name('cover');
