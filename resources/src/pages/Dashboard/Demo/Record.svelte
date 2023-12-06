@@ -65,7 +65,7 @@
 
 <ChapterNameBanner title={$form.title} />
 
-<ChapterTipBanner title="OttoStory recording tip:" questions={chapter.data.question.sub_questions} />
+<ChapterTipBanner title="OttoStory recording tip:" questions={chapter.data?.question?.sub_questions || []} />
 
 <form in:fade>
     <section class="record">
