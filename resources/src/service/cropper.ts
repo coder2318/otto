@@ -229,8 +229,6 @@ function getEditedOptions(cropper: Cropper) {
         },
     }
 
-    console.log(filepondCropData)
-
     return filepondCropData
 }
 
