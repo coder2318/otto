@@ -29,7 +29,7 @@ class OpenAIService
         $this->fake = is_null($this->fake) ? config('services.openai.fake') : $this->fake;
     }
 
-    public function chatEdit(string $input, string $question, string $prompt = null): string
+    public function chatEdit(string $input, string $question, ?string $prompt = null): string
     {
         if ($this->fake) {
             return $input;
@@ -63,7 +63,7 @@ class OpenAIService
         return trim($result);
     }
 
-    public function chatEditStreamed(string $input, string $question, string $prompt = null, string $name = null)
+    public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null)
     {
         if ($this->fake) {
             sleep(1);

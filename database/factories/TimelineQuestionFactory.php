@@ -25,7 +25,7 @@ class TimelineQuestionFactory extends Factory
         ];
     }
 
-    public function withTimeline(int $id = null): static
+    public function withTimeline(?int $id = null): static
     {
         return $this->state(fn (array $attributes) => [
             'timeline_id' => $id ?? Timeline::inRandomOrder()->value('id'),

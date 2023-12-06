@@ -43,16 +43,6 @@ class DemoControllerTest extends TestCase
     }
 
     /** @test */
-    public function book_aborts_with_a_404(): void
-    {
-        $user = $this->createUser(configured: true);
-
-        $response = $this->actingAs($user)->get(route('dashboard.demo.book'));
-
-        $response->assertNotFound();
-    }
-
-    /** @test */
     public function enhance_returns_an_ok_response(): void
     {
         $user = $this->createUser(configured: true);

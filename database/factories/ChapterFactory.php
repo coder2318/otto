@@ -27,21 +27,21 @@ class ChapterFactory extends Factory
         ];
     }
 
-    public function withTimeline(int $id = null): static
+    public function withTimeline(?int $id = null): static
     {
         return $this->state(fn (array $attributes) => [
             'timeline_id' => $id ?? Timeline::inRandomOrder()->value('id'),
         ]);
     }
 
-    public function withStory(int $id = null): static
+    public function withStory(?int $id = null): static
     {
         return $this->state(fn (array $attributes) => [
             'story_id' => $id ?? Story::inRandomOrder()->value('id'),
         ]);
     }
 
-    public function withTimelineQuestion(int $id = null): static
+    public function withTimelineQuestion(?int $id = null): static
     {
         return $this->state(fn (array $attributes) => [
             'timeline_question_id' => $id ?? TimelineQuestion::inRandomOrder()->value('id'),

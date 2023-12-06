@@ -456,8 +456,7 @@
 
 <style lang="scss">
     .table {
-        td,
-        th {
+        td {
             @apply p-0 py-1;
         }
     }
@@ -598,11 +597,6 @@
                         }
                     }
                 }
-            }
-
-            .otto-btn-primary {
-                width: 100%;
-                height: 54px;
             }
         }
     }

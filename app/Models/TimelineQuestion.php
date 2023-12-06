@@ -52,7 +52,7 @@ class TimelineQuestion extends Model implements HasMedia
         return $this->hasMany(Chapter::class);
     }
 
-    public function registerMediaConversions(Media $media = null): void
+    public function registerMediaConversions(?Media $media = null): void
     {
         $this->addMediaConversion('chapters-list')
             ->performOnCollections('cover')

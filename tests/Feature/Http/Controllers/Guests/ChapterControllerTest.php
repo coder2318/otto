@@ -17,7 +17,7 @@ class ChapterControllerTest extends TestCase
 {
     use RefreshDatabase;
 
-    private function createGuestChapter(Guest $guest = null, User $user = null): \App\Models\Chapter
+    private function createGuestChapter(?Guest $guest = null, ?User $user = null): \App\Models\Chapter
     {
         $user ??= $this->createUser();
 

@@ -29,7 +29,7 @@ class DeepgramService
             ->withToken(config('services.deepgram.key'), 'Token');
     }
 
-    public function transcribeFromUrl(string $url, array $options = null): ?string
+    public function transcribeFromUrl(string $url, ?array $options = null): ?string
     {
         return $this->fake
             ? 'This is a fake Deepgram transcript.'
@@ -39,7 +39,7 @@ class DeepgramService
                 ->json('results.channels.0.alternatives.0.transcript');
     }
 
-    public function transcribeFromFile(FilesystemAdapter $storage, string $path, array $options = null): ?string
+    public function transcribeFromFile(FilesystemAdapter $storage, string $path, ?array $options = null): ?string
     {
         return $this->fake
             ? 'This is a fake Deepgram transcript.'

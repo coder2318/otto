@@ -34,7 +34,7 @@ class DemoController extends Controller
 
     protected Chapter $chapter;
 
-    protected function data(Request $request, TimelineQuestion $question = null)
+    protected function data(Request $request, ?TimelineQuestion $question = null)
     {
         $this->user ??= $request->user();
 

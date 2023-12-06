@@ -15,7 +15,7 @@ class MediaService
     ) {
     }
 
-    public function transcribe(Media &$media, string $source = null, string $target = null): ?string
+    public function transcribe(Media &$media, ?string $source = null, ?string $target = null): ?string
     {
         if ($media->hasCustomProperty('transcript')) {
             return $media->getCustomProperty('transcript');
@@ -61,7 +61,7 @@ class MediaService
             ->join(PHP_EOL.PHP_EOL);
     }
 
-    protected function transcribeAudio(Media &$media, string $language = null): ?string
+    protected function transcribeAudio(Media &$media, ?string $language = null): ?string
     {
         $language ??= $media->getCustomProperty('language');
 

@@ -8,7 +8,7 @@ use Illuminate\Notifications\DatabaseNotification;
 
 class NotificationController extends Controller
 {
-    public function read(Request $request, DatabaseNotification $notification = null)
+    public function read(Request $request, ?DatabaseNotification $notification = null)
     {
         $notification
             ? $notification->markAsRead()

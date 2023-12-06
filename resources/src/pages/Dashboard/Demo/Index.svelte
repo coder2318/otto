@@ -1,7 +1,6 @@
 <script context="module" lang="ts">
     import Base from '@/components/Layouts/Base.svelte'
     import Focus from '@/components/Layouts/Focus.svelte'
-    import { strRandom } from '@/service/helpers'
     export const layout = [Base, Focus]
 </script>
 
