@@ -32,6 +32,8 @@ function getEditedOptions(cropper: Cropper) {
     const canvasData = cropper.getCanvasData()
     const cropData = cropper.getData()
     const imageData = cropper.getImageData()
+    const rotate = cropData.rotate - imageData.rotate
+
     /* coordinates of each corner of the original image with the origin at the center of the canvas (rotation point) */
     const offsetTopLeftX = -imageData.naturalWidth / 2
     const offsetTopLeftY = -imageData.naturalHeight / 2
@@ -44,29 +46,23 @@ function getEditedOptions(cropper: Cropper) {
 
     /* apply rotation to each corner */
     const rotatedTopLeftX =
-        offsetTopLeftX * Math.cos((cropData.rotate * Math.PI) / 180) -
-        offsetTopLeftY * Math.sin((cropData.rotate * Math.PI) / 180)
+        offsetTopLeftX * Math.cos((rotate * Math.PI) / 180) - offsetTopLeftY * Math.sin((rotate * Math.PI) / 180)
     const rotatedTopLeftY =
-        offsetTopLeftX * Math.sin((cropData.rotate * Math.PI) / 180) +
-        offsetTopLeftY * Math.cos((cropData.rotate * Math.PI) / 180)
+        offsetTopLeftX * Math.sin((rotate * Math.PI) / 180) + offsetTopLeftY * Math.cos((rotate * Math.PI) / 180)
     const rotatedTopRightX =
-        offsetTopRightX * Math.cos((cropData.rotate * Math.PI) / 180) -
-        offsetTopRightY * Math.sin((cropData.rotate * Math.PI) / 180)
+        offsetTopRightX * Math.cos((rotate * Math.PI) / 180) - offsetTopRightY * Math.sin((rotate * Math.PI) / 180)
     const rotatedTopRightY =
-        offsetTopRightX * Math.sin((cropData.rotate * Math.PI) / 180) +
-        offsetTopRightY * Math.cos((cropData.rotate * Math.PI) / 180)
+        offsetTopRightX * Math.sin((rotate * Math.PI) / 180) + offsetTopRightY * Math.cos((rotate * Math.PI) / 180)
     const rotatedBottomLeftX =
-        offsetBottomLeftX * Math.cos((cropData.rotate * Math.PI) / 180) -
-        offsetBottomLeftY * Math.sin((cropData.rotate * Math.PI) / 180)
+        offsetBottomLeftX * Math.cos((rotate * Math.PI) / 180) - offsetBottomLeftY * Math.sin((rotate * Math.PI) / 180)
     const rotatedBottomLeftY =
-        offsetBottomLeftX * Math.sin((cropData.rotate * Math.PI) / 180) +
-        offsetBottomLeftY * Math.cos((cropData.rotate * Math.PI) / 180)
+        offsetBottomLeftX * Math.sin((rotate * Math.PI) / 180) + offsetBottomLeftY * Math.cos((rotate * Math.PI) / 180)
     const rotatedBottomRightX =
-        offsetBottomRightX * Math.cos((cropData.rotate * Math.PI) / 180) -
-        offsetBottomRightY * Math.sin((cropData.rotate * Math.PI) / 180)
+        offsetBottomRightX * Math.cos((rotate * Math.PI) / 180) -
+        offsetBottomRightY * Math.sin((rotate * Math.PI) / 180)
     const rotatedBottomRightY =
-        offsetBottomRightX * Math.sin((cropData.rotate * Math.PI) / 180) +
-        offsetBottomRightY * Math.cos((cropData.rotate * Math.PI) / 180)
+        offsetBottomRightX * Math.sin((rotate * Math.PI) / 180) +
+        offsetBottomRightY * Math.cos((rotate * Math.PI) / 180)
 
     /* offset coordinates so origin is the top left corner of the rotated canvas (ie use canvasData width and height) */
     const translatedTopLeftX = rotatedTopLeftX + canvasData.naturalWidth / 2
@@ -198,10 +194,8 @@ function getEditedOptions(cropper: Cropper) {
     const offsetY = centerY - canvasData.naturalHeight / 2
 
     /* apply reverse rotation to the point */
-    const rotatedX =
-        offsetX * Math.cos((-cropData.rotate * Math.PI) / 180) - offsetY * Math.sin((-cropData.rotate * Math.PI) / 180)
-    const rotatedY =
-        offsetX * Math.sin((-cropData.rotate * Math.PI) / 180) + offsetY * Math.cos((-cropData.rotate * Math.PI) / 180)
+    const rotatedX = offsetX * Math.cos((-rotate * Math.PI) / 180) - offsetY * Math.sin((-rotate * Math.PI) / 180)
+    const rotatedY = offsetX * Math.sin((-rotate * Math.PI) / 180) + offsetY * Math.cos((-rotate * Math.PI) / 180)
 
     /* offset coordinates so origin is the top left corner of the unrotated canvas (ie use imageData width and height) */
     const translatedX = rotatedX + imageData.naturalWidth / 2
@@ -229,11 +223,13 @@ function getEditedOptions(cropper: Cropper) {
                     vertical: cropData.scaleY < 0,
                 },
                 zoom: zoom,
-                rotation: (Math.PI / 180) * cropData.rotate,
+                rotation: (Math.PI / 180) * rotate,
                 aspectRatio: cropAreaRatio,
             },
         },
     }
+
+    console.log(filepondCropData)
 
     return filepondCropData
 }

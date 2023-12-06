@@ -196,7 +196,9 @@
                                                             server={false}
                                                             onpreparefile={async (file, blob) =>
                                                                 (parameters[field.key] = await fileToBase64(blob))}
-                                                            onremovefile={() => (parameters[field.key] = null)}
+                                                            onremovefile={() =>
+                                                                (parameters[field.key] =
+                                                                    '/build/assets/transparent.png')}
                                                             imageEditEditor={editor}
                                                             allowImageEdit={true}
                                                             allowMultiple={false}
