@@ -46,7 +46,7 @@ class QuizQuestion extends Resource
 
             Text::make('Question')->sortable()->rules('required', 'max:255'),
 
-            ArrayOfStrings::make('Answers')->sortable()->rules('required', 'array')->showOnIndex(false),
+            ArrayOfStrings::make('Answers')->sortable()->rules('required', 'string')->showOnIndex(false),
 
             Number::make('Order')->sortable()->rules('required', 'integer'),
         ];
