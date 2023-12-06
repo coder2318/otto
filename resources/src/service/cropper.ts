@@ -30,7 +30,7 @@ export function createCropperForFilepond(
 
 function getEditedOptions(cropper: Cropper) {
     const canvasData = cropper.getCanvasData()
-    const { cropData, imageData } = cleanRotatation(cropper.getImageData(), cropper.getData())
+    const { cropData, imageData } = normalizeRotation(cropper.getImageData(), cropper.getData())
 
     /* coordinates of each corner of the original image with the origin at the center of the canvas (rotation point) */
     const offsetTopLeftX = -imageData.naturalWidth / 2
@@ -238,21 +238,31 @@ function getEditedOptions(cropper: Cropper) {
     return filepondCropData
 }
 
-function cleanRotatation(imageData: Cropper.ImageData, cropData: Cropper.Data) {
-    const angle = (imageData.rotate * Math.PI) / 180
+function normalizeRotation(imageData: Cropper.ImageData, cropData: Cropper.Data) {
+    const natural = rotate(-imageData.rotate, imageData.naturalWidth, imageData.naturalHeight)
+    const normal = rotate(-imageData.rotate, imageData.width, imageData.height)
 
-    imageData.naturalWidth = Math.abs(
-        imageData.naturalWidth * Math.cos(angle) + imageData.naturalHeight * Math.sin(angle)
-    )
-    imageData.naturalHeight = Math.abs(
-        imageData.naturalHeight * Math.cos(angle) + imageData.naturalWidth * Math.sin(angle)
-    )
-    imageData.width = Math.abs(imageData.width * Math.cos(angle) + imageData.height * Math.sin(angle))
-    imageData.height = Math.abs(imageData.height * Math.cos(angle) + imageData.width * Math.sin(angle))
+    imageData.naturalWidth = natural.width
+    imageData.naturalHeight = natural.height
+
+    imageData.width = normal.width
+    imageData.height = normal.height
+
     cropData.rotate = cropData.rotate - imageData.rotate
     imageData.rotate = 0
 
     return { imageData, cropData }
+}
+
+function rotate(angle: number, width: number, height: number) {
+    angle = (angle * Math.PI) / 180
+    const cos = Math.cos(angle)
+    const sin = Math.sin(angle)
+
+    return {
+        width: Math.abs(width * cos + height * sin),
+        height: Math.abs(width * sin + height * cos),
+    }
 }
 
 function getCenterPointToIntersectionDistance(
