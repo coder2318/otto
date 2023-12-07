@@ -7,7 +7,7 @@
 
 <section class="regSection flex flex-col">
     <div class="otto-container flex flex-1 flex-col">
-        <div class="relative flex flex-1 rounded-3xl bg-base-200 p-8 pt-16 md:pt-8">
+        <div class="relative flex flex-1 rounded-3xl bg-base-200 p-4 pt-16 md:pt-8">
             <slot />
             <img class="womanIllustration" src={womanIllustration} alt="Illustration" />
             <img class="manIllustration" src={manIllustration} alt="Illustration" />
