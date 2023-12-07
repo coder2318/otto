@@ -13,7 +13,6 @@
         <meta name="msapplication-TileColor" content="#F1EDE7">
         <meta name="csrf-token" content="{{ csrf_token() }}">
 
-        <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_tag') }}"></script>
         @if(config('services.google.analytics_tag'))
             <!-- Google tag (gtag.js) -->
             <script async src="https://www.googletagmanager.com/gtag/js?id={{ config('services.google.analytics_tag') }}"></script>
