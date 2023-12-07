@@ -141,7 +141,7 @@
                         : ''} textarea textarea-bordered textarea-ghost rounded-xl"
                 >
                     <TipTap
-                        class="w-full text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
+                        class="min-h-[150px] w-full text-lg first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary md:text-2xl"
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
                     />
@@ -151,7 +151,7 @@
                             {#each images as image, i (image.url)}
                                 <div class="relative flex flex-col items-center justify-center gap-2">
                                     <figure
-                                        class="flex w-96 flex-col rounded-xl border-error bg-base-100"
+                                        class="flex w-full max-w-sm flex-col rounded-xl border-error bg-base-100"
                                         class:border={$form.errors[`images.${i}.file`] ||
                                             $form.errors[`images.${i}.caption`]}
                                         in:fade
@@ -193,14 +193,14 @@
                         {$form.errors.content}
                     </span>
                 {/if}
-                <div class="flex justify-between">
+                <div class="flex flex-col justify-between gap-4 md:flex-row">
                     <div class="flex items-center gap-4">
                         <a href="/chapters/{chapter.data.id}/edit" class="goBackLink" use:inertia>
                             <img src={goBackLinkIcon} alt="Record" />
                             <span>Record more</span>
                         </a>
                     </div>
-                    <div class="flex items-center gap-4">
+                    <div class="flex flex-col items-stretch gap-4 md:flex-row md:items-center">
                         <select
                             name="language"
                             id="language"
@@ -214,7 +214,7 @@
                             {/each}
                         </select>
                         {#if $form.isDirty}
-                            <button type="submit" class="otto-btn-secondary medium" data-status="draft">
+                            <button type="submit" class="btn btn-secondary rounded-full" data-status="draft">
                                 Save & Next
                             </button>
                         {:else}

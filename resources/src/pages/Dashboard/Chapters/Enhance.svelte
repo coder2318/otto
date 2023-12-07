@@ -177,51 +177,39 @@
                     {/if}
                 </div>
 
-                <div class="enhance__buttons">
-                    <div class="enhance__buttons_col">
+                <div class="mt-4 flex flex-col items-stretch justify-end gap-2 md:flex-row md:items-baseline">
+                    {#if !compare && !loading}
                         <button
-                            disabled={loading || $form.isDirty || $form.processing}
-                            use:inertia={{ href: `/chapters/${chapter.data.id}/edit` }}
-                            class="goBackLink"
+                            type="button"
+                            class="btn btn-primary btn-outline rounded-full"
+                            on:click={() => {
+                                compare = true
+                                $form.use = null
+                            }}
                         >
-                            <img src={goBackLinkIcon} alt="Record" />
-                            <span>Record more</span>
+                            Compare with My Writing
                         </button>
-                    </div>
-                    <div class="enhance__buttons_col gap-4">
-                        {#if !compare && !loading}
-                            <button
-                                type="button"
-                                class="otto-btn-outline small"
-                                on:click={() => {
-                                    compare = true
-                                    $form.use = null
-                                }}
-                            >
-                                Compare with My Writing
-                            </button>
-                        {/if}
-                        {#if $form.isDirty && $form.use && !loading}
-                            <button
-                                type="submit"
-                                class="otto-btn-secondary small"
-                                data-status="draft"
-                                data-redirect="dashboard.chapters.congratulation"
-                            >
-                                Save & Next
-                            </button>
-                        {/if}
-                        {#if $form.isDirty && $form.use && !loading}
-                            <button
-                                type="submit"
-                                class="otto-btn-svg"
-                                data-status="published"
-                                data-redirect="dashboard.chapters.finish"
-                            >
-                                <CompleteBtn />
-                            </button>
-                        {/if}
-                    </div>
+                    {/if}
+                    {#if $form.isDirty && $form.use && !loading}
+                        <button
+                            type="submit"
+                            class="btn btn-secondary rounded-full"
+                            data-status="draft"
+                            data-redirect="dashboard.chapters.congratulation"
+                        >
+                            Save & Next
+                        </button>
+                    {/if}
+                    {#if $form.isDirty && $form.use && !loading}
+                        <button
+                            type="submit"
+                            class="btn btn-secondary btn-lg rounded-full text-primary"
+                            data-status="published"
+                            data-redirect="dashboard.chapters.finish"
+                        >
+                            Complete chapter
+                        </button>
+                    {/if}
                 </div>
             </div>
         </div>
@@ -313,7 +301,7 @@
                 <span>Back</span>
             </a>
             <span role="button" tabindex="0" on:click={proccess} on:keypress={(e) => e.key === 'Enter' && proccess()}>
-                <EnhanceBtn />
+                <EnhanceBtn class="w-[208px]" />
             </span>
         </div>
     </form>

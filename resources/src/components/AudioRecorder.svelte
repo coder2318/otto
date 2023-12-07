@@ -221,7 +221,7 @@
             </label>
         </div>
     {:else}
-        <div class="palyerControls">
+        <div class="palyerControls gap-2">
             <div class="palyerTime">
                 <span class="palyerTime-variable">{msToTime(timer)}</span>
                 <span class="palyerTime-static">/ {msToTime(max)}</span>
@@ -397,7 +397,6 @@
         .palyerTime {
             display: flex;
             align-items: center;
-            margin-right: 40px;
 
             &-variable {
                 margin-right: 6px;
