@@ -12,7 +12,7 @@
     <div class="hero-overlay bg-black bg-opacity-30" />
     <div class="hero-content pb-16 pl-4 md:pb-16 md:pl-16 lg:pb-28 lg:pl-28">
         <div class="flex w-full flex-col items-start justify-center">
-            <h1 class="fz_h1 mb-12 text-white">
+            <h1 class="mb-12 text-4xl text-white md:text-5xl lg:text-7xl">
                 Every life is a story. Begin
                 <br class="hidden sm:inline" />
                 telling
@@ -20,21 +20,14 @@
             </h1>
 
             {#if $page.props?.auth?.user?.data?.subscribed}
-                <a use:inertia href="/dashboard" class="otto-btn-secondary">Start Writing</a>
+                <a use:inertia href="/dashboard" class="btn btn-secondary rounded-full">Start Writing</a>
             {:else}
                 <span class="flex gap-4">
-                    <a use:inertia href="/plans" class="otto-btn-secondary">Start Your Book</a>
-                    <a use:inertia href="/register" class="otto-btn-primary">Try A Free Chapter</a>
+                    <a use:inertia href="/plans" class="btn btn-secondary rounded-full lg:btn-lg">Start Your Book</a>
+                    <a use:inertia href="/register" class="btn btn-primary rounded-full lg:btn-lg">Try A Free Chapter</a
+                    >
                 </span>
             {/if}
         </div>
     </div>
 </header>
-
-<style lang="scss">
-    .hero {
-        .fz_h1 {
-            color: #fff;
-        }
-    }
-</style>
