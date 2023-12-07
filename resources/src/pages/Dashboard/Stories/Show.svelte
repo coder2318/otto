@@ -108,21 +108,21 @@
                             />
                         {/if}
                     </div>
-                    <div
-                        class="block__bottom"
-                        class:justify-center={!story.data.cover?.url}
-                        class:justify-between={story.data.cover?.url}
-                    >
-                        <div class="bookProgress">
-                            <div class="bookProgress__content">
-                                <span class="bookProgress-count text-primary">{story.data.progress ?? 0}%</span>
-                                <span class="bookProgress-title text-primary">complete</span>
+                    <div class="flex items-center justify-between gap-4">
+                        <div class="flex flex-1 flex-col items-center gap-2">
+                            <div class="flex w-full items-center justify-center gap-1">
+                                <span class="text-2xl text-primary md:text-4xl">{story.data.progress ?? 0}%</span>
+                                <span class="text-md text-primary md:text-xl">complete</span>
                             </div>
                             <progress class="progress progress-primary" value={story.data?.progress ?? 0} max="100"
                             ></progress>
                         </div>
                         {#if story.data.cover?.url}
-                            <a class="otto-btn-svg" href="/stories/{story.data.id}/cover" use:inertia>
+                            <a
+                                class="btn btn-circle btn-secondary mask mask-hexagon text-primary md:btn-lg"
+                                href="/stories/{story.data.id}/cover"
+                                use:inertia
+                            >
                                 <EditCoverBtn />
                             </a>
                         {/if}
@@ -144,13 +144,13 @@
                         </div>
                     </div>
                     <div class="grid grid-cols-2 gap-4 text-primary">
-                        <div class="card bg-neutral p-6 text-center">
-                            <span class="text-6xl">{story.data.words}</span>
-                            <span class="text-lg">Words Written</span>
+                        <div class="card gap-2 bg-neutral p-6 text-center">
+                            <span class="text-3xl md:text-4xl lg:text-6xl">{story.data.words}</span>
+                            <span class="text-md md:text-lg">Words Written</span>
                         </div>
                         <div class="card bg-neutral p-6 text-center">
-                            <span class="text-6xl">{story.data.pages}</span>
-                            <span class="text-lg">Pages Written</span>
+                            <span class="text-3xl md:text-4xl lg:text-6xl">{story.data.pages}</span>
+                            <span class="text-md md:text-lg">Pages Written</span>
                         </div>
                     </div>
                 </div>
