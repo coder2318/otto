@@ -160,27 +160,6 @@
                         </p>
                         <Fa class="text-2xl text-neutral" icon={faArrowDownLong} />
                     </button>
-                    <dialog bind:this={dropdownDialog} class="modal">
-                        <form method="dialog" class="modal-backdrop bg-primary/80">
-                            <button />
-                        </form>
-                        <div class="modal-box bg-transparent shadow-none">
-                            <ul class="flex flex-col gap-4">
-                                {#each timelines.data as timeline}
-                                    <li class="text-center">
-                                        <button
-                                            class="btn btn-lg w-96 justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
-                                            class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
-                                            on:click={selectOption}
-                                            value={timeline.id}
-                                        >
-                                            {timeline.title}
-                                        </button>
-                                    </li>
-                                {/each}
-                            </ul>
-                        </div>
-                    </dialog>
                     <span class="font-normal text-neutral">With These Questions</span>
                 </h1>
             </div>
@@ -334,6 +313,28 @@
         </dialog>
     </div>
 </section>
+
+<dialog bind:this={dropdownDialog} class="modal">
+    <form method="dialog" class="modal-backdrop bg-primary/80">
+        <button />
+    </form>
+    <div class="modal-box bg-transparent shadow-none">
+        <ul class="flex flex-col gap-4">
+            {#each timelines.data as timeline}
+                <li class="text-center">
+                    <button
+                        class="max-w-96 btn btn-lg w-full justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
+                        class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
+                        on:click={selectOption}
+                        value={timeline.id}
+                    >
+                        {timeline.title}
+                    </button>
+                </li>
+            {/each}
+        </ul>
+    </div>
+</dialog>
 
 <InviteGuestModal story_id={story.data.id} bind:this={modal} />
 

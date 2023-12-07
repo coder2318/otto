@@ -134,16 +134,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.293.4",
+            "version": "3.293.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "bb62581cb3796dd1866ace52ed0a750bd22936a8"
+                "reference": "f2002e52b382b45231da3f9552033f769acfebd8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/bb62581cb3796dd1866ace52ed0a750bd22936a8",
-                "reference": "bb62581cb3796dd1866ace52ed0a750bd22936a8",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/f2002e52b382b45231da3f9552033f769acfebd8",
+                "reference": "f2002e52b382b45231da3f9552033f769acfebd8",
                 "shasum": ""
             },
             "require": {
@@ -223,9 +223,9 @@
             "support": {
                 "forum": "https://forums.aws.amazon.com/forum.jspa?forumID=80",
                 "issues": "https://github.com/aws/aws-sdk-php/issues",
-                "source": "https://github.com/aws/aws-sdk-php/tree/3.293.4"
+                "source": "https://github.com/aws/aws-sdk-php/tree/3.293.5"
             },
-            "time": "2023-12-05T19:07:19+00:00"
+            "time": "2023-12-06T19:09:15+00:00"
         },
         {
             "name": "bacon/bacon-qr-code",
@@ -3545,17 +3545,17 @@
         },
         {
             "name": "laravel/nova",
-            "version": "4.32.6",
+            "version": "4.32.9",
             "source": {
                 "type": "git",
                 "url": "git@github.com:laravel/nova.git",
-                "reference": "eb3d46d7b798f54fb5ce41e23d6f0e2e912f18f8"
+                "reference": "a9272d00cddbdcfeeb4a51244c4274aec9c5aeeb"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://nova.laravel.com/dist/laravel/nova/laravel-nova-eb3d46d7b798f54fb5ce41e23d6f0e2e912f18f8-zip-a2d616.zip",
-                "reference": "eb3d46d7b798f54fb5ce41e23d6f0e2e912f18f8",
-                "shasum": "248288202316049033fad6268a0e6844135b882a"
+                "url": "https://nova.laravel.com/dist/laravel/nova/laravel-nova-a9272d00cddbdcfeeb4a51244c4274aec9c5aeeb-zip-c906a8.zip",
+                "reference": "a9272d00cddbdcfeeb4a51244c4274aec9c5aeeb",
+                "shasum": "ac4a4c3256a77bfb2695ccd4dc53b76d67dea553"
             },
             "require": {
                 "brick/money": "^0.5.0|^0.6.0|^0.7.0|^0.8.0",
@@ -3665,9 +3665,9 @@
                 "laravel"
             ],
             "support": {
-                "source": "https://github.com/laravel/nova/tree/v4.32.6"
+                "source": "https://github.com/laravel/nova/tree/v4.32.9"
             },
-            "time": "2023-11-25T17:43:14+00:00"
+            "time": "2023-12-06T21:28:31+00:00"
         },
         {
             "name": "laravel/pennant",
