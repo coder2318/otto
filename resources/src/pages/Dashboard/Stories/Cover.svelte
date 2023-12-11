@@ -141,10 +141,10 @@
                     <img class="bookCover-illustration-1" src={bookCoverIllustration1} alt="Illustration" />
                     <img class="bookCover-illustration-2" src={bookCoverIllustration2} alt="Illustration" />
                     <div class="flex flex-col gap-4">
-                        {#each grouped as [group, fields] (group)}
+                        {#each grouped as [group, fields], index (group)}
                             {#if group}
                                 <div class="collapse border border-base-content/60 bg-base-100">
-                                    <input type="radio" name="group" />
+                                    <input type="radio" name="group" checked={index === 0} />
                                     <div class="collapse-title text-xl font-medium">
                                         {group}
                                     </div>
