@@ -257,7 +257,7 @@
                         {/each}
                     </div>
                 </div>
-                <div class="bookCover__cover flex items-center justify-center">
+                <div class="bookCover__cover flex h-[500px] items-center justify-center">
                     <BookCoverBuilder
                         bind:this={builder}
                         class="select-none"
