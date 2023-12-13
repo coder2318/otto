@@ -417,10 +417,6 @@
             background-color: #fff;
             margin-right: 36px;
             border-radius: 24px;
-
-            &__bottom {
-                display: flex;
-            }
         }
 
         .cover {
@@ -462,32 +458,6 @@
             //     height: 100%;
             //     object-fit: cover;
             // }
-        }
-
-        .bookProgress {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            &__content {
-                display: flex;
-                align-items: flex-end;
-                margin-bottom: 12px;
-            }
-            &-count {
-                font-size: 36px;
-                line-height: 1;
-                margin-right: 5px;
-            }
-            &-title {
-                font-size: 18px;
-                line-height: 1;
-            }
-
-            .progress {
-                width: 220px;
-                height: 8px;
-                background-color: #e2dacf;
-            }
         }
 
         &__content {

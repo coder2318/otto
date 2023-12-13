@@ -226,8 +226,8 @@
                                 Complete chapter
                             </a>
 
-                            <a class="otto-btn-svg" href="/chapters/{chapter.data.id}/enhance" use:inertia>
-                                <EnhanceBtn />
+                            <a href="/chapters/{chapter.data.id}/enhance" use:inertia>
+                                <EnhanceBtn class="w-full" />
                             </a>
                         {/if}
                     </div>

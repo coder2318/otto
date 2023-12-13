@@ -13,7 +13,6 @@
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
     import enhanceIcon from '@/assets/img/enhance-icon.svg'
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
-    import CompleteBtn from '@/components/SVG/buttons/complete-btn.svg.svelte'
     import TipTap from '@/components/TipTap.svelte'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
 
@@ -346,18 +345,6 @@
 
             @media (max-width: 991px) {
                 padding: 16px;
-            }
-        }
-
-        &__buttons {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-top: 32px;
-
-            &_col {
-                display: flex;
-                align-items: center;
             }
         }
     }
