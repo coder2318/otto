@@ -2,6 +2,7 @@
 
 namespace App\Rules;
 
+use App\Services\TranslateService;
 use Closure;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Support\Str;
@@ -20,12 +21,13 @@ class MinWordsRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if ($this->min < $count = Str::wordCount(strip_tags($value))) {
+        if ($this->min < Str::wordCount(strip_tags($value))) {
             return;
         }
 
-        // Crutch to validate languages without spaces (Hindi, Chinese, Japanese etc.)
-        if ($count <= $this->min && $this->min < Str::length(strip_tags($value))) {
+        $value = app(TranslateService::class)->translate(strip_tags($value), ['target' => 'en'])['text'];
+
+        if ($this->min < Str::wordCount($value)) {
             return;
         }
 
