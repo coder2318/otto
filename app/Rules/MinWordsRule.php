@@ -20,11 +20,18 @@ class MinWordsRule implements ValidationRule
      */
     public function validate(string $attribute, mixed $value, Closure $fail): void
     {
-        if (Str::wordCount(strip_tags($value)) < $this->min) {
-            $fail('validation.min.words')?->translate([
-                'attribute' => $attribute,
-                'min' => $this->min,
-            ]);
+        if ($this->min < $count = Str::wordCount(strip_tags($value))) {
+            return;
         }
+
+        // Crutch to validate languages without spaces (Hindi, Chinese, Japanese etc.)
+        if ($count <= $this->min && $this->min < Str::length(strip_tags($value))) {
+            return;
+        }
+
+        $fail('validation.min.words')?->translate([
+            'attribute' => $attribute,
+            'min' => $this->min,
+        ]);
     }
 }
