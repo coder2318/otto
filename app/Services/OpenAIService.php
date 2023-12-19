@@ -152,12 +152,14 @@ class OpenAIService
     protected function getLanguage(string $input): string
     {
         $translate = app(TranslateService::class);
+
         return $translate->detectLanguage($input)['languageCode'] ?? 'en';
     }
 
     protected function translate(string $input, string $language): string
     {
         $translate = app(TranslateService::class);
+
         return $translate->translate($input, ['target' => $language])['text'] ?? $input;
     }
 
