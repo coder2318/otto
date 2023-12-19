@@ -76,15 +76,22 @@ class OpenAIService
             return true;
         }
 
+        $language = $this->getLanguage($input);
+        $prompt = $this->getPrompt($prompt ?? $this->defaultPrompt, $language);
+        $strings = [
+            'name' => $this->translate("What's your name?", $language),
+            'question' => $this->translate("Please, tell me your story on: \"$question\"", $language),
+        ];
+
         foreach ($this->segmentate($input) as $segment) {
             $messages = [
-                ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
+                ['role' => 'system', 'content' => $prompt],
             ];
 
             if ($name) {
                 $messages[] = [
                     'role' => 'assistant',
-                    'content' => "What's your name?",
+                    'content' => $strings['name'],
                 ];
 
                 $messages[] = [
@@ -95,7 +102,7 @@ class OpenAIService
 
             $messages[] = [
                 'role' => 'assistant',
-                'content' => "Please, tell me your story on: \"$question\"",
+                'content' => $strings['question'],
             ];
 
             $messages[] = [
@@ -142,15 +149,24 @@ class OpenAIService
 
     }
 
-    protected function getPrompt(string $input, string $prompt): string
+    protected function getLanguage(string $input): string
     {
         $translate = app(TranslateService::class);
-        $language = $translate->detectLanguage($input)['languageCode'] ?? 'en';
+        return $translate->detectLanguage($input)['languageCode'] ?? 'en';
+    }
 
+    protected function translate(string $input, string $language): string
+    {
+        $translate = app(TranslateService::class);
+        return $translate->translate($input, ['target' => $language])['text'] ?? $input;
+    }
+
+    protected function getPrompt(string $prompt, string $language): string
+    {
         if ($language === 'en') {
             return $prompt;
         }
 
-        return $translate->translate($prompt, ['target' => $language])['text'] ?? $prompt;
+        return $this->translate($prompt, $language);
     }
 }
