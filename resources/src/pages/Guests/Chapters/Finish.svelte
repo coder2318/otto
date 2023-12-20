@@ -14,7 +14,7 @@
     export let chapter: { data: App.Chapter }
 
     let pages = Math.round((chapter.data.content?.split(' ').filter((v) => v).length ?? 0) / 500 + 1)
-    let days = dayjs(chapter.data.updated_at).diff(dayjs(chapter.data.created_at), 'days')
+    let days = dayjs(chapter.data.updated_at).diff(dayjs(chapter.data.created_at), 'days') + 1
 </script>
 
 <svelte:head>

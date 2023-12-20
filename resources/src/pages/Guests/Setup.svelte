@@ -58,7 +58,7 @@
                     bind:value={$form.relationship}
                     type="text"
                     name="relationship"
-                    placeholder="Enter Your Relarionship"
+                    placeholder="Enter Your Relationship"
                 />
                 {#if $form.errors.relationship}
                     <span class="label-text-alt mt-1 text-left text-error">

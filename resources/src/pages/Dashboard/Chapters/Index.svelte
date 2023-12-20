@@ -17,6 +17,7 @@
     import { onMount } from 'svelte'
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
     import axios from 'axios'
+    import Placeholder from '@/components/Placeholder.svelte'
 
     export let timelines: { data: App.Timeline[] }
     export let story: { data: App.Story }
@@ -229,10 +230,11 @@
                     in:fade
                 >
                     <div class="chapterCard__img">
-                        <img
-                            src={question.chapter?.cover ?? question?.cover ?? `/random-image?key=${id(question)}`}
-                            alt={question.question}
-                        />
+                        {#if question.chapter?.cover ?? question?.cover}
+                            <img src={question.chapter?.cover ?? question?.cover} alt={question.question} />
+                        {:else}
+                            <Placeholder class="flex min-h-[180px] items-center justify-center bg-secondary/20" />
+                        {/if}
                     </div>
 
                     <div class="chapterCard__content">
@@ -430,7 +432,8 @@
             border-radius: 14px;
             margin-bottom: 16px;
 
-            img {
+            img,
+            figure {
                 position: absolute;
                 left: 0;
                 top: 0;

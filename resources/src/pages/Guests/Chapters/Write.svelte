@@ -227,7 +227,7 @@
                             </a>
 
                             <a class="otto-btn-svg" href="/guests/chapters/{chapter.data.id}/enhance" use:inertia>
-                                <EnhanceBtn />
+                                <EnhanceBtn class="w-full" />
                             </a>
                         {/if}
                     </div>

@@ -303,7 +303,7 @@
                 <span>Back</span>
             </a>
             <span role="button" tabindex="0" on:click={proccess} on:keypress={(e) => e.key === 'Enter' && proccess()}>
-                <EnhanceBtn />
+                <EnhanceBtn class="w-[208px]" />
             </span>
         </div>
     </form>
