@@ -39,7 +39,7 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
         }
 
         /** @var TimelineQuestion */
-        $question = TimelineQuestion::updateOrCreate([
+        $question = TimelineQuestion::firstOrCreate([
             'question' => $row[1],
         ], [
             'context' => $row[0],
@@ -47,13 +47,11 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
             'timeline_id' => $row[3],
         ]);
 
-        if (! isset($row[4])) {
+        if (! isset($row[4]) || $question->hasMedia('cover')) {
             return $question;
         }
 
-        if ($question->hasMedia('cover')) {
-            return $question;
-        }
+        dump($row[4]);
 
         dispatch(function () use ($question, $row) {
             $question->clearMediaCollection('cover');
