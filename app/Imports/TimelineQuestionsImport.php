@@ -51,6 +51,10 @@ class TimelineQuestionsImport implements OnEachRow, SkipsEmptyRows
             return $question;
         }
 
+        if ($question->hasMedia('cover')) {
+            return $question;
+        }
+
         dispatch(function () use ($question, $row) {
             $question->clearMediaCollection('cover');
 
