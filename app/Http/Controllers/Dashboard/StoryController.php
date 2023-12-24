@@ -153,7 +153,7 @@ class StoryController extends Controller
     public function covers(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Covers', [
-            'story' => fn () => StoryResource::make($story),
+            'story' => fn () => StoryResource::make($story->append('pages')->load('cover')),
             'covers' => fn () => BookCoverTemplateResource::collection(
                 BookCoverTemplate::paginate(12)
             ),

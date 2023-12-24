@@ -44,6 +44,14 @@ class Story extends Model implements HasMedia
         );
     }
 
+    public function sharedCover()
+    {
+        return $this->media()->one()->ofMany(
+            ['id' => 'MAX'],
+            fn ($query) => $query->where('collection_name', 'shared-cover')
+        );
+    }
+
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);

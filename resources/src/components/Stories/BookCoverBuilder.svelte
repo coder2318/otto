@@ -6,6 +6,7 @@
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
+    export let shared: any = {}
     export let pages: number = 32
     export let change = () => {}
 
@@ -50,6 +51,13 @@
     onMount(() => {
         svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
             dragHooks.push(draggable(node, svg as SVGElement, change))
+        })
+
+        Object.entries(shared).forEach(([key, value]) => {
+            const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
+            if (element?.hasAttribute('data-shared')) {
+                parameters[key] = value
+            }
         })
 
         updateSvg(parameters)

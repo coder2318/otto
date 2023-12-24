@@ -195,7 +195,7 @@
                                                             name={field.key}
                                                             server={false}
                                                             onpreparefile={async (file, blob) =>
-                                                                (parameters[field.key] = await fileToBase64(blob))}
+                                                                prepareFile(field.key, blob)}
                                                             onremovefile={() =>
                                                                 (parameters[field.key] =
                                                                     '/build/assets/transparent.png')}
@@ -262,6 +262,7 @@
                         bind:this={builder}
                         class="select-none"
                         pages={story.data.pages ?? 0}
+                        shared={story.data?.cover?.meta ?? {}}
                         {parameters}
                         change={() => {
                             changed = true

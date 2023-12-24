@@ -38,7 +38,7 @@
             in:blur={{ delay: 250, duration: 250 }}
         >
             <figure>
-                <BookCoverBuilder template={cover} pages={200} />
+                <BookCoverBuilder template={cover} pages={200} shared={story.data?.cover?.meta ?? {}} />
             </figure>
             <div class="card-body items-center">
                 <h5 class="card-title">{cover.name}</h5>
