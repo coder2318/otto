@@ -97,7 +97,7 @@
         parameters[key] = await fileToBase64(blob)
     }
 
-    async function submit() {
+    async function submit(event, onlySave?: boolean) {
         if (loading) return
 
         loading = true
@@ -113,7 +113,7 @@
                     ...hiddenParams,
                 },
                 _method: 'PUT',
-                redirect: 'dashboard.stories.edit',
+                redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
             },
             {
                 forceFormData: true,
@@ -182,13 +182,20 @@
                                                         {/each}
                                                     </select>
                                                 {:else if field.type === 'color'}
-                                                    <input
-                                                        class="input input-bordered w-full"
-                                                        bind:value={parameters[field.key]}
-                                                        type="color"
-                                                        name={field.key}
-                                                        placeholder={field.name}
-                                                    />
+                                                    <label
+                                                        for={field.key}
+                                                        class="h-12 w-full cursor-pointer rounded-lg shadow-sm"
+                                                        style={`background: ${parameters[field.key] || '#000'}`}
+                                                    >
+                                                        <input
+                                                            id={field.key}
+                                                            class="input input-bordered absolute w-0 opacity-0"
+                                                            bind:value={parameters[field.key]}
+                                                            type="color"
+                                                            name={field.key}
+                                                            placeholder={field.name}
+                                                        />
+                                                    </label>
                                                 {:else if field.type === 'image' && editor}
                                                     <div class="">
                                                         <FilePond
@@ -284,9 +291,18 @@
                         More Covers
                     </a>
                     {#if changed}
+                        <button
+                            class="btn btn-secondary rounded-full"
+                            disabled={loading}
+                            type="button"
+                            on:click={(event) => submit(event, true)}
+                        >
+                            {#if loading}<span class="loading loading-spinner"></span>{/if}
+                            <span>Update</span>
+                        </button>
                         <button class="btn btn-secondary rounded-full pr-0" disabled={loading} type="submit">
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
-                            <p>Save & Next</p>
+                            <span>Save & Next</span>
                             <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                         </button>
                     {:else}
