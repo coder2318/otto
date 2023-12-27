@@ -264,7 +264,7 @@
                         {/each}
                     </div>
                 </div>
-                <div class="bookCover__cover flex h-fit items-center justify-center">
+                <div class="bookCover__cover sticky top-32 flex h-fit items-center justify-center">
                     <BookCoverBuilder
                         bind:this={builder}
                         class="select-none"
