@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "12bdd1f8130abf841c90982adc4ac49b",
+    "content-hash": "48bd209c3bfc904b0ad5227679667e4e",
     "packages": [
         {
             "name": "app/array-of-strings",
