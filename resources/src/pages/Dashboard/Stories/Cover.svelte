@@ -97,7 +97,7 @@
         parameters[key] = await fileToBase64(blob)
     }
 
-    async function submit() {
+    async function submit(event, onlySave?: boolean) {
         if (loading) return
 
         loading = true
@@ -113,7 +113,7 @@
                     ...hiddenParams,
                 },
                 _method: 'PUT',
-                redirect: 'dashboard.stories.edit',
+                redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
             },
             {
                 forceFormData: true,
@@ -291,6 +291,15 @@
                         More Covers
                     </a>
                     {#if changed}
+                        <button
+                            class="btn btn-secondary rounded-full"
+                            disabled={loading}
+                            type="button"
+                            on:click={(event) => submit(event, true)}
+                        >
+                            {#if loading}<span class="loading loading-spinner"></span>{/if}
+                            <span>Update</span>
+                        </button>
                         <button class="btn btn-secondary rounded-full pr-0" disabled={loading} type="submit">
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Save & Next</span>
