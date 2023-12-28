@@ -111,7 +111,7 @@ class StoryController extends Controller
         $story->update($request->validated());
 
         if ($request->hasFile('cover')) {
-            $story->cover?->delete();
+            $oldCover = $story->cover;
 
             $files = [];
             $parameters = [];
@@ -124,8 +124,13 @@ class StoryController extends Controller
 
             /** @var \App\Models\Media */
             $cover = $story->addMediaFromRequest('cover')->toMediaCollection('cover');
+            $oldCover?->media()->update([
+                'model_id' => $cover->id,
+            ]);
+            $oldCover?->delete();
 
             foreach ($files as $key => $value) {
+                $cover->clearMediaCollection($key);
                 $cover->addMedia($value)->toMediaCollection($key);
             }
 

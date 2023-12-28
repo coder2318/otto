@@ -87,6 +87,7 @@
         return await toBlob(svg as HTMLElement, {
             canvasHeight: sizes.totalHeight,
             canvasWidth: sizes.totalWidth,
+            type: 'image/jpeg',
         })
     }
 
