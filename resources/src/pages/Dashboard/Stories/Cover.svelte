@@ -200,6 +200,7 @@
                                                     <div class="">
                                                         <FilePond
                                                             name={field.key}
+                                                            acceptedFileTypes={['image/jpeg', 'image/webp']}
                                                             server={false}
                                                             onpreparefile={async (file, blob) =>
                                                                 prepareFile(field.key, blob)}
@@ -246,6 +247,7 @@
                                             <div class="">
                                                 <FilePond
                                                     name={field.key}
+                                                    acceptedFileTypes={['image/jpeg', 'image/webp']}
                                                     server={false}
                                                     onpreparefile={(file, blob) => prepareFile(field.key, blob)}
                                                     onremovefile={() => (parameters[field.key] = null)}
