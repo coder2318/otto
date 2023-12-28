@@ -116,7 +116,13 @@
                 redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
             },
             {
+                preserveScroll: onlySave,
                 forceFormData: true,
+                onSuccess: () => {
+                    changed = false
+                    parameters = createParameters()
+                    hiddenParams = {}
+                },
                 onFinish: () => {
                     loading = false
                 },
