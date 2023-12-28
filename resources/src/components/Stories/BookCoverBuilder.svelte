@@ -88,6 +88,7 @@
             canvasHeight: sizes.totalHeight,
             canvasWidth: sizes.totalWidth,
             type: 'image/jpeg',
+            cacheBust: true,
         })
     }
 
