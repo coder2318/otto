@@ -111,6 +111,7 @@ class StoryController extends Controller
         $story->update($request->validated());
 
         if ($request->hasFile('cover')) {
+            /** @var \App\Models\Media|null */
             $oldCover = $story->cover;
 
             $files = [];
