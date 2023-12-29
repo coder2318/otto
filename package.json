@@ -76,6 +76,7 @@
   },
   "dependencies": {
     "@inertiajs/core": "^1.0.14",
+    "svelte-easy-crop": "^2.0.2",
     "util": "^0.12.5"
   }
 }

@@ -9,7 +9,6 @@
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
-    import { createCropperForFilepond } from '@/service/cropper'
     import { fade } from 'svelte/transition'
     import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
@@ -19,9 +18,17 @@
     import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
     import { faArrowRight } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
+    import Cropper from 'svelte-easy-crop'
+    import getCroppedImg from '@/util/canvasUtils'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
+
+    let image = ''
+    let aspect = 0.6622621448029057
+    let pixelCrop
+    let crop = { x: 0, y: 0 }
+    let zoom = 1
 
     $: grouped = Object.entries(groupBy(template.data.fields, 'group')) as [
         string,
@@ -32,7 +39,7 @@
         }>,
     ][]
 
-    let element: HTMLElement, modal: HTMLDialogElement, builder: BookCoverBuilder, editor: any
+    let modal: HTMLDialogElement, builder: BookCoverBuilder
     let changed = false
     let parameters = createParameters() as any
     let hiddenParams = {} as any
@@ -40,27 +47,12 @@
     let fonts = []
 
     onMount(() => {
-        editor = createCropperForFilepond(element, {
-            aspectRatio: builder.getCoverAspectRatio(),
-            viewMode: 2,
-            background: false,
-            autoCrop: true,
-            ready: () => {
-                modal.showModal()
-            },
-        })
-
         listFonts().then(
             (list) =>
                 (fonts = list
                     .map((font) => font.family)
                     .filter((value, index, array) => array.indexOf(value) === index))
         )
-
-        return () => {
-            editor.clear()
-            editor = null
-        }
     })
 
     function createParameters() {
@@ -77,24 +69,39 @@
 
     function canvelEdit() {
         modal.close()
-        editor.oncancel()
-        editor.onclose && editor.onclose()
-        editor?.clear()
+        pixelCrop = null
+        crop = { x: 0, y: 0 }
+        zoom = 1
+    }
+
+    async function createImageBlob(url): Promise<Blob> {
+        let response = await fetch(url)
+        let data = await response.blob()
+        return data
+    }
+
+    async function cropImage() {
+        const croppedImage = await getCroppedImg(image, pixelCrop)
+
+        const key = 'front'
+        const newBlob = await createImageBlob(croppedImage)
+
+        parameters[key] = await fileToBase64(newBlob)
+        hiddenParams[key] = new File([newBlob], 'Cover-Background', {
+            type: newBlob.type,
+            lastModified: Date.now(),
+        })
     }
 
     function saveImage() {
+        cropImage()
         modal.close()
-        editor.onconfirm(editor.getOptions())
-        editor.onclose && editor.onclose()
-        editor?.clear()
     }
 
     async function prepareFile(key: string, blob: File) {
-        hiddenParams[key] = new File([blob], blob.name, {
-            type: blob.type,
-            lastModified: blob.lastModified,
-        })
-        parameters[key] = await fileToBase64(blob)
+        modal.show()
+
+        image = await fileToBase64(blob)
     }
 
     async function submit(event, onlySave?: boolean) {
@@ -202,21 +209,22 @@
                                                             placeholder={field.name}
                                                         />
                                                     </label>
-                                                {:else if field.type === 'image' && editor}
+                                                {:else if field.type === 'image'}
                                                     <div class="">
                                                         <FilePond
                                                             name={field.key}
-                                                            acceptedFileTypes={['image/jpeg', 'image/webp']}
-                                                            server={false}
+                                                            acceptedFileTypes={[
+                                                                'image/jpeg',
+                                                                'image/webp',
+                                                                'image/png',
+                                                            ]}
                                                             onpreparefile={async (file, blob) =>
                                                                 prepareFile(field.key, blob)}
+                                                            server={false}
                                                             onremovefile={() =>
                                                                 (parameters[field.key] =
                                                                     '/build/assets/transparent.png')}
-                                                            imageEditEditor={editor}
-                                                            allowImageEdit={true}
                                                             allowMultiple={false}
-                                                            imageEditInstantEdit={true}
                                                             styleImageEditButtonEditItemPosition="top right"
                                                             imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
                                                         />
@@ -249,18 +257,16 @@
                                                 name={field.key}
                                                 placeholder={field.name}
                                             />
-                                        {:else if field.type === 'image' && editor}
+                                        {:else if field.type === 'image'}
                                             <div class="">
                                                 <FilePond
                                                     name={field.key}
-                                                    acceptedFileTypes={['image/jpeg', 'image/webp']}
+                                                    acceptedFileTypes={['image/jpeg', 'image/webp', 'image/png']}
+                                                    onpreparefile={async (file, blob) => prepareFile(field.key, blob)}
                                                     server={false}
-                                                    onpreparefile={(file, blob) => prepareFile(field.key, blob)}
-                                                    onremovefile={() => (parameters[field.key] = null)}
-                                                    imageEditEditor={editor}
-                                                    allowImageEdit={true}
+                                                    onremovefile={() =>
+                                                        (parameters[field.key] = '/build/assets/transparent.png')}
                                                     allowMultiple={false}
-                                                    imageEditInstantEdit={true}
                                                     styleImageEditButtonEditItemPosition="top right"
                                                     imageEditIconEdit={`<div class="flex p-1.5 fill-neutral">${editIcon}</div>`}
                                                 />
@@ -326,7 +332,9 @@
 
 <dialog bind:this={modal} class="modal">
     <div class="modal-box w-11/12 max-w-5xl">
-        <div bind:this={element} class="min-h-[500px]" />
+        <div class="min-h-[500px] [&_.container]:mb-24 [&_.container]:min-h-[500px]">
+            <Cropper {image} {aspect} bind:crop bind:zoom on:cropcomplete={(e) => (pixelCrop = e.detail.pixels)} />
+        </div>
         <div class="modal-action">
             <button type="button" class="btn btn-primary" on:click|preventDefault={saveImage}>Confirm</button>
             <button type="button" class="btn" on:click|preventDefault={canvelEdit}>Close</button>
