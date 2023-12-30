@@ -8,6 +8,7 @@
     export let parameters: any = {}
     export let shared: any = {}
     export let pages: number = 32
+    export let preview: boolean = false
     export let change = () => {}
 
     let svg: HTMLElement | SVGElement
@@ -22,6 +23,10 @@
             value = value.toString().slice(0, parseInt(node.dataset.max))
         }
         svgTextWrap(node, value, parseFloat(node.dataset['maxWidth'] || sizes.width + ''))
+    }
+
+    function setHref(node: SVGTextElement, value: string | null = null) {
+        node.setAttribute('href', value)
     }
 
     function updateSvg(params) {
@@ -39,6 +44,9 @@
                         case 'innerHTML':
                             setTextValue(node as SVGTextElement, value as string)
                             break
+                        case 'href':
+                            setHref(node as SVGTextElement, value as string)
+                            break
                         default:
                             node.setAttribute(node.dataset[key], value as string)
                             break
@@ -55,7 +63,7 @@
 
         Object.entries(shared).forEach(([key, value]) => {
             const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
-            if (element?.tagName === 'text' || element?.hasAttribute('data-shared')) {
+            if (element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
@@ -175,23 +183,26 @@
 </script>
 
 <svg
+    class="rounded-md"
     bind:this={svg}
-    viewBox="0 0 {sizes.totalWidth} {sizes.totalHeight}"
+    viewBox="0 0 {preview ? sizes.width : sizes.totalWidth} {preview ? sizes.height : sizes.totalHeight}"
     xmlns="http://www.w3.org/2000/svg"
     style="--spine-width:{sizes.spineWidth}"
     {...$$restProps}
 >
-    <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight}>
+    {#if !preview}
+        <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight}>
+            {@html template.base ?? ''}
+        </svg>
         {@html template.base ?? ''}
-    </svg>
-    {@html template.base ?? ''}
-    <svg x={0} y={0} width={sizes.width} height={sizes.height}>
-        {@html template.back ?? ''}
-    </svg>
-    <svg x={sizes.width} y={0} width={sizes.spineWidth} height={sizes.height}>
-        {@html template.spine ?? ''}
-    </svg>
-    <svg x={sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height}>
+        <svg x={0} y={0} width={sizes.width} height={sizes.height}>
+            {@html template.back ?? ''}
+        </svg>
+        <svg x={sizes.width} y={0} width={sizes.spineWidth} height={sizes.height}>
+            {@html template.spine ?? ''}
+        </svg>
+    {/if}
+    <svg x={preview ? 0 : sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height}>
         {@html template.front ?? ''}
     </svg>
 </svg>

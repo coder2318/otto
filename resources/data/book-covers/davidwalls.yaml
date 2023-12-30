@@ -2,83 +2,86 @@ extends: layout/base.yaml
 name: DavidWalls
 
 fields:
-  - name: Front Background
-    key: front
-    type: image
-    group: Front
+    - name: Front Background
+      key: front
+      type: image
+      group: Front
 
-  - name: Title
-    key: title
-    type: text
-    group: Front
+    - name: Title
+      key: title
+      type: text
+      group: Front
 
-  - name: Title Size
-    key: titleSize
-    type: number
-    group: Front
+    - name: Title Size
+      key: titleSize
+      type: number
+      group: Front
 
-  - name: Title Color
-    key: titleColor
-    type: color
-    group: Front
+    - name: Title Color
+      key: titleColor
+      type: color
+      group: Front
 
-  - name: Author
-    key: author
-    type: text
-    group: Front
+    - name: Author
+      key: author
+      type: text
+      group: Front
 
-  - name: Author Size
-    key: authorSize
-    type: number
-    group: Front
+    - name: Author Size
+      key: authorSize
+      type: number
+      group: Front
 
-  - name: Author Color
-    key: authorColor
-    type: color
-    group: Front
+    - name: Author Color
+      key: authorColor
+      type: color
+      group: Front
 
 front: |
-  <style>
-    @import url(https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap);
-  </style>
-  <image
-    href="/build/assets/cover-background-davidwalls.jpeg"
-    data-front="href"
-    preserveAspectRatio="xMinYMin slice"
-    x="0" y="0" width="100%" height="100%"
-  />
-  <text
-    x="305" y="85"
-    font-size="50pt"
-    text-anchor="middle"
-    font-family="Merriweather"
-    text-shadow="#FC0 1px 0 10px"
-    data-author="innerText"
-    data-author-size="font-size"
-    data-max="50"
-    data-author-color="fill"
-    data-draggable="true"
-    letter-spacing="0.1em"
-    fill="grey"
-    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >DAVID WALLS</text>
-  <text
-    x="98" y="574"
-    font-size="20pt"
-    text-anchor="middle"
-    data-title="innerText"
-    data-max="50"
-    data-title-size="font-size"
-    data-title-color="fill"
-    data-draggable="true"
-    text-shadow="#FC0 1px 0 10px"
-    font-family="Merriweather"
-    font-weight="normal"
-    letter-spacing="0.1em"
-    fill="white"
-    style="filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >
-    Making
-    <tspan dx="-90" dy="40">It So</tspan>
-    <tspan dx="-90" dy="40">Text</tspan>
-  </text>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap);
+    </style>
+    <image
+      href="/build/assets/cover-background-davidwalls.jpeg"
+      data-shared="true"
+      data-front="href"
+      preserveAspectRatio="xMinYMin slice"
+      x="0" y="0" width="100%" height="100%"
+    />
+    <text
+      x="305" y="85"
+      font-size="50pt"
+      text-anchor="middle"
+      font-family="Merriweather"
+      text-shadow="#FC0 1px 0 10px"
+      data-shared="true"
+      data-author="innerText"
+      data-author-size="font-size"
+      data-max="50"
+      data-author-color="fill"
+      data-draggable="true"
+      letter-spacing="0.1em"
+      fill="grey"
+      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    >DAVID WALLS</text>
+    <text
+      x="98" y="574"
+      font-size="20pt"
+      text-anchor="middle"
+      data-shared="true"
+      data-title="innerText"
+      data-max="50"
+      data-title-size="font-size"
+      data-title-color="fill"
+      data-draggable="true"
+      text-shadow="#FC0 1px 0 10px"
+      font-family="Merriweather"
+      font-weight="normal"
+      letter-spacing="0.1em"
+      fill="white"
+      style="filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    >
+      Making
+      <tspan dx="-90" dy="40">It So</tspan>
+      <tspan dx="-90" dy="40">Text</tspan>
+    </text>

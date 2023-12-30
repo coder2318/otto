@@ -2,80 +2,83 @@ extends: layout/base.yaml
 name: Woman
 
 fields:
-  - name: Front Background
-    key: front
-    type: image
-    group: Front
+    - name: Front Background
+      key: front
+      type: image
+      group: Front
 
-  - name: Title
-    key: title
-    type: text
-    group: Front
+    - name: Title
+      key: title
+      type: text
+      group: Front
 
-  - name: Title Size
-    key: titleSize
-    type: number
-    group: Front
+    - name: Title Size
+      key: titleSize
+      type: number
+      group: Front
 
-  - name: Title Color
-    key: titleColor
-    type: color
-    group: Front
+    - name: Title Color
+      key: titleColor
+      type: color
+      group: Front
 
-  - name: Author
-    key: author
-    type: text
-    group: Front
+    - name: Author
+      key: author
+      type: text
+      group: Front
 
-  - name: Author Size
-    key: authorSize
-    type: number
-    group: Front
+    - name: Author Size
+      key: authorSize
+      type: number
+      group: Front
 
-  - name: Author Color
-    key: authorColor
-    type: color
-    group: Front
+    - name: Author Color
+      key: authorColor
+      type: color
+      group: Front
 
 front: |
-  <style>
-    @import url(https://fonts.googleapis.com/css2?family=Arsenal&display=swap);
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
-  </style>
-  <image
-    href="/build/assets/cover-background-women.jpg"
-    data-front="href"
-    preserveAspectRatio="xMinYMin slice"
-    x="0" y="0" width="100%" height="100%"
-  />
-  <text
-    x="560" y="100"
-    font-size="65pt"
-    text-anchor="end"
-    font-family="Arsenal"
-    text-shadow="#FC0 1px 0 10px"
-    data-author="innerText"
-    data-author-size="font-size"
-    data-max="50"
-    data-author-color="fill"
-    data-draggable="true"
-    letter-spacing="0.1em"
-    fill="#fcecec"
-    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  ><tspan x="560" dy="0">Britnet</tspan><tspan x="560" dy="108">Spears</tspan></text>
-  <text
-    x="560" y="650"
-    font-size="55pt"
-    text-anchor="end"
-    data-title="innerText"
-    data-title-size="font-size"
-    data-max="50"
-    data-title-color="fill"
-    data-draggable="true"
-    text-shadow="#FC0 1px 0 10px"
-    font-family="Roboto"
-    font-weight="100"
-    letter-spacing="0.1em"
-    fill="white"
-    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  ><tspan x="560" dy="0">The</tspan><tspan x="560" dy="88">Woman</tspan><tspan x="560" dy="88">In Me</tspan></text>
+    <style>
+      @import url(https://fonts.googleapis.com/css2?family=Arsenal&display=swap);
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+    </style>
+    <image
+      href="/build/assets/cover-background-women.jpg"
+      data-front="href"
+      data-shared="true"
+      preserveAspectRatio="xMinYMin slice"
+      x="0" y="0" width="100%" height="100%"
+    />
+    <text
+      x="560" y="100"
+      font-size="65pt"
+      text-anchor="end"
+      font-family="Arsenal"
+      text-shadow="#FC0 1px 0 10px"
+      data-shared="true"
+      data-author="innerText"
+      data-author-size="font-size"
+      data-max="50"
+      data-author-color="fill"
+      data-draggable="true"
+      letter-spacing="0.1em"
+      fill="#fcecec"
+      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    ><tspan x="560" dy="0">Britnet</tspan><tspan x="560" dy="108">Spears</tspan></text>
+    <text
+      x="560" y="650"
+      font-size="55pt"
+      text-anchor="end"
+      data-shared="true"
+      data-title="innerText"
+      data-title-size="font-size"
+      data-max="50"
+      data-title-color="fill"
+      data-draggable="true"
+      text-shadow="#FC0 1px 0 10px"
+      font-family="Roboto"
+      font-weight="100"
+      letter-spacing="0.1em"
+      fill="white"
+      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    ><tspan x="560" dy="0">The</tspan><tspan x="560" dy="88">Woman</tspan><tspan x="560" dy="88">In Me</tspan></text>

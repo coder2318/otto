@@ -2,92 +2,95 @@ extends: layout/base.yaml
 name: Legend
 
 fields:
-  - name: Front Background
-    key: front
-    type: image
-    group: Front
+    - name: Front Background
+      key: front
+      type: image
+      group: Front
 
-  - name: Title
-    key: title
-    type: text
-    group: Front
+    - name: Title
+      key: title
+      type: text
+      group: Front
 
-  - name: Title Size
-    key: titleSize
-    type: number
-    group: Front
+    - name: Title Size
+      key: titleSize
+      type: number
+      group: Front
 
-  - name: Title Color
-    key: titleColor
-    type: color
-    group: Front
+    - name: Title Color
+      key: titleColor
+      type: color
+      group: Front
 
-  - name: Author
-    key: author
-    type: text
-    group: Front
+    - name: Author
+      key: author
+      type: text
+      group: Front
 
-  - name: Author Size
-    key: authorSize
-    type: number
-    group: Front
+    - name: Author Size
+      key: authorSize
+      type: number
+      group: Front
 
-  - name: Author Color
-    key: authorColor
-    type: color
-    group: Front
+    - name: Author Color
+      key: authorColor
+      type: color
+      group: Front
 
 front: |
-  <style>
-    @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
-    @import url('https://fonts.cdnfonts.com/css/lunchtype22');
-  </style>
-  <defs>
-    <linearGradient id="top-grad" x1="0" y1="0" x2="0" y2="1" >
-      <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
-      <stop offset="100%" stop-opacity="0"/>
-    </linearGradient>
-    <linearGradient id="bot-grad" x1="0" y1="1" x2="0" y2="0" >
-      <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
-      <stop offset="100%" stop-opacity="0"/>
-    </linearGradient>
-  </defs>
-  <image
-    href="/build/assets/cover-background-legend.jpg"
-    data-front="href"
-    preserveAspectRatio="xMinYMin slice"
-    x="0" y="0" width="100%" height="100%"
-  />
-  <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
-  <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
-  <text
-    x="288" y="75"
-    font-size="3rem"
-    text-anchor="middle"
-    font-family="Corbel"
-    text-shadow="#FC0 1px 0 10px"
-    data-author="innerText"
-    data-author-size="font-size"
-    data-max="50"
-    data-author-color="fill"
-    data-draggable="true"
-    letter-spacing="0.1em"
-    fill="white"
-    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >Author</text>
-  <text
-    x="288" y="864"
-    font-size="5rem"
-    text-anchor="middle"
-    data-title="innerText"
-    data-max="50"
-    data-title-size="font-size"
-    data-title-color="fill"
-    data-draggable="true"
-    text-shadow="#FC0 1px 0 10px"
-    font-family="Lunchtype22"
-    font-weight="bold"
-    letter-spacing="0.1em"
-    fill="white"
-    style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-  >Title</text>
+    <style>
+      @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
+      @import url('https://fonts.cdnfonts.com/css/lunchtype22');
+    </style>
+    <defs>
+      <linearGradient id="top-grad" x1="0" y1="0" x2="0" y2="1" >
+        <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+        <stop offset="100%" stop-opacity="0"/>
+      </linearGradient>
+      <linearGradient id="bot-grad" x1="0" y1="1" x2="0" y2="0" >
+        <stop offset="0%" stop-opacity="0.5" stop-color="#A59A96"/>
+        <stop offset="100%" stop-opacity="0"/>
+      </linearGradient>
+    </defs>
+    <image
+      href="/build/assets/cover-background-legend.jpg"
+      data-shared="true"
+      data-front="href"
+      preserveAspectRatio="xMinYMin slice"
+      x="0" y="0" width="100%" height="100%"
+    />
+    <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
+    <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
+    <text
+      x="288" y="75"
+      font-size="3rem"
+      text-anchor="middle"
+      font-family="Corbel"
+      text-shadow="#FC0 1px 0 10px"
+      data-shared="true"
+      data-author="innerText"
+      data-author-size="font-size"
+      data-max="50"
+      data-author-color="fill"
+      data-draggable="true"
+      letter-spacing="0.1em"
+      fill="white"
+      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    >Author</text>
+    <text
+      x="288" y="864"
+      font-size="5rem"
+      text-anchor="middle"
+      data-shared="true"
+      data-title="innerText"
+      data-max="50"
+      data-title-size="font-size"
+      data-title-color="fill"
+      data-draggable="true"
+      text-shadow="#FC0 1px 0 10px"
+      font-family="Lunchtype22"
+      font-weight="bold"
+      letter-spacing="0.1em"
+      fill="white"
+      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
+    >Title</text>
