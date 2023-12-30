@@ -9,15 +9,16 @@
 ## About
 
 AI writing platform made with
-- Laravel
-- Svelte
-- Inertia.js
-- TailwindCSS (DaisyUI)
+
+-   Laravel
+-   Svelte
+-   Inertia.js
+-   TailwindCSS (DaisyUI)
 
 ## Requirements
 
-- Docker
-- Composer
+-   Docker
+-   Composer
 
 ## Installation
 
@@ -35,11 +36,15 @@ vendor/bin/sail up -d
 vendor/bin/sail composer install
 vendor/bin/sail bun install
 vendor/bin/sail bun run build
+
+# migrate db and link storage
+vendor/bin/sail artisan db:seed
+vendor/bin/sail artisan storage:link
 ```
 
 ## Access points
 
-- Application: http://localhost/
-- Database Explorer: http://localhost:3000/
-- Minio S3 Storage: http://localhost:9000/
-- Mailpit Emails: http://localhost:8025/
+-   Application: http://localhost/
+-   Database Explorer: http://localhost:3000/
+-   Minio S3 Storage: http://localhost:9000/
+-   Mailpit Emails: http://localhost:8025/
