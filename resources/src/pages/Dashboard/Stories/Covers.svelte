@@ -26,7 +26,7 @@
 <Breadcrumbs step={1} {story} />
 
 <section
-    class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 sm:grid-cols-3 lg:grid-cols-6"
+    class="container card m-4 mx-auto grid grid-cols-1 gap-8 rounded-xl px-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5"
     in:fade
 >
     {#each covers.data as cover (cover.id)}

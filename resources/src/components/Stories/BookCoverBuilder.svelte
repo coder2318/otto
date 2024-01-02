@@ -63,7 +63,7 @@
 
         Object.entries(shared).forEach(([key, value]) => {
             const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
-            if (element?.hasAttribute('data-shared')) {
+            if (element?.tagName === 'text' || element?.tagName === 'image' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
