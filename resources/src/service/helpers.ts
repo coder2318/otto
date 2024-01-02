@@ -74,7 +74,7 @@ export function strRandom(length: number): string {
 }
 
 export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number) {
-    if (!text) {
+    if (text === null) {
         text = ''
         if (node.children.length > 1) {
             node.childNodes.forEach((n) => (text += n.textContent + ' '))

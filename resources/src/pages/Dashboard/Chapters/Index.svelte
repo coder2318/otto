@@ -325,7 +325,7 @@
             {#each timelines.data as timeline}
                 <li class="text-center">
                     <button
-                        class="max-w-96 btn btn-lg w-full justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
+                        class="btn btn-lg w-full max-w-96 justify-start rounded-full border-none bg-neutral/30 px-8 py-4 font-serif text-4xl font-normal italic leading-none text-neutral backdrop-blur hover:clear-none"
                         class:!bg-secondary={query?.filter?.timeline_id == timeline.id}
                         on:click={selectOption}
                         value={timeline.id}
