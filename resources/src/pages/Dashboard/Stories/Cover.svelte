@@ -41,6 +41,7 @@
 
     let modal: HTMLDialogElement, builder: BookCoverBuilder
     let changed = false
+    let imageKey: string
     let parameters = createParameters() as any
     let hiddenParams = {} as any
     let loading: boolean = false
@@ -82,12 +83,10 @@
 
     async function cropImage() {
         const croppedImage = await getCroppedImg(image, pixelCrop)
-
-        const key = 'front'
         const newBlob = await createImageBlob(croppedImage)
 
-        parameters[key] = await fileToBase64(newBlob)
-        hiddenParams[key] = new File([newBlob], 'Cover-Background', {
+        parameters[imageKey] = await fileToBase64(newBlob)
+        hiddenParams[imageKey] = new File([newBlob], 'Cover-Background', {
             type: newBlob.type,
             lastModified: Date.now(),
         })
@@ -102,6 +101,7 @@
         modal.show()
 
         image = await fileToBase64(blob)
+        imageKey = key
     }
 
     async function submit(event, onlySave?: boolean) {
