@@ -45,7 +45,7 @@ class User extends Authenticatable implements HasMedia, MustVerifyEmail
 
     public function fullName(): Attribute
     {
-        return Attribute::get(fn () => $this->details?->name ?? trim($this->details?->first_name.' '.$this->details?->last_name));
+        return Attribute::get(fn () => trim($this->details?->first_name.' '.$this->details?->last_name));
     }
 
     public function plan(): BelongsTo
