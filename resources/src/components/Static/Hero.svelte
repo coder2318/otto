@@ -23,7 +23,7 @@
                 <a use:inertia href="/dashboard" class="btn btn-secondary rounded-full">Start Writing</a>
             {:else}
                 <span class="flex gap-4">
-                    <a use:inertia href="/plans" class="btn btn-secondary rounded-full lg:btn-lg">Start Your Book</a>
+                    <a use:inertia href="/login" class="btn btn-secondary rounded-full lg:btn-lg">Log In</a>
                     <a use:inertia href="/register" class="btn btn-primary rounded-full lg:btn-lg">Try A Free Chapter</a
                     >
                 </span>
