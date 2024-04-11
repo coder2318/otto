@@ -20,6 +20,7 @@
     import Fa from 'svelte-fa'
     import Cropper from 'svelte-easy-crop'
     import getCroppedImg from '@/util/canvasUtils'
+    import Range from '@/components/Chapters/Range.svelte'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -176,6 +177,8 @@
                                                         placeholder={field.name}
                                                         rows="1"
                                                     />
+                                                {:else if field.key === 'authorSize' || field.key === 'titleSize'}
+                                                    <Range inputName={field.key} bind:values={parameters[field.key]} />
                                                 {:else if field.type === 'number'}
                                                     <input
                                                         class="input input-bordered"
