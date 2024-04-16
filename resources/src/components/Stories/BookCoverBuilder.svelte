@@ -180,8 +180,6 @@
     export function getCoverAspectRatio() {
         return sizes.width / sizes.height
     }
-
-    console.log(template.front)
 </script>
 
 <svg
