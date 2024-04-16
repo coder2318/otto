@@ -191,7 +191,7 @@
     {...$$restProps}
 >
     {#if !preview}
-        <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight}>
+        <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight + 1}>
             {@html template.base ?? ''}
         </svg>
         {@html template.base ?? ''}
@@ -202,7 +202,7 @@
             {@html template.spine ?? ''}
         </svg>
     {/if}
-    <svg x={preview ? 0 : sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height}>
+    <svg x={preview ? 0 : sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height + 1}>
         {@html template.front ?? ''}
     </svg>
 </svg>
