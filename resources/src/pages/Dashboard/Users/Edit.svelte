@@ -38,6 +38,8 @@
     let initialFile: File
     let skipUpdate: boolean = false
 
+    let pronouns = ['He/Him', 'She/Her', 'They/Them']
+
     onMount(() => {
         editor = createCropperForFilepond(element, {
             aspectRatio: 1,
@@ -209,14 +211,19 @@
                             <label class="label" for="pronouns">
                                 <span class="label-text">Pronouns</span>
                             </label>
-                            <input
-                                class="input input-bordered"
-                                class:input-error={$form.errors['details.pronouns']}
+                            <select
+                                class="select select-bordered"
+                                class:select-error={$form.errors['details.pronouns']}
+                                name="pronouns"
                                 bind:value={$form.details.pronouns}
-                                type="text"
-                                name="name"
-                                placeholder="Pronouns"
-                            />
+                            >
+                                <option value={null} disabled selected> Select Pronouns... </option>
+                                {#each pronouns as pronoun}
+                                    <option value={pronoun}>
+                                        {pronoun}
+                                    </option>
+                                {/each}
+                            </select>
                             {#if $form.errors['details.pronouns']}
                                 <span class="label-text-alt mt-1 text-left text-error">
                                     {$form.errors['details.pronouns']}
