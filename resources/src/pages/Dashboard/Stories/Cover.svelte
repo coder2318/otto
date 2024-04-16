@@ -49,12 +49,11 @@
     let fonts = []
 
     onMount(() => {
-        listFonts().then(
-            (list) =>
-                (fonts = list
-                    .map((font) => font.family)
-                    .filter((value, index, array) => array.indexOf(value) === index))
-        )
+        listFonts().then((list) => {
+            fonts = list
+                .map((font) => font.family || font)
+                .filter((value, index, array) => array.indexOf(value) === index)
+        })
     })
 
     function createParameters() {
@@ -168,7 +167,6 @@
                                                 <label class="label" for={field.key}>
                                                     <span class="label-text">{field.name}</span>
                                                 </label>
-
                                                 {#if field.type === 'text'}
                                                     <textarea
                                                         class="textarea textarea-bordered"
@@ -350,7 +348,6 @@
         padding-bottom: 100px;
 
         &-illustration-1 {
-            position: absolute;
             position: absolute;
             right: 0px;
             top: 0px;

@@ -195,10 +195,10 @@
             {@html template.base ?? ''}
         </svg>
         {@html template.base ?? ''}
-        <svg x={0} y={0} width={sizes.width} height={sizes.height}>
+        <svg x={0} y={0} width={sizes.width} height={sizes.height + 1}>
             {@html template.back ?? ''}
         </svg>
-        <svg x={sizes.width} y={0} width={sizes.spineWidth} height={sizes.height}>
+        <svg x={sizes.width} y={0} width={sizes.spineWidth} height={sizes.height + 1}>
             {@html template.spine ?? ''}
         </svg>
     {/if}
