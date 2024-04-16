@@ -33,7 +33,7 @@
             {question.question}
         </h1>
         <div class="wrap mt-8 flex gap-4">
-            {#each question.answers as answer (answer)}
+            {#each question.answers as answer (answer + Math.random())}
                 <button
                     on:click={() => toggleAnswer(answer)}
                     class="questions-item font-serif {answer === $form.quiz?.[question.id]

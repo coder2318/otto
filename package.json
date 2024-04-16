@@ -2,7 +2,7 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "NODE_OPTIONS=--max_old_space_size=2048 vite build",
     "lint": "eslint resources/src/**/*.{ts,js,svelte}",
     "build-book-cover-params": "cd nova-components/BookCoverParams && npm run dev",
