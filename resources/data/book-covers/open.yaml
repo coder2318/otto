@@ -52,6 +52,11 @@ fields:
       type: color
       group: Front
 
+    - name: Spine Background Color
+      key: spineBackgroundColor
+      type: color
+      group: Spine
+
 front: |
     <style>
       @import url(https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap);

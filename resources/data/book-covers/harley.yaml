@@ -12,6 +12,11 @@ fields:
       type: text
       group: Front
 
+    - name: Title Font
+      key: titleFont
+      type: font
+      group: Front
+
     - name: Title Size
       key: titleSize
       type: number
@@ -51,6 +56,11 @@ fields:
       key: authorColor
       type: color
       group: Front
+
+    - name: Spine Background Color
+      key: spineBackgroundColor
+      type: color
+      group: Spine
 
 front: |
     <style>

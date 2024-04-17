@@ -37,6 +37,11 @@ fields:
       type: color
       group: Front
 
+    - name: Spine Background Color
+      key: spineBackgroundColor
+      type: color
+      group: Spine
+
 front: |
     <style>
       @import url(https://db.onlinewebfonts.com/c/29dc27977e417a98e56556776f41607c?family=Corbel);
