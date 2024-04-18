@@ -19,6 +19,11 @@ fields:
     type: color
     group: Back
 
+  - name: Description Text Size
+    key: descriptionTextSize
+    type: number
+    group: Back
+
   - name: Spine Text
     key: spine
     type: text
@@ -29,10 +34,31 @@ fields:
     type: color
     group: Spine
 
+  - name: Spine Text Size
+    key: spineTextSize
+    type: number
+    group: Spine
+
+  - name: Spine Background Color
+    key: spineBackgroundColor
+    type: color
+    group: Spine
+
+  - name: Title Font
+    key: titleFont
+    type: font
+    group: Front
+
+  - name: Author Font
+    key: authorFont
+    type: font
+    group: Front
+
 base: |
   <rect x="0" y="0" width="100%" height="100%" fill="black" data-background-color="fill" />
 
 spine: |
+  <rect x="0" y="0" width="100%" height="100%" fill="black" data-spin-background-color="fill" />
   <text
       x="50%"
       y="50%"
@@ -45,7 +71,10 @@ spine: |
       font-size="calc(var(--spine-width) * 0.666)"
       data-spine="innerText"
       data-spine-text-color="fill"
-    fill="white"
+      data-spine-text-font="font-family"
+      data-spin-text-size="font-size"
+      font-family="Merriweather"
+      fill="white"
   ></text>
 
 back: |
@@ -62,6 +91,9 @@ back: |
     text-shadow="#FC0 1px 0 10px"
     data-description="innerText"
     data-description-color="fill"
+    data-description-font="font-family"
+    data-description-size="font-size"
+    font-family="Merriweather"
     data-draggable="true"
     data-max-width="492"
     data-text-justify="true"

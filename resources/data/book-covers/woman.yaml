@@ -37,11 +37,6 @@ fields:
       type: color
       group: Front
 
-    - name: Spine Background Color
-      key: spineBackgroundColor
-      type: color
-      group: Spine
-
 front: |
     <style>
       @import url(https://fonts.googleapis.com/css2?family=Arsenal&display=swap);
@@ -62,6 +57,7 @@ front: |
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
       data-author="innerText"
+      data-author-font="font-family"
       data-author-size="font-size"
       data-max="50"
       data-author-color="fill"
@@ -78,6 +74,7 @@ front: |
       data-title="innerText"
       data-title-size="font-size"
       data-max="50"
+      data-title-font="font-family"
       data-title-color="fill"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"

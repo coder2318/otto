@@ -37,11 +37,6 @@ fields:
       type: color
       group: Front
 
-    - name: Spine Background Color
-      key: spineBackgroundColor
-      type: color
-      group: Spine
-
 front: |
     <style>
       @import url(https://fonts.googleapis.com/css2?family=Merriweather:wght@300&display=swap);
@@ -62,6 +57,7 @@ front: |
       data-shared="true"
       data-author="innerText"
       data-author-size="font-size"
+      data-author-font="font-family"
       data-max="50"
       data-author-color="fill"
       data-draggable="true"
@@ -78,6 +74,7 @@ front: |
       data-max="50"
       data-title-size="font-size"
       data-title-color="fill"
+      data-title-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Merriweather"

@@ -31,6 +31,14 @@
     let crop = { x: 0, y: 0 }
     let zoom = 1
 
+    const isFontSize = {
+        authorSize: 'authorSize',
+        titleSize: 'titleSize',
+        descriptionTextSize: 'descriptionTextSize',
+        subtitleSize: 'subtitleSize',
+        spineTextSize: 'spineTextSize',
+    }
+
     $: grouped = Object.entries(groupBy(template.data.fields, 'group')) as [
         string,
         Array<{
@@ -175,7 +183,7 @@
                                                         placeholder={field.name}
                                                         rows="1"
                                                     />
-                                                {:else if field.key === 'authorSize' || field.key === 'titleSize'}
+                                                {:else if isFontSize[field.key]}
                                                     <Range inputName={field.key} bind:values={parameters[field.key]} />
                                                 {:else if field.type === 'number'}
                                                     <input
