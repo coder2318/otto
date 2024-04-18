@@ -24,6 +24,11 @@ fields:
     type: number
     group: Back
 
+  - name: Description Text Background
+    key: descriptionTextBackground
+    type: color
+    group: Back
+
   - name: Spine Text
     key: spine
     type: text
@@ -84,7 +89,17 @@ back: |
     preserveAspectRatio="xMinYMin slice"
     x="0" y="0" width="100%" height="100%"
   />
+  <defs>
+    <filter x="0" y="0" width="1" height="1" id="descriptionBackground">
+      <feFlood flood-color="black" result="bg" data-description-text-background="flood-color"/>
+      <feMerge>
+        <feMergeNode in="bg"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
   <text
+    filter="url(#descriptionBackground)"
     x="48" y="96"
     font-size="1rem"
     text-anchor="left"
