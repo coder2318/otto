@@ -16,13 +16,13 @@ return new class extends Migration
                 'key' => 'spineBackgroundColor',
                 'name' => 'Spine Background Color',
                 'type' => 'color',
-                'group' => 'Spine'
+                'group' => 'Spine',
             ],
             [
                 'key' => 'titleFont',
                 'name' => 'Title Font',
                 'type' => 'font',
-                'group' => 'Front'
+                'group' => 'Front',
             ],
         ];
         $templates = DB::table('book_cover_templates')->get();
@@ -30,15 +30,15 @@ return new class extends Migration
             $decoded = json_decode($template->fields, true);
             $column = array_column($decoded, 'key');
             $flag = false;
-            if(!in_array('spineBackgroundColor', $column)) {
+            if (! in_array('spineBackgroundColor', $column)) {
                 $decoded[] = $fields[0];
                 $flag = true;
             }
-            if(!in_array('titleFont', $column)) {
+            if (! in_array('titleFont', $column)) {
                 $decoded[] = $fields[1];
                 $flag = true;
             }
-            if($flag) {
+            if ($flag) {
                 DB::table('book_cover_templates')
                     ->where(['id' => $template->id])
                     ->update(['fields' => $decoded]);
