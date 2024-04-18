@@ -58,7 +58,7 @@ base: |
   <rect x="0" y="0" width="100%" height="100%" fill="black" data-background-color="fill" />
 
 spine: |
-  <rect x="0" y="0" width="100%" height="100%" fill="black" data-spin-background-color="fill" />
+  <rect x="0" y="0" width="100%" height="100%" fill="black" data-spine-background-color="fill" />
   <text
       x="50%"
       y="50%"
@@ -72,7 +72,7 @@ spine: |
       data-spine="innerText"
       data-spine-text-color="fill"
       data-spine-text-font="font-family"
-      data-spin-text-size="font-size"
+      data-spine-text-size="font-size"
       font-family="Merriweather"
       fill="white"
   ></text>
