@@ -19,6 +19,18 @@ return new class extends Migration
                 'group' => 'Back',
             ],
             [
+                'name' => 'Description Text Background',
+                'key' => 'descriptionTextBackground',
+                'type' => 'color',
+                'group' => 'Back',
+            ],
+            [
+                'name' => 'Description Text Size',
+                'key' => 'descriptionTextSize',
+                'type' => 'number',
+                'group' => 'Back',
+            ],
+            [
                 'key' => 'subtitleFont',
                 'name' => 'Subtitle Font',
                 'type' => 'font',
@@ -48,6 +60,12 @@ return new class extends Migration
                 'type' => 'font',
                 'group' => 'Front',
             ],
+            [
+                'name' => 'Spine Text Size',
+                'key' => 'spineTextSize',
+                'type' => 'number',
+                'group' => 'Spine',
+            ]
         ];
 
         $templates = DB::table('book_cover_templates')->get();
