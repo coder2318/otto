@@ -63,44 +63,43 @@ return new class extends Migration
                             fill="white"
                           ></text>';
 
-
         $templates = DB::table('book_cover_templates')->get();
         foreach ($templates as $template) {
             DB::table('book_cover_templates')
                 ->where(['id' => $template->id])
                 ->update([
-                    'spine' => DB::raw("'" . $spine . "'"),
-                    'back' => DB::raw("'" . $back . "'")
+                    'spine' => DB::raw("'".$spine."'"),
+                    'back' => DB::raw("'".$back."'"),
                 ]);
 
-            if ($template->name == "Legend") {
+            if ($template->name === 'Legend') {
                 $this->updateFrontContent($template, 'data-author="innerText"', "\n  data-author-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-title-color="fill"', "\n  data-title-font=\"font-family\"");
             }
 
-            if ($template->name == "Open") {
+            if ($template->name === 'Open') {
                 $this->updateFrontContent($template, 'data-title-color="fill"', "\n  data-title-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-subtitle-size="font-size"', "\n  data-subtitle-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-author-color="fill"', "\n  data-author-font=\"font-family\"");
             }
 
-            if ($template->name == "Open") {
+            if ($template->name === 'Open') {
                 $this->updateFrontContent($template, 'data-title-color="fill"', "\n  data-title-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-subtitle-size="font-size"', "\n  data-subtitle-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-author-color="fill"', "\n  data-author-font=\"font-family\"");
             }
 
-            if ($template->name == "Woman") {
+            if ($template->name === 'Woman') {
                 $this->updateFrontContent($template, 'data-author="innerText"', "\n  data-author-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-max="50"', "\n  data-title-font=\"font-family\"");
             }
 
-            if ($template->name == "DavidWalls") {
+            if ($template->name === 'DavidWalls') {
                 $this->updateFrontContent($template, 'data-author-size="font-size"', "\n  data-author-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-title-color="fill"', "\n  data-title-font=\"font-family\"");
             }
 
-            if ($template->name == "Harley") {
+            if ($template->name === 'Harley') {
                 $this->updateFrontContent($template, 'data-title-size="font-size"', "\n  data-title-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-subtitle-color="fill"', "\n  data-subtitle-font=\"font-family\"");
                 $this->updateFrontContent($template, 'data-author-size="font-size"', "\n  data-author-font=\"font-family\"");

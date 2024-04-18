@@ -57,7 +57,7 @@ return new class extends Migration
             $flag = false;
 
             foreach ($fields as $newField) {
-                if (!in_array($newField['key'], $column)) {
+                if (! in_array($newField['key'], $column)) {
                     $decoded[] = $newField;
                     $flag = true;
                 }
