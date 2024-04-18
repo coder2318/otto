@@ -114,11 +114,24 @@
 
     async function submit(event, onlySave?: boolean) {
         if (loading) return
-
         loading = true
-        const file = new File([await builder.getFile()], 'cover.png', {
+        const { file: blobFile, svg } = await builder.getFile()
+
+        const file = new File([blobFile], 'cover.png', {
             type: 'image/png',
         })
+
+        svg.querySelectorAll('text').forEach((item) => {
+            const key = item.className.baseVal
+
+            if (key) {
+                parameters[`${key}Position`] = {
+                    x: item.x.baseVal[0].value,
+                    y: item.y.baseVal[0].value,
+                }
+            }
+        })
+
         router.post(
             `/stories/${story.data.id}`,
             {

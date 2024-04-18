@@ -17,6 +17,20 @@
     $: sizes = getSize(pages)
 
     let dragHooks = []
+    let isSetPosition = false
+
+    const keys = {
+        title: 'title',
+        titleColor: 'title',
+        titleSize: 'title',
+        description: 'description',
+        descriptionColor: 'description',
+        descriptionSize: 'description',
+        author: 'author',
+        authorColor: 'author',
+        authorSize: 'author',
+        spin: 'spin',
+    }
 
     function setTextValue(node: SVGTextElement, value: string | null = null) {
         if (node.dataset.max && value) {
@@ -32,9 +46,27 @@
     function updateSvg(params) {
         if (!svg) return
 
-        Object.entries(params).forEach(([key, value]) => {
+        Object.entries(params).forEach(([key, value], i) => {
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
+                    if (keys[key]) {
+                        node.classList.add(keys[key])
+                    }
+
+                    if (!isSetPosition) {
+                        const className = node.className.baseVal
+                        const values = params[`${className}Position`]
+
+                        if (className && values) {
+                            node.setAttribute('x', values.x)
+                            node.setAttribute('y', values.y)
+                        }
+                    }
+
+                    if (i === Object.entries(params).length - 1) {
+                        isSetPosition = true
+                    }
+
                     switch (node.dataset[key]) {
                         case 'font-size':
                             node.style.fontSize = value + 'px'
@@ -63,6 +95,7 @@
 
         Object.entries(shared).forEach(([key, value]) => {
             const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
+
             if (element?.tagName === 'text' || element?.tagName === 'image' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
@@ -92,12 +125,14 @@
     })
 
     export async function getFile() {
-        return await toBlob(svg as HTMLElement, {
+        const file = await toBlob(svg as HTMLElement, {
             canvasHeight: sizes.totalHeight,
             canvasWidth: sizes.totalWidth,
             type: 'image/jpeg',
             cacheBust: true,
         })
+
+        return { file, svg }
     }
 
     function getSpineWidth(pages) {
@@ -191,18 +226,23 @@
     {...$$restProps}
 >
     {#if !preview}
-        <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight + 1}>
+        <svg x={0} y={0} width={sizes.totalWidth} height={sizes.totalHeight + 1} class="base">
             {@html template.base ?? ''}
         </svg>
-        {@html template.base ?? ''}
-        <svg x={0} y={0} width={sizes.width} height={sizes.height + 1}>
+        <svg x={0} y={0} width={sizes.width} height={sizes.height + 1} class="back">
             {@html template.back ?? ''}
         </svg>
         <svg x={sizes.width} y={0} width={sizes.spineWidth + 1} height={sizes.height + 1}>
             {@html template.spine ?? ''}
         </svg>
     {/if}
-    <svg x={preview ? 0 : sizes.width + sizes.spineWidth} y={0} width={sizes.width} height={sizes.height + 1}>
+    <svg
+        x={preview ? 0 : sizes.width + sizes.spineWidth}
+        y={0}
+        width={sizes.width}
+        height={sizes.height + 1}
+        class="front"
+    >
         {@html template.front ?? ''}
     </svg>
 </svg>

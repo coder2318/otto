@@ -105,8 +105,7 @@ export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number
     lines.push(line.trim())
 
     node.innerHTML = lines.reduce(
-        (a, line) =>
-            a + `<tspan x="${node.getAttributeNS(null, 'x')}" dy="${a ? test.getBBox().height : 0}">${line}</tspan>`,
+        (a, line) => a + `<tspan x="${node.getAttribute('x')}" dy="${a ? test.getBBox().height : 0}">${line}</tspan>`,
         ''
     )
 }
