@@ -32,16 +32,9 @@
     function updateSvg(params) {
         if (!svg) return
 
-        console.log(params)
         Object.entries(params).forEach(([key, value]) => {
-            console.log(key.replaceAll(/([A-Z])/g, '-$1').toLowerCase())
-            console.log(svg)
-            console.log(svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`))
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
-                    console.log('node', node)
-                    console.log('key', key)
-                    console.log('node.dataset[key]', node.dataset[key])
                     switch (node.dataset[key]) {
                         case 'font-size':
                             node.style.fontSize = value + 'px'
@@ -83,7 +76,6 @@
     })
 
     afterUpdate(() => {
-        console.log(parameters)
         const diff = Object.keys(parameters).reduce((diff, key) => {
             if (parameters[key] !== oldParams[key]) {
                 diff[key] = parameters[key]
@@ -188,8 +180,6 @@
     export function getCoverAspectRatio() {
         return sizes.width / sizes.height
     }
-
-    console.log(template.spine)
 </script>
 
 <svg
