@@ -121,7 +121,13 @@ export function groupBy(array: Array<any>, key: string): any {
 
 export async function listFonts() {
     try {
-        return await window.queryLocalFonts()
+        const res = await window.queryLocalFonts()
+
+        if (res.length) {
+            return res
+        }
+
+        throw new Error('')
     } catch {
         const fontCheck = new Set(
             [
@@ -250,16 +256,54 @@ export async function listFonts() {
             ].sort()
         )
 
-        await document.fonts.ready
+        // await document.fonts.ready
+        //
+        // const fontAvailable = new Set()
+        //
+        // for (const font of fontCheck.values()) {
+        //     if (document.fonts.check(`12px "${font}"`)) {
+        //         fontAvailable.add(font)
+        //     }
+        // }
 
-        const fontAvailable = new Set()
+        const defaultFonts = [
+            'Arial, sans-serif',
+            'Arial Black, sans-serif',
+            'Arial Narrow, sans-serif',
+            'Arial Rounded MT Bold, sans-serif',
+            'Bookman Old Style, serif',
+            'Bradley Hand, cursive',
+            'Brush Script MT, cursive',
+            'Calibri, sans-serif',
+            'Cambria, serif',
+            'Candara, sans-serif',
+            'Century Gothic, sans-serif',
+            'Comic Sans MS, cursive',
+            'Consolas, monospace',
+            'Constantia, serif',
+            'Corbel, sans-serif',
+            'Courier New, monospace',
+            'DejaVu Sans, sans-serif',
+            'DejaVu Serif, serif',
+            'Georgia, serif',
+            'Gill Sans, sans-serif',
+            'Garamond, serif',
+            'Helvetica, sans-serif',
+            'Impact, fantasy',
+            'Lucida Bright, serif',
+            'Lucida Console, monospace',
+            'Lucida Grande, sans-serif',
+            'Lucida Sans Unicode, sans-serif',
+            'Microsoft Sans Serif, sans-serif',
+            'Monaco, monospace',
+            'Palatino, serif',
+            'Segoe UI, sans-serif',
+            'Tahoma, sans-serif',
+            'Times New Roman, serif',
+            'Trebuchet MS, sans-serif',
+            'Verdana, sans-serif',
+        ]
 
-        for (const font of fontCheck.values()) {
-            if (document.fonts.check(`12px "${font}"`)) {
-                fontAvailable.add(font)
-            }
-        }
-
-        return [...fontAvailable.values()]
+        return defaultFonts
     }
 }
