@@ -13,6 +13,24 @@ return new class extends Migration
     {
         $fields = [
             [
+                'key' => 'descriptionFont',
+                'name' => 'Description Text Font',
+                'type' => 'font',
+                'group' => 'Back',
+            ],
+            [
+                'key' => 'subtitleFont',
+                'name' => 'Subtitle Font',
+                'type' => 'font',
+                'group' => 'Front',
+            ],
+            [
+                'key' => 'spineTextFont',
+                'name' => 'Spine Text Font',
+                'type' => 'font',
+                'group' => 'Spine',
+            ],
+            [
                 'key' => 'spineBackgroundColor',
                 'name' => 'Spine Background Color',
                 'type' => 'color',
@@ -24,20 +42,27 @@ return new class extends Migration
                 'type' => 'font',
                 'group' => 'Front',
             ],
+            [
+                'key' => 'authorFont',
+                'name' => 'Author Font',
+                'type' => 'font',
+                'group' => 'Front',
+            ],
         ];
+
         $templates = DB::table('book_cover_templates')->get();
         foreach ($templates as $template) {
             $decoded = json_decode($template->fields, true);
             $column = array_column($decoded, 'key');
             $flag = false;
-            if (! in_array('spineBackgroundColor', $column)) {
-                $decoded[] = $fields[0];
-                $flag = true;
+
+            foreach ($fields as $newField) {
+                if (!in_array($newField['key'], $column)) {
+                    $decoded[] = $newField;
+                    $flag = true;
+                }
             }
-            if (! in_array('titleFont', $column)) {
-                $decoded[] = $fields[1];
-                $flag = true;
-            }
+
             if ($flag) {
                 DB::table('book_cover_templates')
                     ->where(['id' => $template->id])

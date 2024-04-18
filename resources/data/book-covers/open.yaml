@@ -22,6 +22,11 @@ fields:
       type: color
       group: Front
 
+    - name: Title Font
+      key: titleFont
+      type: font
+      group: Front
+
     - name: Subtitle
       key: subtitle
       type: text
@@ -60,6 +65,11 @@ fields:
     - name: Author Color
       key: authorColor
       type: color
+      group: Front
+
+    - name: Author Font
+      key: authorFont
+      type: font
       group: Front
 
 front: |
