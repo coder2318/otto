@@ -22,6 +22,11 @@ fields:
       type: color
       group: Front
 
+    - name: Title Font
+      key: titleFont
+      type: font
+      group: Front
+
     - name: Author
       key: author
       type: text
@@ -35,6 +40,11 @@ fields:
     - name: Author Color
       key: authorColor
       type: color
+      group: Front
+
+    - name: Author Font
+      key: authorFont
+      type: font
       group: Front
 
 front: |
@@ -57,6 +67,7 @@ front: |
       data-shared="true"
       data-author="innerText"
       data-author-size="font-size"
+      data-author-font="font-family"
       data-max="50"
       data-author-color="fill"
       data-draggable="true"
@@ -73,6 +84,7 @@ front: |
       data-max="50"
       data-title-size="font-size"
       data-title-color="fill"
+      data-title-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Merriweather"

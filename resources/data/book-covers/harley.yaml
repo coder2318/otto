@@ -22,6 +22,11 @@ fields:
       type: color
       group: Front
 
+    - name: Title Font
+      key: titleFont
+      type: font
+      group: Front
+
     - name: Subtitle
       key: subtitle
       type: text
@@ -52,6 +57,11 @@ fields:
       type: color
       group: Front
 
+    - name: Author Font
+      key: authorFont
+      type: font
+      group: Front
+
 front: |
     <style>
       @import url(https://fonts.googleapis.com/css2family=Raleway:wght@100&display=swap);
@@ -72,6 +82,7 @@ front: |
       data-shared="true"
       data-title="innerText"
       data-title-size="font-size"
+      data-title-font="font-family"
       data-max="50"
       data-title-color="fill"
       data-draggable="true"
@@ -90,6 +101,7 @@ front: |
       data-max="50"
       data-subtitle-size="font-size"
       data-subtitle-color="fill"
+      data-subtitle-font="font-family"
       data-draggable="true"
       letter-spacing="0.1em"
       fill="white"
@@ -103,6 +115,7 @@ front: |
       data-author="innerText"
       data-max="50"
       data-author-size="font-size"
+      data-author-font="font-family"
       data-author-color="fill"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"

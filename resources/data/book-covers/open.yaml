@@ -22,6 +22,11 @@ fields:
       type: color
       group: Front
 
+    - name: Title Font
+      key: titleFont
+      type: font
+      group: Front
+
     - name: Subtitle
       key: subtitle
       type: text
@@ -37,6 +42,16 @@ fields:
       type: color
       group: Front
 
+    - name: Subtitle Size
+      key: subtitleSize
+      type: number
+      group: Front
+
+    - name: Subtitle Font
+      key: subtitleFont
+      type: font
+      group: Front
+
     - name: Author
       key: author
       type: text
@@ -50,6 +65,11 @@ fields:
     - name: Author Color
       key: authorColor
       type: color
+      group: Front
+
+    - name: Author Font
+      key: authorFont
+      type: font
       group: Front
 
 front: |
@@ -86,6 +106,7 @@ front: |
       data-title-size="font-size"
       data-max="50"
       data-title-color="fill"
+      data-title-font="font-family"
       data-draggable="true"
       letter-spacing="0.1em"
       fill="white"
@@ -100,6 +121,7 @@ front: |
       data-shared="true"
       data-subtitle="innerText"
       data-subtitle-size="font-size"
+      data-subtitle-font="font-family"
       data-max="50"
       data-subtitle-color="fill"
       data-draggable="true"
@@ -116,6 +138,7 @@ front: |
       data-author-size="font-size"
       data-max="50"
       data-author-color="fill"
+      data-author-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Noto Sans Devanagari"
