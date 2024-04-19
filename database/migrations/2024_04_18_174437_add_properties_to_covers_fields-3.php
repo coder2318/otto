@@ -2,7 +2,6 @@
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
@@ -14,8 +13,6 @@ return new class extends Migration
         $templates = DB::table('book_cover_templates')->get();
         foreach ($templates as $template) {
             $this->updateFrontContent($template, 'data-title-color="fill"', "\n  data-title-font=\"font-family\"");
-            $this->updateFrontContent($template, 'data-subtitle-size="font-size"', "\n  data-subtitle-font=\"font-family\"");
-            $this->updateFrontContent($template, 'data-author-color="fill"', "\n  data-author-font=\"font-family\"");
         }
     }
 
