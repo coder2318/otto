@@ -66,8 +66,12 @@ export function draggable(node: SVGElement, root: SVGElement, callback: Function
         event.preventDefault()
         callback()
         const pos = getMousePosition(event)
-        selected.setAttributeNS(null, 'x', (pos.x - offset.x).toString())
+        const x = (pos.x - offset.x).toString()
+
+        selected.setAttributeNS(null, 'x', x)
         selected.setAttributeNS(null, 'y', (pos.y - offset.y).toString())
+
+        selected.setAttributeNS(null, 'width', `calc(100% - ${x.includes('%') ? x : `${Math.abs(+x)}px`})`)
 
         selected.childNodes.forEach((child) => {
             if (child instanceof SVGTSpanElement && child.getAttributeNS(null, 'x')) {

@@ -58,42 +58,50 @@ front: |
       preserveAspectRatio="xMinYMin slice"
       x="0" y="0" width="100%" height="100%"
     />
-    <text
-      x="305" y="85"
+    <foreignObject
+      x="98" y="85"
       font-size="50pt"
       text-anchor="middle"
       font-family="Merriweather"
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
-      data-author="innerText"
       data-author-size="font-size"
       data-author-font="font-family"
       data-max="50"
-      data-author-color="fill"
+      data-author-color="color"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="grey"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >DAVID WALLS</text>
-    <text
+      color="grey"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 98px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-author="innerHTML"
+          style="word-wrap: break-word">
+            DAVID WALLS
+        </p>
+    </foreignObject>
+    <foreignObject
       x="98" y="574"
       font-size="20pt"
       text-anchor="middle"
       data-shared="true"
-      data-title="innerText"
       data-max="50"
       data-title-size="font-size"
-      data-title-color="fill"
+      data-title-color="color"
       data-title-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Merriweather"
       font-weight="normal"
       letter-spacing="0.1em"
-      fill="white"
-      style="filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >
-      Making
-      <tspan dx="-90" dy="40">It So</tspan>
-      <tspan dx="-90" dy="40">Text</tspan>
-    </text>
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 98px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-title="innerHTML"
+          style="word-wrap: break-word">
+            Making <br>
+            It So<br>
+            Text
+      </p>
+    </foreignObject>
