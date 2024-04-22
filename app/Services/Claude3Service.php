@@ -3,12 +3,12 @@
 namespace App\Services;
 
 use Anthropic\Anthropic;
-use OpenAI\Laravel\Facades\OpenAI;
 use TextAnalysis\Tokenizers\SentenceTokenizer;
 
 class Claude3Service
 {
     protected $anthropic;
+
     protected string $defaultPrompt = <<<'TXT'
     You are AutobiographyGPT. You are a high-quality and experienced ghostwriter that has written millions of award-winning autobiographies. You are going to ghostwrite a chapter of my autobiography for me.
     The ghostwriting must be narrated in the First Person.
@@ -32,7 +32,7 @@ class Claude3Service
             'anthropic-version' => '2023-06-01',
             'anthropic-beta' => 'messages-2023-12-15',
             'content-type' => 'application/json',
-            'x-api-key' => env('ANTHROPIC_API_KEY')
+            'x-api-key' => env('ANTHROPIC_API_KEY'),
         ];
 
         $this->anthropic = Anthropic::factory()
@@ -94,7 +94,6 @@ class Claude3Service
         }
     }
 
-
     public static function segmentate(string $input, int $maxWords = 1300)
     {
         $currentLength = 0;
@@ -140,6 +139,4 @@ class Claude3Service
 
         return $this->translate($prompt, $language);
     }
-
-
 }
