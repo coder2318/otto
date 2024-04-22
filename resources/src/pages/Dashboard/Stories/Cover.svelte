@@ -132,6 +132,17 @@
             }
         })
 
+        svg.querySelectorAll('foreignObject').forEach((item) => {
+            const key = item.className.baseVal
+
+            if (key) {
+                parameters[`${key}Position`] = {
+                    x: item.getAttribute('x'),
+                    y: item.getAttribute('y'),
+                }
+            }
+        })
+
         router.post(
             `/stories/${story.data.id}`,
             {

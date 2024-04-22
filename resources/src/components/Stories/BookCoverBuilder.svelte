@@ -1,7 +1,7 @@
 <script lang="ts">
     import { toBlob } from 'html-to-image'
     import { draggable } from '@/service/svelte'
-    import { svgTextWrap } from '@/service/helpers'
+    import { svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
 
     export let template: App.BookCoverTemplate
@@ -70,14 +70,31 @@
                     switch (node.dataset[key]) {
                         case 'font-size':
                             node.style.fontSize = value + 'px'
-                            setTextValue(node as SVGTextElement)
+
+                            if (node.tagName === 'foreignObject') {
+                                svgTextInside(node as SVGTextElement)
+                            } else {
+                                setTextValue(node as SVGTextElement)
+                            }
+
+                            if (+node.getAttribute('y') < 0) {
+                                node.setAttribute('y', '0')
+                            }
+
                             break
                         case 'innerText':
-                        case 'innerHTML':
                             setTextValue(node as SVGTextElement, value as string)
+                            break
+                        case 'innerHTML':
+                            svgTextInside(node as SVGTextElement, value as string)
                             break
                         case 'href':
                             setHref(node as SVGTextElement, value as string)
+                            break
+                        case 'text-background':
+                            if (typeof value === 'string') {
+                                node.style.background = value
+                            }
                             break
                         default:
                             node.setAttribute(node.dataset[key], value as string)
@@ -96,7 +113,12 @@
         Object.entries(shared).forEach(([key, value]) => {
             const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
 
-            if (element?.tagName === 'text' || element?.tagName === 'image' || element?.hasAttribute('data-shared')) {
+            if (
+                element?.tagName === 'text' ||
+                element?.tagName === 'p' ||
+                element?.tagName === 'image' ||
+                element?.hasAttribute('data-shared')
+            ) {
                 parameters[key] = value
             }
         })

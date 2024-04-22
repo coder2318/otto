@@ -95,55 +95,70 @@ front: |
     />
     <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
     <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
-    <text
-      x="305" y="185"
+    <foreignObject
+      x="200" y="185"
       font-size="140pt"
       text-anchor="middle"
       font-family="Noto Sans Devanagari"
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
-      data-title="innerText"
       data-title-size="font-size"
       data-max="50"
-      data-title-color="fill"
+      data-title-color="color"
       data-title-font="font-family"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >OPEN</text>
-    <text
-      x="295" y="240"
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 200px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-title="innerHTML"
+          style="word-wrap: break-word">
+           OPEN
+        </p>
+    </foreignObject>
+    <foreignObject
+      x="25" y="240"
       font-size="36.14pt"
       text-anchor="middle"
       font-family="Noto Sans Devanagari"
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
-      data-subtitle="innerText"
       data-subtitle-size="font-size"
       data-subtitle-font="font-family"
       data-max="50"
-      data-subtitle-color="fill"
+      data-subtitle-color="color"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >AN AUTOBIOGRAPHY</text>
-    <text
-      x="298" y="874"
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 25px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-subtitle="innerHTML"
+          style="word-wrap: break-word">
+            AN AUTOBIOGRAPHY
+        </p>
+    </foreignObject>
+    <foreignObject
+      x="25" y="874"
       font-size="51.24pt"
       text-anchor="middle"
       data-shared="true"
-      data-author="innerText"
       data-author-size="font-size"
       data-max="50"
-      data-author-color="fill"
+      data-author-color="color"
       data-author-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Noto Sans Devanagari"
       font-weight="bold"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >Andre Agassi</text>
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 25px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-author="innerHTML"
+          style="word-wrap: break-word">
+            Andre Agassi
+        </p>
+    </foreignObject>

@@ -71,7 +71,7 @@ front: |
     />
     <rect x="0" y="0" width="100%" height="20%" fill="url(#top-grad)"/>
     <rect x="0" y="80%" width="100%" height="20%" fill="url(#bot-grad)"/>
-    <text
+    <foreignObject
       x="288" y="75"
       font-size="3rem"
       text-anchor="middle"
@@ -82,12 +82,16 @@ front: |
       data-author-font="font-family"
       data-author-size="font-size"
       data-max="50"
-      data-author-color="fill"
+      data-author-color="color"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >Author</text>
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 288px)" height="1">
+      <p xmlns="http://www.w3.org/1999/xhtml"
+        data-author="innerHTML"
+        style="word-wrap: break-word">Author</p>
+    </foreignObject>
     <text
       x="288" y="864"
       font-size="5rem"
@@ -96,13 +100,15 @@ front: |
       data-title="innerText"
       data-max="50"
       data-title-size="font-size"
-      data-title-color="fill"
+      data-title-color="color"
       data-title-font="font-family"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Lunchtype22"
       font-weight="bold"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >Title</text>
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 288px)" height="1">
+      <p xmlns="http://www.w3.org/1999/xhtml" data-author="innerHTML" style="word-wrap: break-word">Title</p>
+    </foreignObject>
