@@ -89,29 +89,28 @@ back: |
     preserveAspectRatio="xMinYMin slice"
     x="0" y="0" width="100%" height="100%"
   />
-  <defs>
-    <filter x="0" y="0" width="1" height="1" id="descriptionBackground">
-      <feFlood flood-color="black" result="bg" data-description-text-background="flood-color"/>
-      <feMerge>
-        <feMergeNode in="bg"/>
-        <feMergeNode in="SourceGraphic"/>
-      </feMerge>
-    </filter>
-  </defs>
-  <text
-    filter="url(#descriptionBackground)"
+  <foreignObject
     x="48" y="96"
-    font-size="1rem"
-    text-anchor="left"
     text-shadow="#FC0 1px 0 10px"
-    data-description="innerText"
-    data-description-color="fill"
-    data-description-font="font-family"
+    font-size="20pt"
+    text-anchor="middle"
+    data-shared="true"
+    data-max="50"
     data-description-text-size="font-size"
+    data-description-color="color"
+    data-description-font="font-family"
     font-family="Merriweather"
+    font-weight="normal"
+    letter-spacing="0.1em"
+    color="white"
     data-draggable="true"
     data-max-width="492"
     data-text-justify="true"
-    letter-spacing="0.1em"
-    fill="white"
-  ></text>
+    style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1;"
+    width="calc(100% - 48px)" height="1">
+      <p xmlns="http://www.w3.org/1999/xhtml"
+        data-description="innerHTML"
+        data-description-text-background="text-background"
+        style="word-wrap: break-word; background: black; max-width: fit-content; width: 98%">
+    </p>
+  </foreignObject>

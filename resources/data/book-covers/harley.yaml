@@ -73,25 +73,30 @@ front: |
         preserveAspectRatio="xMinYMin slice"
         x="0" y="0" width="100%" height="100%"
     />
-    <text
+    <foreignObject
       x="305" y="105"
       font-size="75pt"
       text-anchor="middle"
       font-family="Raleway"
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
-      data-title="innerText"
       data-title-size="font-size"
       data-title-font="font-family"
       data-max="50"
-      data-title-color="fill"
+      data-title-color="color"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="gold"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >Harley</text>
-    <text
-      x="300" y="175"
+      color="gold"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 305px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-title="innerHTML"
+          style="word-wrap: break-word">
+            Harley
+      </p>
+    </foreignObject>
+    <foreignObject
+      x="200" y="175"
       font-size="24pt"
       text-anchor="middle"
       font-family="Raleway"
@@ -100,14 +105,20 @@ front: |
       data-subtitle="innerText"
       data-max="50"
       data-subtitle-size="font-size"
-      data-subtitle-color="fill"
+      data-subtitle-color="color"
       data-subtitle-font="font-family"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    >A reckoning McLEE COREY</text>
-    <text
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 200px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-subtitle="innerHTML"
+          style="word-wrap: break-word">
+            A reckoning McLEE COREY
+      </p>
+    </foreignObject>
+    <foreignObject
       x="288" y="814"
       font-size="40pt"
       text-anchor="middle"
@@ -116,12 +127,17 @@ front: |
       data-max="50"
       data-author-size="font-size"
       data-author-font="font-family"
-      data-author-color="fill"
+      data-author-color="color"
       data-draggable="true"
       text-shadow="#FC0 1px 0 10px"
       font-family="Raleway"
       font-weight="bold"
       letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    ></text>
+      color="white"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 288px)" height="1">
+      <p xmlns="http://www.w3.org/1999/xhtml"
+        data-author="innerHTML"
+        style="word-wrap: break-word">
+    </p>
+  </foreignObject>

@@ -59,38 +59,51 @@ front: |
       preserveAspectRatio="xMinYMin slice"
       x="0" y="0" width="100%" height="100%"
     />
-    <text
-      x="560" y="100"
+    <foreignObject
+      x="200" y="100"
       font-size="65pt"
       text-anchor="end"
       font-family="Arsenal"
       text-shadow="#FC0 1px 0 10px"
       data-shared="true"
-      data-author="innerText"
       data-author-font="font-family"
       data-author-size="font-size"
       data-max="50"
-      data-author-color="fill"
+      data-author-color="color"
       data-draggable="true"
       letter-spacing="0.1em"
-      fill="#fcecec"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    ><tspan x="560" dy="0">Britnet</tspan><tspan x="560" dy="108">Spears</tspan></text>
-    <text
-      x="560" y="650"
-      font-size="55pt"
-      text-anchor="end"
-      data-shared="true"
-      data-title="innerText"
-      data-title-size="font-size"
-      data-max="50"
-      data-title-font="font-family"
-      data-title-color="fill"
-      data-draggable="true"
-      text-shadow="#FC0 1px 0 10px"
-      font-family="Roboto"
-      font-weight="100"
-      letter-spacing="0.1em"
-      fill="white"
-      style="text-transform:uppercase;filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5))"
-    ><tspan x="560" dy="0">The</tspan><tspan x="560" dy="88">Woman</tspan><tspan x="560" dy="88">In Me</tspan></text>
+      color="#fcecec"
+      style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+      width="calc(100% - 200px)" height="1">
+        <p xmlns="http://www.w3.org/1999/xhtml"
+          data-author="innerHTML"
+          style="word-wrap: break-word">
+            Britnet <br>
+            Spears<br>
+      </p>
+    </foreignObject>
+    <foreignObject
+        x="200" y="650"
+        font-size="55pt"
+        text-anchor="end"
+        data-shared="true"
+        data-title-size="font-size"
+        data-max="50"
+        data-title-font="font-family"
+        data-title-color="color"
+        data-draggable="true"
+        text-shadow="#FC0 1px 0 10px"
+        font-family="Roboto"
+        font-weight="100"
+        letter-spacing="0.1em"
+        color="white"
+        style="text-transform:uppercase; filter:drop-shadow(3px 3px 1px rgba(0,0,0,0.5)); overflow: visible; line-height: 1"
+        width="calc(100% - 200px)" height="1">
+          <p xmlns="http://www.w3.org/1999/xhtml"
+            data-title="innerHTML"
+            style="word-wrap: break-word">
+              The <br>
+              Woman<br>
+              In Me
+        </p>
+    </foreignObject>

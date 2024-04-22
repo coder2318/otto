@@ -91,6 +91,11 @@
                         case 'href':
                             setHref(node as SVGTextElement, value as string)
                             break
+                        case 'text-background':
+                            if (typeof value === 'string') {
+                                node.style.background = value
+                            }
+                            break
                         default:
                             node.setAttribute(node.dataset[key], value as string)
                             break
