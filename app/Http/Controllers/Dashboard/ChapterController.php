@@ -24,6 +24,7 @@ use App\Models\TimelineQuestion;
 use App\Notifications\GuestChapterInviteNotification;
 use App\Services\Claude3Service;
 use App\Services\MediaService;
+use App\Services\OpenAIService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -118,7 +119,7 @@ class ChapterController extends Controller
     }
 
     //Enhanced with OttoStory button
-    public function process(Chapter $chapter, Claude3Service $service, Request $request)
+    public function process(Chapter $chapter, OpenAIService $service, Request $request)
     {
         return new StreamedResponse(function () use ($chapter, $service, $request) {
             $request->validate([

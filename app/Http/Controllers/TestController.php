@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Services\Claude3Service;
+use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class TestController extends Controller
 {
-    public function prompt(Request $request, Claude3Service $service)
+    public function prompt(Request $request, OpenAIService $service)
     {
         $request->validate([
             'prompt' => 'required|string',
