@@ -19,7 +19,6 @@ use App\Models\User;
 use App\Notifications\DemoFinishedNotification;
 use App\Services\Claude3Service;
 use App\Services\MediaService;
-use App\Services\OpenAIService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
@@ -183,7 +182,7 @@ class DemoController extends Controller
         return redirect()->route('dashboard.demo.attachments')->with('message', 'Attachment deleted successfully!');
     }
 
-    public function process(Request $request, OpenAIService $service)
+    public function process(Request $request, Claude3Service $service)
     {
         [$chapter] = $this->data($request);
 
