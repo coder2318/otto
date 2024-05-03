@@ -3,11 +3,9 @@
 namespace App\Services;
 
 use OpenAI\Laravel\Facades\OpenAI;
-use TextAnalysis\Tokenizers\SentenceTokenizer;
 
 class OpenAIService extends AiService
 {
-
     public function __construct(protected ?bool $fake = null)
     {
         $this->fake = is_null($this->fake) ? config('services.openai.fake') : $this->fake;
@@ -111,5 +109,4 @@ class OpenAIService extends AiService
 
         return true;
     }
-
 }

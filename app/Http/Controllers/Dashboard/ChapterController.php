@@ -23,7 +23,6 @@ use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Notifications\GuestChapterInviteNotification;
 use App\Services\AiService;
-use App\Services\Claude3Service;
 use App\Services\MediaService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;

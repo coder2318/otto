@@ -25,7 +25,6 @@ abstract class AiService
 
     abstract public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null);
 
-
     public static function segmentate(string $input, int $maxWords = 1300)
     {
         $currentLength = 0;

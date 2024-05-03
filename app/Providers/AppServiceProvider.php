@@ -51,11 +51,12 @@ class AppServiceProvider extends ServiceProvider
         } catch (Exception) {
             $selectedModel = null;
         }
-            if (is_null($selectedModel)) {
-                $selectedModel = 'Claude3';
-            } else {
-                $selectedModel = $selectedModel->value;
-            }
+
+        if (is_null($selectedModel)) {
+            $selectedModel = 'Claude3';
+        } else {
+            $selectedModel = $selectedModel->value;
+        }
 
         if ($selectedModel === 'Claude3') {
             $this->app->bind(AiService::class, fn () => new Claude3Service(config('services.anthropic.key')));
