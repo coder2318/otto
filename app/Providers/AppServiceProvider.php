@@ -2,15 +2,9 @@
 
 namespace App\Providers;
 
-use App\Models\Setting;
-use App\Services\AiService;
-use App\Services\Claude3Service;
-use App\Services\OpenAIService;
 use DateTime;
-use Exception;
 use Google\Cloud\Translate\V2\TranslateClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Illuminate\Support\ServiceProvider;
@@ -41,29 +35,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(TranslateClient::class, fn () => new TranslateClient([
             'key' => config('services.google.translate.key'),
         ]));
-
-        // ---------------------------------------------------------------------------------------
-        // AI Services bind
-        // ***************************************************************************************
-
-        try {
-            $selectedModel = Schema::hasTable('settings') ? Setting::firstWhere('name', 'ai_service') : null;
-        } catch (Exception) {
-            $selectedModel = null;
-        }
-
-        if (is_null($selectedModel)) {
-            $selectedModel = 'Claude3';
-        } else {
-            $selectedModel = $selectedModel->value;
-        }
-
-        if ($selectedModel === 'Claude3') {
-            $this->app->bind(AiService::class, fn () => new Claude3Service(config('services.anthropic.key')));
-        } elseif ($selectedModel === 'GPT4') {
-            $this->app->bind(AiService::class, fn () => new OpenAIService);
-        }
-        // ---------------------------------------------------------------------------------------
 
         Storage::disk('local')->buildTemporaryUrlsUsing(
             fn (string $path, DateTime $expiration, array $options) => URL::temporarySignedRoute(
