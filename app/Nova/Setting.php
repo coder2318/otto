@@ -12,7 +12,7 @@ class Setting extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Prompt>
+     * @var class-string<\App\Models\Setting>
      */
     public static $model = \App\Models\Setting::class;
 
@@ -22,8 +22,6 @@ class Setting extends Resource
      * @var string
      */
     public static $title = 'name';
-
-    public static $hasRecourseId = false;
 
     /**
      * The columns that should be searched.
