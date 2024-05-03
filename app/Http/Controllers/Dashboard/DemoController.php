@@ -17,7 +17,7 @@ use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Models\User;
 use App\Notifications\DemoFinishedNotification;
-use App\Services\AiService;
+use App\Services\Claude3Service;
 use App\Services\MediaService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -182,7 +182,7 @@ class DemoController extends Controller
         return redirect()->route('dashboard.demo.attachments')->with('message', 'Attachment deleted successfully!');
     }
 
-    public function process(Request $request, AiService $service)
+    public function process(Request $request, Claude3Service $service)
     {
         [$chapter] = $this->data($request);
 
