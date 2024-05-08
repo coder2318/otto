@@ -22,7 +22,7 @@ use App\Models\Prompt;
 use App\Models\Story;
 use App\Models\TimelineQuestion;
 use App\Notifications\GuestChapterInviteNotification;
-use App\Services\Claude3Service;
+use App\Services\AiService;
 use App\Services\MediaService;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -118,7 +118,7 @@ class ChapterController extends Controller
     }
 
     //Enhanced with OttoStory button
-    public function process(Chapter $chapter, Claude3Service $service, Request $request)
+    public function process(Chapter $chapter, AiService $service, Request $request)
     {
         return new StreamedResponse(function () use ($chapter, $service, $request) {
             $request->validate([
