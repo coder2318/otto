@@ -23,12 +23,19 @@
         title: 'title',
         titleColor: 'title',
         titleSize: 'title',
+        titleFont: 'title',
         description: 'description',
         descriptionColor: 'description',
         descriptionSize: 'description',
+        descriptionFont: 'description',
         author: 'author',
         authorColor: 'author',
         authorSize: 'author',
+        authorFont: 'author',
+        subtitle: 'subtitle',
+        subtitleColor: 'subtitle',
+        subtitleSize: 'subtitle',
+        subtitleFont: 'subtitle',
         spin: 'spin',
     }
 
@@ -47,6 +54,8 @@
         if (!svg) return
 
         Object.entries(params).forEach(([key, value], i) => {
+            key = key.includes('Position') ? key.replace('Position', '') : key
+
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
                     if (keys[key]) {

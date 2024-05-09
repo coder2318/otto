@@ -116,7 +116,10 @@ export function svgTextInside(node, text?: string) {
     const x = el.getAttribute('x')
 
     el.setAttribute('width', `calc(100% - ${x.includes('%') ? x : `${Math.abs(+x)}px`})`)
-    node.innerText = text?.trim() || ''
+
+    if (typeof text === 'string') {
+        node.innerText = text?.trim() || ''
+    }
 }
 
 export function groupBy(array: Array<any>, key: string): any {
