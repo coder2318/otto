@@ -50,11 +50,15 @@
         node.setAttribute('href', value)
     }
 
+    function replaceKey(key: string) {
+        return key.includes('Position') ? key.replace('Position', '') : key
+    }
+
     function updateSvg(params) {
         if (!svg) return
 
         Object.entries(params).forEach(([key, value], i) => {
-            key = key.includes('Position') ? key.replace('Position', '') : key
+            key = replaceKey(key)
 
             svg.querySelectorAll(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`).forEach(
                 (node: HTMLElement | SVGElement) => {
@@ -120,14 +124,15 @@
         })
 
         Object.entries(shared).forEach(([key, value]) => {
-            const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
+            const element = svg.querySelector(
+                `[data-${replaceKey(key)
+                    .replaceAll(/([A-Z])/g, '-$1')
+                    .toLowerCase()}]`
+            )
 
-            if (
-                element?.tagName === 'text' ||
-                element?.tagName === 'p' ||
-                element?.tagName === 'image' ||
-                element?.hasAttribute('data-shared')
-            ) {
+            const tagName = element?.tagName.toLowerCase()
+
+            if (tagName === 'text' || tagName === 'p' || tagName === 'image' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
