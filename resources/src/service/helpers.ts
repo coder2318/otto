@@ -83,31 +83,35 @@ export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number
         }
         text = text.trim()
     }
-    const words = text.split(' ').filter((w) => w)
-    const test = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
-    node.innerHTML = ''
-    node.appendChild(test)
-    const lines = []
-    let line = ''
 
-    words.forEach((word) => {
-        const testLine = line + word + ' '
-        test.innerHTML = testLine
+    if (typeof text === 'string') {
+        const words = text.split(' ').filter((w) => w)
+        const test = document.createElementNS('http://www.w3.org/2000/svg', 'tspan')
+        node.innerHTML = ''
+        node.appendChild(test)
+        const lines = []
+        let line = ''
 
-        if (test.getBBox().width <= maxWidth) {
-            line = testLine
-        } else {
-            lines.push(line.trim())
-            line = word + ' '
-        }
-    })
+        words.forEach((word) => {
+            const testLine = line + word + ' '
+            test.innerHTML = testLine
 
-    lines.push(line.trim())
+            if (test.getBBox().width <= maxWidth) {
+                line = testLine
+            } else {
+                lines.push(line.trim())
+                line = word + ' '
+            }
+        })
 
-    node.innerHTML = lines.reduce(
-        (a, line) => a + `<tspan x="${node.getAttribute('x')}" dy="${a ? test.getBBox().height : 0}">${line}</tspan>`,
-        ''
-    )
+        lines.push(line.trim())
+
+        node.innerHTML = lines.reduce(
+            (a, line) =>
+                a + `<tspan x="${node.getAttribute('x')}" dy="${a ? test.getBBox().height : 0}">${line}</tspan>`,
+            ''
+        )
+    }
 }
 
 export function svgTextInside(node, text?: string) {
