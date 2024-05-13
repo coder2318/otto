@@ -49,7 +49,7 @@ class OpenAIService extends AiService
 
     public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null)
     {
-        if (false) {
+        if ($this->fake) {
             sleep(1);
 
             foreach (str_split($input, 5) as $segment) {
