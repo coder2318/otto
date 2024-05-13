@@ -20,23 +20,18 @@
     let isSetPosition = false
 
     const keys = {
-        title: 'title',
         titleColor: 'title',
         titleSize: 'title',
         titleFont: 'title',
-        description: 'description',
         descriptionColor: 'description',
         descriptionSize: 'description',
         descriptionFont: 'description',
-        author: 'author',
         authorColor: 'author',
         authorSize: 'author',
         authorFont: 'author',
-        subtitle: 'subtitle',
         subtitleColor: 'subtitle',
         subtitleSize: 'subtitle',
         subtitleFont: 'subtitle',
-        spin: 'spin',
     }
 
     function setTextValue(node: SVGTextElement, value: string | null = null) {
@@ -122,12 +117,9 @@
         Object.entries(shared).forEach(([key, value]) => {
             const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
 
-            if (
-                element?.tagName === 'text' ||
-                element?.tagName === 'p' ||
-                element?.tagName === 'image' ||
-                element?.hasAttribute('data-shared')
-            ) {
+            const tagName = element?.tagName.toLowerCase()
+
+            if (tagName === 'text' || tagName === 'p' || tagName === 'image' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
