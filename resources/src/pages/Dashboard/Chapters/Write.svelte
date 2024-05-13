@@ -108,7 +108,7 @@
 
     function removeImage() {
         if (chapter.data.images?.length) {
-            router.delete(`/chapters/${chapter.data.id}/image/${chapter.data.images[0].id}`, {
+            router.delete('/chapters/${chapter.data.id}/image/${chapter.data.images[0].id}', {
                 only: ['chapter'],
                 preserveScroll: true,
             })
@@ -156,7 +156,7 @@
                                             $form.errors[`images.${i}.caption`]}
                                         in:fade
                                     >
-                                        <button
+                                        <button type="button"
                                             class="btn-trash btn btn-circle btn-error btn-outline btn-sm absolute right-2 top-2"
                                             on:click={removeImage}><Fa icon={faTrash} /></button
                                         >
