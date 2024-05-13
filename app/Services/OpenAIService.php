@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Prompt;
 use OpenAI\Laravel\Facades\OpenAI;
 
 class OpenAIService extends AiService
@@ -48,7 +49,7 @@ class OpenAIService extends AiService
 
     public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null)
     {
-        if ($this->fake) {
+        if (false) {
             sleep(1);
 
             foreach (str_split($input, 5) as $segment) {
@@ -60,7 +61,11 @@ class OpenAIService extends AiService
         }
 
         $language = $this->getLanguage($input);
-        $prompt = $this->getPrompt($prompt ?? $this->defaultPrompt, $language);
+        if (is_null($prompt)) {
+            $prompt = Prompt::where('title', 'The Default')->value('content') ?? $this->defaultPrompt;
+        }
+        $prompt = $this->getPrompt($prompt, $language);
+
         $strings = [
             'name' => $this->translate("What's your name?", $language),
             'question' => $this->translate("Please, tell me your story on: \"$question\"", $language),

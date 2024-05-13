@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use Anthropic\Anthropic;
+use App\Models\Prompt;
 
 class Claude3Service extends AiService
 {
@@ -25,7 +26,10 @@ class Claude3Service extends AiService
     public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null)
     {
         $language = $this->getLanguage($input);
-        $prompt = $this->getPrompt($prompt ?? $this->defaultPrompt, $language);
+        if (is_null($prompt)) {
+            $prompt = Prompt::where('title', 'The Default')->value('content') ?? $this->defaultPrompt;
+        }
+        $prompt = $this->getPrompt($prompt, $language);
 
         $strings = [
             'name' => $this->translate("What's your name?", $language),
