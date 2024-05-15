@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { inertia, router } from '@inertiajs/svelte'
+    import { inertia, router, page } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
@@ -55,6 +55,17 @@
     let hiddenParams = {} as any
     let loading: boolean = false
     let fonts = []
+
+    const isTemplate = !!new URLSearchParams($page.url.split('?')?.[1]).get('template')
+
+    let sharedStyles = story.data?.cover?.meta ?? {}
+
+    if (isTemplate) {
+        const { title, description, author, subtitle } = sharedStyles
+
+        sharedStyles = { title, description, author, subtitle }
+        parameters = {}
+    }
 
     onMount(() => {
         listFonts().then((list) => {
@@ -316,7 +327,7 @@
                         bind:this={builder}
                         class="select-none"
                         pages={story.data.pages ?? 0}
-                        shared={story.data?.cover?.meta ?? {}}
+                        shared={sharedStyles}
                         {parameters}
                         change={() => {
                             changed = true

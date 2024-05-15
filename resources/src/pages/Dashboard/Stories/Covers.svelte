@@ -17,6 +17,14 @@
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
+
+    const { title, description, author, subtitle } = story.data?.cover?.meta ?? {}
+
+    let bookCoverInfo = {}
+
+    if (title) {
+        bookCoverInfo = { title, description, author, subtitle }
+    }
 </script>
 
 <svelte:head>
@@ -38,7 +46,7 @@
             in:blur={{ delay: 250, duration: 250 }}
         >
             <figure class="p-2">
-                <BookCoverBuilder preview={true} template={cover} pages={200} shared={story.data?.cover?.meta ?? {}} />
+                <BookCoverBuilder preview={true} template={cover} pages={200} shared={bookCoverInfo ?? {}} />
             </figure>
             <div class="card-body items-center px-1 py-2">
                 <h5 class="card-title">{cover.name}</h5>
