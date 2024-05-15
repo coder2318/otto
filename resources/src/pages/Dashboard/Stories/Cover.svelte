@@ -64,6 +64,7 @@
         const { title, description, author, subtitle } = sharedStyles
 
         sharedStyles = { title, description, author, subtitle }
+        parameters = {}
     }
 
     onMount(() => {
