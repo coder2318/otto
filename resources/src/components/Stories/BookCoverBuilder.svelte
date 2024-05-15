@@ -110,12 +110,16 @@
     }
 
     onMount(() => {
+        parameters = {}
+
         svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
             dragHooks.push(draggable(node, svg as SVGElement, change))
         })
 
         Object.entries(shared).forEach(([key, value]) => {
-            const element = svg.querySelector(`[data-${key.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
+            const keyPos = key.includes('Position') ? key.replace('Position', '') : key
+
+            const element = svg.querySelector(`[data-${keyPos.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)
 
             const tagName = element?.tagName.toLowerCase()
 
