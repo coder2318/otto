@@ -102,7 +102,7 @@
         @if($chapter->images)
             @foreach ($chapter->images as $image)
                 <figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem">
-                    <img src="{{ $image->getTemporaryUrl(now()->addMinute(), 'optimized') }}" style="margin-bottom:0.5rem;max-height:7in;width:100%" />
+                    <img src="{{ $image->getTemporaryUrl(now()->addMinute()) }}" style="margin-bottom:0.5rem;max-height:7in;width:100%" />
                     <figcaption style="font-size:0.8rem;font-style:italic">{{ $image->getCustomProperty('caption') }}</figcaption>
                 </figure>
             @endforeach
