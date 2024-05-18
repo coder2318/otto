@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Dashboard;
 
+use App\Helpers;
+
 use App\Data\Lulu\LineItem;
 use App\Data\Lulu\PrintableNormalization;
 use App\Data\Lulu\PrintJobDetails;
@@ -248,10 +250,13 @@ class StoryController extends Controller
             return redirect()->back()->with('error', trans('A book must have at least 32 pages!'));
         }
 
+        $luluSettings = \App\Models\LuluPrintSettings::where('is_enabled', '=', 1)->firstOrFail();
+        $pod_package_id = $luluSettings->getPackageId();
+
         $cost = rescue(fn () => $lulu->cost(
             LineItem::from([
                 'page_count' => $story->pages,
-                'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
+                'pod_package_id' => $pod_package_id,
                 'quantity' => $request->validated('quantity'),
             ]),
             $request->shippingAddress(),
@@ -293,12 +298,15 @@ class StoryController extends Controller
             }
         }
 
+        $luluSettings = \App\Models\LuluPrintSettings::where('is_enabled', '=', 1)->firstOrFail();
+        $pod_package_id = $luluSettings->getPackageId();
+
         $print = $lulu->print(
             config('mail.from.address'),
             LineItem::from([
                 'printable_normalization' => PrintableNormalization::from([
                     'external_id' => isset($payment) ? $payment->external_id : null, // @phpstan-ignore-line
-                    'pod_package_id' => '0614X0921FCSTDCW080CW444MXX',
+                    'pod_package_id' => $pod_package_id,
                     'cover' => ['source_url' => $story->book_cover->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
                     'interior' => ['source_url' => $story->book->getTemporaryUrl(now()->addHour())], // @phpstan-ignore-line
                 ]),
