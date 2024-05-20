@@ -78,7 +78,7 @@ return [
     'lulu' => [
         'key' => env('LULU_API_KEY'),
         'secret' => env('LULU_SECRET'),
-        'url' => env('LULU_API', 'https://api.lulu.com/'),
+        'url' => env('LULU_API_URL'),
         'encoded_key' => env('LULU_ENCODED'),
         /**
          * 0600X0900: trim size 6” x 9”
