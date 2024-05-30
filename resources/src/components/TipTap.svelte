@@ -1,7 +1,6 @@
 <script lang="ts">
     import { Editor } from '@tiptap/core'
-    import { onMount, afterUpdate, onDestroy } from 'svelte'
-    import { strToHtml } from '@/service/helpers'
+    import { onMount, onDestroy } from 'svelte'
     import StarterKit from '@tiptap/starter-kit'
     import Focus from '@tiptap/extension-focus'
     import Placeholder from '@tiptap/extension-placeholder'
@@ -10,7 +9,6 @@
     let wrapper: HTMLElement
     let toolbar: HTMLElement
     let actualParent: HTMLElement = document
-    let toolbarHeight = 0
 
     const NAVBAR_HEIGHT = 99
     const TOOLBAR_PADDING_TOP = 16
