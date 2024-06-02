@@ -81,22 +81,8 @@
                 </g>
             </svg>
         </div>
-        @php
-            $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))
-                ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p));
-        @endphp
         <section>
-            @foreach ($content as $p)
-            @if($loop->first)
-                @php
-                    $cap = substr($p, 0, 1);
-                    $p = substr($p, 1);
-                @endphp
-                <p><span class="first-letter">{{ $cap }}</span>{{ $p }}</p>
-            @else
-                <p>{{ $p }}</p>
-            @endif
-            @endforeach
+            {!! $chapter->content !!}
         </section>
 
         @if($chapter->images)
