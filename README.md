@@ -32,19 +32,41 @@ composer install --ignore-platform-reqs
 # start docker environment
 vendor/bin/sail up -d
 
+# remove docker environment
+sail down --rmi all
+
 # install application
 vendor/bin/sail composer install
 vendor/bin/sail bun install
 vendor/bin/sail bun run build
+
+# run the app for the first time with a clean database
+# first, add stripe properties to .env file
+vendor/bin/sail artisan migrate:fresh --seed
 
 # migrate db and link storage
 vendor/bin/sail artisan db:seed
 vendor/bin/sail artisan storage:link
 ```
 
+you can configure alias to avoid typing vendor/bin/sail every time
+https://laravel.com/docs/11.x/sail#configuring-a-shell-alias
+alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
+
+in order to configure local s3 storage (minio) login to localhost:8900 with user:sail Password:password. You need to create a key and a bucket, put them to appripriate AWS_.. variables
+
+# run js in dev mode 
+sail bun run dev
+
+# restart containers
+sudo ./vendor/bin/sail restart
+
 ## Access points
 
 -   Application: http://localhost/
 -   Database Explorer: http://localhost:3000/
--   Minio S3 Storage: http://localhost:9000/
+-   Minio S3 Storage: http://localhost:8900/
+  - MINIO_ROOT_USER: sail
+  - MINIO_ROOT_PASSWORD: password
+
 -   Mailpit Emails: http://localhost:8025/
