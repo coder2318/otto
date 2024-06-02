@@ -108,7 +108,7 @@
 
     function removeImage() {
         if (chapter.data.images?.length) {
-            router.delete('/chapters/${chapter.data.id}/image/${chapter.data.images[0].id}', {
+            router.delete(`/chapters/${chapter.data.id}/image/${chapter.data.images[0].id}`, {
                 only: ['chapter'],
                 preserveScroll: true,
             })
@@ -116,6 +116,7 @@
 
         $form.images.forEach((image) => URL.revokeObjectURL(image.url))
         $form.images = []
+        document.getElementById('upFile').value = null
     }
 
     $: images = chapter.data.images?.length ? chapter.data.images : $form.images?.length ? $form.images : []
@@ -145,7 +146,14 @@
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
                     />
-                    <input bind:this={input} type="file" accept="image/*" class="hidden" on:change={addImages} />
+                    <input
+                        bind:this={input}
+                        type="file"
+                        id="upFile"
+                        accept="image/*"
+                        class="hidden"
+                        on:change={addImages}
+                    />
                     {#if images.length}
                         <div class="flex flex-wrap items-center justify-center gap-4">
                             {#each images as image, i (image.url)}
@@ -156,7 +164,8 @@
                                             $form.errors[`images.${i}.caption`]}
                                         in:fade
                                     >
-                                        <button type="button"
+                                        <button
+                                            type="button"
                                             class="btn-trash btn btn-circle btn-error btn-outline btn-sm absolute right-2 top-2"
                                             on:click={removeImage}><Fa icon={faTrash} /></button
                                         >
