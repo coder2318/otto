@@ -14,21 +14,17 @@
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
     import TipTap from '@/components/TipTap.svelte'
     import languages from '@/data/translate_languages.json'
-    import Fa from 'svelte-fa'
-    import { faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
     import axios from 'axios'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
 
     let modal: HTMLDialogElement
-    let input: HTMLInputElement
 
     const form = useForm({
         content: chapter.data.content ?? '',
         title: chapter.data.title,
         status: chapter.data.status,
-        images: [],
     })
 
     let language: string | null = null
@@ -65,13 +61,11 @@
             .post(`/chapters/${chapter.data.id}`, {
                 preserveScroll: true,
                 onSuccess: () => {
-                    $form.images = []
                     $form
                         .defaults({
                             content: chapter.data.content ?? '',
                             title: chapter.data.title,
                             status: chapter.data.status,
-                            images: [],
                         })
                         .reset()
                 },
@@ -96,30 +90,39 @@
             })
     }
 
-    function addImages(event) {
-        $form.images.push({
-            file: event.target.files[0],
-            caption: prompt('Please enter image caption'),
-            url: URL.createObjectURL(event.target.files[0]),
-        })
-
-        $form.images = $form.images
-    }
-
-    function removeImage() {
-        if (chapter.data.images?.length) {
-            router.delete(`/chapters/${chapter.data.id}/image/${chapter.data.images[0].id}`, {
-                only: ['chapter'],
-                preserveScroll: true,
+    function uploadImage(event) {
+        axios
+            .post(
+                `/chapters/${chapter.data.id}/image`,
+                {
+                    images: [
+                        {
+                            file: event.detail.files[0],
+                            caption: prompt('Please enter image caption'),
+                            url: URL.createObjectURL(event.detail.files[0]),
+                        },
+                    ],
+                },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+            .then((response) => {
+                let newImage = response?.data?.image ?? null
+                if (newImage) {
+                    event.detail.callback(newImage)
+                }
             })
-        }
-
-        $form.images.forEach((image) => URL.revokeObjectURL(image.url))
-        $form.images = []
-        document.getElementById('upFile').value = null
     }
 
-    $: images = chapter.data.images?.length ? chapter.data.images : $form.images?.length ? $form.images : []
+    function removeImage(event) {
+        router.delete(`/chapters/${chapter.data.id}/image/${event.detail.id}`, {
+            only: ['chapter'],
+            preserveScroll: true,
+        })
+    }
 </script>
 
 <svelte:head>
@@ -146,57 +149,9 @@
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
                         contentType="html"
+                        on:uploadImage={uploadImage}
+                        on:removeImage={removeImage}
                     />
-                    <input
-                        bind:this={input}
-                        type="file"
-                        id="upFile"
-                        accept="image/*"
-                        class="hidden"
-                        on:change={addImages}
-                    />
-                    {#if images.length}
-                        <div class="flex flex-wrap items-center justify-center gap-4">
-                            {#each images as image, i (image.url)}
-                                <div class="relative flex flex-col items-center justify-center gap-2">
-                                    <figure
-                                        class="flex w-full max-w-sm flex-col rounded-xl border-error bg-base-100"
-                                        class:border={$form.errors[`images.${i}.file`] ||
-                                            $form.errors[`images.${i}.caption`]}
-                                        in:fade
-                                    >
-                                        <button
-                                            type="button"
-                                            class="btn-trash btn btn-circle btn-error btn-outline btn-sm absolute right-2 top-2"
-                                            on:click={removeImage}><Fa icon={faTrash} /></button
-                                        >
-                                        <img src={image.url} alt={image.caption} class="w-full bg-base-200" />
-                                        <figcaption class="p-2 italic">{image.caption}</figcaption>
-                                    </figure>
-                                    {#if $form.errors?.[`images.${i}.file`]}
-                                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
-                                            {$form.errors[`images.${i}.file`]}
-                                        </span>
-                                    {/if}
-                                    {#if $form.errors[`images.${i}.caption`]}
-                                        <span class="badge badge-error badge-lg mx-auto text-neutral/80">
-                                            {$form.errors?.[`images.${i}.caption`]}
-                                        </span>
-                                    {/if}
-                                </div>
-                            {/each}
-                        </div>
-                    {:else}
-                        <div class="flex">
-                            <button
-                                type="button"
-                                class="btn btn-ghost btn-sm"
-                                on:click|preventDefault={() => input.click()}
-                            >
-                                <Fa icon={faPlus} /> Add Image
-                            </button>
-                        </div>
-                    {/if}
                 </div>
                 {#if $form.errors.content}
                     <span class="badge badge-error badge-lg mx-auto text-neutral/80">
