@@ -155,24 +155,37 @@
             </div>
             <div class="block">
                 <div class="flex flex-col items-stretch gap-4 md:flex-row">
-                    <TipTap
-                        class="textarea textarea-bordered textarea-ghost h-full transition-transform
-                            {$form.use == 'enhanced' ? 'scale-[1.01]' : ''}
-                            {$form.errors.original ? 'textarea-error' : ''}
-                            rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
-                        bind:content={$form.enhanced}
-                        placeholder="Type Your Story here..."
-                    />
+                    <div
+                        class="form-control w-full gap-2 {$form.errors.content
+                            ? 'textarea-error'
+                            : ''} textarea textarea-bordered textarea-ghost rounded-xl"
+                    >
+                        <TipTap
+                            class="textarea  textarea-ghost h-full transition-transform
+                                {$form.use == 'enhanced' ? 'scale-[1.01]' : ''}
+                                {$form.errors.original ? 'textarea-error' : ''}
+                                rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
+                            bind:content={$form.enhanced}
+                            placeholder="Type Your Story here..."
+                            contentType="html"
+                        />
+                    </div>
 
                     {#if compare}
-                        <TipTap
-                            class="textarea textarea-bordered h-full transition-transform
+                        <div
+                            class="form-control w-full gap-2 {$form.errors.content
+                                ? 'textarea-error'
+                                : ''} textarea textarea-bordered textarea-ghost rounded-xl"
+                        >
+                            <TipTap
+                                class="textarea  h-full transition-transform
                                 {$form.use == 'original' ? 'scale-[1.01]' : ''}
                                 {$form.errors.original ? 'textarea-error' : ''}
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
-                            bind:content={$form.original}
-                            placeholder="Type Your Story here..."
-                        />
+                                bind:content={$form.original}
+                                placeholder="Type Your Story here..."
+                            />
+                        </div>
                     {/if}
                 </div>
 

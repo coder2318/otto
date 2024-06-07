@@ -4,6 +4,7 @@
     import StarterKit from '@tiptap/starter-kit'
     import Focus from '@tiptap/extension-focus'
     import Placeholder from '@tiptap/extension-placeholder'
+    import { strToHtml } from '@/service/helpers'
 
     let element: HTMLElement
     let wrapper: HTMLElement
@@ -16,6 +17,8 @@
     export let editor: Editor = null
     export let content = ''
     export let autofocus = false
+
+    let contentType = 'text'
 
     const handleScroll = () => {
         const toolbarTop = wrapper.getBoundingClientRect().top
@@ -32,6 +35,10 @@
     }
 
     onMount(() => {
+        contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
+        if (contentType === 'text') {
+            content = strToHtml(content, true)
+        }
         editor = new Editor({
             editorProps: {
                 attributes: {
@@ -49,15 +56,16 @@
             ],
             content: content,
             onTransaction: () => (editor = editor),
-            onUpdate: ({ editor }) => {
-                const newText = editor.getHTML()
-                if (newText == content) return
-                content = newText
-            },
             onCreate: ({ editor }) => {
                 if (autofocus) {
                     editor.chain().focus('end').run()
                 }
+            },
+            onUpdate: ({ editor }) => {
+                let editorContent =
+                    contentType === 'html' ? editor.getHTML() : editor.getText({ blockSeparator: '\n\n' })
+
+                content = editorContent
             },
         })
 
@@ -68,11 +76,26 @@
         return () => editor?.destroy()
     })
 
+    function updateContent(content: string) {
+        if (editor) {
+            let editorContent = contentType === 'html' ? editor.getHTML() : editor.getText({ blockSeparator: '\n\n' })
+            if (editorContent !== content) {
+                const { from, to } = editor.state.selection
+                editor.commands.setContent(strToHtml(content, true), false)
+                editor.commands.setTextSelection({ from, to })
+            }
+        } else {
+            return
+        }
+    }
+
     onDestroy(() => {
         if (actualParent) {
             actualParent.removeEventListener('scroll', handleScroll)
         }
     })
+
+    $: updateContent(content)
 </script>
 
 <div bind:this={wrapper} class="prose mx-auto w-full max-w-none focus:outline-none">

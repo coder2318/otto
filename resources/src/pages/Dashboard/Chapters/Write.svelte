@@ -145,6 +145,7 @@
                         class="min-h-[150px] w-full text-lg first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary md:text-2xl"
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
+                        contentType="html"
                     />
                     <input
                         bind:this={input}
