@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { inertia, useForm, router } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
@@ -15,6 +15,7 @@
     import goBackLinkIcon from '@/assets/img/go-back-link-icon.svg'
     import TipTap from '@/components/TipTap.svelte'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
+    import axios from 'axios'
 
     export let chapter: { data: App.Chapter }
     export let prompts: { data: App.Prompt[] }
@@ -112,6 +113,40 @@
             controller?.abort()
         }
     })
+
+    function uploadImage(event) {
+        axios
+            .post(
+                `/chapters/${chapter.data.id}/image`,
+                {
+                    images: [
+                        {
+                            file: event.detail.files[0],
+                            caption: prompt('Please enter image caption'),
+                            url: URL.createObjectURL(event.detail.files[0]),
+                        },
+                    ],
+                },
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+            .then((response) => {
+                let newImage = response?.data?.image ?? null
+                if (newImage) {
+                    event.detail.callback(newImage)
+                }
+            })
+    }
+
+    function removeImage(event) {
+        router.delete(`/chapters/${chapter.data.id}/image/${event.detail.id}`, {
+            only: ['chapter'],
+            preserveScroll: true,
+        })
+    }
 </script>
 
 <svelte:head>
@@ -168,9 +203,10 @@
                             bind:content={$form.enhanced}
                             placeholder="Type Your Story here..."
                             contentType="html"
+                            on:uploadImage={uploadImage}
+                            on:removeImage={removeImage}
                         />
                     </div>
-
                     {#if compare}
                         <div
                             class="form-control w-full gap-2 {$form.errors.content
@@ -184,6 +220,8 @@
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
                                 bind:content={$form.original}
                                 placeholder="Type Your Story here..."
+                                on:uploadImage={uploadImage}
+                                on:removeImage={removeImage}
                             />
                         </div>
                     {/if}

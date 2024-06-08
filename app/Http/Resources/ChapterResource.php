@@ -15,7 +15,36 @@ class ChapterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $tempImagesById = [];
+        $tempImages = $this->whenLoaded('images', fn () => $this->resource->images->map(
+            fn (Media $record) => [
+                'id' => $record->id,
+                'url' => $record->getTemporaryUrl(now()->addHour()),
+                'caption' => $record->getCustomProperty('caption'),
+            ],
+        ));
+        foreach($tempImages as $image) {
+            $tempImagesById[ $image['id'] ] = $image;
+        }
+
+        $this->resource->content = preg_replace_callback("/<img[^>]+>/im", function($matches) use(&$tempImagesById) {
+            $imageTeg = $matches[0];
+
+            preg_match('@id="([^"]+)"@' , $imageTeg, $match);
+            $id = array_pop($match);
+
+            preg_match('@src="([^"]+)"@' , $imageTeg, $match);
+            $src = array_pop($match);
+
+            if(isset($tempImagesById[$id])) {
+                $imageTeg = str_replace($src, $tempImagesById[$id]['url'], $imageTeg);
+            }
+
+            return $imageTeg;
+        }, $this->resource->content);
+
         return array_merge(parent::toArray($request), [
+            'content' => $this->resource->content,
             'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl('chapters-list')),
             'attachments' => $this->whenLoaded('attachments', fn () => $this->resource->attachments->map(
                 fn (Media $record) => [
@@ -42,13 +71,7 @@ class ChapterResource extends JsonResource
                     'created_at' => $record->created_at,
                 ]
             )),
-            'images' => $this->whenLoaded('images', fn () => $this->resource->images->map(
-                fn (Media $record) => [
-                    'id' => $record->id,
-                    'url' => $record->getTemporaryUrl(now()->addHour()),
-                    'caption' => $record->getCustomProperty('caption'),
-                ],
-            )),
+            'images' => $tempImages,
             'guest' => $this->whenLoaded('guest', fn () => GuestResource::make($this->resource->guest)),
             'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question)),
         ]);

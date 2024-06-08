@@ -336,4 +336,22 @@ class ChapterController extends Controller
 
         return redirect()->back()->with('message', 'Image removed successfully!');
     }
+
+    public function addImage(UpdateChapterRequest $request, Chapter $chapter)
+    {
+        foreach ($request->validated('images') ?? [] as $image) {
+            $record = $chapter->addMedia($image['file'])
+                ->withCustomProperties(['caption' => $image['caption'] ?? null])
+                ->toMediaCollection('images', config('media-library.private_disk_name'));
+
+            return response()->json([
+                'image' => [
+                    'id' => $record->id,
+                    'url' => $record->getTemporaryUrl(now()->addHour()),
+                    'caption' => $record->getCustomProperty('caption'),
+                ]
+            ]);
+        }
+    }
+
 }
