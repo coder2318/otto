@@ -46,7 +46,7 @@ class LuluPrintSettings extends Model
         ],
         'print_type' => [
             'Premium' => 'PRE',
-            'Standard' => 'STD'
+            'Standard' => 'STD',
         ],
         'bind_type' => [
             'Perfect' => 'PB',
@@ -54,9 +54,9 @@ class LuluPrintSettings extends Model
             'Saddle Stitch' => 'SS',
             'Case Wrap' => 'CW',
             'Linen Wrap' => 'LW',
-            'Wire O' => 'WO'
+            'Wire O' => 'WO',
         ],
-        'paper_type' =>  [
+        'paper_type' => [
             '60# Uncoated White' => '060UW444',
             '60# Uncoated Cream' => '060UC444',
             '70# Coated White' => '070CW460',
@@ -66,27 +66,28 @@ class LuluPrintSettings extends Model
         'finish_type' => [
             'Gloss' => 'G',
             'Matte' => 'M',
-            'Unlaminated' => 'U'
+            'Unlaminated' => 'U',
         ],
         'linen_type' => [
-            'Red Linen' =>'R',
-            'Navy Linen' =>'N',
-            'Black Linen' =>'B',
-            'Gray Linen' =>'G',
-            'Tan Linen' =>'T',
-            'Forest Linen' =>'F',
-            'Interior Cover Print' =>'I',
-            'N/A' =>'X',
+            'Red Linen' => 'R',
+            'Navy Linen' => 'N',
+            'Black Linen' => 'B',
+            'Gray Linen' => 'G',
+            'Tan Linen' => 'T',
+            'Forest Linen' => 'F',
+            'Interior Cover Print' => 'I',
+            'N/A' => 'X',
         ],
         'foil_type' => [
             'Gold' => 'G',
             'Black' => 'B',
             'White' => 'W',
             'N/A' => 'X',
-        ]
+        ],
     ];
 
-    public static function getAvailableOptions($optionType = null) {
+    public static function getAvailableOptions($optionType = null)
+    {
         if ($optionType == null) {
             return static::$availableOptions;
         } else {
@@ -94,12 +95,14 @@ class LuluPrintSettings extends Model
         }
     }
 
-    public function getPackageId() {
+    public function getPackageId()
+    {
         $result = '';
         $options = static::$availableOptions;
         foreach ($options as $fieldName => $valuesByKeys) {
             $result .= $valuesByKeys[$this->{$fieldName}];
         }
+
         return $result;
     }
 }

@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers\Dashboard;
 
-use App\Helpers;
-
 use App\Data\Lulu\LineItem;
 use App\Data\Lulu\PrintableNormalization;
 use App\Data\Lulu\PrintJobDetails;

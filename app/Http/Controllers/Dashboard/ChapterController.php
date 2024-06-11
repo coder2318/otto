@@ -349,9 +349,8 @@ class ChapterController extends Controller
                     'id' => $record->id,
                     'url' => $record->getTemporaryUrl(now()->addHour()),
                     'caption' => $record->getCustomProperty('caption'),
-                ]
+                ],
             ]);
         }
     }
-
 }
