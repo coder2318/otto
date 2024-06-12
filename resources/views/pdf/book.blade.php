@@ -81,25 +81,46 @@
                 </g>
             </svg>
         </div>
-        <section>
-            @php
-                $chapter->content = preg_replace_callback("/<img[^>]+>/im", function($matches) {
-                    $imageTeg   = $matches[0];
+        @php
+            $isHTML = str_contains($chapter->content, '<p>') || str_contains($chapter->content, '<img>');
 
-                    preg_match( '@title="([^"]+)"@' , $imageTeg, $match);
+            if (!$isHTML) {
+                $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))
+                    ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p));
+            } else {
+                $content = preg_replace_callback("/<img[^>]+>/im", function($matches) {
+                    $imageTag   = $matches[0];
+
+                    preg_match( '@title="([^"]+)"@' , $imageTag, $match);
                     $title = array_pop($match);
 
-                    preg_match( '@style="([^"]+)"@' , $imageTeg, $match);
+                    preg_match( '@style="([^"]+)"@' , $imageTag, $match);
                     $style = array_pop($match);
 
                     return '<figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem;'.$style.'">
-                        '.$imageTeg.'
+                        '.$imageTag.'
                         <figcaption style="font-size:0.8rem;font-style:italic">'.$title.'</figcaption>
                     </figure>
                     ';
-                }, $chapter->content);
-            @endphp
-            {!! $chapter->content !!}
+                }, $content);
+            }
+        @endphp
+        <section>
+            @if($isHTML)
+                {!! $chapter->content !!}
+            @else
+                @foreach ($content as $p)
+                    @if($loop->first)
+                        @php
+                            $cap = substr($p, 0, 1);
+                            $p = substr($p, 1);
+                        @endphp
+                        <p><span class="first-letter">{{ $cap }}</span>{{ $p }}</p>
+                    @else
+                        <p>{{ $p }}</p>
+                    @endif
+                @endforeach            
+            @endif
         </section>
     </article>
     @endforeach
