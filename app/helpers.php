@@ -50,8 +50,7 @@ function _D_clean($var, $maxDepth = 1)
             $return = $var;
         }
     } else {
-        $return = is_object($var) ? get_class($var)
-            : (is_array($var) ? 'Array('.count($var).')' : $var);
+        $return = $isObj ? get_class($var) : $var;
     }
 
     return $return;
