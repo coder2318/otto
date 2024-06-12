@@ -13,7 +13,7 @@ class LuluPrintSettings extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Setting>
+     * @var class-string<\App\Models\LuluPrintSettings>
      */
     public static $model = \App\Models\LuluPrintSettings::class;
 
