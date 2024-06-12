@@ -1,10 +1,10 @@
 <?php
 
+use App\Models\LuluPrintSettings;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use App\Models\LuluPrintSettings;
 
 return new class extends Migration
 {
@@ -35,7 +35,7 @@ return new class extends Migration
             'paper_type' => '80# Coated White',
             'finish_type' => 'Matte',
             'linen_type' => 'N/A',
-            'foil_type' => 'N/A'
+            'foil_type' => 'N/A',
         ]);
     }
 

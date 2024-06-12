@@ -23,20 +23,20 @@ class ChapterResource extends JsonResource
                 'caption' => $record->getCustomProperty('caption'),
             ],
         ));
-        foreach($tempImages as $image) {
-            $tempImagesById[ $image['id'] ] = $image;
+        foreach ($tempImages as $image) {
+            $tempImagesById[$image['id']] = $image;
         }
 
-        $this->resource->content = preg_replace_callback("/<img[^>]+>/im", function($matches) use(&$tempImagesById) {
+        $this->resource->content = preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$tempImagesById) {
             $imageTeg = $matches[0];
 
-            preg_match('@id="([^"]+)"@' , $imageTeg, $match);
+            preg_match('@id="([^"]+)"@', $imageTeg, $match);
             $id = array_pop($match);
 
-            preg_match('@src="([^"]+)"@' , $imageTeg, $match);
+            preg_match('@src="([^"]+)"@', $imageTeg, $match);
             $src = array_pop($match);
 
-            if(isset($tempImagesById[$id])) {
+            if (isset($tempImagesById[$id])) {
                 $imageTeg = str_replace($src, $tempImagesById[$id]['url'], $imageTeg);
             }
 

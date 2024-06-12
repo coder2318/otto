@@ -16,6 +16,7 @@
     import TipTap from '@/components/TipTap.svelte'
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
     import axios from 'axios'
+    import { flash } from '@/components/Toast.svelte'
 
     export let chapter: { data: App.Chapter }
     export let prompts: { data: App.Prompt[] }
@@ -79,7 +80,17 @@
             },
         })
             .then((res) => {
-                if (res.ok) return res.body.pipeThrough(new TextDecoderStream()).getReader()
+                if (res.ok) {
+                    return res.body.pipeThrough(new TextDecoderStream()).getReader()
+                }
+
+                $form.enhanced = $form.original
+
+                flash({
+                    message: 'OttoStory AI not available',
+                    type: 'alert-error',
+                    autohide: true,
+                })
 
                 throw new Error('Network response was not ok.')
             })
@@ -220,6 +231,7 @@
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
                                 bind:content={$form.original}
                                 placeholder="Type Your Story here..."
+                                contentType="html"
                                 on:uploadImage={uploadImage}
                                 on:removeImage={removeImage}
                             />

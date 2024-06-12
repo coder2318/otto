@@ -3,9 +3,9 @@
 namespace App\Nova;
 
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Boolean;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class LuluPrintSettings extends Resource
@@ -13,7 +13,7 @@ class LuluPrintSettings extends Resource
     /**
      * The model the resource corresponds to.
      *
-     * @var class-string<\App\Models\Setting>
+     * @var class-string<\App\Models\LuluPrintSettings>
      */
     public static $model = \App\Models\LuluPrintSettings::class;
 
@@ -40,9 +40,9 @@ class LuluPrintSettings extends Resource
      */
     public function fields(NovaRequest $request)
     {
-        $fields = [ 
+        $fields = [
             Text::make('Name', 'name')->sortable(),
-            Boolean::make('Is Enabled', 'is_enabled')->sortable()
+            Boolean::make('Is Enabled', 'is_enabled')->sortable(),
         ];
 
         $luluOptions = \App\Models\LuluPrintSettings::getAvailableOptions();
@@ -106,5 +106,4 @@ class LuluPrintSettings extends Resource
     {
         return __('Books');
     }
-
 }
