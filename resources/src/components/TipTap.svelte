@@ -323,8 +323,10 @@
     }
 
     onMount(() => {
-        contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
-        if (contentType === 'text') {
+        let contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
+        let foundHtmlTags = content.search('<p>') !== -1
+
+        if (contentType === 'text' || !foundHtmlTags) {
             content = strToHtml(content, true)
         }
         editor = new Editor({
