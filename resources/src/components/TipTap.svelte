@@ -375,7 +375,7 @@
             let editorContent = contentType === 'html' ? editor.getHTML() : editor.getText({ blockSeparator: '\n\n' })
             if (editorContent !== content) {
                 const { from, to } = editor.state.selection
-                editor.commands.setContent(strToHtml(content, true), false)
+                editor.commands.setContent(content, false)
                 editor.commands.setTextSelection({ from, to })
             }
         } else {
