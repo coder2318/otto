@@ -475,7 +475,7 @@
             >
                 ordered list
             </button>
-            <button on:click={() => fileInput.click()} class={editor.isActive('orderedList') ? 'is-active' : ''}>
+            <button on:click={() => fileInput.click()}>
                 add image
             </button>
         </div>
