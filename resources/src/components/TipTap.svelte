@@ -323,7 +323,7 @@
     }
 
     onMount(() => {
-        let contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
+        contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
         let foundHtmlTags = content.search('<p>') !== -1
 
         if (contentType === 'text' || !foundHtmlTags) {
@@ -373,6 +373,7 @@
     function updateContent(content: string) {
         if (editor) {
             let editorContent = contentType === 'html' ? editor.getHTML() : editor.getText({ blockSeparator: '\n\n' })
+
             if (editorContent !== content) {
                 const { from, to } = editor.state.selection
                 editor.commands.setContent(content, false)
@@ -475,8 +476,8 @@
             >
                 ordered list
             </button>
-            <button on:click={() => fileInput.click()}>
-                add image
+            <button on:click={() => fileInput.click()}> 
+                add image 
             </button>
         </div>
     {/if}
