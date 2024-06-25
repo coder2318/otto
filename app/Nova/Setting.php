@@ -46,7 +46,8 @@ class Setting extends Resource
             Select::make('Value', 'value')
                 ->options([
                     'Claude3' => 'Claude3',
-                    'GPT4' => 'GPT4',
+                    'GPT4:gpt-4-1106-preview' => 'GPT4:gpt-4-1106-preview',
+                    'GPT4:gpt-4o' => 'GPT4:gpt-4o',
                 ])
                 ->sortable(),
         ];

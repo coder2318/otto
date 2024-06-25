@@ -7,9 +7,11 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class OpenAIService extends AiService
 {
-    public function __construct(protected ?bool $fake = null)
+
+    public function __construct(protected ?bool $fake = null, $modelName)
     {
         $this->fake = is_null($this->fake) ? config('services.openai.fake') : $this->fake;
+        $this->modelName = $modelName;
     }
 
     public function chatEdit(string $input, string $question, ?string $prompt = null): string
@@ -18,7 +20,7 @@ class OpenAIService extends AiService
             return $input;
         }
         $result = '';
-        $model = config('services.openai.models.chat');
+        $model = $this->modelName;
 
         foreach (self::segmentate($input) as $segment) {
             $messages = [
@@ -70,7 +72,7 @@ class OpenAIService extends AiService
             'name' => $this->translate("What's your name?", $language),
             'question' => $this->translate("Please, tell me your story on: \"$question\"", $language),
         ];
-        $model = config('services.openai.models.chat');
+        $model = $this->modelName;
 
         foreach (self::segmentate($input) as $segment) {
             $messages = [
