@@ -60,8 +60,14 @@ class AppServiceProvider extends ServiceProvider
 
         if ($selectedModel === 'Claude3') {
             $this->app->bind(AiService::class, fn () => new Claude3Service(config('services.anthropic.key')));
-        } elseif ($selectedModel === 'GPT4') {
-            $this->app->bind(AiService::class, fn () => new OpenAIService);
+        } elseif (str_starts_with($selectedModel, 'GPT4')) {
+            $modelName = config('services.openai.models.chat'); //default model
+            $openAIParts = explode(':' , $selectedModel);
+            if (count($openAIParts) == 2) {
+                $modelName = $openAIParts[1];
+            }
+            $this->app->bind(AiService::class, fn () => new OpenAIService(config('services.openai.fake'), $modelName));
+
         }
         // ---------------------------------------------------------------------------------------
 
