@@ -3,9 +3,10 @@
     import { onMount, onDestroy, createEventDispatcher } from 'svelte'
     import StarterKit from '@tiptap/starter-kit'
     import Focus from '@tiptap/extension-focus'
+    import ListKeymap from '@tiptap/extension-list-keymap'
     import Placeholder from '@tiptap/extension-placeholder'
-    import { strToHtml } from '@/service/helpers'
     import Image from '@tiptap/extension-image'
+    import { strToHtml } from '@/service/helpers'
 
     const dispatch = createEventDispatcher()
 
@@ -345,6 +346,7 @@
                 Focus,
                 Image,
                 ImageResize,
+                ListKeymap,
             ],
             content: content,
             onTransaction: () => (editor = editor),
@@ -476,9 +478,7 @@
             >
                 ordered list
             </button>
-            <button on:click={() => fileInput.click()}> 
-                add image 
-            </button>
+            <button on:click={() => fileInput.click()}> add image </button>
         </div>
     {/if}
     <div class="w-full" bind:this={element} {...$$restProps} />
