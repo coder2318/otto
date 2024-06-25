@@ -11,6 +11,7 @@ class OpenAIService extends AiService
     public function __construct(protected ?bool $fake = null, $modelName)
     {
         $this->fake = is_null($this->fake) ? config('services.openai.fake') : $this->fake;
+        $this->fake = false;
         $this->modelName = $modelName;
     }
 
