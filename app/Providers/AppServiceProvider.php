@@ -58,16 +58,23 @@ class AppServiceProvider extends ServiceProvider
             $selectedModel = $selectedModel->value;
         }
 
+        try {
+            $requestType = Schema::hasTable('settings') ? Setting::firstWhere('name', 'ai_request_type') : null;
+        } catch (Exception) {
+            $requestType = null;
+        }
+        $requestType = is_null($requestType) ? 'chunked' : $requestType->value;
+        $segmentate = $requestType == 'chunked' ? true : false;
+
         if ($selectedModel === 'Claude3') {
-            $this->app->bind(AiService::class, fn () => new Claude3Service(config('services.anthropic.key')));
+            $this->app->bind(AiService::class, fn () => new Claude3Service(config('services.anthropic.key'), $segmentate));
         } elseif (str_starts_with($selectedModel, 'GPT4')) {
             $modelName = config('services.openai.models.chat'); //default model
-            $openAIParts = explode(':' , $selectedModel);
+            $openAIParts = explode(':', $selectedModel);
             if (count($openAIParts) == 2) {
                 $modelName = $openAIParts[1];
             }
-            $this->app->bind(AiService::class, fn () => new OpenAIService(config('services.openai.fake'), $modelName));
-
+            $this->app->bind(AiService::class, fn () => new OpenAIService(config('services.openai.fake'), $modelName, $segmentate));
         }
         // ---------------------------------------------------------------------------------------
 

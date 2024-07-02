@@ -9,7 +9,7 @@ class Claude3Service extends AiService
 {
     protected $anthropic;
 
-    public function __construct(string $apiKey)
+    public function __construct(string $apiKey, bool $segmentate)
     {
         $headers = [
             'anthropic-version' => '2023-06-01',
@@ -21,6 +21,7 @@ class Claude3Service extends AiService
         $this->anthropic = Anthropic::factory()
             ->withHeaders($headers)
             ->make();
+        $this->segmentate = $segmentate;
     }
 
     public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null)
@@ -36,9 +37,7 @@ class Claude3Service extends AiService
             'question' => $this->translate("Please, tell me your story on: \"$question\"", $language),
         ];
 
-        $segments = self::segmentate($input);
-
-        foreach ($segments as $segment) {
+        foreach ($this->segmentate ? self::segmentate($input) : [$input] as $segment) {
             $messages = [
                 ['role' => 'user', 'content' => $prompt],
             ];
