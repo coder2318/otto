@@ -39,18 +39,40 @@ class Setting extends Resource
      */
     public function fields(NovaRequest $request)
     {
-        return [
-            Text::make('Name', 'name')
-                ->sortable(),
+        if ($request->resourceId == 1) {
+            return [
+                Text::make('Name', 'name')
+                    ->sortable(),
 
-            Select::make('Value', 'value')
-                ->options([
-                    'Claude3' => 'Claude3',
-                    'GPT4:gpt-4-1106-preview' => 'GPT4:gpt-4-1106-preview',
-                    'GPT4:gpt-4o' => 'GPT4:gpt-4o',
-                ])
-                ->sortable(),
-        ];
+                Select::make('Value', 'value')
+                    ->options([
+                        'Claude3' => 'Claude3',
+                        'GPT4:gpt-4-1106-preview' => 'GPT4:gpt-4-1106-preview',
+                        'GPT4:gpt-4o' => 'GPT4:gpt-4o',
+                    ])
+                    ->sortable(),
+            ];
+        } elseif ($request->resourceId == 2) {
+            return [
+                Text::make('Name', 'name')
+                    ->sortable(),
+
+                Select::make('Value', 'value')
+                    ->options([
+                        'whole' => 'Whole',
+                        'chunked' => 'Chunked',
+                    ])
+                    ->sortable(),
+            ];
+        } else {
+            return [
+                Text::make('Name', 'name')
+                    ->sortable(),
+
+                Text::make('Value', 'value')
+                    ->sortable(),
+            ];
+        }
     }
 
     /**

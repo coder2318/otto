@@ -7,12 +7,14 @@ use OpenAI\Laravel\Facades\OpenAI;
 
 class OpenAIService extends AiService
 {
+    protected $modelName;
 
-    public function __construct(protected ?bool $fake = null, $modelName)
+    public function __construct(protected ?bool $fake, $modelName, bool $segmentate)
     {
         $this->fake = is_null($this->fake) ? config('services.openai.fake') : $this->fake;
         $this->fake = false;
         $this->modelName = $modelName;
+        $this->segmentate = $segmentate;
     }
 
     public function chatEdit(string $input, string $question, ?string $prompt = null): string
@@ -23,7 +25,7 @@ class OpenAIService extends AiService
         $result = '';
         $model = $this->modelName;
 
-        foreach (self::segmentate($input) as $segment) {
+        foreach ($this->segmentate ? self::segmentate($input) : [$input] as $segment) {
             $messages = [
                 ['role' => 'system', 'content' => $this->getPrompt($input, $prompt ?? $this->defaultPrompt)],
             ];
@@ -75,7 +77,7 @@ class OpenAIService extends AiService
         ];
         $model = $this->modelName;
 
-        foreach (self::segmentate($input) as $segment) {
+        foreach ($this->segmentate ? self::segmentate($input) : [$input] as $segment) {
             $messages = [
                 ['role' => 'system', 'content' => $prompt],
             ];
