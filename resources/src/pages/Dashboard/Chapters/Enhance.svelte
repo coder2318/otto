@@ -94,7 +94,8 @@
 
                 throw new Error('Network response was not ok.')
             })
-            .then((reader) =>
+            .then((reader) => {
+                $form.enhanced = ''
                 reader.read().then(function pump({ done, value }) {
                     if (controller.signal.aborted) return
 
@@ -110,7 +111,7 @@
 
                     return reader.read().then(pump)
                 })
-            )
+            })
             .finally(() => {
                 loading = false
                 finish()
