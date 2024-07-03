@@ -5,13 +5,14 @@
 </script>
 
 <script lang="ts">
+    import { router } from '@inertiajs/core'
+
     import { fade } from 'svelte/transition'
     import { inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import FilePond from '@/components/FilePond.svelte'
-    import { start, done } from '@/components/Loading.svelte'
     import type { FilePondErrorDescription, FilePond as FilePondType, FilePondFile } from 'filepond'
     import translateIcon from '@fortawesome/fontawesome-free/svgs/solid/globe.svg?raw'
     import FileTranslateModal from '@/components/Chapters/FileTranslateModal.svelte'
@@ -70,29 +71,40 @@
     }
 
     function submit(event: SubmitEvent) {
-        $form
-            .transform((data) => ({
-                _method: 'PUT',
-                status: event.submitter.dataset?.status ?? data.status,
-                redirect: 'dashboard.chapters.write',
-                ...data,
-                attachments: filepond.getFiles().map((file: FilePondFile) => ({
-                    file: file.file,
-                    options: [],
-                    translate: {
-                        source: file.getMetadata('source') ?? null,
-                        target: file.getMetadata('target') ?? null,
+        document.getElementsByClassName('filepond--drop-label')[0].style.visibility = 'hidden'
+
+        filepond.setOptions({
+            server: {
+                url: `/chapters/${chapter.data.id}`,
+                process: {
+                    url: '/attachments',
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
                     },
-                })),
-            }))
-            .post(`/chapters/${chapter.data.id}`, {
-                forceFormData: true,
-                onStart: start,
-                onFinish: done,
-                onSuccess: () => {
-                    filepond.removeFiles()
+                    withCredentials: true,
+                    onerror: (response) => {
+                        console.log(response)
+                    },
+                    ondata: (formData) => {
+                        return formData
+                    },
                 },
-            })
+                revert: '/revert',
+                restore: '/restore',
+                load: '/load',
+            },
+        })
+
+        filepond.processFiles()
+    }
+
+    function filePondAddFile(error: FilePondErrorDescription | null, file: FilePondFile) {
+        syncFiles(error)
+        addMetadataButton(file)
+    }
+    function filePondProcessFiles() {
+        router.visit(`/chapters/${chapter.data.id}/write`)
     }
 </script>
 
@@ -118,15 +130,12 @@
         <div class="card-body gap-4">
             <FilePond
                 bind:instance={filepond}
-                server={false}
-                allowMultiple={true}
-                allowProcess={false}
                 instantUpload={false}
-                onaddfile={(err, file) => {
-                    syncFiles(err)
-                    addMetadataButton(file)
-                }}
+                allowMultiple={true}
+                allowProcess={true}
                 onremovefile={syncFiles}
+                onaddfile={filePondAddFile}
+                onprocessfiles={filePondProcessFiles}
                 acceptedFileTypes={[
                     'audio/webm',
                     'audio/wav',
@@ -145,17 +154,6 @@
                     `application/vnd.openxmlformats-officedocument.wordprocessingml.document`,
                 ]}
             />
-            {#if Object.keys($form.errors).length > 0}
-                <span class="label-text-alt mt-1 text-left text-error">
-                    <ul class="list-inside list-disc">
-                        {#each Object.entries($form.errors) as [field, error]}
-                            {#if field.startsWith('attachments')}
-                                <li>{error}</li>
-                            {/if}
-                        {/each}
-                    </ul>
-                </span>
-            {/if}
         </div>
     </main>
 
@@ -171,3 +169,9 @@
 </form>
 
 <FileTranslateModal bind:modal bind:file={currentFile} />
+
+<style lang="scss">
+    :global(.filepond--file-status .filepond--file-status-sub) {
+        display: none;
+    }
+</style>
