@@ -21,7 +21,7 @@ class OpenAITest extends TestCase
         ]);
 
         /** @var OpenAIService */
-        $service = new OpenAIService(fake: false);
+        $service = new OpenAIService(false, null, true);
 
         $this->assertEquals('What day of the week is it?', $service->chatEdit('What day of the wek is it?', 'Fix the spelling mistakes'));
     }
