@@ -100,6 +100,7 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/invite', 'invite')->name('invite');
             Route::delete('/image/{imageId}', 'removeImage')->name('image');
             Route::post('/image', 'addImage')->name('image.add');
+            Route::post('/attachments', 'uploadAttachments')->name('attachments.upload');
         });
 
         // Guest features

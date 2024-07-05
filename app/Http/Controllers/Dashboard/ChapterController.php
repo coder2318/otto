@@ -353,4 +353,30 @@ class ChapterController extends Controller
             ]);
         }
     }
+
+    public function uploadAttachments(UpdateChapterRequest $request, Chapter $chapter, MediaService $service)
+    {
+        $transcriptions = [];
+
+        $params = json_decode(($_POST['filepond'] ?? '{}'));
+        $file = $_FILES['filepond'] ?? null;
+
+        if ($file) {
+            $uploadedFile = new \Symfony\Component\HttpFoundation\File\UploadedFile($file['tmp_name'], $file['name'], $file['type'], $file['error']);
+
+            $record = $chapter->addMedia($uploadedFile)
+                ->toMediaCollection('attachments', config('media-library.private_disk_name'));
+
+            $source = $params->source ?? null;
+            $target = $params->target ?? null;
+
+            if ($transcription = $service->transcribe($record, $source, $target)) {
+                $transcriptions[$record->file_name] = $transcription;
+            }
+        }
+
+        if (count($transcriptions)) {
+            Session::flash('transcriptions', $transcriptions);
+        }
+    }
 }
