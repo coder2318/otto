@@ -104,19 +104,47 @@ class OpenAIService extends AiService
                 'content' => $segment,
             ];
 
-            $stream = OpenAI::chat()->createStreamed([
-                'model' => $model,
-                'messages' => $messages,
-                'temperature' => 0.2,
-            ]);
-
-            foreach ($stream as $response) {
-                yield $response['choices'][0]['delta']['content'] ?? '';
+            foreach ($this->chatCreateStreamed($model, $messages) as $response) {
+                yield $response;
             }
 
             yield PHP_EOL.PHP_EOL;
         }
 
         return true;
+    }
+
+    protected function chatCreateStreamed(string $model, array $messages)
+    {
+        $answer = '';
+        $stream = OpenAI::chat()->createStreamed([
+            'model' => $model,
+            'messages' => $messages,
+            'temperature' => 0.2,
+        ]);
+
+        foreach ($stream as $response) {
+            $finishReason = $response['choices'][0]['finish_reason'] ?? null;
+            $answer .= $response['choices'][0]['delta']['content'] ?? '';
+
+            if ($finishReason == 'length') {
+                sleep(2);
+
+                $messages[] = [
+                    'role' => 'assistant',
+                    'content' => $answer,
+                ];
+                $messages[] = [
+                    'role' => 'user',
+                    'content' => 'continue your answer',
+                ];
+
+                yield from $this->chatCreateStreamed($model, $messages);
+
+                continue;
+            } else {
+                yield $response['choices'][0]['delta']['content'] ?? '';
+            }
+        }
     }
 }

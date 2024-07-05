@@ -209,7 +209,7 @@
                     >
                         <TipTap
                             class="textarea  textarea-ghost h-full transition-transform
-                                {$form.use == 'enhanced' ? 'scale-[1.01]' : ''}
+                                {compare && $form.use == 'enhanced' ? 'scale-[1.004]' : ''}
                                 {$form.errors.original ? 'textarea-error' : ''}
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
                             bind:content={$form.enhanced}
@@ -227,7 +227,7 @@
                         >
                             <TipTap
                                 class="textarea  h-full transition-transform
-                                {$form.use == 'original' ? 'scale-[1.01]' : ''}
+                                {compare && $form.use == 'original' ? 'scale-[1.004]' : ''}
                                 {$form.errors.original ? 'textarea-error' : ''}
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
                                 bind:content={$form.original}
