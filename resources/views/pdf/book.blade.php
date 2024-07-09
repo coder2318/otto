@@ -88,21 +88,36 @@
                 $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))
                     ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p));
             } else {
-                $content = preg_replace_callback("/<img[^>]+>/im", function($matches) {
-                    $imageTag   = $matches[0];
+                $imagesById = [];
+                foreach($chapter->images as $image) {
+                    $imagesById[ $image->id ] = [
+                        'id' => $image->id,
+                        'url' => $image->getTemporaryUrl(now()->addHour()),
+                        'caption' => $image->getCustomProperty('caption'),
+                    ];
+                }
 
-                    preg_match( '@title="([^"]+)"@' , $imageTag, $match);
-                    $title = array_pop($match);
+                $chapter->content = preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$imagesById) {
+                    $imageAttr = $matches[0];
 
-                    preg_match( '@style="([^"]+)"@' , $imageTag, $match);
+                    preg_match('@id="([^"]+)"@', $imageAttr, $match);
+                    $id = array_pop($match);
+
+                    preg_match( '@style="([^"]+)"@' , $imageAttr, $match);
                     $style = array_pop($match);
 
-                    return '<figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem;'.$style.'">
-                        '.$imageTag.'
-                        <figcaption style="font-size:0.8rem;font-style:italic">'.$title.'</figcaption>
-                    </figure>
-                    ';
-                }, $content);
+                    if (isset($imagesById[$id])) {
+                        $imageUrl = $imagesById[$id]['url'];
+                        $html = '<figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem;'.$style.'">
+                            <img src="'.$imageUrl.'">
+                            <figcaption style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</figcaption>
+                        </figure>';
+
+                        return $html;
+                    }
+
+                    return '';
+                }, $chapter->content);
             }
         @endphp
         <section>
@@ -119,7 +134,7 @@
                     @else
                         <p>{{ $p }}</p>
                     @endif
-                @endforeach            
+                @endforeach
             @endif
         </section>
     </article>
