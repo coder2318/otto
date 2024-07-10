@@ -33,6 +33,10 @@ class UpdateChapterRequest extends FormRequest
             'images.*.caption' => ['nullable', 'string'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],
             'redirect' => ['sometimes', 'nullable'],
+            'image' => ['sometimes', 'nullable', 'array'],
+            'image.id' => ['sometimes', 'required', 'nullable', 'integer'],
+            'image.url' => ['sometimes', 'nullable', 'string'],
+            'image.caption' => ['sometimes', 'nullable', 'string'],
         ];
     }
 }

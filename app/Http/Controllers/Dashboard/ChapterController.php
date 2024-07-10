@@ -339,18 +339,38 @@ class ChapterController extends Controller
 
     public function addImage(UpdateChapterRequest $request, Chapter $chapter)
     {
-        foreach ($request->validated('images') ?? [] as $image) {
-            $record = $chapter->addMedia($image['file'])
-                ->withCustomProperties(['caption' => $image['caption'] ?? null])
-                ->toMediaCollection('images', config('media-library.private_disk_name'));
+        if ($image = $request->validated('image')) {
+            $response = [
+                'error' => true,
+                'image' => null,
+            ];
+            if ($media = Media::find($image['id'])) {
+                $mediaCopy = $media->copy($chapter, 'images', config('media-library.private_disk_name'), $media->file_name);
+                $response = [
+                    'error' => false,
+                    'image' => [
+                        'id' => $mediaCopy->id,
+                        'url' => $mediaCopy->getTemporaryUrl(now()->addHour()),
+                        'caption' => $mediaCopy->getCustomProperty('caption'),
+                    ],
+                ];
+            }
 
-            return response()->json([
-                'image' => [
-                    'id' => $record->id,
-                    'url' => $record->getTemporaryUrl(now()->addHour()),
-                    'caption' => $record->getCustomProperty('caption'),
-                ],
-            ]);
+            return response()->json($response);
+        } else {
+            foreach ($request->validated('images') ?? [] as $image) {
+                $record = $chapter->addMedia($image['file'])
+                    ->withCustomProperties(['caption' => $image['caption'] ?? null])
+                    ->toMediaCollection('images', config('media-library.private_disk_name'));
+
+                return response()->json([
+                    'image' => [
+                        'id' => $record->id,
+                        'url' => $record->getTemporaryUrl(now()->addHour()),
+                        'caption' => $record->getCustomProperty('caption'),
+                    ],
+                ]);
+            }
         }
     }
 

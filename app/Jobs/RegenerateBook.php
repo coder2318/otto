@@ -30,6 +30,26 @@ class RegenerateBook implements ShouldQueue
             ->orderBy('order', 'asc')
             ->lazy();
 
+        foreach ($chapters as $chapter) {
+            $chapterImagesById = [];
+            preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$chapterImagesById) {
+                $imageTeg = $matches[0];
+
+                preg_match('@id="([^"]+)"@', $imageTeg, $match);
+                $id = array_pop($match);
+
+                $chapterImagesById[$id] = $id;
+
+                return $imageTeg;
+            }, $chapter->content);
+
+            foreach ($chapter->images as $image) {
+                if (! isset($chapterImagesById[$image->id])) {
+                    $image->delete();
+                }
+            }
+        }
+
         $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters]);
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
