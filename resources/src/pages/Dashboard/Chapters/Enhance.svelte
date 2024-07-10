@@ -120,44 +120,47 @@
 
     onMount(() => {
         enhance.showModal()
-
         return () => {
             controller?.abort()
         }
     })
 
     function uploadImage(event) {
-        axios
-            .post(
-                `/chapters/${chapter.data.id}/image`,
-                {
-                    images: [
-                        {
-                            file: event.detail.files[0],
-                            caption: prompt('Please enter image caption'),
-                            url: URL.createObjectURL(event.detail.files[0]),
-                        },
-                    ],
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+        if (event.detail.image === undefined) {
+            axios
+                .post(
+                    `/chapters/${chapter.data.id}/image`,
+                    {
+                        images: [
+                            {
+                                file: event.detail.files[0],
+                                caption: prompt('Please enter image caption'),
+                                url: URL.createObjectURL(event.detail.files[0]),
+                            },
+                        ],
                     },
-                }
-            )
-            .then((response) => {
-                let newImage = response?.data?.image ?? null
-                if (newImage) {
-                    event.detail.callback(newImage)
-                }
-            })
-    }
-
-    function removeImage(event) {
-        router.delete(`/chapters/${chapter.data.id}/image/${event.detail.id}`, {
-            only: ['chapter'],
-            preserveScroll: true,
-        })
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                )
+                .then((response) => {
+                    event.detail.callback(response)
+                })
+        } else {
+            axios
+                .post(`/chapters/${chapter.data.id}/image`, {
+                    image: {
+                        id: event.detail.id,
+                        url: event.detail.image,
+                        caption: event.detail.caption,
+                    },
+                })
+                .then((response) => {
+                    event.detail.callback(response)
+                })
+        }
     }
 </script>
 
@@ -213,10 +216,10 @@
                                 {$form.errors.original ? 'textarea-error' : ''}
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl first-letter:italic first-letter:text-primary"
                             bind:content={$form.enhanced}
+                            bind:images={chapter.data.images}
                             placeholder="Type Your Story here..."
                             contentType="html"
                             on:uploadImage={uploadImage}
-                            on:removeImage={removeImage}
                         />
                     </div>
                     {#if compare}
@@ -231,10 +234,10 @@
                                 {$form.errors.original ? 'textarea-error' : ''}
                                 rounded-xl text-2xl first-letter:font-serif first-letter:text-4xl"
                                 bind:content={$form.original}
+                                bind:images={chapter.data.images}
                                 placeholder="Type Your Story here..."
                                 contentType="html"
                                 on:uploadImage={uploadImage}
-                                on:removeImage={removeImage}
                             />
                         </div>
                     {/if}

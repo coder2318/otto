@@ -7,6 +7,7 @@
     import Placeholder from '@tiptap/extension-placeholder'
     import Image from '@tiptap/extension-image'
     import { strToHtml } from '@/service/helpers'
+    import { start, done } from '@/components/Loading.svelte'
 
     const dispatch = createEventDispatcher()
 
@@ -22,6 +23,8 @@
     export let editor: Editor = null
     export let content = ''
     export let autofocus = false
+
+    export let images = []
 
     let contentType = 'text'
 
@@ -192,13 +195,8 @@
                     $deleteController.addEventListener('mouseover', controllerMouseOver)
                     $deleteController.addEventListener('mouseout', controllerMouseOut)
 
-                    $deleteController.addEventListener('click', (event) => {
-                        let id = node?.attrs?.id
-
-                        dispatch('removeImage', { id })
-
+                    $deleteController.addEventListener('click', () => {
                         dispatchNodeView()
-
                         editor.commands.deleteSelection()
                     })
 
@@ -330,10 +328,52 @@
         if (contentType === 'text' || !foundHtmlTags) {
             content = strToHtml(content, true)
         }
+
         editor = new Editor({
             editorProps: {
                 attributes: {
                     class: 'focus:outline-none',
+                },
+                transformPastedHTML(html) {
+                    const htmlCopy = html
+
+                    htmlCopy.replace(/<img.*?>/g, function (imageTeg: string) {
+                        const originalImageTeg = imageTeg
+                        const id = parseInt(imageTeg.match(/id="([^"]+)"/)[1] ?? '0')
+                        const src = imageTeg.match(/src="([^"]+)"/)[1] ?? null
+                        const title = imageTeg.match(/title="([^"]+)"/)[1] ?? null
+                        const foundImage = images.find((image) => image.id == id)
+
+                        if (foundImage === undefined) {
+                            start()
+
+                            dispatch('uploadImage', {
+                                image: src,
+                                caption: title,
+                                id: id,
+                                callback: function (response: any) {
+                                    if (response.error) {
+                                        content = html.replace(originalImageTeg, '')
+                                    } else if (response?.data?.image) {
+                                        imageTeg = imageTeg.replace(
+                                            'src="' + src + '"',
+                                            'src="' + response.data.image.url + '"'
+                                        )
+                                        imageTeg = imageTeg.replace(
+                                            'id="' + id + '"',
+                                            'id="' + response.data.image.id + '"'
+                                        )
+                                        content = html.replace(originalImageTeg, imageTeg)
+                                    }
+                                    done()
+                                },
+                            })
+                        }
+
+                        return imageTeg
+                    })
+
+                    return html
                 },
             },
             element: element,
@@ -344,7 +384,6 @@
                 }),
                 // @ts-ignore
                 Focus,
-                Image,
                 ImageResize,
                 ListKeymap,
             ],
@@ -387,9 +426,12 @@
     }
 
     function uploadImage(event) {
+        start()
         dispatch('uploadImage', {
             files: event.target.files,
-            callback: function (image) {
+            callback: function (response) {
+                const image = response?.data?.image ?? null
+
                 if (editor && image) {
                     editor.chain().focus().setImage({ src: image.url, title: image.caption, id: image.id }).run()
 
@@ -397,6 +439,8 @@
                 } else {
                     return
                 }
+
+                done()
             },
         })
     }
@@ -417,6 +461,7 @@
     {#if editor}
         <div bind:this={toolbar} class="z-10 bg-transparent">
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleBold().run()}
                 disabled={!editor.can().chain().focus().toggleBold().run()}
                 class={editor.isActive('bold') ? 'is-active' : ''}
@@ -424,6 +469,7 @@
                 bold
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleItalic().run()}
                 disabled={!editor.can().chain().focus().toggleItalic().run()}
                 class={editor.isActive('italic') ? 'is-active' : ''}
@@ -431,54 +477,62 @@
                 italic
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 1 }).run()}
                 class={editor.isActive('heading', { level: 1 }) ? 'is-active' : ''}
             >
                 h1
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 2 }).run()}
                 class={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''}
             >
                 h2
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 3 }).run()}
                 class={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''}
             >
                 h3
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 4 }).run()}
                 class={editor.isActive('heading', { level: 4 }) ? 'is-active' : ''}
             >
                 h4
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 5 }).run()}
                 class={editor.isActive('heading', { level: 5 }) ? 'is-active' : ''}
             >
                 h5
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleHeading({ level: 6 }).run()}
                 class={editor.isActive('heading', { level: 6 }) ? 'is-active' : ''}
             >
                 h6
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleBulletList().run()}
                 class={editor.isActive('bulletList') ? 'is-active' : ''}
             >
                 bullet list
             </button>
             <button
+                type="button"
                 on:click={() => editor.chain().focus().toggleOrderedList().run()}
                 class={editor.isActive('orderedList') ? 'is-active' : ''}
             >
                 ordered list
             </button>
-            <button on:click={() => fileInput.click()}> add image </button>
+            <button type="button" on:click={() => fileInput.click()}> add image </button>
         </div>
     {/if}
     <div class="w-full" bind:this={element} {...$$restProps} />

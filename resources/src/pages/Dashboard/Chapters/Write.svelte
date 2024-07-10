@@ -91,37 +91,41 @@
     }
 
     function uploadImage(event) {
-        axios
-            .post(
-                `/chapters/${chapter.data.id}/image`,
-                {
-                    images: [
-                        {
-                            file: event.detail.files[0],
-                            caption: prompt('Please enter image caption'),
-                            url: URL.createObjectURL(event.detail.files[0]),
-                        },
-                    ],
-                },
-                {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
+        if (event.detail.image === undefined) {
+            axios
+                .post(
+                    `/chapters/${chapter.data.id}/image`,
+                    {
+                        images: [
+                            {
+                                file: event.detail.files[0],
+                                caption: prompt('Please enter image caption'),
+                                url: URL.createObjectURL(event.detail.files[0]),
+                            },
+                        ],
                     },
-                }
-            )
-            .then((response) => {
-                let newImage = response?.data?.image ?? null
-                if (newImage) {
-                    event.detail.callback(newImage)
-                }
-            })
-    }
-
-    function removeImage(event) {
-        router.delete(`/chapters/${chapter.data.id}/image/${event.detail.id}`, {
-            only: ['chapter'],
-            preserveScroll: true,
-        })
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                )
+                .then((response) => {
+                    event.detail.callback(response)
+                })
+        } else {
+            axios
+                .post(`/chapters/${chapter.data.id}/image`, {
+                    image: {
+                        id: event.detail.id,
+                        url: event.detail.image,
+                        caption: event.detail.caption,
+                    },
+                })
+                .then((response) => {
+                    event.detail.callback(response)
+                })
+        }
     }
 </script>
 
@@ -149,8 +153,8 @@
                         bind:content={$form.content}
                         placeholder="Type Your Story here..."
                         contentType="html"
+                        bind:images={chapter.data.images}
                         on:uploadImage={uploadImage}
-                        on:removeImage={removeImage}
                     />
                 </div>
                 {#if $form.errors.content}
