@@ -102,14 +102,34 @@
 
                     preg_match('@id="([^"]+)"@', $imageAttr, $match);
                     $id = array_pop($match);
-
                     preg_match( '@style="([^"]+)"@' , $imageAttr, $match);
                     $style = array_pop($match);
 
+                    preg_match('/[^-]width[: ]+([0-9]+)/', $style, $width);
+                    $width = $width[1] ?? null;
+
+                    preg_match('/[^-]height[: ]+([0-9]+)/', $style, $height);
+                    $height = $height[1] ?? null;
+
+                    $newStyle = '';
+                    if($width) {
+                        $newStyle .= "width:{$width}px;";
+                    }
+                    if($height) {
+                        $newStyle .= "height:{$height}px;";
+                    }
+
+                    if(strpos($style, 'margin-right: 0px; margin-left: auto;')) {
+                        $newStyle .= "margin-right: 0px; margin-left: auto;";
+                    }
+                    elseif(strpos($style, 'margin-right: auto; margin-left: auto;')) {
+                        $newStyle .= "margin-right: auto; margin-left: auto;";
+                    }
+
                     if (isset($imagesById[$id])) {
                         $imageUrl = $imagesById[$id]['url'];
-                        $html = '<figure style="text-align:center;padding:1rem;border:1px solid #999;border-radius:0.5rem;'.$style.'">
-                            <img src="'.$imageUrl.'">
+                        $html = '<figure style="text-align:center;border:1px solid gray;max-height: 600px;'.$newStyle.'">
+                            <img src="'.$imageUrl.'" style="max-height: 600px;">
                             <figcaption style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</figcaption>
                         </figure>';
 

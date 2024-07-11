@@ -148,6 +148,9 @@
                 .then((response) => {
                     event.detail.callback(response)
                 })
+                .catch(function (error) {
+                    event.detail.callback(error)
+                });
         } else {
             axios
                 .post(`/chapters/${chapter.data.id}/image`, {
@@ -160,6 +163,9 @@
                 .then((response) => {
                     event.detail.callback(response)
                 })
+                .catch(function (error) {
+                    event.detail.callback(error)
+                });
         }
     }
 </script>
