@@ -427,6 +427,7 @@
 
     function uploadImage(event) {
         start()
+
         dispatch('uploadImage', {
             files: event.target.files,
             callback: function (response) {
@@ -436,8 +437,6 @@
                     editor.chain().focus().setImage({ src: image.url, title: image.caption, id: image.id }).run()
 
                     fileInput.value = null
-                } else {
-                    return
                 }
 
                 done()

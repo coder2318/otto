@@ -33,14 +33,14 @@ class RegenerateBook implements ShouldQueue
         foreach ($chapters as $chapter) {
             $chapterImagesById = [];
             preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$chapterImagesById) {
-                $imageTeg = $matches[0];
+                $imageTag = $matches[0];
 
-                preg_match('@id="([^"]+)"@', $imageTeg, $match);
+                preg_match('@id="([^"]+)"@', $imageTag, $match);
                 $id = array_pop($match);
 
                 $chapterImagesById[$id] = $id;
 
-                return $imageTeg;
+                return $imageTag;
             }, $chapter->content);
 
             foreach ($chapter->images as $image) {
