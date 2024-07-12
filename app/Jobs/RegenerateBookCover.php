@@ -23,26 +23,37 @@ class RegenerateBookCover implements ShouldQueue
     public function handle(): void
     {
         if (! $cover = $this->story->cover) {
+            $this->story->regenerate_counter--;
+            $this->story->save();
+
             return;
         }
 
-        $spine = $this->spineWidth($this->story->book->getCustomProperty('pages')) * 25.4; // @phpstan-ignore-line
+        try {
+            $spine = $this->spineWidth($this->story->book->getCustomProperty('pages')) * 25.4; // @phpstan-ignore-line
 
-        $pdf = Pdf::loadView('pdf.book-cover', [
-            'cover' => $cover,
-            'width' => (2 * 178.181 + $spine).'mm',
-            'height' => '278mm',
-        ]);
-        /** @var Mpdf */
-        $mpdf = $pdf->getMpdf();
-        $mpdf->curlAllowUnsafeSslRequests = true;
-        $pdf->save($path = "/tmp/book-cover-{$this->story->id}.pdf");
+            $pdf = Pdf::loadView('pdf.book-cover', [
+                'cover' => $cover,
+                'width' => (2 * 178.181 + $spine).'mm',
+                'height' => '278mm',
+            ]);
+            /** @var Mpdf */
+            $mpdf = $pdf->getMpdf();
+            $mpdf->curlAllowUnsafeSslRequests = true;
+            $pdf->save($path = "/tmp/book-cover-{$this->story->id}.pdf");
 
-        $this->story->clearMediaCollection('book-cover');
+            $this->story->clearMediaCollection('book-cover');
 
-        $this->story->addMedia($path)
-            ->withCustomProperties(compact('spine'))
-            ->toMediaCollection('book-cover', config('media-library.private_disk_name'));
+            $this->story->addMedia($path)
+                ->withCustomProperties(compact('spine'))
+                ->toMediaCollection('book-cover', config('media-library.private_disk_name'));
+
+        } catch (\Exception $e) {
+
+        }
+
+        $this->story->regenerate_counter--;
+        $this->story->save();
     }
 
     protected function spineWidth(int $pages): float

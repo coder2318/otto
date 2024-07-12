@@ -19,6 +19,8 @@ class RegenerateBook implements ShouldQueue
     public function __construct(
         public Story $story
     ) {
+        $this->story->regenerate_counter++;
+        $this->story->save();
     }
 
     public function handle(): void
