@@ -150,7 +150,7 @@
                 })
                 .catch(function (error) {
                     event.detail.callback(error)
-                });
+                })
         } else {
             axios
                 .post(`/chapters/${chapter.data.id}/image`, {
@@ -165,7 +165,7 @@
                 })
                 .catch(function (error) {
                     event.detail.callback(error)
-                });
+                })
         }
     }
 </script>
