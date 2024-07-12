@@ -19,6 +19,7 @@ use App\Http\Resources\StoryResource;
 use App\Http\Resources\StoryTypeResource;
 use App\Http\Resources\TimelineResource;
 use App\Jobs\RegenerateBook;
+use App\Jobs\RegenerateBookCover;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
@@ -139,6 +140,8 @@ class StoryController extends Controller
             }
 
             $cover->save();
+
+            dispatch(new RegenerateBookCover($story));
         }
 
         dispatch(new RegenerateBook($story));
@@ -215,13 +218,6 @@ class StoryController extends Controller
                     ->orderBy('order', 'asc')
                     ->get(['id', 'title'])
             ),
-        ]);
-    }
-
-    public function regenerate_counter(Story $story)
-    {
-        return response()->json([
-            'regenerate_counter' => $story->regenerate_counter,
         ]);
     }
 

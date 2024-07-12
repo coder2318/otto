@@ -5,7 +5,6 @@
 </script>
 
 <script lang="ts">
-    import { router } from '@inertiajs/core'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
     import { inertia } from '@inertiajs/svelte'
@@ -22,34 +21,8 @@
 
     $: outline = outlines.find((o) => o.page === selected)
 
-    let checkRegenerateCounter
-    let needToUpdate = false
-
-    async function checkRegenerateCounterCallback() {
-        const response = await fetch(`/stories/${story.data.id}/regenerate_counter`)
-        const json = await response.json()
-
-        story.data.regenerate_counter = json?.regenerate_counter ?? 0
-
-        if (needToUpdate && story.data.regenerate_counter == 0) {
-            router.visit(`/stories/${story.data.id}/preview`, {
-                onFinish: (visit) => {
-                    needToUpdate = false
-                    clearInterval(checkRegenerateCounter)
-                },
-            })
-        }
-    }
-
     onMount(() => {
         let load, change
-
-        if (story.data.regenerate_counter) {
-            needToUpdate = true
-            checkRegenerateCounter = setInterval(() => {
-                checkRegenerateCounterCallback()
-            }, 5000)
-        }
 
         frame.addEventListener(
             'load',
@@ -93,7 +66,6 @@
         )
 
         return () => {
-            if (checkRegenerateCounter) clearInterval(checkRegenerateCounter)
             if (change) select.removeEventListener('change', change)
             if (load) frame.removeEventListener('load', load)
         }
@@ -108,9 +80,6 @@
     <Breadcrumbs step={2} {story} />
     <h1 class="text-3xl text-primary">
         Book Preview - <i>{story.data.title}</i>
-        {#if story.data.regenerate_counter}
-            (updating preview <span class="loading loading-spinner" />)
-        {/if}
     </h1>
 
     <select bind:this={select} bind:value={selected} name="bookmarks" class="select select-primary">
@@ -119,9 +88,7 @@
         {/each}
     </select>
 
-    <section
-        class="grid grid-flow-row gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4"
-    >
+    <section class="grid grid-flow-row grid-cols-4 gap-4">
         <iframe
             title={story.data.title}
             src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book)}"

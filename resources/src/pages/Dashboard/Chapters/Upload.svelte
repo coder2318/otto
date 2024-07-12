@@ -79,6 +79,10 @@
                 process: {
                     url: '/attachments',
                     method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                    },
+                    withCredentials: true,
                     onerror: (response) => {
                         console.log(response)
                     },
