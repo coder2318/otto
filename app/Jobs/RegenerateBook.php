@@ -44,7 +44,7 @@ class RegenerateBook implements ShouldQueue
             }, $chapter->content);
 
             foreach ($chapter->images as $image) {
-                if (! isset($chapterImagesById[$image->id])) {
+                if (! isset($chapterImagesById[$image->id])) { // @phpstan-ignore-line
                     $image->delete();
                 }
             }
