@@ -30,7 +30,6 @@ class Story extends Model implements HasMedia
         'user_id',
         'story_type_id',
         'shopify_id',
-        'regenerate_counter',
     ];
 
     protected $casts = [

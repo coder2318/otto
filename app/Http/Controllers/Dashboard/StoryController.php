@@ -221,13 +221,6 @@ class StoryController extends Controller
         ]);
     }
 
-    public function regenerate_counter(Story $story)
-    {
-        return response()->json([
-            'regenerate_counter' => $story->regenerate_counter,
-        ]);
-    }
-
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
     {
         if (! $story->cover) {

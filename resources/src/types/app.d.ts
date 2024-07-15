@@ -76,7 +76,6 @@ declare namespace App {
         created_at: Date | string
         updated_at: Date | string
         chapters?: Chapter[]
-        regenerate_counter?: number
     }
 
     interface StoryType {
