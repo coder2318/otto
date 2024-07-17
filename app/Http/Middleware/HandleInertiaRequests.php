@@ -41,6 +41,7 @@ class HandleInertiaRequests extends Middleware
         }
 
         $data = [
+            'csrf_token' => csrf_token(),
             'auth.user' => fn () => ($user = $request->user('web'))
                 ? UserResource::make($user->load('avatar'))
                 : null,
