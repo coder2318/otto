@@ -8,7 +8,7 @@
     import { router } from '@inertiajs/core'
 
     import { fade } from 'svelte/transition'
-    import { inertia, useForm } from '@inertiajs/svelte'
+    import { page, inertia, useForm } from '@inertiajs/svelte'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import Fa from 'svelte-fa'
     import { faArrowLeft } from '@fortawesome/free-solid-svg-icons'
@@ -79,6 +79,10 @@
                 process: {
                     url: '/attachments',
                     method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': $page?.props?.csrf_token,
+                    },
+                    withCredentials: true,
                     onerror: (response) => {
                         console.log(response)
                     },

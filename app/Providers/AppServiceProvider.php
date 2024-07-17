@@ -103,7 +103,23 @@ class AppServiceProvider extends ServiceProvider
                 $story->save();
             }
         });
+
         Queue::after(function ($event) {
+            $payload = $event->job->payload();
+            $displayName = $payload['displayName'] ?? '';
+            $command = unserialize($payload['data']['command']);
+
+            if ($displayName == 'App\Jobs\RegenerateBook') {
+                $story = \App\Models\Story::find($command->story->id);
+                $story->regenerate_counter--;
+                if ($story->regenerate_counter < 0) {
+                    $story->regenerate_counter = 0;
+                }
+                $story->save();
+            }
+        });
+
+        Queue::exceptionOccurred(function ($event) {
             $payload = $event->job->payload();
             $displayName = $payload['displayName'] ?? '';
             $command = unserialize($payload['data']['command']);
