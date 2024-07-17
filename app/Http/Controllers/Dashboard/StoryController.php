@@ -28,6 +28,7 @@ use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Sokil\IsoCodes\Database\Countries\Country;
@@ -221,10 +222,26 @@ class StoryController extends Controller
         ]);
     }
 
-    public function regenerate_counter(Story $story)
+    public function regenerate_status(Story $story)
     {
+        $regenerateStatus = false;
+
+        $queuesDefault = Redis::lrange('queues:default', 0, -1);
+        $queuesReserved = Redis::zrange('queues:default:reserved', 0, -1);
+        $queues = array_merge($queuesDefault, $queuesReserved);
+
+        foreach ($queues as $queueJson) {
+            $queue = json_decode($queueJson);
+            $firstTag = ($queue->tags[0] ?? '');
+
+            if ($firstTag == "App\Models\Story:{$story->id}") {
+                $regenerateStatus = true;
+                break;
+            }
+        }
+
         return response()->json([
-            'regenerate_counter' => $story->regenerate_counter,
+            'regenerate_status' => $regenerateStatus,
         ]);
     }
 

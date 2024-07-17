@@ -10,7 +10,6 @@ use DateTime;
 use Exception;
 use Google\Cloud\Translate\V2\TranslateClient;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
@@ -91,47 +90,5 @@ class AppServiceProvider extends ServiceProvider
             ? response()->json(['message' => 'This feature is not available'], 418)
             : Inertia::render('Pennent')
         );
-
-        Queue::before(function ($event) {
-            $payload = $event->job->payload();
-            $displayName = $payload['displayName'] ?? '';
-            $command = unserialize($payload['data']['command']);
-
-            if ($displayName == 'App\Jobs\RegenerateBook') {
-                $story = \App\Models\Story::find($command->story->id);
-                $story->regenerate_counter++;
-                $story->save();
-            }
-        });
-
-        Queue::after(function ($event) {
-            $payload = $event->job->payload();
-            $displayName = $payload['displayName'] ?? '';
-            $command = unserialize($payload['data']['command']);
-
-            if ($displayName == 'App\Jobs\RegenerateBook') {
-                $story = \App\Models\Story::find($command->story->id);
-                $story->regenerate_counter--;
-                if ($story->regenerate_counter < 0) {
-                    $story->regenerate_counter = 0;
-                }
-                $story->save();
-            }
-        });
-
-        Queue::exceptionOccurred(function ($event) {
-            $payload = $event->job->payload();
-            $displayName = $payload['displayName'] ?? '';
-            $command = unserialize($payload['data']['command']);
-
-            if ($displayName == 'App\Jobs\RegenerateBook') {
-                $story = \App\Models\Story::find($command->story->id);
-                $story->regenerate_counter--;
-                if ($story->regenerate_counter < 0) {
-                    $story->regenerate_counter = 0;
-                }
-                $story->save();
-            }
-        });
     }
 }
