@@ -24,14 +24,18 @@
 
     let checkRegenerateCounter
     let needToUpdate = false
+    let regenerateStatus = false
 
     async function checkRegenerateCounterCallback() {
-        const response = await fetch(`/stories/${story.data.id}/regenerate_counter`)
+        const response = await fetch(`/stories/${story.data.id}/regenerate_status`)
         const json = await response.json()
 
-        story.data.regenerate_counter = json?.regenerate_counter ?? 0
+        regenerateStatus = json?.regenerate_status ?? false
+        if (regenerateStatus) {
+            needToUpdate = true
+        }
 
-        if (needToUpdate && story.data.regenerate_counter == 0) {
+        if (needToUpdate && !regenerateStatus) {
             router.visit(`/stories/${story.data.id}/preview`, {
                 onFinish: (visit) => {
                     needToUpdate = false
@@ -44,12 +48,13 @@
     onMount(() => {
         let load, change
 
-        if (story.data.regenerate_counter) {
-            needToUpdate = true
-            checkRegenerateCounter = setInterval(() => {
-                checkRegenerateCounterCallback()
-            }, 5000)
-        }
+        setTimeout(() => {
+            checkRegenerateCounterCallback()
+        }, 1000)
+
+        checkRegenerateCounter = setInterval(() => {
+            checkRegenerateCounterCallback()
+        }, 5000)
 
         frame.addEventListener(
             'load',
@@ -108,7 +113,7 @@
     <Breadcrumbs step={2} {story} />
     <h1 class="text-3xl text-primary">
         Book Preview - <i>{story.data.title}</i>
-        {#if story.data.regenerate_counter}
+        {#if regenerateStatus}
             (updating preview <span class="loading loading-spinner" />)
         {/if}
     </h1>

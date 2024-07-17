@@ -83,7 +83,7 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/order', 'order')->name('order');
             Route::patch('/order', 'orderCost')->name('order.cost');
             Route::post('/order', 'orderPurchase')->name('order.purchase');
-            Route::get('/regenerate_counter', 'regenerate_counter')->name('regenerate_counter');
+            Route::get('/regenerate_status', 'regenerate_status')->name('regenerate_status');
         });
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::resource('stories.questions.chapters', ChapterController::class)->shallow()->only('create');
