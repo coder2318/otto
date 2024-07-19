@@ -103,6 +103,8 @@
                         return
                     }
 
+                    value = value.replace(/(\r\n|\n\n)/g, '<p></p>')
+
                     $form.enhanced += value
 
                     if ($form.enhanced) {
