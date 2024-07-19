@@ -95,6 +95,9 @@
                 throw new Error('Network response was not ok.')
             })
             .then((reader) => {
+                let splitted = []
+                let text = ''
+
                 $form.enhanced = ''
                 reader.read().then(function pump({ done, value }) {
                     if (controller.signal.aborted) return
@@ -103,9 +106,14 @@
                         return
                     }
 
-                    value = value.replace(/(\r\n|\n\n)/g, '<p></p>')
+                    text += value
+                    splitted = text.split(/[\r\n]{2,2}/g)
 
-                    $form.enhanced += value
+                    if (splitted.length > 1) {
+                        $form.enhanced = '<p>' + splitted.join('</p><p>') + '</p>'
+                    } else {
+                        $form.enhanced += value
+                    }
 
                     if ($form.enhanced) {
                         finish()

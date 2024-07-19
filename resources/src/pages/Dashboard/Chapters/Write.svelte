@@ -79,7 +79,7 @@
 
         axios
             .post('/translate', {
-                text: chapter.data.content,
+                text: chapter.data.content == '' ? $form.content : chapter.data.content,
                 options: {
                     target: language,
                     format: 'text',
