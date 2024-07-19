@@ -128,10 +128,16 @@
 
                     if (isset($imagesById[$id])) {
                         $imageUrl = $imagesById[$id]['url'];
-                        $html = '<figure style="text-align:center;border:1px solid gray;max-height: 600px;'.$newStyle.'">
-                            <img src="'.$imageUrl.'" style="max-height: 600px;">
-                            <figcaption style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</figcaption>
-                        </figure>';
+                        $html = '
+                        <table style="page-break-inside:avoid; text-align:center;max-height: 600px;'.$newStyle.'">
+                            <tr>
+                                <td style="border-radius:20px; border:1px solid gray;padding-top:10px;padding-left:10px;padding-right:10px;">
+                                    <img src="'.$imageUrl.'" style="'.$newStyle.'">
+                                    <div style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</div>
+                                </td>
+                            </tr>
+                        </table>
+                        ';
 
                         return $html;
                     }
