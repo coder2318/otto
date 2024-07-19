@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Redis;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mpdf\Mpdf;
 
@@ -16,13 +17,34 @@ class RegenerateBook implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
+    public $timeout = 120;
+
     public function __construct(
         public Story $story
     ) {
     }
 
+    protected function getVersion()
+    {
+        $version = Redis::get("book-{$this->story->id}-version", 0);
+
+        return $version;
+    }
+
+    protected function increaseVersion()
+    {
+        $version = $this->getVersion();
+        $version++;
+
+        Redis::set("book-{$this->story->id}-version", $version);
+
+        return $version;
+    }
+
     public function handle(): void
     {
+        $currentVersion = $this->increaseVersion();
+
         $chapters = $this->story->chapters()
             ->with('images')
             ->where('status', Status::PUBLISHED)
@@ -50,11 +72,19 @@ class RegenerateBook implements ShouldQueue
             }
         }
 
+        $path = "/tmp/book-{$this->story->id}-".md5(microtime(true)).'.pdf';
+
         $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters]);
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
         $mpdf->curlAllowUnsafeSslRequests = true;
-        $pdf->save($path = "/tmp/book-{$this->story->id}.pdf");
+        $pdf->save($path);
+
+        if ($currentVersion != $this->getVersion()) {
+            unlink($path);
+
+            return;
+        }
 
         $this->story->clearMediaCollection('book');
 
@@ -66,6 +96,10 @@ class RegenerateBook implements ShouldQueue
             ->toMediaCollection('book', config('media-library.private_disk_name'));
 
         config(['media-library.max_file_size' => $size]);
+
+        if ($currentVersion != $this->getVersion()) {
+            return;
+        }
 
         dispatch(new RegenerateBookCover($this->story));
     }
