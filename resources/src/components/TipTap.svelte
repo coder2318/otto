@@ -417,6 +417,19 @@
 
             if (editorContent !== content) {
                 const { from, to } = editor.state.selection
+
+                content = content.replace(/>[\r\n ]+</g, '><')
+                content = content.replace(/\r\n/g, '\n')
+                content = content.replace(/\r/g, '\n')
+
+                const splitted = content.split(/\n\n/)
+
+                if (splitted.length > 1) {
+                    content = '<p>' + splitted.join('</p><p>') + '</p>'
+                } else {
+                    content = content
+                }
+
                 editor.commands.setContent(content, false)
                 editor.commands.setTextSelection({ from, to })
             }
