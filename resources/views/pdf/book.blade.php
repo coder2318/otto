@@ -31,7 +31,6 @@
             font-style: italic;
             font-weight: normal;
             color: #0C345C;
-            text-align: center;
             text-wrap: balance;
         }
 
@@ -44,6 +43,10 @@
             font-size: 1.5rem;
             color: #0C345C;
         }
+        .title {
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
@@ -63,7 +66,7 @@
     @endif
     <tocentry content="{{ $chapter->title }}"/><bookmark content="{{ $chapter->title }}"/>
     <article>
-        <h1>{{ $chapter->title }}</h1>
+        <h1 class="title">{{ $chapter->title }}</h1>
         <div style="text-align:center;padding:1rem 0">
             <svg viewBox="0 0 375 25" xmlns="http://www.w3.org/2000/svg" width="100%">
                 <g stroke="#999" fill="#999">
