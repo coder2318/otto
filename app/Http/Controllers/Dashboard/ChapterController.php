@@ -359,6 +359,13 @@ class ChapterController extends Controller
             return response()->json($response);
         } else {
             foreach ($request->validated('images') ?? [] as $image) {
+                $filePath = $image['file']->getPathname();
+
+                $manager = new \Intervention\Image\ImageManager();
+                $tempImage = $manager->make($filePath);
+                $tempImage = $tempImage->orientate();
+                $tempImage->save($filePath);
+
                 $record = $chapter->addMedia($image['file'])
                     ->withCustomProperties(['caption' => $image['caption'] ?? null])
                     ->toMediaCollection('images', config('media-library.private_disk_name'));
