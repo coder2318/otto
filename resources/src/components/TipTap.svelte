@@ -329,7 +329,13 @@
         const splitted = content.split(/\n\n/)
 
         if (splitted.length > 1) {
-            content = '<p>' + splitted.join('</p><p>') + '</p>'
+            content = splitted
+                .map((x) => {
+                    return x.startsWith('<') && x.endsWith('>') ? x : '<p>' + x + '</p>'
+                })
+                .join('')
+        } else {
+            content = splitted.join('').trim()
         }
 
         return content
