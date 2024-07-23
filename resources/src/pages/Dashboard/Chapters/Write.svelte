@@ -31,7 +31,7 @@
 
     onMount(() => {
         if (transcriptions) {
-            $form.content ? modal.showModal() : paste('replace')
+            $form.content && $form.content != '<p></p>' ? modal.showModal() : paste('replace')
         }
     })
 
