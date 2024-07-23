@@ -132,9 +132,9 @@
                     if (isset($imagesById[$id])) {
                         $imageUrl = $imagesById[$id]['url'];
                         $html = '
-                        <table style="page-break-inside:avoid; text-align:center;max-height: 600px;'.$newStyle.'">
+                        <table style="page-break-inside:avoid; border:0; text-align:center;max-height: 600px;'.$newStyle.'">
                             <tr>
-                                <td style="border-radius:20px; border:1px solid gray;padding-top:10px;padding-left:10px;padding-right:10px;">
+                                <td style="border:0;padding-top:10px;padding-left:10px;padding-right:10px;">
                                     <img src="'.$imageUrl.'" style="'.$newStyle.'">
                                     <div style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</div>
                                 </td>
