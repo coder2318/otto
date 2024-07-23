@@ -10,6 +10,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\Storage;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mpdf\Mpdf;
 
@@ -44,7 +45,7 @@ class RegenerateBook implements ShouldQueue
     public function handle(): void
     {
         $currentVersion = $this->increaseVersion();
-
+        $imageErrors = [];
         $chapters = $this->story->chapters()
             ->with('images')
             ->where('status', Status::PUBLISHED)
@@ -68,13 +69,19 @@ class RegenerateBook implements ShouldQueue
             foreach ($chapter->images as $image) {
                 if (! isset($chapterImagesById[$image->id])) { // @phpstan-ignore-line
                     $image->delete();
+                } else {
+                    $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
+                    if (! $exists) {
+                        $url = url("/chapters/{$chapter->id}/write");
+                        $imageErrors[] = $url;
+                    }
                 }
             }
         }
 
         $path = "/tmp/book-{$this->story->id}-".md5(microtime(true)).'.pdf';
 
-        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters]);
+        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters, 'imageErrors' => $imageErrors]);
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
         $mpdf->curlAllowUnsafeSslRequests = true;
