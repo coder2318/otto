@@ -95,7 +95,7 @@
                 foreach($chapter->images as $image) {
                     $imagesById[ $image->id ] = [
                         'id' => $image->id,
-                        'url' => $image->getTemporaryUrl(now()->addHour()),
+                        'url' => $image->getTemporaryUrl(now()->addHour(), 'optimized'),
                         'caption' => $image->getCustomProperty('caption'),
                     ];
                 }
