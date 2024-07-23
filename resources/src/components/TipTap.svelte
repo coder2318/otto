@@ -321,6 +321,20 @@
         }
     }
 
+    const transformContent = (content: string) => {
+        content = content.replace(/>[\r\n ]+</g, '><')
+        content = content.replace(/\r\n/g, '\n')
+        content = content.replace(/\r/g, '\n')
+
+        const splitted = content.split(/\n\n/)
+
+        if (splitted.length > 1) {
+            content = '<p>' + splitted.join('</p><p>') + '</p>'
+        }
+
+        return content
+    }
+
     onMount(() => {
         contentType = (element.getAttribute('contentType') ?? 'text').toLowerCase()
         let foundHtmlTags = content.search('<p>') !== -1
@@ -387,7 +401,7 @@
                 ImageResize,
                 ListKeymap,
             ],
-            content: content,
+            content: transformContent(content),
             onTransaction: () => (editor = editor),
             onCreate: ({ editor }) => {
                 if (autofocus) {
@@ -418,19 +432,7 @@
             if (editorContent !== content) {
                 const { from, to } = editor.state.selection
 
-                content = content.replace(/>[\r\n ]+</g, '><')
-                content = content.replace(/\r\n/g, '\n')
-                content = content.replace(/\r/g, '\n')
-
-                const splitted = content.split(/\n\n/)
-
-                if (splitted.length > 1) {
-                    content = '<p>' + splitted.join('</p><p>') + '</p>'
-                } else {
-                    content = content
-                }
-
-                editor.commands.setContent(content, false)
+                editor.commands.setContent(transformContent(content), false)
                 editor.commands.setTextSelection({ from, to })
             }
         } else {
