@@ -60,6 +60,10 @@
 
     <tocpagebreak links="on" toc-prehtml="&lt;h1&gt;Table of Contents&lt;/h1&gt;"/>
 
+    @foreach ($imageErrors as $url)
+        <div>Chapter generation errors, image not found. <a href="{{$url}}" >Edit</a></div>
+    @endforeach
+
     @foreach ($chapters as $chapter)
     @if(!$loop->first)
         <pagebreak/>
@@ -147,6 +151,12 @@
 
                     return '';
                 }, $chapter->content);
+
+                $chapter->content = str_replace([
+                    '<h1>'
+                ], [
+                    '<h1 style="page-break-inside:avoid;">'
+                ], $chapter->content);
             }
         @endphp
         <section>
