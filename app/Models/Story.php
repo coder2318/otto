@@ -80,6 +80,14 @@ class Story extends Model implements HasMedia
         );
     }
 
+    public function book_preview(): MorphOne
+    {
+        return $this->media()->one()->ofMany(
+            ['id' => 'MAX'],
+            fn ($query) => $query->where('collection_name', 'book-preview')
+        );
+    }
+
     public function book_cover(): MorphOne
     {
         return $this->media()->one()->ofMany(

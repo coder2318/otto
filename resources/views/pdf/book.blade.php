@@ -60,9 +60,11 @@
 
     <tocpagebreak links="on" toc-prehtml="&lt;h1&gt;Table of Contents&lt;/h1&gt;"/>
 
-    @foreach ($imageErrors as $url)
-        <div>Chapter generation errors, image not found. <a href="{{$url}}" >Edit</a></div>
-    @endforeach
+    @if(isset($imageErrors))
+        @foreach ($imageErrors as $url)
+            <div>Chapter generation errors, image not found. <a href="{{$url}}" >Edit</a></div>
+        @endforeach
+    @endif
 
     @foreach ($chapters as $chapter)
     @if(!$loop->first)
@@ -95,15 +97,6 @@
                 $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))
                     ->map(fn (string $p) => preg_replace('/\s+/', ' ', $p));
             } else {
-                $imagesById = [];
-                foreach($chapter->images as $image) {
-                    $imagesById[ $image->id ] = [
-                        'id' => $image->id,
-                        'url' => $image->getTemporaryUrl(now()->addHour()),
-                        'caption' => $image->getCustomProperty('caption'),
-                    ];
-                }
-
                 $chapter->content = preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$imagesById) {
                     $imageAttr = $matches[0];
 
@@ -134,12 +127,11 @@
                     }
 
                     if (isset($imagesById[$id])) {
-                        $imageUrl = $imagesById[$id]['url'];
                         $html = '
                         <table style="page-break-inside:avoid; border:0; text-align:center;max-height: 600px;'.$newStyle.'">
                             <tr>
                                 <td style="border:0;padding-top:10px;padding-left:10px;padding-right:10px;">
-                                    <img src="'.$imageUrl.'" style="'.$newStyle.'">
+                                    <img src="'.$imagesById[$id]['url'].'" style="'.$newStyle.'">
                                     <div style="font-size:0.8rem;font-style:italic">'.$imagesById[$id]['caption'].'</div>
                                 </td>
                             </tr>

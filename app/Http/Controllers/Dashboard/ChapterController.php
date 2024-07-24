@@ -14,7 +14,7 @@ use App\Http\Resources\QuestionsChaptersResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\TimelineQuestionResource;
 use App\Http\Resources\TimelineResource;
-use App\Jobs\RegenerateBook;
+use App\Jobs\RegenerateBookPreview;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Media;
@@ -165,7 +165,7 @@ class ChapterController extends Controller
         ]);
 
         if ($chapter->wasChanged('status')) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         return Inertia::render('Dashboard/Chapters/Finish', [
@@ -184,7 +184,7 @@ class ChapterController extends Controller
         ]);
 
         if ($chapter->wasChanged('status')) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         return Inertia::render('Dashboard/Chapters/Congratulation', [
@@ -308,7 +308,7 @@ class ChapterController extends Controller
         }
 
         if ($chapter->wasChanged(['status', 'content', 'title']) || $addedImages) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         if ($redirect = $request->validated('redirect')) {
@@ -324,7 +324,7 @@ class ChapterController extends Controller
     {
         $chapter->delete();
 
-        dispatch(new RegenerateBook($chapter->story));
+        dispatch(new RegenerateBookPreview($chapter->story));
 
         return redirect()->back()->with('message', 'Chapter deleted successfully!');
     }

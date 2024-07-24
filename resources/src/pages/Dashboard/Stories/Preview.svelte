@@ -23,23 +23,35 @@
     $: outline = outlines.find((o) => o.page === selected)
 
     let checkRegenerateCounter
+    let checkRegenerateInterval = 1000
+
     let needToUpdate = false
     let regenerateStatus = false
+    let regeneratePreviewStatus = false
 
     async function checkRegenerateCounterCallback() {
+        if (checkRegenerateInterval == 1000) {
+            clearInterval(checkRegenerateCounter)
+            checkRegenerateInterval = 5000
+            checkRegenerateCounter = setInterval(() => {
+                checkRegenerateCounterCallback()
+            }, checkRegenerateInterval)
+        }
+
         const response = await fetch(`/stories/${story.data.id}/regenerate_status`)
         const json = await response.json()
 
         regenerateStatus = json?.regenerate_status ?? false
-        if (regenerateStatus) {
+        regeneratePreviewStatus = json?.regenerate_preview_status ?? false
+
+        if (regeneratePreviewStatus) {
             needToUpdate = true
         }
 
-        if (needToUpdate && !regenerateStatus) {
+        if (needToUpdate && !regeneratePreviewStatus) {
             router.visit(`/stories/${story.data.id}/preview`, {
                 onFinish: (visit) => {
                     needToUpdate = false
-                    clearInterval(checkRegenerateCounter)
                 },
             })
         }
@@ -48,13 +60,9 @@
     onMount(() => {
         let load, change
 
-        setTimeout(() => {
-            checkRegenerateCounterCallback()
-        }, 1000)
-
         checkRegenerateCounter = setInterval(() => {
             checkRegenerateCounterCallback()
-        }, 5000)
+        }, checkRegenerateInterval)
 
         frame.addEventListener(
             'load',
@@ -113,8 +121,11 @@
     <Breadcrumbs step={2} {story} />
     <h1 class="text-3xl text-primary">
         Book Preview - <i>{story.data.title}</i>
-        {#if regenerateStatus}
+        {#if regeneratePreviewStatus}
             (updating preview <span class="loading loading-spinner" />)
+        {/if}
+        {#if regenerateStatus}
+            (updating printable version <span class="loading loading-spinner" />)
         {/if}
     </h1>
 
@@ -129,7 +140,7 @@
     >
         <iframe
             title={story.data.title}
-            src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book)}"
+            src="/pdf/web/viewer.html?file={encodeURIComponent(story.data.book_preview)}"
             width="100%"
             class="col-span-3 min-h-[60vh] flex-1 bg-base-300"
             bind:this={frame}
