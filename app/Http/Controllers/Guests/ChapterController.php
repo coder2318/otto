@@ -8,7 +8,7 @@ use App\Http\Requests\Chapters\TranscribeRequest;
 use App\Http\Requests\Chapters\UpdateChapterRequest;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\PromptResource;
-use App\Jobs\RegenerateBook;
+use App\Jobs\RegenerateBookPreview;
 use App\Models\Chapter;
 use App\Models\Guest;
 use App\Models\Media;
@@ -170,7 +170,7 @@ class ChapterController extends Controller
         ]);
 
         if ($chapter->wasChanged('status')) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         return Inertia::render('Guests/Chapters/Finish', [
@@ -185,7 +185,7 @@ class ChapterController extends Controller
         ]);
 
         if ($chapter->wasChanged('status')) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         return Inertia::render('Guests/Chapters/Congratulation', [
@@ -259,7 +259,7 @@ class ChapterController extends Controller
         }
 
         if ($chapter->wasChanged(['status', 'content', 'title']) || $addedImages) {
-            dispatch(new RegenerateBook($chapter->story));
+            dispatch(new RegenerateBookPreview($chapter->story));
         }
 
         if ($redirect = $request->validated('redirect')) {

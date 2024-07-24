@@ -18,7 +18,17 @@ class RegenerateBook implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    public $timeout = 120;
+    public $timeout = 300;
+
+    public $cacheKeyPattern = 'book-%s';
+
+    public $mediaQuality = '';
+
+    public $mediaCollectionName = 'book';
+
+    public $dispatchRegenerateBook = false;
+
+    public $dispatchRegenerateBookCover = false;
 
     public function __construct(
         public Story $story
@@ -27,7 +37,7 @@ class RegenerateBook implements ShouldQueue
 
     protected function getVersion()
     {
-        $version = Redis::get("book-{$this->story->id}-version", 0);
+        $version = Redis::get(sprintf($this->cacheKeyPattern, $this->story->id), 0);
 
         return $version;
     }
@@ -37,7 +47,7 @@ class RegenerateBook implements ShouldQueue
         $version = $this->getVersion();
         $version++;
 
-        Redis::set("book-{$this->story->id}-version", $version);
+        Redis::set(sprintf($this->cacheKeyPattern, $this->story->id), $version);
 
         return $version;
     }
@@ -46,6 +56,8 @@ class RegenerateBook implements ShouldQueue
     {
         $currentVersion = $this->increaseVersion();
         $imageErrors = [];
+        $imagesById = [];
+
         $chapters = $this->story->chapters()
             ->with('images')
             ->where('status', Status::PUBLISHED)
@@ -67,47 +79,73 @@ class RegenerateBook implements ShouldQueue
             }, $chapter->content);
 
             foreach ($chapter->images as $image) {
-                if (! isset($chapterImagesById[$image->id])) { // @phpstan-ignore-line
+                $imageId = $image->id; // @phpstan-ignore-line
+                if (! isset($chapterImagesById[$imageId])) {
                     $image->delete();
+
+                    continue;
+                }
+                $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
+                if (! $exists) {
+                    $url = url("/chapters/{$chapter->id}/write");
+                    $imageErrors[] = $url;
                 } else {
-                    $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
-                    if (! $exists) {
-                        $url = url("/chapters/{$chapter->id}/write");
-                        $imageErrors[] = $url;
-                    }
+                    $imagesById[$imageId] = [
+                        'id' => $imageId,
+                        'url' => $image->getTemporaryUrl(now()->addHour(), $this->mediaQuality),
+                        'caption' => $image->getCustomProperty('caption'),
+                    ];
                 }
             }
         }
 
-        $path = "/tmp/book-{$this->story->id}-".md5(microtime(true)).'.pdf';
+        if ($currentVersion != $this->getVersion()) {
+            $this->delete();
 
-        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters, 'imageErrors' => $imageErrors]);
+            return;
+        }
+
+        $path = '/tmp/'.sprintf($this->cacheKeyPattern, $this->story->id).'-'.md5(microtime(true)).'.pdf';
+
+        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters, 'imagesById' => $imagesById, 'imageErrors' => $imageErrors]);
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
         $mpdf->curlAllowUnsafeSslRequests = true;
         $pdf->save($path);
 
         if ($currentVersion != $this->getVersion()) {
-            unlink($path);
+            if (file_exists($path)) {
+                unlink($path);
+            }
+
+            $this->delete();
 
             return;
         }
 
-        $this->story->clearMediaCollection('book');
+        $this->story->clearMediaCollection($this->mediaCollectionName);
 
         $size = config('media-library.max_file_size');
         config(['media-library.max_file_size' => INF]);
 
         $this->story->addMedia($path)
             ->withCustomProperties(['pages' => $mpdf->page])
-            ->toMediaCollection('book', config('media-library.private_disk_name'));
+            ->toMediaCollection($this->mediaCollectionName, config('media-library.private_disk_name'));
 
         config(['media-library.max_file_size' => $size]);
 
         if ($currentVersion != $this->getVersion()) {
+            $this->delete();
+
             return;
         }
 
-        dispatch(new RegenerateBookCover($this->story));
+        if ($this->dispatchRegenerateBook) {
+            dispatch(new RegenerateBook($this->story));
+        }
+
+        if ($this->dispatchRegenerateBookCover) {
+            dispatch(new RegenerateBookCover($this->story));
+        }
     }
 }

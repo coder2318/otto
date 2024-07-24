@@ -67,6 +67,7 @@ declare namespace App {
         user_id: number
         user?: User
         book?: any | null
+        book_preview?: any | null
         pages?: number
         words?: number
         progress?: number

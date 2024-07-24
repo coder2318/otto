@@ -18,8 +18,8 @@ use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\StoryTypeResource;
 use App\Http\Resources\TimelineResource;
-use App\Jobs\RegenerateBook;
 use App\Jobs\RegenerateBookCover;
+use App\Jobs\RegenerateBookPreview;
 use App\Models\BookCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
@@ -145,7 +145,7 @@ class StoryController extends Controller
             dispatch(new RegenerateBookCover($story));
         }
 
-        dispatch(new RegenerateBook($story));
+        dispatch(new RegenerateBookPreview($story));
 
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Story updated successfully!');
     }
@@ -204,7 +204,7 @@ class StoryController extends Controller
             }
         });
 
-        dispatch(new RegenerateBook($story));
+        dispatch(new RegenerateBookPreview($story));
 
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'Contents saved successfully!');
     }
@@ -212,7 +212,7 @@ class StoryController extends Controller
     public function preview(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Preview', [
-            'story' => fn () => StoryResource::make($story->load('book')),
+            'story' => fn () => StoryResource::make($story->load('book_preview')->load('book')),
             'chapters' => fn () => ChapterResource::collection(
                 $story->chapters()->where('status', Status::PUBLISHED)
                     ->orderBy('timeline_id', 'asc')
@@ -225,25 +225,32 @@ class StoryController extends Controller
     public function regenerate_status(Story $story)
     {
         $regenerateStatus = false;
+        $regeneratePreviewStatus = false;
 
-        if (env('APP_ENV') !== 'testing') {
-            $queuesDefault = Redis::lrange('queues:default', 0, -1);
-            $queuesReserved = Redis::zrange('queues:default:reserved', 0, -1);
-            $queues = array_merge($queuesDefault, $queuesReserved);
+        $queuesDefault = Redis::lrange('queues:default', 0, -1);
+        $queuesReserved = Redis::zrange('queues:default:reserved', 0, -1);
+        $queues = array_merge($queuesDefault, $queuesReserved);
 
-            foreach ($queues as $queueJson) {
-                $queue = json_decode($queueJson);
-                $firstTag = ($queue->tags[0] ?? '');
+        foreach ($queues as $queueJson) {
+            $queue = json_decode($queueJson);
+            $firstTag = ($queue->tags[0] ?? '');
 
-                if ($firstTag == "App\Models\Story:{$story->id}") {
-                    $regenerateStatus = true;
-                    break;
-                }
+            if ($firstTag !== "App\Models\Story:{$story->id}") {
+                continue;
+            }
+
+            if ($queue->displayName == 'App\Jobs\RegenerateBook') {
+                $regenerateStatus = true;
+            }
+
+            if ($queue->displayName == 'App\Jobs\RegenerateBookPreview') {
+                $regeneratePreviewStatus = true;
             }
         }
 
         return response()->json([
             'regenerate_status' => $regenerateStatus,
+            'regenerate_preview_status' => $regeneratePreviewStatus,
         ]);
     }
 
