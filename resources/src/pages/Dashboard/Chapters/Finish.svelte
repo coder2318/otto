@@ -45,8 +45,8 @@
             <div class="card">
                 <div class="card-body items-center">
                     <h2 class="card-title text-4xl font-normal italic">
-                        {$page.props?.auth?.user?.data.details.first_name}
-                        {$page.props?.auth?.user?.data.details.last_name}
+                        {$page.props?.auth?.user?.data.details.first_name ?? 'User'}
+                        {$page.props?.auth?.user?.data.details.last_name ?? ''}
                     </h2>
                     <p>
                         has just finished his autobiography chapter on: {chapter.data.title}

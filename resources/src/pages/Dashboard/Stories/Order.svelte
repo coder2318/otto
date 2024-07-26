@@ -385,8 +385,8 @@
                         </div>
                         <div class="col-span-3 text-primary">
                             <h4 class="bookInfo-author font-serif">
-                                {$page.props?.auth?.user?.data.details.first_name}
-                                {$page.props?.auth?.user?.data.details.last_name}
+                                {$page.props?.auth?.user?.data.details.first_name ?? 'User'}
+                                {$page.props?.auth?.user?.data.details.last_name ?? ''}
                             </h4>
                             <h3 class="bookInfo-name font-serif">{story.data.title}</h3>
                         </div>
