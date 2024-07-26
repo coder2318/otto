@@ -10,7 +10,6 @@
     export let pages: number = 32
     export let preview: boolean = false
     export let change = () => {}
-
     let svg: HTMLElement | SVGElement
     let oldParams = { ...parameters }
 
@@ -42,7 +41,7 @@
     }
 
     function setHref(node: SVGTextElement, value: string | null = null) {
-        node.setAttribute('href', value)
+        if (value) node.setAttribute('href', value)
     }
 
     function updateSvg(params) {
@@ -151,7 +150,20 @@
         oldParams = { ...parameters }
     })
 
-    export async function getFile() {
+    export async function getFile(story) {
+        svg.querySelectorAll(`[data-front]`).forEach((node: HTMLElement | SVGElement) => {
+            const href = node.getAttribute('href')
+            if (href.indexOf('data:') !== 0 && story?.data?.cover?.meta?.front_base64 !== null) {
+                setHref(node as SVGTextElement, story.data.cover.meta.front_base64 as string)
+            }
+        })
+        svg.querySelectorAll(`[data-back]`).forEach((node: HTMLElement | SVGElement) => {
+            const href = node.getAttribute('href')
+            if (href.indexOf('data:') !== 0 && story?.data?.cover?.meta?.back_base64 !== null) {
+                setHref(node as SVGTextElement, story.data.cover.meta.back_base64 as string)
+            }
+        })
+
         const file = await toBlob(svg as HTMLElement, {
             canvasHeight: sizes.totalHeight,
             canvasWidth: sizes.totalWidth,
