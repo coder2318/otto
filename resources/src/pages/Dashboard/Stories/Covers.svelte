@@ -18,8 +18,13 @@
         meta: App.PaginationMeta
     }
 
-    const { title, description, author, subtitle, front, back } = story.data?.cover?.meta ?? {}
-    let bookCoverInfo = { title, description, author, subtitle, front, back }
+    const { title, description, author, subtitle } = story.data?.cover?.meta ?? {}
+
+    let bookCoverInfo = {}
+
+    if (title) {
+        bookCoverInfo = { title, description, author, subtitle }
+    }
 </script>
 
 <svelte:head>
