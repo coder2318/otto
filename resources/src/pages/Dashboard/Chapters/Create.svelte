@@ -54,7 +54,7 @@
             <img class="createChapterBanner-figure" src={bannerIllustration} alt="Figure" />
             <div class="block">
                 <img class="createChapterBanner-illustration" src={recordBannerIllustration} alt="Illustartion" />
-                <h2 class="fz_h3 title">Starting Your OttoStory</h2>
+                <h2 class="fz_h3 title">Choose Your Story Title:</h2>
                 <p>
                     Chat with Otto and relive a cherished memory. Turn this treasured moment into a brand new chapter.
                 </p>
