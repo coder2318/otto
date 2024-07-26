@@ -34,8 +34,8 @@
 
 <svelte:head>
     <title
-        >{import.meta.env.VITE_APP_NAME} - {user.data.details?.first_name}
-        {user.data.details?.last_name}</title
+        >{import.meta.env.VITE_APP_NAME} - {user.data.details?.first_name ?? 'User'}
+        {user.data.details?.last_name ?? ''}</title
     >
 </svelte:head>
 
@@ -66,8 +66,8 @@
                         <div class="profileContent_right">
                             <div class="profileContent_row">
                                 <h2 class="userName">
-                                    {user.data.details?.first_name}
-                                    {user.data.details?.last_name}
+                                    {user.data.details?.first_name ?? 'User'}
+                                    {user.data.details?.last_name ?? ''}
                                 </h2>
                                 <div class="userSocials">
                                     {#each Object.entries(user.data.details?.social ?? {}) as [key, value]}

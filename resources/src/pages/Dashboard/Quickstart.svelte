@@ -38,8 +38,8 @@
         quickstart = quickstart ? JSON.parse(quickstart) : null
 
         step = quickstart?.step ?? step
-        $form.first_name = quickstart?.form?.first_name ?? $form.first_name
-        $form.last_name = quickstart?.form?.last_name ?? $form.last_name
+        $form.first_name = quickstart?.form?.first_name ?? $form.first_name ?? 'User'
+        $form.last_name = quickstart?.form?.last_name ?? $form.last_name ?? ''
         $form.birth_date = quickstart?.form?.birth_date ?? $form.birth_date
         $form.quiz = quickstart?.form?.quiz ?? $form.answers
 

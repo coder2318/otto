@@ -71,7 +71,7 @@
                                 <td
                                     >{type === 'sent'
                                         ? chapter.guest?.name
-                                        : chapter.user?.details.first_name + ' ' + chapter.user?.details.last_name}</td
+                                        : (chapter.user?.details.first_name ?? 'User') + ' ' + (chapter.user?.details.last_name ?? '')}</td
                                 >
                                 <td>{type === 'sent' ? chapter.guest?.email : chapter.user?.email}</td>
                                 <td style="min-width: 300px;">{chapter.title}</td>
