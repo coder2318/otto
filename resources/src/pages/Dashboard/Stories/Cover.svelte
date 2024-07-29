@@ -61,9 +61,9 @@
     let sharedStyles = story.data?.cover?.meta ?? {}
 
     if (isTemplate) {
-        const { title, description, author, subtitle } = sharedStyles
+        const { title, description, author, subtitle, front, back } = sharedStyles
 
-        sharedStyles = { title, description, author, subtitle }
+        sharedStyles = { title, description, author, subtitle, front, back }
         parameters = {}
     }
 
@@ -105,6 +105,7 @@
         const newBlob = await createImageBlob(croppedImage)
 
         parameters[imageKey] = await fileToBase64(newBlob)
+
         hiddenParams[imageKey] = new File([newBlob], 'Cover-Background', {
             type: newBlob.type,
             lastModified: Date.now(),
@@ -126,7 +127,8 @@
     async function submit(event, onlySave?: boolean) {
         if (loading) return
         loading = true
-        const { file: blobFile, svg } = await builder.getFile()
+
+        const { file: blobFile, svg } = await builder.getFile(story)
 
         const file = new File([blobFile], 'cover.png', {
             type: 'image/png',

@@ -77,6 +77,7 @@ Route::middleware('user-configured')->group(function () {
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
+            Route::get('/covers_image_base64', 'coversImageBase64')->name('covers.image.base64');
             Route::get('/cover', 'cover')->name('cover');
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
