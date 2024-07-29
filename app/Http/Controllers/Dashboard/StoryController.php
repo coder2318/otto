@@ -177,13 +177,15 @@ class StoryController extends Controller
         foreach ($medias as $v) {
             if ($v->collection_name == 'front' || $v->collection_name == 'back') {
                 $stream = $v->stream();
-                $file = stream_get_contents($stream);
-                fclose($stream);
-                $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
-                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
-                unset($file);
+                if (is_resource($stream)) {
+                    $file = stream_get_contents($stream);
+                    fclose($stream);
+                    $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
+                    $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                    unset($file);
 
-                $images["{$v->collection_name}"] = $base64;
+                    $images["{$v->collection_name}"] = $base64;
+                }
             }
         }
 
