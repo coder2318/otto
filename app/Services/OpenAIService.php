@@ -23,7 +23,6 @@ class OpenAIService extends AiService
             return $input;
         }
         $result = '';
-        $model = $this->modelName;
 
         foreach ($this->segmentate ? self::segmentate($input) : [$input] as $segment) {
             $messages = [
@@ -41,7 +40,7 @@ class OpenAIService extends AiService
             ];
 
             $chat = OpenAI::chat()->create([
-                'model' => $model,
+                'model' => $this->modelName,
                 'messages' => $messages,
                 'temperature' => 0.2,
             ]);
@@ -65,17 +64,16 @@ class OpenAIService extends AiService
             return true;
         }
 
-        $language = $this->getLanguage($input);
+        $languageName = $this->getLanguageName($input);
+
         if (is_null($prompt)) {
             $prompt = Prompt::where('title', 'The Default')->value('content') ?? $this->defaultPrompt;
         }
-        $prompt = $this->getPrompt($prompt, $language);
 
         $strings = [
-            'name' => $this->translate("What's your name?", $language),
-            'question' => $this->translate("Please, tell me your story on: \"$question\"", $language),
+            'name' => "What's your name?",
+            'question' => "Please, tell me your story on: \"$question\"",
         ];
-        $model = $this->modelName;
 
         foreach ($this->segmentate ? self::segmentate($input) : [$input] as $segment) {
             $messages = [
@@ -100,11 +98,26 @@ class OpenAIService extends AiService
             ];
 
             $messages[] = [
+                'role' => 'system',
+                'content' => "[RULE] Now assistant using only {$languageName} language",
+            ];
+
+            $messages[] = [
+                'role' => 'system',
+                'content' => '[RULE] dont damage the HTML markup.',
+            ];
+
+            $messages[] = [
+                'role' => 'system',
+                'content' => '[RULE] You cant change links and links params in the text.',
+            ];
+
+            $messages[] = [
                 'role' => 'user',
                 'content' => $segment,
             ];
 
-            foreach ($this->chatCreateStreamed($model, $messages) as $response) {
+            foreach ($this->chatCreateStreamed($messages) as $response) {
                 yield $response;
             }
 
@@ -114,11 +127,64 @@ class OpenAIService extends AiService
         return true;
     }
 
-    protected function chatCreateStreamed(string $model, array $messages)
+    public function getLanguageName($text)
+    {
+        $text = strip_tags($text);
+        $text = mb_substr($text, 0, 500);
+
+        $messages[] = [
+            'role' => 'system',
+            'content' => '[RULE] determine the language and return the language name, the response should only contain the name of the language',
+        ];
+
+        $messages[] = [
+            'role' => 'user',
+            'content' => $text,
+        ];
+
+        $response = OpenAI::chat()->create([
+            'model' => $this->modelName,
+            'messages' => $messages,
+            'temperature' => 0.2,
+        ]);
+
+        return $response['choices'][0]['message']['content'] ?? '';
+    }
+
+    public function translateTextStreamed(string $text, string $target)
+    {
+        $messages[] = [
+            'role' => 'system',
+            'content' => "[RULE] translate text to languageCode:{$target}.",
+        ];
+
+        $messages[] = [
+            'role' => 'system',
+            'content' => '[RULE] dont damage the HTML markup.',
+        ];
+
+        $messages[] = [
+            'role' => 'system',
+            'content' => '[RULE] You cant change links and links params in the text.',
+        ];
+
+        $messages[] = [
+            'role' => 'user',
+            'content' => $text,
+        ];
+
+        foreach ($this->chatCreateStreamed($messages) as $response) {
+            yield $response;
+        }
+
+        return true;
+    }
+
+    protected function chatCreateStreamed(array $messages)
     {
         $answer = '';
         $stream = OpenAI::chat()->createStreamed([
-            'model' => $model,
+            'model' => $this->modelName,
             'messages' => $messages,
             'temperature' => 0.2,
         ]);
@@ -139,7 +205,7 @@ class OpenAIService extends AiService
                     'content' => 'continue your answer',
                 ];
 
-                yield from $this->chatCreateStreamed($model, $messages);
+                yield from $this->chatCreateStreamed($messages);
 
                 continue;
             } else {

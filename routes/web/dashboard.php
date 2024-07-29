@@ -97,6 +97,7 @@ Route::middleware('user-configured')->group(function () {
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
             Route::get('/enhance/stream', 'process')->name('enhance.stream');
+            Route::get('/translate/stream', 'translate')->name('translate.stream');
             Route::get('/finish', 'finish')->name('finish');
             Route::get('/congratulation', 'congratulation')->name('congratulation');
             Route::post('/invite', 'invite')->name('invite');
