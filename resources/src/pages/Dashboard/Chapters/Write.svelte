@@ -190,7 +190,7 @@
                         </select>
                         {#if $form.isDirty}
                             <button type="submit" class="btn btn-secondary rounded-full" data-status="draft">
-                                Save & Next
+                                Save to drafts
                             </button>
                         {:else}
                             <a
