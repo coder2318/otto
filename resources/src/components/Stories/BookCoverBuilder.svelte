@@ -3,6 +3,7 @@
     import { draggable } from '@/service/svelte'
     import { svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
+    import { page } from '@inertiajs/svelte'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
@@ -41,7 +42,7 @@
     }
 
     function setHref(node: SVGTextElement, value: string | null = null) {
-        if (value) node.setAttribute('href', value)
+        if (value !== null) node.setAttribute('href', value)
     }
 
     function updateSvg(params) {
@@ -127,6 +128,13 @@
             }
         })
 
+        if (!parameters['front']) {
+            parameters['front'] = template.front_image
+        }
+        if (!parameters['back']) {
+            parameters['back'] = template.back_image
+        }
+
         updateSvg(parameters)
 
         return () => {
@@ -152,7 +160,14 @@
 
     export async function getFile(story) {
         const response = await fetch(`/stories/${story.data.id}/covers_image_base64`, {
-            method: 'GET',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $page?.props?.csrf_token,
+            },
+            body: JSON.stringify({
+                front_image: template?.front_image_file,
+                back_image: template?.back_image_file,
+            }),
         })
         const base64 = await response.json()
 
