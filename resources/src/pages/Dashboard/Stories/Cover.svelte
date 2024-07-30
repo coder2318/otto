@@ -61,10 +61,19 @@
     let sharedStyles = story.data?.cover?.meta ?? {}
 
     if (isTemplate) {
-        const { title, description, author, subtitle, front, back } = sharedStyles
+        const { title, description, author, subtitle, front, back, front_image, back_image } = sharedStyles
 
-        sharedStyles = { title, description, author, subtitle, front, back }
+        sharedStyles = { title, description, author, subtitle, front, back, front_image, back_image }
         parameters = {}
+        parameters.template_id = new URLSearchParams($page.url.split('?')?.[1]).get('template')
+        parameters.title = title
+        parameters.description = description
+        parameters.author = author
+        parameters.subtitle = subtitle
+        parameters.front = front
+        parameters.back = back
+        parameters.front_image = front_image
+        parameters.back_image = back_image
     }
 
     onMount(() => {
@@ -76,7 +85,7 @@
     })
 
     function createParameters() {
-        if (template.data.id == story.data?.cover?.meta?.template_id) {
+        if (story.data?.cover?.meta?.template_id && template.data.id == story.data?.cover?.meta?.template_id) {
             return story.data?.cover?.meta
         }
 

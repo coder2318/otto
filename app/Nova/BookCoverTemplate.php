@@ -3,8 +3,10 @@
 namespace App\Nova;
 
 use App\BookCoverParams\BookCoverParams;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -49,9 +51,29 @@ class BookCoverTemplate extends Resource
 
             Code::make('Base')->language('xml')->height('auto'),
 
+            Image::make('Front image', null, config('media-library.private_disk_name'))->preview(function ($value, $disk) {
+                return $value
+                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                            : null;
+            })->thumbnail(function ($value, $disk) {
+                return $value
+                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                            : null;
+            }),
+
             Code::make('Front')->language('xml')->height('auto'),
 
             Code::make('Spine')->language('xml')->height('auto'),
+
+            Image::make('Back image', null, config('media-library.private_disk_name'))->preview(function ($value, $disk) {
+                return $value
+                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                            : null;
+            })->thumbnail(function ($value, $disk) {
+                return $value
+                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                            : null;
+            }),
 
             Code::make('Back')->language('xml')->height('auto'),
 

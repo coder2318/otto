@@ -30,6 +30,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
@@ -173,6 +174,11 @@ class StoryController extends Controller
             'front' => null,
             'back' => null,
         ];
+        $request = request()->json();
+
+        $front_image = $request->get('front_image');
+        $back_image = $request->get('back_image');
+
         $medias = $story?->cover?->media ?? [];
         foreach ($medias as $v) {
             if ($v->collection_name == 'front' || $v->collection_name == 'back') {
@@ -186,6 +192,33 @@ class StoryController extends Controller
 
                     $images["{$v->collection_name}"] = $base64;
                 }
+            }
+        }
+
+        if (empty($images['front']) && ! empty($front_image)) {
+            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($front_image);
+            if (is_resource($stream)) {
+                $file = stream_get_contents($stream);
+                fclose($stream);
+                $parts = explode('.', $front_image);
+                $ext = array_pop($parts);
+                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                unset($file);
+
+                $images['front'] = $base64;
+            }
+        }
+        if (empty($images['back']) && ! empty($back_image)) {
+            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($back_image);
+            if (is_resource($stream)) {
+                $file = stream_get_contents($stream);
+                fclose($stream);
+                $parts = explode('.', $back_image);
+                $ext = array_pop($parts);
+                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                unset($file);
+
+                $images['back'] = $base64;
             }
         }
 

@@ -13,8 +13,10 @@ class BookCoverTemplate extends Model
         'name',
         'fields',
         'back',
+        'back_image',
         'spine',
         'front',
+        'front_image',
     ];
 
     protected $casts = [
