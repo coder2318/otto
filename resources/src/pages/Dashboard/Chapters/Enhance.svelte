@@ -269,7 +269,7 @@
                             data-status="draft"
                             data-redirect="dashboard.chapters.congratulation"
                         >
-                            Save & Next
+                            Save to drafts
                         </button>
                     {/if}
                     {#if $form.isDirty && $form.use && !loading}
