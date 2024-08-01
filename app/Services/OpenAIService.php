@@ -113,6 +113,11 @@ class OpenAIService extends AiService
             ];
 
             $messages[] = [
+                'role' => 'system',
+                'content' => "[Rule] Use HTML instead of a markdown in the output.",
+            ];
+
+            $messages[] = [
                 'role' => 'user',
                 'content' => $segment,
             ];
