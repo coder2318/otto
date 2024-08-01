@@ -112,9 +112,11 @@
     onMount(() => {
         parameters = {}
 
-        svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
-            dragHooks.push(draggable(node, svg as SVGElement, change))
-        })
+        if (!preview) {
+            svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
+                dragHooks.push(draggable(node, svg as SVGElement, change))
+            })
+        }
 
         Object.entries(shared).forEach(([key, value]) => {
             const keyPos = key.includes('Position') ? key.replace('Position', '') : key
@@ -123,17 +125,10 @@
 
             const tagName = element?.tagName.toLowerCase()
 
-            if (tagName === 'text' || tagName === 'p' || tagName === 'image' || element?.hasAttribute('data-shared')) {
+            if (tagName === 'text' || tagName === 'p' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
-
-        if (!parameters['front']) {
-            parameters['front'] = template.front_image
-        }
-        if (!parameters['back']) {
-            parameters['back'] = template.back_image
-        }
 
         updateSvg(parameters)
 
@@ -152,8 +147,9 @@
 
         if (Object.keys(diff).length) {
             change()
-            updateSvg(diff)
         }
+
+        updateSvg(parameters)
 
         oldParams = { ...parameters }
     })
@@ -305,9 +301,10 @@
         {@html template.front ?? ''}
     </svg>
 </svg>
-
-<style lang="scss">
-    :global([data-draggable]) {
-        @apply cursor-move;
-    }
-</style>
+{#if !preview}
+    <style lang="scss">
+        :global([data-draggable]) {
+            @apply cursor-move;
+        }
+    </style>
+{/if}

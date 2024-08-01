@@ -5,7 +5,7 @@
 </script>
 
 <script lang="ts">
-    import { inertia, router, page } from '@inertiajs/svelte'
+    import { inertia, router } from '@inertiajs/svelte'
     import FilePond from '@/components/FilePond.svelte'
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
@@ -21,9 +21,13 @@
     import Cropper from 'svelte-easy-crop'
     import getCroppedImg from '@/util/canvasUtils'
     import Range from '@/components/Chapters/Range.svelte'
+    import { flash } from '@/components/Toast.svelte'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
+    export let userTemplate: any
+    export let templateType: any
+    export let templateId: any
 
     let image = ''
     let aspect = 0.6622621448029057
@@ -56,24 +60,45 @@
     let loading: boolean = false
     let fonts = []
 
-    const isTemplate = !!new URLSearchParams($page.url.split('?')?.[1]).get('template')
+    const excludeParameters = ['template_id', 'back', 'back_image', 'front', 'front_image']
 
-    let sharedStyles = story.data?.cover?.meta ?? {}
+    let coverMeta = story.data?.cover?.meta ?? {}
+    let sharedStyles = coverMeta
 
-    if (isTemplate) {
-        const { title, description, author, subtitle, front, back, front_image, back_image } = sharedStyles
-
-        sharedStyles = { title, description, author, subtitle, front, back, front_image, back_image }
-        parameters = {}
-        parameters.template_id = new URLSearchParams($page.url.split('?')?.[1]).get('template')
-        parameters.title = title
-        parameters.description = description
-        parameters.author = author
-        parameters.subtitle = subtitle
-        parameters.front = front
-        parameters.back = back
-        parameters.front_image = front_image
-        parameters.back_image = back_image
+    if (templateId && templateType == 'default') {
+        changed = true
+        sharedStyles = Object.keys(coverMeta).reduce((result, key) => {
+            if (excludeParameters.includes(key)) {
+                return result
+            }
+            if (key.indexOf('position') == -1 && key.indexOf('Position') == -1) {
+                result[key] = coverMeta[key]
+            }
+            return result
+        }, {})
+        parameters = Object.keys(coverMeta).reduce((result, key) => {
+            if (excludeParameters.includes(key)) {
+                return result
+            }
+            result[key] = coverMeta[key]
+            return result
+        }, {})
+        parameters.template_id = templateId
+        parameters.user_template_id = null
+    }
+    if (templateId && templateType == 'user') {
+        changed = true
+        sharedStyles = Object.keys(userTemplate.data.parameters).reduce((result, key) => {
+            if (excludeParameters.includes(key)) {
+                return result
+            }
+            result[key] = userTemplate.data.parameters[key]
+            return result
+        }, {})
+        template.data = userTemplate.data.template
+        parameters = sharedStyles
+        parameters.template_id = template.data.id
+        parameters.user_template_id = templateId
     }
 
     onMount(() => {
@@ -183,6 +208,35 @@
                     changed = false
                     parameters = createParameters()
                     hiddenParams = {}
+                },
+                onFinish: () => {
+                    loading = false
+                },
+            }
+        )
+    }
+
+    async function saveUserCoverTemplate(event) {
+        router.post(
+            `/stories/${story.data.id}/cover/template`,
+            {
+                parameters: {
+                    ...parameters,
+                    ...hiddenParams,
+                },
+                redirect: 'dashboard.stories.cover',
+            },
+            {
+                preserveScroll: true,
+                forceFormData: true,
+                onSuccess: (response) => {
+                    if (response?.message) {
+                        flash({
+                            message: response.message,
+                            type: 'alert-error',
+                            autohide: true,
+                        })
+                    }
                 },
                 onFinish: () => {
                     loading = false
@@ -375,6 +429,17 @@
                             <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                         </button>
                     {:else}
+                        <button
+                            class="btn btn-secondary rounded-full"
+                            disabled={loading}
+                            type="button"
+                            on:click={(event) => {
+                                saveUserCoverTemplate(event)
+                            }}
+                        >
+                            {#if loading}<span class="loading loading-spinner"></span>{/if}
+                            <span>Save User cover</span>
+                        </button>
                         <a href="/stories/{story.data.id}/edit" class="btn btn-secondary rounded-full" use:inertia>
                             Continue
                         </a>

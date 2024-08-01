@@ -79,6 +79,9 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
             Route::post('/covers_image_base64', 'coversImageBase64')->name('covers.image.base64');
             Route::get('/cover', 'cover')->name('cover');
+            Route::get('/cover/{type}/{id}', 'cover')->name('cover.type');
+            Route::delete('/cover/{id}', 'coverDelete')->name('cover.delete');
+            Route::post('/cover/template', 'userCoverTemplate')->name('save.cover.template');
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
             Route::get('/order', 'order')->name('order');
