@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm, router } from '@inertiajs/svelte'
+    import { inertia, useForm } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import { start, done as finish } from '@/components/Loading.svelte'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
@@ -17,6 +17,7 @@
     import EnhanceBtn from '@/components/SVG/buttons/enhance-btn.svg.svelte'
     import axios from 'axios'
     import { flash } from '@/components/Toast.svelte'
+    import Select from 'svelte-select'
 
     export let chapter: { data: App.Chapter }
     export let prompts: { data: App.Prompt[] }
@@ -29,6 +30,12 @@
     let enhance: HTMLDialogElement
     let loading: boolean = true
     let compare: boolean = false
+
+    $: tonePromptsItems = tonePrompts.map((tonePrompt) => ({ value: tonePrompt.id, label: tonePrompt.title }))
+    $: perspectivePromptsItems = perspectivePrompts.map((perspectivePrompt) => ({
+        value: perspectivePrompt.id,
+        label: perspectivePrompt.title,
+    }))
 
     const enhanceData = {
         tone_id: null,
@@ -301,7 +308,7 @@
                 <label class="label" for="tone">
                     <span class="label-text">Change Tone</span>
                 </label>
-                <div class="grid grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
                     <div class="join col-span-1 items-center md:col-span-1">
                         {#if enhanceData.tone_id}
                             <div
@@ -310,15 +317,7 @@
                                 {@html currentTone?.icon}
                             </div>
                         {/if}
-                        <select
-                            bind:value={enhanceData.tone_id}
-                            class="select join-item select-bordered select-ghost w-full"
-                        >
-                            <option disabled value={null}>Select Tone</option>
-                            {#each tonePrompts as tone}
-                                <option value={tone.id}>{tone.title}</option>
-                            {/each}
-                        </select>
+                        <Select items={tonePromptsItems} />
                     </div>
                     {#if enhanceData.tone_id}
                         <div class="col-span-2 font-serif italic text-primary">
@@ -334,7 +333,7 @@
                 <label class="label" for="tone">
                     <span class="label-text">From the Perspective of</span>
                 </label>
-                <div class="grid grid-cols-3 gap-8">
+                <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
                     <div class="join col-span-1 flex items-center md:col-span-1">
                         {#if enhanceData.perspective_id}
                             <div
@@ -343,15 +342,7 @@
                                 {@html currentPerspective?.icon}
                             </div>
                         {/if}
-                        <select
-                            bind:value={enhanceData.perspective_id}
-                            class="select join-item select-bordered select-ghost w-full"
-                        >
-                            <option disabled value={null}>Select Perspective</option>
-                            {#each perspectivePrompts as perspective}
-                                <option value={perspective.id}>{perspective.title}</option>
-                            {/each}
-                        </select>
+                        <Select items={perspectivePromptsItems} />
                     </div>
                     {#if enhanceData.perspective_id}
                         <div class="col-span-2 font-serif italic text-primary">
