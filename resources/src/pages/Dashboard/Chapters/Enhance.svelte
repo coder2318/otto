@@ -31,10 +31,15 @@
     let loading: boolean = true
     let compare: boolean = false
 
-    $: tonePromptsItems = tonePrompts.map((tonePrompt) => ({ value: tonePrompt.id, label: tonePrompt.title }))
+    $: tonePromptsItems = tonePrompts.map((tonePrompt) => ({
+        value: tonePrompt.id,
+        label: tonePrompt.title,
+        icon: tonePrompt.icon,
+    }))
     $: perspectivePromptsItems = perspectivePrompts.map((perspectivePrompt) => ({
         value: perspectivePrompt.id,
         label: perspectivePrompt.title,
+        icon: perspectivePrompt.icon,
     }))
 
     const enhanceData = {
@@ -53,6 +58,24 @@
 
     const controller = new AbortController()
 
+    let toneError = ''
+    let perspectiveError = ''
+
+    function validateForm() {
+        toneError = ''
+        perspectiveError = ''
+
+        if (!enhanceData.tone_id) {
+            toneError = 'Please select a tone.'
+        }
+
+        if (!enhanceData.perspective_id) {
+            perspectiveError = 'Please select a perspective.'
+        }
+
+        return !toneError && !perspectiveError
+    }
+
     function submit(event: SubmitEvent) {
         $form
             .transform((data) => ({
@@ -67,6 +90,10 @@
     }
 
     function proccess() {
+        if (!validateForm()) {
+            return
+        }
+
         enhance?.close()
 
         start()
@@ -308,7 +335,7 @@
                 <label class="label" for="tone">
                     <span class="label-text">Change Tone</span>
                 </label>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
                     <div class="join col-span-1 items-center md:col-span-1">
                         {#if enhanceData.tone_id}
                             <div
@@ -317,8 +344,27 @@
                                 {@html currentTone?.icon}
                             </div>
                         {/if}
-                        <Select items={tonePromptsItems} />
+                        <Select
+                            items={tonePromptsItems}
+                            on:change={(event) => {
+                                enhanceData.tone_id = event.detail.value
+                                validateForm()
+                            }}
+                            placeholder="Select Tone"
+                            clearable={false}
+                            searchable={false}
+                            showChevron
+                            required
+                        >
+                            <div class="item" slot="item" let:item>
+                                {item.icon}
+                                {item.label}
+                            </div>
+                        </Select>
                     </div>
+                    {#if toneError}
+                        <div class="text-sm text-error">{toneError}</div>
+                    {/if}
                     {#if enhanceData.tone_id}
                         <div class="col-span-2 font-serif italic text-primary">
                             {currentTone?.description}
@@ -333,7 +379,7 @@
                 <label class="label" for="tone">
                     <span class="label-text">From the Perspective of</span>
                 </label>
-                <div class="grid grid-cols-1 gap-8 md:grid-cols-3">
+                <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
                     <div class="join col-span-1 flex items-center md:col-span-1">
                         {#if enhanceData.perspective_id}
                             <div
@@ -342,8 +388,27 @@
                                 {@html currentPerspective?.icon}
                             </div>
                         {/if}
-                        <Select items={perspectivePromptsItems} />
+                        <Select
+                            items={perspectivePromptsItems}
+                            on:change={(event) => {
+                                enhanceData.perspective_id = event.detail.value
+                                validateForm()
+                            }}
+                            placeholder="Select Perspective"
+                            clearable={false}
+                            searchable={false}
+                            showChevron
+                            required
+                        >
+                            <div class="flex w-full gap-2" slot="item" let:item>
+                                {@html item.icon}
+                                {item.label}
+                            </div>
+                        </Select>
                     </div>
+                    {#if perspectiveError}
+                        <div class="text-sm text-error">{perspectiveError}</div>
+                    {/if}
                     {#if enhanceData.perspective_id}
                         <div class="col-span-2 font-serif italic text-primary">
                             {currentPerspective?.description}
