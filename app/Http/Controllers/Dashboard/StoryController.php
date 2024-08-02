@@ -167,6 +167,29 @@ class StoryController extends Controller
         ]);
     }
 
+    public function coversImageBase64(Story $story)
+    {
+        $images = [
+            'front' => null,
+            'back' => null,
+        ];
+        $medias = $story?->cover?->media ?? [];
+        foreach ($medias as $v) {
+            if ($v->collection_name == 'front' || $v->collection_name == 'back') {
+                $stream = $v->stream();
+                $file = stream_get_contents($stream);
+                fclose($stream);
+                $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
+                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                unset($file);
+
+                $images["{$v->collection_name}"] = $base64;
+            }
+        }
+
+        return response()->json($images);
+    }
+
     public function edit(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Edit', [
