@@ -117,6 +117,30 @@ class ChapterController extends Controller
         ]);
     }
 
+    public function translate(Chapter $chapter, AiService $service, Request $request)
+    {
+        return new StreamedResponse(function () use ($chapter, $service, $request) {
+            $request->validate([
+                'content' => ['string', 'nullable'],
+                'language' => ['string', 'nullable'],
+            ]);
+
+            foreach ($service->translateTextStreamed(
+                $chapter->content,
+                $request->language,
+            ) as $chunk) {
+                if (connection_aborted()) {
+                    return;
+                }
+
+                echo $chunk;
+
+                ob_flush();
+                flush();
+            }
+        }, headers: ['X-Accel-Buffering' => 'no']);
+    }
+
     //Enhanced with OttoStory button
     public function process(Chapter $chapter, AiService $service, Request $request)
     {

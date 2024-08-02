@@ -3,6 +3,7 @@
     import { draggable } from '@/service/svelte'
     import { svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
+    import { page } from '@inertiajs/svelte'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
@@ -41,7 +42,7 @@
     }
 
     function setHref(node: SVGTextElement, value: string | null = null) {
-        if (value) node.setAttribute('href', value)
+        if (value !== null) node.setAttribute('href', value)
     }
 
     function updateSvg(params) {
@@ -111,9 +112,11 @@
     onMount(() => {
         parameters = {}
 
-        svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
-            dragHooks.push(draggable(node, svg as SVGElement, change))
-        })
+        if (!preview) {
+            svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
+                dragHooks.push(draggable(node, svg as SVGElement, change))
+            })
+        }
 
         Object.entries(shared).forEach(([key, value]) => {
             const keyPos = key.includes('Position') ? key.replace('Position', '') : key
@@ -122,7 +125,7 @@
 
             const tagName = element?.tagName.toLowerCase()
 
-            if (tagName === 'text' || tagName === 'p' || tagName === 'image' || element?.hasAttribute('data-shared')) {
+            if (tagName === 'text' || tagName === 'p' || element?.hasAttribute('data-shared')) {
                 parameters[key] = value
             }
         })
@@ -144,15 +147,23 @@
 
         if (Object.keys(diff).length) {
             change()
-            updateSvg(diff)
         }
+
+        updateSvg(parameters)
 
         oldParams = { ...parameters }
     })
 
     export async function getFile(story) {
         const response = await fetch(`/stories/${story.data.id}/covers_image_base64`, {
-            method: 'GET',
+            method: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': $page?.props?.csrf_token,
+            },
+            body: JSON.stringify({
+                front_image: template?.front_image_file,
+                back_image: template?.back_image_file,
+            }),
         })
         const base64 = await response.json()
 
@@ -290,9 +301,10 @@
         {@html template.front ?? ''}
     </svg>
 </svg>
-
-<style lang="scss">
-    :global([data-draggable]) {
-        @apply cursor-move;
-    }
-</style>
+{#if !preview}
+    <style lang="scss">
+        :global([data-draggable]) {
+            @apply cursor-move;
+        }
+    </style>
+{/if}

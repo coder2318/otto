@@ -14,6 +14,7 @@ use App\Http\Requests\Stories\StoreStoryRequest;
 use App\Http\Requests\Stories\StoriesRequest;
 use App\Http\Requests\Stories\UpdateStoryRequest;
 use App\Http\Resources\BookCoverTemplateResource;
+use App\Http\Resources\BookUserCoverTemplateResource;
 use App\Http\Resources\ChapterResource;
 use App\Http\Resources\StoryResource;
 use App\Http\Resources\StoryTypeResource;
@@ -21,6 +22,7 @@ use App\Http\Resources\TimelineResource;
 use App\Jobs\RegenerateBookCover;
 use App\Jobs\RegenerateBookPreview;
 use App\Models\BookCoverTemplate;
+use App\Models\BookUserCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
 use App\Models\User;
@@ -30,6 +32,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
@@ -75,19 +78,6 @@ class StoryController extends Controller
             'story' => fn () => StoryResource::make($story
                 ->load('cover')
                 ->append(['pages', 'words', 'progress'])
-            ),
-        ]);
-    }
-
-    public function cover(Story $story, Request $request)
-    {
-        return Inertia::render('Dashboard/Stories/Cover', [
-            'story' => fn () => StoryResource::make($story->append('pages')->load('cover')),
-            'template' => fn () => BookCoverTemplateResource::make(
-                BookCoverTemplate::when(
-                    $tmpl = $request->query('template', $story->cover?->getCustomProperty('template_id')), // @phpstan-ignore-line
-                    fn ($query) => $query->where('id', $tmpl)
-                )->orderBy('created_at')->firstOrFail()
             ),
         ]);
     }
@@ -157,14 +147,74 @@ class StoryController extends Controller
         return redirect()->route('dashboard.stories.index')->with('message', 'Story deleted successfully!');
     }
 
-    public function covers(Story $story)
+    public function cover(Story $story, Request $request, string $type = 'default', ?int $id = null)
     {
-        return Inertia::render('Dashboard/Stories/Covers', [
-            'story' => fn () => StoryResource::make($story->append('pages')->load('cover')),
-            'covers' => fn () => BookCoverTemplateResource::collection(
-                BookCoverTemplate::paginate(12)
-            ),
+        $storyResource = StoryResource::make($story->append('pages')->load('cover'));
+
+        $templateId = ($type == 'default' && $id) ? $id : ($story->cover?->getCustomProperty('template_id') ?? 1); // @phpstan-ignore-line
+
+        $bookCoverTemplate = BookCoverTemplate::where('id', $templateId)->orderBy('created_at')->first();
+        $bookCoverTemplateResource = BookCoverTemplateResource::make($bookCoverTemplate);
+        $bookCoverTemplateResource->story = $storyResource->resource;
+
+        $bookUserCoverTemplateResource = [];
+        if ($type == 'user' && $id) {
+            $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('id', $id)->first();
+            $bookUserCoverTemplateResource = BookUserCoverTemplateResource::make($bookUserCoverTemplate);
+        }
+
+        return Inertia::render('Dashboard/Stories/Cover', [
+            'story' => fn () => $storyResource,
+            'template' => fn () => $bookCoverTemplateResource,
+            'userTemplate' => fn () => $bookUserCoverTemplateResource,
+            'templateType' => $type,
+            'templateId' => $id,
         ]);
+    }
+
+    public function covers(Story $story, Request $request)
+    {
+        $storyResource = StoryResource::make($story->append('pages')->load('cover'));
+        $bookCoverTemplate = BookCoverTemplate::paginate(10);
+        $bookCoverTemplate->map(function ($i) use ($storyResource) {
+            $i->story = $storyResource->resource;
+        });
+        $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('story_id', $story->id)->paginate(10, ['*'], 'upage');
+
+        return Inertia::render('Dashboard/Stories/Covers', [
+            'story' => fn () => $storyResource,
+            'covers' => fn () => BookCoverTemplateResource::collection($bookCoverTemplate),
+            'userCovers' => fn () => BookUserCoverTemplateResource::collection($bookUserCoverTemplate),
+        ]);
+    }
+
+    public function userCoverTemplate(Story $story, Request $request)
+    {
+        $parameters = request()->parameters;
+
+        $templateId = $parameters['template_id'] ?? 1;
+        foreach (['front', 'front_image', 'back', 'back_image', 'template_id'] as $v) {
+            unset($parameters[$v]);
+        }
+
+        $template = new BookUserCoverTemplate();
+        $template->parameters = $parameters;
+        $template->story_id = $story->id;
+        $template->template_id = $templateId;
+        $template->save();
+
+        $userTemplateId = $template->id;
+
+        return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'User cover saved successfully!');
+    }
+
+    public function coverDelete(Story $story, Request $request, ?int $id = null)
+    {
+        if ($id) {
+            BookUserCoverTemplate::where('id', $id)?->first()?->delete();
+        }
+
+        return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'User cover deleted successfully!');
     }
 
     public function coversImageBase64(Story $story)
@@ -173,17 +223,51 @@ class StoryController extends Controller
             'front' => null,
             'back' => null,
         ];
+        $request = request()->json();
+
+        $front_image = $request->get('front_image');
+        $back_image = $request->get('back_image');
+
         $medias = $story?->cover?->media ?? [];
         foreach ($medias as $v) {
             if ($v->collection_name == 'front' || $v->collection_name == 'back') {
                 $stream = $v->stream();
+                if (is_resource($stream)) {
+                    $file = stream_get_contents($stream);
+                    fclose($stream);
+                    $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
+                    $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                    unset($file);
+
+                    $images["{$v->collection_name}"] = $base64;
+                }
+            }
+        }
+
+        if (empty($images['front']) && ! empty($front_image)) {
+            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($front_image);
+            if (is_resource($stream)) {
                 $file = stream_get_contents($stream);
                 fclose($stream);
-                $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
+                $parts = explode('.', $front_image);
+                $ext = array_pop($parts);
                 $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
                 unset($file);
 
-                $images["{$v->collection_name}"] = $base64;
+                $images['front'] = $base64;
+            }
+        }
+        if (empty($images['back']) && ! empty($back_image)) {
+            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($back_image);
+            if (is_resource($stream)) {
+                $file = stream_get_contents($stream);
+                fclose($stream);
+                $parts = explode('.', $back_image);
+                $ext = array_pop($parts);
+                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                unset($file);
+
+                $images['back'] = $base64;
             }
         }
 

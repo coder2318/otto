@@ -23,6 +23,8 @@ abstract class AiService
 
     protected bool $segmentate = true;
 
+    abstract public function translateTextStreamed(string $text, string $target);
+
     abstract public function chatEditStreamed(string $input, string $question, ?string $prompt = null, ?string $name = null);
 
     public static function segmentate(string $input, int $maxWords = 1300)

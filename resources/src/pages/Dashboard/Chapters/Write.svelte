@@ -6,7 +6,7 @@
 
 <script lang="ts">
     import { fade } from 'svelte/transition'
-    import { inertia, useForm, router } from '@inertiajs/svelte'
+    import { inertia, useForm } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import ChapterNameBanner from '@/components/Chapters/ChapterNameBanner.svelte'
     import ChapterTipBanner from '@/components/Chapters/ChapterTipBanner.svelte'
@@ -15,12 +15,16 @@
     import TipTap from '@/components/TipTap.svelte'
     import languages from '@/data/translate_languages.json'
     import axios from 'axios'
+    import { start, done as finish } from '@/components/Loading.svelte'
+    import { flash } from '@/components/Toast.svelte'
 
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
 
+    let loading: boolean = true
     let modal: HTMLDialogElement
 
+    const controller = new AbortController()
     const form = useForm({
         content: chapter.data.content ?? '',
         title: chapter.data.title,
@@ -77,16 +81,66 @@
             $form.content = chapter.data.content
         }
 
-        axios
-            .post('/translate', {
-                text: chapter.data.content == '' ? $form.content : chapter.data.content,
-                options: {
-                    target: language,
-                    format: 'text',
+        start()
+
+        $form
+            .transform((data) => ({
+                ...data,
+                _method: 'PUT',
+                status: data.status,
+            }))
+            .post(`/chapters/${chapter.data.id}`, {
+                preserveScroll: true,
+                onStart: start,
+                onFinish: finish,
+                onSuccess: () => {
+                    start()
+
+                    const data = { language }
+
+                    fetch(`/chapters/${chapter.data.id}/translate/stream?${new URLSearchParams(data)}`, {
+                        signal: controller.signal,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            Accept: 'application/json, text/plain',
+                        },
+                    })
+                        .then((res) => {
+                            if (res.ok) {
+                                return res.body.pipeThrough(new TextDecoderStream()).getReader()
+                            }
+
+                            flash({
+                                message: 'OttoStory AI not available',
+                                type: 'alert-error',
+                                autohide: true,
+                            })
+
+                            throw new Error('Network response was not ok.')
+                        })
+                        .then((reader) => {
+                            $form.content = ''
+                            reader.read().then(function pump({ done, value }) {
+                                if (controller.signal.aborted) return
+
+                                if (done) {
+                                    return
+                                }
+
+                                $form.content += value
+
+                                if ($form.content) {
+                                    finish()
+                                }
+
+                                return reader.read().then(pump)
+                            })
+                        })
+                        .finally(() => {
+                            loading = false
+                            finish()
+                        })
                 },
-            })
-            .then((res) => {
-                $form.content = res.data.text
             })
     }
 

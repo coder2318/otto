@@ -146,8 +146,12 @@ declare namespace App {
         id: number
         name: string
         back: string
+        back_image: string
+        back_image_file: string
         spine: string
         front: string
+        front_image: string
+        front_image_file: string
         base: string
         cover?: string
         fields: Array<{

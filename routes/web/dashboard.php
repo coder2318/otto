@@ -77,8 +77,11 @@ Route::middleware('user-configured')->group(function () {
         Route::resource('stories', StoryController::class);
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
-            Route::get('/covers_image_base64', 'coversImageBase64')->name('covers.image.base64');
+            Route::post('/covers_image_base64', 'coversImageBase64')->name('covers.image.base64');
             Route::get('/cover', 'cover')->name('cover');
+            Route::get('/cover/{type}/{id}', 'cover')->name('cover.type');
+            Route::delete('/cover/{id}', 'coverDelete')->name('cover.delete');
+            Route::post('/cover/template', 'userCoverTemplate')->name('save.cover.template');
             Route::post('/contents', 'saveContents')->name('contents.save');
             Route::get('/preview', 'preview')->name('preview');
             Route::get('/order', 'order')->name('order');
@@ -97,6 +100,7 @@ Route::middleware('user-configured')->group(function () {
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
             Route::get('/enhance/stream', 'process')->name('enhance.stream');
+            Route::get('/translate/stream', 'translate')->name('translate.stream');
             Route::get('/finish', 'finish')->name('finish');
             Route::get('/congratulation', 'congratulation')->name('congratulation');
             Route::post('/invite', 'invite')->name('invite');
