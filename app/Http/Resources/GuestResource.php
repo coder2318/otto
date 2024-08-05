@@ -22,7 +22,9 @@ class GuestResource extends JsonResource
 
     public function processAvatar()
     {
-        $this->processed_avatar = $this->processAvatarImage($this->resource->avatar->getUrl());
+        if ($this->resource->avatar) {
+            $this->processed_avatar = $this->processAvatarImage($this->resource->avatar->getUrl());
+        }
 
         return $this;
     }
