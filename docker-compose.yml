@@ -33,10 +33,10 @@ services:
     mysql:
         image: 'mysql/mysql-server:8.0'
         ports:
-            - '${FORWARD_DB_PORT:-3306}:3306'
+            - '127.0.0.1:${FORWARD_DB_PORT:-3306}:3306'
         environment:
             MYSQL_ROOT_PASSWORD: '${DB_PASSWORD}'
-            MYSQL_ROOT_HOST: "%"
+            MYSQL_ROOT_HOST: "localhost"
             MYSQL_DATABASE: '${DB_DATABASE}'
             MYSQL_USER: '${DB_USERNAME}'
             MYSQL_PASSWORD: '${DB_PASSWORD}'
@@ -54,7 +54,7 @@ services:
         image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
         command: --requirepass=${REDIS_PASSWORD}
         ports:
-            - '${FORWARD_REDIS_PORT:-6379}:6379'
+            - '127.0.0.1:${FORWARD_REDIS_PORT:-6379}:6379'
         volumes:
             - 'sail-dragonfly:/data'
         networks:
@@ -66,7 +66,7 @@ services:
     dbgate:
         image: dbgate/dbgate
         ports:
-            - 3000:3000
+            - '127.0.0.1:${FORWARD_DBGATE_PORT:-3000}:3000'
         volumes:
             - 'sail-dbgate:/root/.dbgate'
         networks:
@@ -78,7 +78,7 @@ services:
             SERVER_MYSQL: mysql
             USER_MYSQL: '${DB_USERNAME}'
             PASSWORD_MYSQL: '${DB_PASSWORD}'
-            PORT_MYSQL: ${FORWARD_DB_PORT:-3306}
+            PORT_MYSQL: ${DB_PORT:-3306}
             ENGINE_MYSQL: mysql@dbgate-plugin-mysql
 
             LABEL_REDIS: Redis
@@ -92,8 +92,8 @@ services:
     minio:
         image: 'minio/minio:latest'
         ports:
-            - '${FORWARD_MINIO_PORT:-9000}:9000'
-            - '${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
+            - '127.0.0.1:${FORWARD_MINIO_PORT:-9000}:9000'
+            - '127.0.0.1:${FORWARD_MINIO_CONSOLE_PORT:-8900}:8900'
         environment:
             MINIO_ROOT_USER: sail
             MINIO_ROOT_PASSWORD: password
@@ -113,7 +113,7 @@ services:
     meilisearch:
         image: 'getmeili/meilisearch:latest'
         ports:
-            - '${FORWARD_MEILISEARCH_PORT:-7700}:7700'
+            - '127.0.0.1:${FORWARD_MEILISEARCH_PORT:-7700}:7700'
         environment:
             MEILI_NO_ANALYTICS: '${MEILISEARCH_NO_ANALYTICS:-false}'
         volumes:
@@ -138,15 +138,15 @@ services:
             SOKETI_DEFAULT_APP_KEY: '${PUSHER_APP_KEY}'
             SOKETI_DEFAULT_APP_SECRET: '${PUSHER_APP_SECRET}'
         ports:
-            - '${PUSHER_PORT:-6001}:6001'
-            - '${PUSHER_METRICS_PORT:-9601}:9601'
+            - '127.0.0.1:${PUSHER_PORT:-6001}:6001'
+            - '127.0.0.1:${PUSHER_METRICS_PORT:-9601}:9601'
         networks:
             - sail
     mailpit:
         image: 'axllent/mailpit:latest'
         ports:
-            - '${FORWARD_MAILPIT_PORT:-1025}:1025'
-            - '${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
+            - '127.0.0.1:${FORWARD_MAILPIT_PORT:-1025}:1025'
+            - '127.0.0.1:${FORWARD_MAILPIT_DASHBOARD_PORT:-8025}:8025'
         networks:
             - sail
     selenium:
@@ -160,6 +160,7 @@ services:
 networks:
     sail:
         driver: bridge
+
 volumes:
     sail-mysql:
         driver: local

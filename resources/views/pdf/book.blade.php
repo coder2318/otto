@@ -43,17 +43,48 @@
             font-size: 1.5rem;
             color: #0C345C;
         }
+
         .title {
             text-align: center;
         }
 
+        .guest-name {
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 0.9rem;
+            text-align: right;
+        }
+
+        .avatar {
+            width: 30px;
+            height: 30px;
+            overflow: hidden;
+        }
+
+        table.guest-container {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        td.container-cell {
+            text-align: center;
+        }
+
+        table.guest-info {
+            border-collapse: collapse;
+        }
+
+        td.avatar-cell {
+            vertical-align: middle;
+            padding-left: 10px;
+        }
+
+        td.name-cell {
+            text-align: right;
+            vertical-align: middle;
+        }
     </style>
 </head>
 <body>
-    {{-- <htmlpageheader name="page-header">
-        <div style="font-size:12pt;text-align:center">{{ $story->title }}</div>
-    </htmlpageheader> --}}
-
     <htmlpagefooter name="page-footer">
         <div style="font-size:0.8rem;text-align:center">{PAGENO}</div>
     </htmlpagefooter>
@@ -73,6 +104,27 @@
     <tocentry content="{{ $chapter->title }}"/><bookmark content="{{ $chapter->title }}"/>
     <article>
         <h1 class="title">{{ $chapter->title }}</h1>
+        
+        @if ($chapter->guest)
+        <table class="guest-container">
+            <tr>
+                <td class="container-cell">
+                    <table class="guest-info">
+                        <tr>
+                            <td class="name-cell">
+                                <span class="guest-name">written by {{ $chapter->guest->name }}</span>
+                            </td>
+                            <td class="avatar-cell">
+                                @if ($chapter->guest->processed_avatar)
+                                <img class="avatar" src="{{ $chapter->guest->processed_avatar }}" />
+                                @endif
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        @endif
         <div style="text-align:center;padding:1rem 0">
             <svg viewBox="0 0 375 25" xmlns="http://www.w3.org/2000/svg" width="100%">
                 <g stroke="#999" fill="#999">

@@ -33,7 +33,7 @@ composer install --ignore-platform-reqs
 vendor/bin/sail up -d
 
 # remove docker environment
-sail down --rmi all
+vendor/bin/sail down --rmi all
 
 # install application
 vendor/bin/sail composer install
@@ -56,10 +56,10 @@ alias sail='sh $([ -f sail ] && echo sail || echo vendor/bin/sail)'
 in order to configure local s3 storage (minio) login to localhost:8900 with user:sail Password:password. You need to create a key and a bucket, put them to appripriate AWS_.. variables
 
 # run js in dev mode 
-sail bun run dev
+vendor/bin/sail bun run dev
 
 # restart containers
-sudo ./vendor/bin/sail restart
+vendor/bin/sail restart
 
 ## Access points
 

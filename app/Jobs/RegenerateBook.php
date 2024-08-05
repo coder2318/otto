@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Data\Chapter\Status;
 use App\Models\Story;
+use App\Http\Resources\GuestResource;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -59,14 +60,16 @@ class RegenerateBook implements ShouldQueue
         $imagesById = [];
 
         $chapters = $this->story->chapters()
-            ->with('images')
+            ->with('images', 'guest')
             ->where('status', Status::PUBLISHED)
             ->orderBy('timeline_id', 'asc')
             ->orderBy('order', 'asc')
             ->lazy();
 
+        $chaptersWithGuestAvatars = [];
         foreach ($chapters as $chapter) {
             $chapterImagesById = [];
+
             preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$chapterImagesById) {
                 $imageTag = $matches[0];
 
@@ -80,13 +83,13 @@ class RegenerateBook implements ShouldQueue
 
             foreach ($chapter->images as $image) {
                 $imageId = $image->id; // @phpstan-ignore-line
-                if (! isset($chapterImagesById[$imageId])) {
+                if (!isset($chapterImagesById[$imageId])) {
                     $image->delete();
 
                     continue;
                 }
                 $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
-                if (! $exists) {
+                if (!$exists) {
                     $url = url("/chapters/{$chapter->id}/write");
                     $imageErrors[] = $url;
                 } else {
@@ -97,6 +100,11 @@ class RegenerateBook implements ShouldQueue
                     ];
                 }
             }
+
+            if ($chapter->guest) {
+                $chapter->guest = GuestResource::make($chapter->guest)->processAvatar();
+            }
+            $chaptersWithGuestAvatars[] = $chapter;
         }
 
         if ($currentVersion != $this->getVersion()) {
@@ -105,9 +113,9 @@ class RegenerateBook implements ShouldQueue
             return;
         }
 
-        $path = '/tmp/'.sprintf($this->cacheKeyPattern, $this->story->id).'-'.md5(microtime(true)).'.pdf';
+        $path = '/tmp/' . sprintf($this->cacheKeyPattern, $this->story->id) . '-' . md5(microtime(true)) . '.pdf';
 
-        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chapters, 'imagesById' => $imagesById, 'imageErrors' => $imageErrors]);
+        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chaptersWithGuestAvatars, 'imagesById' => $imagesById, 'imageErrors' => $imageErrors]);
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
         $mpdf->curlAllowUnsafeSslRequests = true;
