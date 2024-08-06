@@ -337,9 +337,9 @@
                 </label>
                 <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
                     <div class="join col-span-1 items-center md:col-span-1">
-                        {#if enhanceData.tone_id}
+                        {#if enhanceData.tone_id && currentTone?.icon}
                             <div
-                                class="join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
+                                class="icon join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
                             >
                                 {@html currentTone?.icon}
                             </div>
@@ -356,8 +356,8 @@
                             showChevron
                             required
                         >
-                            <div class="item" slot="item" let:item>
-                                {item.icon}
+                            <div class="flex w-full items-center gap-2" slot="item" let:item>
+                                {@html item.icon}
                                 {item.label}
                             </div>
                         </Select>
@@ -381,9 +381,9 @@
                 </label>
                 <div class="grid grid-cols-1 items-center gap-8 md:grid-cols-3">
                     <div class="join col-span-1 flex items-center md:col-span-1">
-                        {#if enhanceData.perspective_id}
+                        {#if enhanceData.perspective_id && currentTone?.icon}
                             <div
-                                class="join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
+                                class="icon join-item flex h-full items-center justify-center border border-r-0 px-2 text-primary"
                             >
                                 {@html currentPerspective?.icon}
                             </div>
@@ -400,7 +400,7 @@
                             showChevron
                             required
                         >
-                            <div class="flex w-full gap-2" slot="item" let:item>
+                            <div class="flex w-full items-center gap-2" slot="item" let:item>
                                 {@html item.icon}
                                 {item.label}
                             </div>
@@ -476,5 +476,35 @@
                 padding: 16px;
             }
         }
+    }
+    .icon {
+        min-width: 53px;
+        height: 42px;
+    }
+
+    :global(.svelte-select .item.active) {
+        background: #c1dafa !important;
+        color: inherit !important;
+    }
+    :global(.svelte-select .item svg) {
+        min-width: 34px;
+        max-width: 34px;
+        min-height: 34px;
+        max-height: 34px;
+    }
+    :global(.svelte-select .item) {
+        padding: 0 10px 0 10px !important;
+    }
+    :global(.svelte-select-list::-webkit-scrollbar) {
+        width: 10px;
+    }
+    :global(.svelte-select-list::-webkit-scrollbar-track) {
+        background: #f1f1f1;
+    }
+    :global(.svelte-select-list::-webkit-scrollbar-thumb) {
+        background: #888;
+    }
+    :global(.svelte-select-list::-webkit-scrollbar-thumb:hover) {
+        background: #555;
     }
 </style>
