@@ -22,6 +22,7 @@
     import getCroppedImg from '@/util/canvasUtils'
     import Range from '@/components/Chapters/Range.svelte'
     import { flash } from '@/components/Toast.svelte'
+    import Select from 'svelte-select'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -294,15 +295,15 @@
                                                         placeholder={field.name}
                                                     />
                                                 {:else if field.type === 'font'}
-                                                    <select
-                                                        class="select select-bordered"
+                                                    <Select
                                                         bind:value={parameters[field.key]}
+                                                        bind:items={fonts}
                                                         name={field.key}
-                                                    >
-                                                        {#each fonts as font}
-                                                            <option value={font}>{font}</option>
-                                                        {/each}
-                                                    </select>
+                                                        placeholder=""
+                                                        clearable={false}
+                                                        searchable={true}
+                                                        showChevron
+                                                    ></Select>
                                                 {:else if field.type === 'color'}
                                                     <label
                                                         for={field.key}

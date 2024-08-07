@@ -24,9 +24,12 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use Inertia\Inertia;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use App\Http\Controllers\Traits\ChapterControllerTrait;
 
 class ChapterController extends Controller
 {
+    use ChapterControllerTrait;
+
     public function invite(Story $story, TimelineQuestion $question, Request $request)
     {
         $data = $request->validate([
@@ -269,13 +272,5 @@ class ChapterController extends Controller
         }
 
         return redirect()->back()->with('message', 'Chapter updated successfully!');
-    }
-
-    public function removeImage(Chapter $chapter, int $imageId)
-    {
-        $media = $chapter->images()->where('id', $imageId)->firstOrFail();
-        $media->delete();
-
-        return redirect()->back()->with('message', 'Image removed successfully!');
     }
 }

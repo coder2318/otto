@@ -11,14 +11,16 @@
     import { inertia } from '@inertiajs/svelte'
     import { onMount } from 'svelte'
     import Fa from 'svelte-fa'
+    import Select from 'svelte-select'
+
     export let story: { data: App.Story }
     export let chapters: { data: App.Chapter[] }
 
-    let select: HTMLSelectElement
     let frame: HTMLIFrameElement
 
     let outlines = []
-    let selected = 0
+    let selected: any
+    let selectItems = []
 
     $: outline = outlines.find((o) => o.page === selected)
 
@@ -57,8 +59,14 @@
         }
     }
 
+    function selectChangeHandle(frame: any) {
+        const viewer = frame.contentWindow.PDFViewerApplication
+
+        viewer.page = selected.value + 1
+    }
+
     onMount(() => {
-        let load, change
+        let load
 
         checkRegenerateCounter = setInterval(() => {
             checkRegenerateCounterCallback()
@@ -88,18 +96,19 @@
                             chapter: null,
                         })
 
-                        viewer.eventBus.on('pagechanging', async (e) => {
-                            selected = outlines.find((o) => o.page === e.pageNumber - 1)?.page ?? selected
+                        outlines.map((o) => {
+                            selectItems.push({
+                                id: o.page,
+                                value: o.page,
+                                label: o.title,
+                            })
                         })
 
-                        select.addEventListener(
-                            'change',
-                            (change = () => {
-                                viewer.page = selected + 1
-                            })
-                        )
+                        viewer.eventBus.on('pagechanging', async (e) => {
+                            selected = selectItems.findLast((o) => o.value <= viewer.page) ?? selected
+                        })
 
-                        selected = viewer.page - 1
+                        selected = selectItems.findLast((o) => o.value <= viewer.page) ?? selected
                     })
                 })
             })
@@ -107,7 +116,6 @@
 
         return () => {
             if (checkRegenerateCounter) clearInterval(checkRegenerateCounter)
-            if (change) select.removeEventListener('change', change)
             if (load) frame.removeEventListener('load', load)
         }
     })
@@ -129,11 +137,15 @@
         {/if}
     </h1>
 
-    <select bind:this={select} bind:value={selected} name="bookmarks" class="select select-primary">
-        {#each outlines as outline}
-            <option value={outline.page}>{outline.title}</option>
-        {/each}
-    </select>
+    <Select
+        bind:value={selected}
+        bind:items={selectItems}
+        on:change={(event) => selectChangeHandle(frame)}
+        placeholder=""
+        clearable={false}
+        searchable={true}
+        showChevron
+    ></Select>
 
     <section
         class="grid grid-flow-row gap-4 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-4 xl:grid-cols-4 2xl:grid-cols-4"

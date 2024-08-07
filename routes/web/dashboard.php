@@ -99,14 +99,15 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/files', 'transcribe')->name('attachments.transcribe');
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
-            Route::get('/enhance/stream', 'process')->name('enhance.stream');
-            Route::get('/translate/stream', 'translate')->name('translate.stream');
             Route::get('/finish', 'finish')->name('finish');
             Route::get('/congratulation', 'congratulation')->name('congratulation');
             Route::post('/invite', 'invite')->name('invite');
+
             Route::delete('/image/{imageId}', 'removeImage')->name('image');
             Route::post('/image', 'addImage')->name('image.add');
             Route::post('/attachments', 'uploadAttachments')->name('attachments.upload');
+            Route::get('/enhance/stream', 'process')->name('enhance.stream');
+            Route::get('/translate/stream', 'translate')->name('translate.stream');
         });
 
         // Guest features

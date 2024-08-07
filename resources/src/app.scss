@@ -662,3 +662,34 @@
         }
     }
 }
+.svelte-select {
+    .item.active {
+        background: #c1dafa !important;
+        color: inherit !important;
+    }
+    .item svg {
+        min-width: 34px;
+        max-width: 34px;
+        min-height: 34px;
+        max-height: 34px;
+    }
+    .item {
+        padding: 0 10px 0 10px !important;
+    }
+
+    .svelte-select-list {
+        z-index: 9999 !important;
+    }
+}
+.svelte-select-list::-webkit-scrollbar {
+    width: 10px;
+}
+.svelte-select-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+.svelte-select-list::-webkit-scrollbar-thumb {
+    background: #888;
+}
+.svelte-select-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
