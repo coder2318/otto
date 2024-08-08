@@ -26,6 +26,7 @@ use App\Models\BookUserCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
 use App\Models\User;
+use App\Models\Setting;
 use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
@@ -163,12 +164,19 @@ class StoryController extends Controller
             $bookUserCoverTemplateResource = BookUserCoverTemplateResource::make($bookUserCoverTemplate);
         }
 
+        try {
+            $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
+        } catch (Exception) {
+            $coverFonts = null;
+        }
+
         return Inertia::render('Dashboard/Stories/Cover', [
             'story' => fn () => $storyResource,
             'template' => fn () => $bookCoverTemplateResource,
             'userTemplate' => fn () => $bookUserCoverTemplateResource,
             'templateType' => $type,
             'templateId' => $id,
+            'coverFonts' =>  $coverFonts,
         ]);
     }
 
@@ -181,10 +189,17 @@ class StoryController extends Controller
         });
         $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('story_id', $story->id)->paginate(10, ['*'], 'upage');
 
+        try {
+            $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
+        } catch (Exception) {
+            $coverFonts = null;
+        }
+
         return Inertia::render('Dashboard/Stories/Covers', [
             'story' => fn () => $storyResource,
             'covers' => fn () => BookCoverTemplateResource::collection($bookCoverTemplate),
             'userCovers' => fn () => BookUserCoverTemplateResource::collection($bookUserCoverTemplate),
+            'coverFonts' =>  $coverFonts,
         ]);
     }
 

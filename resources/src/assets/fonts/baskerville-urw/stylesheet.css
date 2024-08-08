@@ -1,0 +1,81 @@
+
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("400-normal.woff2") format("woff2"),url("400-normal.woff") format("woff");
+	font-display:auto;
+	font-style:normal;
+	font-weight:400;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("500-normal.woff2") format("woff2"),url("500-normal.woff") format("woff");
+	font-display:auto;
+	font-style:normal;
+	font-weight:500;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("700-normal.woff2") format("woff2"),url("700-normal.woff") format("woff");
+	font-display:auto;
+	font-style:normal;
+	font-weight:700;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("800-normal.woff2") format("woff2"),url("800-normal.woff") format("woff");
+	font-display:auto;
+	font-style:normal;
+	font-weight:800;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("900-normal.woff2") format("woff2"),url("900-normal.woff") format("woff");
+	font-display:auto;
+	font-style:normal;
+	font-weight:900;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("400-italic.woff2") format("woff2"),url("400-italic.woff") format("woff");
+	font-display:auto;
+	font-style:italic;
+	font-weight:400;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("500-italic.woff2") format("woff2"),url("500-italic.woff") format("woff");
+	font-display:auto;
+	font-style:italic;
+	font-weight:500;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("700-italic.woff2") format("woff2"),url("700-italic.woff") format("woff");
+	font-display:auto;
+	font-style:italic;
+	font-weight:700;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("800-italic.woff2") format("woff2"),url("800-italic.woff") format("woff");
+	font-display:auto;
+	font-style:italic;
+	font-weight:800;
+	font-stretch:normal;
+}
+@font-face {
+	font-family:"baskerville-urw";
+	src:url("900-italic.woff2") format("woff2"),url("900-italic.woff") format("woff");
+	font-display:auto;
+	font-style:italic;
+	font-weight:900;
+	font-stretch:normal;
+}

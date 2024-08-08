@@ -1,6 +1,13 @@
 @import url('@/assets/fonts/ABCDiatype/stylesheet.css');
 @import url('@/assets/fonts/Baskerville/stylesheet.css');
-@import url('https://use.typekit.net/enp4pjp.css');
+@import url('@/assets/fonts/baskerville-urw/stylesheet.css');
+
+@import url('@/assets/fonts/arsenal/stylesheet.css');
+@import url('@/assets/fonts/corbel/stylesheet.css');
+@import url('@/assets/fonts/lunchtype22/stylesheet.css');
+@import url('@/assets/fonts/merriweather/stylesheet.css');
+@import url('@/assets/fonts/notosansdevanagari/stylesheet.css');
+@import url('@/assets/fonts/roboto/stylesheet.css');
 
 @tailwind base;
 @tailwind components;
@@ -29,6 +36,9 @@
 @import 'scss/components';
 @import 'scss/filepond';
 
+.tk-baskerville-urw {
+     font-family: "baskerville-urw",serif;
+}
 
 
 .otto-container {

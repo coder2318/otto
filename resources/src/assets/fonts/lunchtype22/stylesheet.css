@@ -1,0 +1,18 @@
+@font-face {
+    font-family: 'Lunchtype22';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Lunchtype22'), url('Lunchtype22-Regular.woff') format('woff');
+}
+@font-face {
+    font-family: 'Lunchtype22';
+    font-style: normal;
+    font-weight: 300;
+    src: local('Lunchtype22'), url('Lunchtype22-Light.woff') format('woff');
+}
+@font-face {
+    font-family: 'Lunchtype22';
+    font-style: normal;
+    font-weight: 500;
+    src: local('Lunchtype22'), url('Lunchtype22-Medium.woff') format('woff');
+}

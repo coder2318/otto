@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { toBlob } from 'html-to-image'
+    import { toBlob, getFontEmbedCSS } from 'html-to-image'
     import { draggable } from '@/service/svelte'
     import { svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
@@ -10,6 +10,7 @@
     export let shared: any = {}
     export let pages: number = 32
     export let preview: boolean = false
+    export let coverFonts: any = ''
     export let change = () => {}
     let svg: HTMLElement | SVGElement
     let oldParams = { ...parameters }
@@ -184,7 +185,9 @@
             canvasHeight: sizes.totalHeight,
             canvasWidth: sizes.totalWidth,
             type: 'image/jpeg',
-            cacheBust: true,
+            cacheBust: false,
+            preferredFontFormat: 'woff2',
+            fontEmbedCSS: coverFonts,
         })
 
         return { file, svg }

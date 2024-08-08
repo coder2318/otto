@@ -29,6 +29,7 @@
     export let userTemplate: any
     export let templateType: any
     export let templateId: any
+    export let coverFonts: any
 
     let image = ''
     let aspect = 0.6622621448029057
@@ -296,7 +297,10 @@
                                                     />
                                                 {:else if field.type === 'font'}
                                                     <Select
-                                                        bind:value={parameters[field.key]}
+                                                        value={parameters[field.key]}
+                                                        on:change={(event) => {
+                                                            parameters[field.key] = event.detail.value
+                                                        }}
                                                         bind:items={fonts}
                                                         name={field.key}
                                                         placeholder=""
@@ -392,6 +396,7 @@
                     <BookCoverBuilder
                         bind:this={builder}
                         class="select-none"
+                        {coverFonts}
                         pages={story.data.pages ?? 0}
                         shared={sharedStyles}
                         {parameters}
