@@ -8,15 +8,16 @@ use App\Notifications\Notifiables\AdminNotifiable;
 use App\Notifications\PreorderNotification;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
-use Spatie\Honeypot\Honeypot;
 
 class StaticController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Index', [
-            'honeypot' => fn () => app(Honeypot::class),
-        ]);
+        if (auth()->check()) {
+            return redirect('/dashboard');
+        } else {
+            return redirect(config('app.landing_url'));
+        }
     }
 
     public function about()
