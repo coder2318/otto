@@ -1,0 +1,26 @@
+{
+  "name": "otto-native",
+  "main": "app/app.ts",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "@nativescript/core": "~8.8.0",
+    "@nativescript/theme": "^3.1.0",
+    "nativescript-audio": "^6.2.6",
+    "svelte-native": "~1.0.9"
+  },
+  "devDependencies": {
+    "@nativescript/preview-cli": "1.0.13",
+    "@nativescript/types": "~8.8.0",
+    "@nativescript/webpack": "~5.0.0",
+    "dotenv": "^16.4.5",
+    "prettier-plugin-organize-imports": "^3.2.4",
+    "prettier-plugin-svelte": "^3.1.2",
+    "prettier-plugin-tailwindcss": "^0.5.10",
+    "svelte": "~4.2.2",
+    "svelte-loader": "^3.1.9",
+    "svelte-native-preprocessor": "^1.0.0",
+    "svelte-preprocess": "^5.0.4",
+    "typescript": "~5.4.0"
+  }
+}

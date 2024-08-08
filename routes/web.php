@@ -7,6 +7,7 @@ use App\Http\Controllers\RandomImageController;
 use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\StorageController;
+use App\Http\Controllers\MobileController;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -16,6 +17,10 @@ Route::post('/logout', function () {
     Auth::logout();
     return redirect('/login');
 })->name('logout');
+// Mobile app
+Route::controller(MobileController::class)->group(function () {
+    Route::post('/mobile/upload', 'upload')->name('upload');
+});
 
 // Temporary URLs for local files
 Route::get('temp/local/{path}', [StorageController::class, 'local'])
