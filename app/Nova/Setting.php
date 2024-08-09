@@ -5,6 +5,7 @@ namespace App\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Textarea;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class Setting extends Resource
@@ -64,13 +65,22 @@ class Setting extends Resource
                     ])
                     ->sortable(),
             ];
-        } else {
+        } elseif ($request->resourceId == 3) {
             return [
                 Text::make('Name', 'name')
                     ->sortable(),
-
-                Text::make('Value', 'value')
+                Textarea::make('Value', 'value')
                     ->sortable(),
+            ];
+        }
+        else {
+            return [
+                Text::make('Name', 'name')
+                    ->sortable(),
+                Text::make('Value', 'value')
+                    ->sortable()->displayUsing(function($value) {
+                        return mb_strlen($value) > 120 ? (strip_tags(mb_substr($value, 0, 120)) . " ...") : $value;
+                    })->onlyOnIndex(),
             ];
         }
     }
