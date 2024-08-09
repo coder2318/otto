@@ -9,6 +9,7 @@ class ChapterOrderRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'font' => ['string'],
             'timelines' => ['nullable', 'array'],
             'timelines.*' => ['required', 'array'],
             'timelines.*.id' => ['required', 'integer', 'exists:timelines,id'],

@@ -28,9 +28,11 @@ use App\Models\StoryType;
 use App\Models\User;
 use App\Models\Setting;
 use App\Services\LuluService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -49,7 +51,7 @@ class StoryController extends Controller
     public function index(StoriesRequest $request)
     {
         return Inertia::render('Dashboard/Stories/Index', [
-            'stories' => fn () => StoryResource::collection(
+            'stories' => fn() => StoryResource::collection(
                 $request->stories($request->user()->stories()->with('cover'))
                     ->paginate(6)
                     ->appends($request->query())
@@ -60,7 +62,7 @@ class StoryController extends Controller
     public function create()
     {
         return Inertia::render('Dashboard/Stories/Create', [
-            'story_types' => fn () => StoryTypeResource::collection(
+            'story_types' => fn() => StoryTypeResource::collection(
                 StoryType::all(['id', 'name'])
             ),
         ]);
@@ -69,16 +71,17 @@ class StoryController extends Controller
     public function write(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Write', [
-            'story' => fn () => StoryResource::make($story),
+            'story' => fn() => StoryResource::make($story),
         ]);
     }
 
     public function show(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Show', [
-            'story' => fn () => StoryResource::make($story
-                ->load('cover')
-                ->append(['pages', 'words', 'progress'])
+            'story' => fn() => StoryResource::make(
+                $story
+                    ->load('cover')
+                    ->append(['pages', 'words', 'progress'])
             ),
         ]);
     }
@@ -171,9 +174,9 @@ class StoryController extends Controller
         }
 
         return Inertia::render('Dashboard/Stories/Cover', [
-            'story' => fn () => $storyResource,
-            'template' => fn () => $bookCoverTemplateResource,
-            'userTemplate' => fn () => $bookUserCoverTemplateResource,
+            'story' => fn() => $storyResource,
+            'template' => fn() => $bookCoverTemplateResource,
+            'userTemplate' => fn() => $bookUserCoverTemplateResource,
             'templateType' => $type,
             'templateId' => $id,
             'coverFonts' =>  $coverFonts,
@@ -196,9 +199,9 @@ class StoryController extends Controller
         }
 
         return Inertia::render('Dashboard/Stories/Covers', [
-            'story' => fn () => $storyResource,
-            'covers' => fn () => BookCoverTemplateResource::collection($bookCoverTemplate),
-            'userCovers' => fn () => BookUserCoverTemplateResource::collection($bookUserCoverTemplate),
+            'story' => fn() => $storyResource,
+            'covers' => fn() => BookCoverTemplateResource::collection($bookCoverTemplate),
+            'userCovers' => fn() => BookUserCoverTemplateResource::collection($bookUserCoverTemplate),
             'coverFonts' =>  $coverFonts,
         ]);
     }
@@ -251,7 +254,7 @@ class StoryController extends Controller
                     $file = stream_get_contents($stream);
                     fclose($stream);
                     $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
-                    $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                    $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
                     unset($file);
 
                     $images["{$v->collection_name}"] = $base64;
@@ -266,7 +269,7 @@ class StoryController extends Controller
                 fclose($stream);
                 $parts = explode('.', $front_image);
                 $ext = array_pop($parts);
-                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
                 unset($file);
 
                 $images['front'] = $base64;
@@ -279,7 +282,7 @@ class StoryController extends Controller
                 fclose($stream);
                 $parts = explode('.', $back_image);
                 $ext = array_pop($parts);
-                $base64 = 'data:application/'.$ext.';base64,'.base64_encode($file);
+                $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
                 unset($file);
 
                 $images['back'] = $base64;
@@ -292,19 +295,24 @@ class StoryController extends Controller
     public function edit(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Edit', [
-            'story' => fn () => StoryResource::make($story),
-            'chapters' => fn () => $story->chapters()
+            'story' => fn() => StoryResource::make($story),
+            'chapters' => fn() => $story->chapters()
                 ->orderBy('timeline_id', 'asc')
                 ->orderBy('order', 'asc')
                 ->where('status', Status::PUBLISHED)
                 ->get([
-                    'id', 'title', 'status', 'timeline_id', 'order',
+                    'id',
+                    'title',
+                    'status',
+                    'timeline_id',
+                    'order',
                 ])
                 ->groupBy('timeline_id')
-                ->map(fn ($chapters) => ChapterResource::collection($chapters)),
-            'timelines' => fn () => TimelineResource::collection(
+                ->map(fn($chapters) => ChapterResource::collection($chapters)),
+            'timelines' => fn() => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),
+            'fontList' => fn() => $this->getFonts()
         ]);
     }
 
@@ -312,6 +320,8 @@ class StoryController extends Controller
     {
         DB::transaction(function () use ($story, $request) {
             foreach ($request->validated('timelines', []) as $data) {
+                $story->update(['font' => $request->validated('font', config('story.default_font'))]);
+
                 if (empty($data['chapters'])) {
                     continue;
                 }
@@ -334,8 +344,8 @@ class StoryController extends Controller
     public function preview(Story $story)
     {
         return Inertia::render('Dashboard/Stories/Preview', [
-            'story' => fn () => StoryResource::make($story->load('book_preview')->load('book')),
-            'chapters' => fn () => ChapterResource::collection(
+            'story' => fn() => StoryResource::make($story->load('book_preview')->load('book')),
+            'chapters' => fn() => ChapterResource::collection(
                 $story->chapters()->where('status', Status::PUBLISHED)
                     ->orderBy('timeline_id', 'asc')
                     ->orderBy('order', 'asc')
@@ -383,14 +393,14 @@ class StoryController extends Controller
         }
 
         return Inertia::render('Dashboard/Stories/Order', [
-            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
-            'countries' => fn () => collect($iso->getCountries())->map(fn (Country $country) => [
+            'story' => fn() => StoryResource::make($story->load('cover')->append('pages')),
+            'countries' => fn() => collect($iso->getCountries())->map(fn(Country $country) => [
                 'name' => $country->getName(),
                 'code' => $country->getAlpha2(),
             ]),
-            'payment' => fn () => $request->user()->defaultPaymentMethod(),
-            'states' => fn () => $request->has('country_code') ? collect($iso->getSubdivisions()->getAllByCountryCode($request->validated('country_code')))
-                ->map(fn (Subdivision $subdivision) => [
+            'payment' => fn() => $request->user()->defaultPaymentMethod(),
+            'states' => fn() => $request->has('country_code') ? collect($iso->getSubdivisions()->getAllByCountryCode($request->validated('country_code')))
+                ->map(fn(Subdivision $subdivision) => [
                     'name' => $subdivision->getName(),
                     'code' => explode('-', $subdivision->getCode())[1],
                 ])->values() : [],
@@ -406,7 +416,7 @@ class StoryController extends Controller
         $luluSettings = \App\Models\LuluPrintSettings::where('is_enabled', '=', 1)->firstOrFail();
         $pod_package_id = $luluSettings->getPackageId();
 
-        $cost = rescue(fn () => $lulu->cost(
+        $cost = rescue(fn() => $lulu->cost(
             LineItem::from([
                 'page_count' => $story->pages,
                 'pod_package_id' => $pod_package_id,
@@ -414,15 +424,15 @@ class StoryController extends Controller
             ]),
             $request->shippingAddress(),
             ShippingOption::from($request->validated('shipping_method')),
-        ), fn ($e) => Session::flash('error', $e->getMessage()));
+        ), fn($e) => Session::flash('error', $e->getMessage()));
 
         if ($cost) {
             Session::put("print-cost-{$story->id}", $cost);
         }
 
         return Inertia::render('Dashboard/Stories/Order', [
-            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
-            'price' => fn () => $cost,
+            'story' => fn() => StoryResource::make($story->load('cover')->append('pages')),
+            'price' => fn() => $cost,
         ]);
     }
 
@@ -482,5 +492,37 @@ class StoryController extends Controller
         Session::forget("print-cost-{$story->id}");
 
         return redirect()->back()->with('message', 'Print job created successfully!');
+    }
+
+    public function getFonts(): JsonResponse
+    {
+        $fontPath = config('story.book_fonts_dir');
+        $fonts = [];
+
+        if (File::exists($fontPath)) {
+            $directories = File::directories($fontPath);
+
+            foreach ($directories as $directory) {
+                $fontName = basename($directory);
+
+                $formattedName = $this->formatFontName($fontName);
+
+                $fonts[] = [
+                    'name' => $formattedName,
+                    'directory' => $fontName,
+                ];
+            }
+        }
+
+        return response()->json($fonts);
+    }
+
+    private function formatFontName(string $fontName): string
+    {
+        $formattedName = str_replace(['_', '-'], ' ', $fontName);
+
+        $formattedName = ucwords($formattedName);
+
+        return $formattedName;
     }
 }

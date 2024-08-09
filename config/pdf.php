@@ -1,7 +1,7 @@
 <?php
 
 return [
-    'mode' => 'utf-8',
+    'mode' => 'UTF-8',
     'format' => 'A4',
     'default_font_size' => '12',
     'default_font' => 'sans-serif',
@@ -25,20 +25,9 @@ return [
     'watermark_image_alpha' => 0.2,
     'watermark_image_size' => 'D',
     'watermark_image_position' => 'P',
-    'custom_font_dir' => '',
-    'custom_font_data' => [],
     'auto_language_detection' => false,
     'temp_dir' => storage_path('app'),
     'pdfa' => false,
     'pdfaauto' => false,
     'use_active_forms' => false,
-    'custom_font_dir' => resource_path('src/assets/fonts/Baskerville'),
-    'custom_font_data' => [
-        'Baskerville' => [
-            'R' => 'Baskerville120Pro.ttf',
-            'B' => 'Baskerville120Pro-Bold.ttf',
-            'I' => 'Baskerville120Pro-Italic.ttf',
-            'BI' => 'Baskerville120Pro-BoldItalic.ttf',
-        ],
-    ],
 ];

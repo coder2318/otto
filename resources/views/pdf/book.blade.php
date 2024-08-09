@@ -3,6 +3,14 @@
 <head>
     <title>{{ $story->title }}</title>
     <style>
+        * {
+            font-family: '{{ $fontName }}';
+        }
+
+        body {
+            font-family: '{{ $fontName }}';
+        }
+
         @page {
             sheet-size: 6.39in 9.46in;
             margin: 0.8in;
@@ -13,23 +21,21 @@
         }
 
         .mpdf_toc {
+            font-family: '{{ $fontName }}';
             font-size: 0.8rem;
         }
 
         span.mpdf_toc_t_level_0 {
-            font-family: 'Baskerville';
+            font-family: '{{ $fontName }}';
             font-weight: normal;
         }
 
         section {
-            font-family: 'Baskerville';
             font-size: 0.8rem;
         }
 
         h1 {
-            font-family: 'DejaVu Serif';
             font-size: 1.5rem;
-            font-style: italic;
             font-weight: normal;
             color: #0C345C;
             text-wrap: balance;
@@ -87,9 +93,9 @@
     <tocpagebreak links="on" toc-prehtml="&lt;h1&gt;Table of Contents&lt;/h1&gt;" />
 
     @if(isset($imageErrors))
-    @foreach ($imageErrors as $url)
-    <div>Chapter generation errors, image not found. <a href="{{$url}}">Edit</a></div>
-    @endforeach
+        @foreach ($imageErrors as $url)
+        <div>Chapter generation errors, image not found. <a href="{{$url}}">Edit</a></div>
+        @endforeach
     @endif
 
     @foreach ($chapters as $chapter)
@@ -100,7 +106,6 @@
     <bookmark content="{{ $chapter->title }}" />
     <article>
         <h1 class="title">{{ $chapter->title }}</h1>
-
         @if ($chapter->guest)
         <table class="guest-info">
             <tr>

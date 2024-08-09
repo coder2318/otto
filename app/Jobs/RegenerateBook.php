@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
@@ -33,8 +35,7 @@ class RegenerateBook implements ShouldQueue
 
     public function __construct(
         public Story $story
-    ) {
-    }
+    ) {}
 
     protected function getVersion()
     {
@@ -58,6 +59,13 @@ class RegenerateBook implements ShouldQueue
         $currentVersion = $this->increaseVersion();
         $imageErrors = [];
         $imagesById = [];
+        $fontName = $this->story->font;
+        $fontPath = config('story.book_fonts_dir') . '/' . $fontName;
+        $fontData = $this->getFontData('default_font', $fontPath);
+        $config = [
+            'custom_font_dir' => $fontPath,
+            'custom_font_data' => $fontData
+        ];
 
         $chapters = $this->story->chapters()
             ->with('images', 'guest')
@@ -67,6 +75,7 @@ class RegenerateBook implements ShouldQueue
             ->lazy();
 
         $chaptersWithGuestAvatars = [];
+
         foreach ($chapters as $chapter) {
             $chapterImagesById = [];
 
@@ -83,12 +92,15 @@ class RegenerateBook implements ShouldQueue
 
             foreach ($chapter->images as $image) {
                 $imageId = $image->id; // @phpstan-ignore-line
+
                 if (!isset($chapterImagesById[$imageId])) {
                     $image->delete();
 
                     continue;
                 }
+
                 $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
+
                 if (!$exists) {
                     $url = url("/chapters/{$chapter->id}/write");
                     $imageErrors[] = $url;
@@ -104,6 +116,7 @@ class RegenerateBook implements ShouldQueue
             if ($chapter->guest) {
                 $chapter->guest = GuestResource::make($chapter->guest)->processAvatar();
             }
+
             $chaptersWithGuestAvatars[] = $chapter;
         }
 
@@ -115,7 +128,19 @@ class RegenerateBook implements ShouldQueue
 
         $path = '/tmp/' . sprintf($this->cacheKeyPattern, $this->story->id) . '-' . md5(microtime(true)) . '.pdf';
 
-        $pdf = Pdf::loadView('pdf.book', ['story' => $this->story, 'chapters' => $chaptersWithGuestAvatars, 'imagesById' => $imagesById, 'imageErrors' => $imageErrors]);
+        $pdf = Pdf::loadView(
+            'pdf.book',
+            [
+                'story' => $this->story,
+                'chapters' => $chaptersWithGuestAvatars,
+                'imagesById' => $imagesById,
+                'imageErrors' => $imageErrors,
+                'fontName' => 'default_font'
+            ],
+            [],
+            $config
+        );
+
         /** @var Mpdf */
         $mpdf = $pdf->getMpdf();
         $mpdf->curlAllowUnsafeSslRequests = true;
@@ -155,5 +180,33 @@ class RegenerateBook implements ShouldQueue
         if ($this->dispatchRegenerateBookCover) {
             dispatch(new RegenerateBookCover($this->story));
         }
+    }
+
+    private function getFontData(string $fontName, string $fontPath): array
+    {
+        $fontData = [];
+
+        try {
+            $files = File::files($fontPath);
+
+            foreach ($files as $file) {
+                $filename = $file->getFilename();
+
+                if (stripos($filename, 'regular') !== false) {
+                    $fontData[$fontName]['R'] = $filename;
+                } elseif (stripos($filename, 'bolditalic') !== false) {
+                    $fontData[$fontName]['BI'] = $filename;
+                } elseif (stripos($filename, 'bold') !== false) {
+                    $fontData[$fontName]['B'] = $filename;
+                } elseif (stripos($filename, 'italic') !== false) {
+                    $fontData[$fontName]['I'] = $filename;
+                }
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to retrieve font data at {$fontPath}: " . $e->getMessage());
+            return [];
+        }
+
+        return $fontData;
     }
 }

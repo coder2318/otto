@@ -17,16 +17,22 @@
     import Sortable from 'sortablejs'
     import Fa from 'svelte-fa'
     import { faClose, faTrash } from '@fortawesome/free-solid-svg-icons'
+    import Select from 'svelte-select'
 
     export let story: { data: App.Story }
     export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
     export let timelines: { data: App.Timeline[] }
+    export let fontList: { original: App.Font[] }
+
+    let fonts = []
+    let font = story.data.font
 
     const form = useForm({
         timelines: timelines.data.map((timeline) => ({
             id: timeline.id,
             chapters: chapters[timeline.id]?.data.map((chapter) => chapter.id) ?? [],
         })),
+        font,
     })
 
     let lists: HTMLUListElement[] = []
@@ -52,6 +58,9 @@
             )
         })
 
+        fonts = (fontList?.original || []).map((font) => ({ value: font.directory, label: font.name }))
+        $form.font = font || fonts?.[0]?.value || ''
+
         return () => {
             sortables.forEach((sortable) => sortable.destroy())
         }
@@ -62,6 +71,7 @@
             onSuccess: () =>
                 $form.defaults({
                     timelines: $form.timelines,
+                    font: $form.font,
                 }),
         })
     }
@@ -96,23 +106,39 @@
         <div class="otto-container">
             <div class="wrap">
                 <img src={splash4} class="editBookHeader-illustration" alt="" />
-                <h1 class="fz_h2 title text-primary">
-                    Table of <i>Contents </i>
-                </h1>
-
-                {#if $form.isDirty}
-                    <button type="submit" class="otto-btn-primary" disabled={$form.processing}>
-                        {#if $form.processing}<span class="loading loading-spinner"></span>{/if}
-                        Save Chapter Order
-                    </button>
-                {:else}
-                    <a href="/stories/{story.data.id}/preview" use:inertia class="otto-btn-with-arrow">
-                        <p>Preview Your Book</p>
-                        <span class="icon">
-                            <BtnArrow />
-                        </span>
-                    </a>
-                {/if}
+                <div class="z-10 flex w-full flex-col gap-3">
+                    <div class="flex justify-between">
+                        <h1 class="fz_h2 title text-primary">
+                            Table of <i>Contents </i>
+                        </h1>
+                        {#if $form.isDirty}
+                            <button type="submit" class="otto-btn-primary" disabled={$form.processing}>
+                                {#if $form.processing}<span class="loading loading-spinner"></span>{/if}
+                                Save Chapter Order {#if font}and font{/if}
+                            </button>
+                        {:else}
+                            <a href="/stories/{story.data.id}/preview" use:inertia class="otto-btn-with-arrow">
+                                <p>Preview Your Book</p>
+                                <span class="icon">
+                                    <BtnArrow />
+                                </span>
+                            </a>
+                        {/if}
+                    </div>
+                    <div class="flex w-full flex-col md:w-fit">
+                        <span>Select book font:</span>
+                        <Select
+                            items={fonts}
+                            value={$form.font}
+                            bind:justValue={$form.font}
+                            on:change={(event) => ($form.font = event.detail.value)}
+                            clearable={false}
+                            searchable={false}
+                            showChevron
+                            required
+                        />
+                    </div>
+                </div>
             </div>
         </div>
     </section>

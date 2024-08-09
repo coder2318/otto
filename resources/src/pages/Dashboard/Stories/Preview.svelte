@@ -52,7 +52,7 @@
 
         if (needToUpdate && !regeneratePreviewStatus) {
             router.visit(`/stories/${story.data.id}/preview`, {
-                onFinish: (visit) => {
+                onFinish: () => {
                     needToUpdate = false
                 },
             })

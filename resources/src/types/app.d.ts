@@ -77,10 +77,16 @@ declare namespace App {
         created_at: Date | string
         updated_at: Date | string
         chapters?: Chapter[]
+        font: string
     }
 
     interface StoryType {
         id: number
+        name: string
+    }
+
+    interface Font {
+        directory: string
         name: string
     }
 
