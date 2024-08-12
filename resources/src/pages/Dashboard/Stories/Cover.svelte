@@ -164,58 +164,68 @@
         if (loading) return
         loading = true
 
-        const { file: blobFile, svg } = await builder.getFile(story)
+        try {
+            const { file: blobFile, svg } = await builder.getFile(story)
 
-        const file = new File([blobFile], 'cover.png', {
-            type: 'image/png',
-        })
+            const file = new File([blobFile], 'cover.png', {
+                type: 'image/png',
+            })
 
-        svg.querySelectorAll('text').forEach((item) => {
-            const key = item.className.baseVal
+            svg.querySelectorAll('text').forEach((item) => {
+                const key = item.className.baseVal
 
-            if (key) {
-                parameters[`${key}Position`] = {
-                    x: item.x.baseVal[0].value,
-                    y: item.y.baseVal[0].value,
+                if (key) {
+                    parameters[`${key}Position`] = {
+                        x: item.x.baseVal[0].value,
+                        y: item.y.baseVal[0].value,
+                    }
                 }
-            }
-        })
+            })
 
-        svg.querySelectorAll('foreignObject').forEach((item) => {
-            const key = item.className.baseVal
+            svg.querySelectorAll('foreignObject').forEach((item) => {
+                const key = item.className.baseVal
 
-            if (key) {
-                parameters[`${key}Position`] = {
-                    x: item.getAttribute('x'),
-                    y: item.getAttribute('y'),
+                if (key) {
+                    parameters[`${key}Position`] = {
+                        x: item.getAttribute('x'),
+                        y: item.getAttribute('y'),
+                    }
                 }
-            }
-        })
+            })
 
-        router.post(
-            `/stories/${story.data.id}`,
-            {
-                cover: file,
-                meta: {
-                    ...parameters,
-                    ...hiddenParams,
+            router.post(
+                `/stories/${story.data.id}`,
+                {
+                    cover: file,
+                    meta: {
+                        ...parameters,
+                        ...hiddenParams,
+                    },
+                    _method: 'PUT',
+                    redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
                 },
-                _method: 'PUT',
-                redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
-            },
-            {
-                preserveScroll: onlySave,
-                forceFormData: true,
-                onSuccess: () => {
-                    changed = false
-                    parameters = createParameters()
-                    hiddenParams = {}
-                },
-                onFinish: () => {
-                    loading = false
-                },
-            }
-        )
+                {
+                    preserveScroll: onlySave,
+                    forceFormData: true,
+                    onSuccess: () => {
+                        changed = false
+                        parameters = createParameters()
+                        hiddenParams = {}
+                    },
+                    onFinish: () => {
+                        loading = false
+                    },
+                }
+            )
+        } catch (error) {
+            console.error(error)
+            flash({
+                message: error?.message || 'Failed to update cover',
+                type: 'alert-error',
+                autohide: true,
+            })
+            loading = false
+        }
     }
 
     async function saveUserCoverTemplate(event) {

@@ -170,12 +170,15 @@
 
         svg.querySelectorAll(`[data-front]`).forEach((node: HTMLElement | SVGElement) => {
             const href = node.getAttribute('href')
+
             if (href.indexOf('data:') !== 0 && base64?.front) {
                 setHref(node as SVGTextElement, base64?.front as string)
             }
         })
+
         svg.querySelectorAll(`[data-back]`).forEach((node: HTMLElement | SVGElement) => {
             const href = node.getAttribute('href')
+
             if (href.indexOf('data:') !== 0 && base64?.back) {
                 setHref(node as SVGTextElement, base64?.back as string)
             }
