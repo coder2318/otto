@@ -49,12 +49,12 @@ class StaticControllerTest extends TestCase
     /** @test */
     public function index_returns_an_ok_response(): void
     {
-        $response = $this->get(route('index'));
+        $response = $this->get(route('login'));
 
         $response->assertOk();
 
         $response->assertInertia(fn (AssertableInertia $page) => $page
-            ->component('Index')
+            ->component('Auth/Login')
         );
     }
 

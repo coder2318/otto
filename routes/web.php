@@ -8,7 +8,14 @@ use App\Http\Controllers\SocialAuthController;
 use App\Http\Controllers\StaticController;
 use App\Http\Controllers\StorageController;
 use Illuminate\Routing\Router;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+
+// Logout
+Route::post('/logout', function () {
+    Auth::logout();
+    return redirect('/login');
+})->name('logout');
 
 // Temporary URLs for local files
 Route::get('temp/local/{path}', [StorageController::class, 'local'])

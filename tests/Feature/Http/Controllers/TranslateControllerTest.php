@@ -31,11 +31,11 @@ class TranslateControllerTest extends TestCase
             'text' => 'Hello world!',
             'options' => [
                 'format' => 'text',
-                'target' => 'uk',
+                'target' => 'es',
             ],
         ]);
 
         $response->assertOk();
-        $this->assertEquals('Привіт Світ!', $response->json('text'));
+        $this->assertEquals('¡Hola Mundo!', $response->json('text'));
     }
 }

@@ -14,8 +14,7 @@ class DemoFinishedNotification extends Notification
 
     public function __construct(
         protected Story $story
-    ) {
-    }
+    ) {}
 
     public function via(object $notifiable): array
     {
@@ -32,6 +31,7 @@ class DemoFinishedNotification extends Notification
                 Pdf::loadView('pdf.book', [
                     'story' => $this->story,
                     'chapters' => $this->story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy(),
+                    'fontName' => 'default_font'
                 ])->output(),
                 'demo.pdf',
                 ['mime' => 'application/pdf']
