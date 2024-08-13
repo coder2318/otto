@@ -23,16 +23,35 @@ class DemoFinishedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
+        $fontName = $this->story->font;
+        $config = [];
+
+        if (!in_array($fontName, config('pdf.standart_fonts'))) {
+            $fontPath = config('story.book_fonts_dir') . '/' . $fontName;
+            $fontData = getFontData('custom', $fontPath);
+            $config = [
+                'custom_font_dir' => $fontPath,
+                'custom_font_data' => $fontData,
+                'default_font' => 'custom'
+            ];
+            $fontName = 'custom';
+        }
+
         return (new MailMessage)
             ->subject('Demo Story Finished')
             ->greeting('Hello!')
             ->line('Thank you for using Otto Story! We attached your result to this message.')
             ->attachData(
-                Pdf::loadView('pdf.book', [
-                    'story' => $this->story,
-                    'chapters' => $this->story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy(),
-                    'fontName' => 'default_font'
-                ])->output(),
+                Pdf::loadView(
+                    'pdf.book',
+                    [
+                        'story' => $this->story,
+                        'chapters' => $this->story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy(),
+                        'fontName' => $fontName
+                    ],
+                    [],
+                    $config
+                )->output(),
                 'demo.pdf',
                 ['mime' => 'application/pdf']
             );

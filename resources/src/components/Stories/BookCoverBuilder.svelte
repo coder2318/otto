@@ -1,9 +1,10 @@
 <script lang="ts">
-    import { toBlob, getFontEmbedCSS } from 'html-to-image'
+    import { toBlob } from 'html-to-image'
     import { draggable } from '@/service/svelte'
     import { svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
     import { page } from '@inertiajs/svelte'
+    import isEqual from 'lodash/isEqual'
 
     export let template: App.BookCoverTemplate
     export let parameters: any = {}
@@ -140,9 +141,10 @@
 
     afterUpdate(() => {
         const diff = Object.keys(parameters).reduce((diff, key) => {
-            if (parameters[key] !== oldParams[key]) {
+            if (!isEqual(oldParams[key], parameters[key])) {
                 diff[key] = parameters[key]
             }
+
             return diff
         }, {})
 

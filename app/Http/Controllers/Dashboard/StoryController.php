@@ -169,7 +169,7 @@ class StoryController extends Controller
 
         try {
             $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
-        } catch (Exception) {
+        } catch (\Exception) {
             $coverFonts = null;
         }
 
@@ -194,7 +194,7 @@ class StoryController extends Controller
 
         try {
             $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
-        } catch (Exception) {
+        } catch (\Exception) {
             $coverFonts = null;
         }
 
@@ -245,8 +245,8 @@ class StoryController extends Controller
 
         $front_image = $request->get('front_image');
         $back_image = $request->get('back_image');
-
         $medias = $story?->cover?->media ?? [];
+
         foreach ($medias as $v) {
             if ($v->collection_name == 'front' || $v->collection_name == 'back') {
                 $stream = $v->stream();
@@ -512,6 +512,15 @@ class StoryController extends Controller
                     'directory' => $fontName,
                 ];
             }
+        }
+
+        $standartFonts = @config('pdf.standart_fonts') ?? [];
+
+        foreach ($standartFonts as $standartFont) {
+            $fonts[] = [
+                'name' => $standartFont,
+                'directory' => $standartFont,
+            ];
         }
 
         return response()->json($fonts);

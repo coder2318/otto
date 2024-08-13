@@ -54,8 +54,8 @@
         }>,
     ][]
 
+    let changed = true
     let modal: HTMLDialogElement, builder: BookCoverBuilder
-    let changed = false
     let imageKey: string
     let parameters = createParameters() as any
     let hiddenParams = {} as any
@@ -69,6 +69,7 @@
 
     if (templateId && templateType == 'default') {
         changed = true
+
         sharedStyles = Object.keys(coverMeta).reduce((result, key) => {
             if (excludeParameters.includes(key)) {
                 return result
@@ -88,8 +89,10 @@
         parameters.template_id = templateId
         parameters.user_template_id = null
     }
+
     if (templateId && templateType == 'user') {
         changed = true
+
         sharedStyles = Object.keys(userTemplate.data.parameters).reduce((result, key) => {
             if (excludeParameters.includes(key)) {
                 return result
@@ -160,7 +163,7 @@
         imageKey = key
     }
 
-    async function submit(event, onlySave?: boolean) {
+    async function submit(onlySave?: boolean) {
         if (loading) return
         loading = true
 
@@ -228,7 +231,7 @@
         }
     }
 
-    async function saveUserCoverTemplate(event) {
+    async function saveUserCoverTemplate() {
         router.post(
             `/stories/${story.data.id}/cover/template`,
             {
@@ -236,7 +239,6 @@
                     ...parameters,
                     ...hiddenParams,
                 },
-                redirect: 'dashboard.stories.cover',
             },
             {
                 preserveScroll: true,
@@ -249,6 +251,15 @@
                             autohide: true,
                         })
                     }
+                },
+                onError: (error) => {
+                    console.error(error)
+                    flash({
+                        message: error?.message || 'Failed to update user cover',
+                        type: 'alert-error',
+                        autohide: true,
+                    })
+                    loading = false
                 },
                 onFinish: () => {
                     loading = false
@@ -266,7 +277,7 @@
     <Breadcrumbs step={1} {story} />
 </section>
 
-<form on:submit|preventDefault={submit} in:fade id="book-cover">
+<form on:submit|preventDefault={() => submit()} in:fade id="book-cover">
     <section class="bookCover">
         <div class="container mx-auto">
             <div class="wrap">
@@ -410,10 +421,8 @@
                         pages={story.data.pages ?? 0}
                         shared={sharedStyles}
                         {parameters}
-                        change={() => {
-                            changed = true
-                        }}
                         template={template.data}
+                        change={() => (changed = true)}
                     />
                 </div>
             </div>
@@ -434,7 +443,7 @@
                             class="btn btn-secondary rounded-full"
                             disabled={loading}
                             type="button"
-                            on:click={(event) => submit(event, true)}
+                            on:click={() => submit(true)}
                         >
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Update</span>
@@ -449,9 +458,7 @@
                             class="btn btn-secondary rounded-full"
                             disabled={loading}
                             type="button"
-                            on:click={(event) => {
-                                saveUserCoverTemplate(event)
-                            }}
+                            on:click={saveUserCoverTemplate}
                         >
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Save User cover</span>

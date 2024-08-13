@@ -128,9 +128,4 @@
     .card {
         position: relative;
     }
-    .btn-delete {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-    }
 </style>
