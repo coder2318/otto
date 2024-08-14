@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Facades\Log;
-
 function _D_clean($var, $maxDepth = 1)
 {
     $return = null;
@@ -77,32 +74,4 @@ function _D()
         echo htmlentities($s, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 | ENT_DISALLOWED);
     }
     echo '</pre>';
-}
-
-function getFontData(string $fontName, string $fontPath): array
-{
-    $fontData = [];
-
-    try {
-        $files = File::files($fontPath);
-
-        foreach ($files as $file) {
-            $filename = $file->getFilename();
-
-            if (stripos($filename, 'regular') !== false) {
-                $fontData[$fontName]['R'] = $filename;
-            } elseif (stripos($filename, 'bolditalic') !== false) {
-                $fontData[$fontName]['BI'] = $filename;
-            } elseif (stripos($filename, 'bold') !== false) {
-                $fontData[$fontName]['B'] = $filename;
-            } elseif (stripos($filename, 'italic') !== false) {
-                $fontData[$fontName]['I'] = $filename;
-            }
-        }
-    } catch (\Exception $e) {
-        Log::error("Failed to retrieve font data at {$fontPath}: " . $e->getMessage());
-        return [];
-    }
-
-    return $fontData;
 }

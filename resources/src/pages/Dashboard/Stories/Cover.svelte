@@ -10,7 +10,6 @@
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { fade } from 'svelte/transition'
-    import { onMount } from 'svelte'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
     import { fileToBase64, groupBy, listFonts } from '@/service/helpers'
     import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
@@ -22,10 +21,11 @@
     import getCroppedImg from '@/util/canvasUtils'
     import Range from '@/components/Chapters/Range.svelte'
     import { flash } from '@/components/Toast.svelte'
-    import Select from 'svelte-select'
+    import FontSelector from '@/components/FontSelector.svelte'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
+    export let fontList: { original: App.Font[] }
     export let userTemplate: any
     export let templateType: any
     export let templateId: any
@@ -60,7 +60,6 @@
     let parameters = createParameters() as any
     let hiddenParams = {} as any
     let loading: boolean = false
-    let fonts = []
 
     const excludeParameters = ['template_id', 'back', 'back_image', 'front', 'front_image']
 
@@ -105,14 +104,6 @@
         parameters.template_id = template.data.id
         parameters.user_template_id = templateId
     }
-
-    onMount(() => {
-        listFonts().then((list) => {
-            fonts = list
-                .map((font) => font.family || font)
-                .filter((value, index, array) => array.indexOf(value) === index)
-        })
-    })
 
     function createParameters() {
         if (story.data?.cover?.meta?.template_id && template.data.id == story.data?.cover?.meta?.template_id) {
@@ -317,18 +308,16 @@
                                                         placeholder={field.name}
                                                     />
                                                 {:else if field.type === 'font'}
-                                                    <Select
-                                                        value={parameters[field.key]}
+                                                    <FontSelector
+                                                        fonts={fontList.original}
+                                                        bind:value={parameters[field.key]}
                                                         on:change={(event) => {
                                                             parameters[field.key] = event.detail.value
                                                         }}
-                                                        bind:items={fonts}
                                                         name={field.key}
                                                         placeholder=""
-                                                        clearable={false}
-                                                        searchable={true}
-                                                        showChevron
-                                                    ></Select>
+                                                        labelText=""
+                                                    />
                                                 {:else if field.type === 'color'}
                                                     <label
                                                         for={field.key}

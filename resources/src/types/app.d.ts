@@ -86,7 +86,8 @@ declare namespace App {
     }
 
     interface Font {
-        directory: string
+        value: string
+        path: string
         name: string
     }
 

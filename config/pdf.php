@@ -31,25 +31,6 @@ return [
     'pdfa' => false,
     'pdfaauto' => false,
     'use_active_forms' => false,
-    'standart_fonts' => [
-        'DejaVuSans',
-        'DejaVuSansCondensed',
-        'DejaVuSerif',
-        'DejaVuSerifCondensed',
-        'DejaVuSansMono',
-        'FreeSans',
-        'FreeSerif',
-        'FreeMono',
-        'Quivira',
-        'Abyssinica SIL',
-        'XBRiyaz',
-        'Taamey David CLM',
-        'Estrangelo Edessa',
-        'Aegean',
-        'Jomolhari',
-        'Lohitkannada',
-        'Kaputaunicode',
-        'Pothana2000',
-        'Lateef',
-    ]
+    'custom_font_dir' => storage_path('app/public/book/fonts'),
+    'default_font_name' => 'book_font'
 ];

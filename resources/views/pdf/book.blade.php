@@ -31,6 +31,10 @@
             font-weight: normal;
         }
 
+        .mpdf_toc a {
+            font-family: '{{ $fontName }}', sans-serif;
+        }
+
         section {
             font-size: 0.8rem;
         }
@@ -47,7 +51,7 @@
 
         h1.title {
             text-align: center;
-            font-size: 1.7rem;
+            font-size: 1.8rem;
             font-weight: normal;
             color: #0C345C;
             text-wrap: balance;

@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Data\Chapter\Status;
+use App\Http\Controllers\FontController;
 use App\Models\Story;
 use App\Http\Resources\GuestResource;
 use Illuminate\Bus\Queueable;
@@ -57,19 +58,7 @@ class RegenerateBook implements ShouldQueue
         $currentVersion = $this->increaseVersion();
         $imageErrors = [];
         $imagesById = [];
-        $fontName = $this->story->font;
-        $config = [];
-
-        if (!in_array($fontName, config('pdf.standart_fonts'))) {
-            $fontPath = config('story.book_fonts_dir') . '/' . $fontName;
-            $fontData = getFontData('custom', $fontPath);
-            $config = [
-                'custom_font_dir' => $fontPath,
-                'custom_font_data' => $fontData,
-                'default_font' => 'custom'
-            ];
-            $fontName = 'custom';
-        }
+        $config = FontController::getConfig($this->story->font);
 
         $chapters = $this->story->chapters()
             ->with('images', 'guest')
@@ -139,7 +128,7 @@ class RegenerateBook implements ShouldQueue
                 'chapters' => $chaptersWithGuestAvatars,
                 'imagesById' => $imagesById,
                 'imageErrors' => $imageErrors,
-                'fontName' => $fontName
+                'fontName' => $config['default_font']
             ],
             [],
             $config

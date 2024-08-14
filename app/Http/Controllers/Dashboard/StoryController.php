@@ -8,6 +8,7 @@ use App\Data\Lulu\PrintJobDetails;
 use App\Data\Lulu\ShippingOption;
 use App\Data\Story\Status;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\FontController;
 use App\Http\Requests\Stories\ChapterOrderRequest;
 use App\Http\Requests\Stories\OrderCostRequest;
 use App\Http\Requests\Stories\StoreStoryRequest;
@@ -28,7 +29,6 @@ use App\Models\StoryType;
 use App\Models\User;
 use App\Models\Setting;
 use App\Services\LuluService;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -180,6 +180,7 @@ class StoryController extends Controller
             'templateType' => $type,
             'templateId' => $id,
             'coverFonts' =>  $coverFonts,
+            'fontList' => FontController::getFonts()
         ]);
     }
 
@@ -312,7 +313,7 @@ class StoryController extends Controller
             'timelines' => fn() => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),
-            'fontList' => fn() => $this->getFonts()
+            'fontList' => FontController::getFonts()
         ]);
     }
 
@@ -492,46 +493,5 @@ class StoryController extends Controller
         Session::forget("print-cost-{$story->id}");
 
         return redirect()->back()->with('message', 'Print job created successfully!');
-    }
-
-    public function getFonts(): JsonResponse
-    {
-        $fontPath = config('story.book_fonts_dir');
-        $fonts = [];
-
-        if (File::exists($fontPath)) {
-            $directories = File::directories($fontPath);
-
-            foreach ($directories as $directory) {
-                $fontName = basename($directory);
-
-                $formattedName = $this->formatFontName($fontName);
-
-                $fonts[] = [
-                    'name' => $formattedName,
-                    'directory' => $fontName,
-                ];
-            }
-        }
-
-        $standartFonts = @config('pdf.standart_fonts') ?? [];
-
-        foreach ($standartFonts as $standartFont) {
-            $fonts[] = [
-                'name' => $standartFont,
-                'directory' => $standartFont,
-            ];
-        }
-
-        return response()->json($fonts);
-    }
-
-    private function formatFontName(string $fontName): string
-    {
-        $formattedName = str_replace(['_', '-'], ' ', $fontName);
-
-        $formattedName = ucwords($formattedName);
-
-        return $formattedName;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Notifications;
 
+use App\Http\Controllers\FontController;
 use App\Models\Story;
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -23,19 +24,7 @@ class DemoFinishedNotification extends Notification
 
     public function toMail(object $notifiable): MailMessage
     {
-        $fontName = $this->story->font;
-        $config = [];
-
-        if (!in_array($fontName, config('pdf.standart_fonts'))) {
-            $fontPath = config('story.book_fonts_dir') . '/' . $fontName;
-            $fontData = getFontData('custom', $fontPath);
-            $config = [
-                'custom_font_dir' => $fontPath,
-                'custom_font_data' => $fontData,
-                'default_font' => 'custom'
-            ];
-            $fontName = 'custom';
-        }
+        $config = FontController::getConfig($this->story->font);
 
         return (new MailMessage)
             ->subject('Demo Story Finished')
@@ -47,7 +36,7 @@ class DemoFinishedNotification extends Notification
                     [
                         'story' => $this->story,
                         'chapters' => $this->story->chapters()->orderBy('timeline_id', 'asc')->orderBy('order', 'asc')->lazy(),
-                        'fontName' => $fontName
+                        'fontName' => $config['default_font']
                     ],
                     [],
                     $config

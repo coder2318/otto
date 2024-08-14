@@ -70,53 +70,62 @@
             return
         }
 
-        navigator.mediaDevices.getUserMedia({ audio: true, video: false }).then((stream) => {
-            const recordedChunks = []
-            mediaRecorder = new MediaRecorder(stream)
-            let format = null
+        navigator.mediaDevices
+            .getUserMedia({ audio: true, video: false })
+            .then((stream) => {
+                const recordedChunks = []
+                mediaRecorder = new MediaRecorder(stream)
+                let format = null
 
-            mediaRecorder.addEventListener('dataavailable', function (e) {
-                if (!format) format = e.data.type
-                if (e.data.size > 0) recordedChunks.push(e.data)
+                mediaRecorder.addEventListener('dataavailable', function (e) {
+                    if (!format) format = e.data.type
+                    if (e.data.size > 0) recordedChunks.push(e.data)
+                })
+
+                mediaRecorder.addEventListener('stop', function () {
+                    const getFormat = () =>
+                        ({
+                            'audio/webm': 'weba',
+                            'audio/ogg': 'ogg',
+                            'audio/wav': 'wav',
+                        })[format] ?? format
+
+                    recordings = [
+                        ...(recordings ?? []),
+                        {
+                            translate,
+                            file: new File(
+                                recordedChunks,
+                                `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.${getFormat()}`,
+                                {
+                                    type: format,
+                                }
+                            ),
+                        },
+                    ]
+
+                    stream.getTracks().forEach((track) => track.stop())
+                    onStop()
+                })
+
+                createBubbles(stream)
+
+                mediaRecorder.start()
+                timer = 0
+                interval = setInterval(() => {
+                    if (max && max < timer) {
+                        return stopRecording()
+                    }
+                    timer += 100
+                }, 100)
             })
-
-            mediaRecorder.addEventListener('stop', function () {
-                const getFormat = () =>
-                    ({
-                        'audio/webm': 'weba',
-                        'audio/ogg': 'ogg',
-                        'audio/wav': 'wav',
-                    })[format] ?? format
-
-                recordings = [
-                    ...(recordings ?? []),
-                    {
-                        translate,
-                        file: new File(
-                            recordedChunks,
-                            `audio_${dayjs().format('YYYY-MM-DD_HH-mm-ss')}.${getFormat()}`,
-                            {
-                                type: format,
-                            }
-                        ),
-                    },
-                ]
-
-                stream.getTracks().forEach((track) => track.stop())
-                onStop()
-            })
-
-            createBubbles(stream)
-
-            mediaRecorder.start()
-            timer = 0
-            interval = setInterval(() => {
-                if (max && max < timer) {
-                    return stopRecording()
-                }
-                timer += 100
-            }, 100)
-        })
+            .catch((error) =>
+                flash({
+                    message: error?.message || 'Failed to start recording',
+                    type: 'alert-error',
+                    autohide: true,
+                })
+            )
     }
 
     function stopRecording() {

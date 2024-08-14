@@ -3,6 +3,7 @@
 use App\Http\Controllers\Guests\ChapterController;
 use App\Http\Controllers\Guests\SetupController;
 use App\Http\Middleware\GuestConfigured;
+use Illuminate\Support\Facades\Route;
 
 // Setup
 Route::controller(SetupController::class)->group(function () {
