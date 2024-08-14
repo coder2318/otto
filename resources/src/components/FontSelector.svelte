@@ -42,7 +42,7 @@
     }
 </script>
 
-<div class="flex w-full min-w-96 flex-col md:w-fit">
+<div class="flex w-full flex-col md:w-fit md:min-w-96">
     <span>{labelText}</span>
     <Select
         containerStyles="font-family: '{value}';"
