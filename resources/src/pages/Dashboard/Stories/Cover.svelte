@@ -11,7 +11,7 @@
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { fade } from 'svelte/transition'
     import editIcon from '@fortawesome/fontawesome-free/svgs/solid/pen-to-square.svg?raw'
-    import { fileToBase64, groupBy, listFonts } from '@/service/helpers'
+    import { fileToBase64, groupBy } from '@/service/helpers'
     import bookCoverIllustration1 from '@/assets/img/book-cover-illustration-1.svg'
     import bookCoverIllustration2 from '@/assets/img/book-cover-illustration-2.svg'
     import BtnArrow from '@/components/SVG/btn-arrow.svg.svelte'
@@ -25,11 +25,10 @@
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
-    export let fontList: { original: App.Font[] }
+    export let fonts: App.Font[]
     export let userTemplate: any
     export let templateType: any
     export let templateId: any
-    export let coverFonts: any
 
     let image = ''
     let aspect = 0.6622621448029057
@@ -54,8 +53,10 @@
         }>,
     ][]
 
-    let changed = true
-    let modal: HTMLDialogElement, builder: BookCoverBuilder
+    let reloadCover = false
+    let changed = false
+    let modal: HTMLDialogElement
+    let builder: BookCoverBuilder
     let imageKey: string
     let parameters = createParameters() as any
     let hiddenParams = {} as any
@@ -64,6 +65,7 @@
     const excludeParameters = ['template_id', 'back', 'back_image', 'front', 'front_image']
 
     let coverMeta = story.data?.cover?.meta ?? {}
+
     let sharedStyles = coverMeta
 
     if (templateId && templateType == 'default') {
@@ -78,6 +80,7 @@
             }
             return result
         }, {})
+
         parameters = Object.keys(coverMeta).reduce((result, key) => {
             if (excludeParameters.includes(key)) {
                 return result
@@ -85,6 +88,7 @@
             result[key] = coverMeta[key]
             return result
         }, {})
+
         parameters.template_id = templateId
         parameters.user_template_id = null
     }
@@ -154,8 +158,10 @@
         imageKey = key
     }
 
-    async function submit(onlySave?: boolean) {
+    async function submit(options?: { onlySave?: boolean; saveAsUserTemplate?: boolean }) {
         if (loading) return
+
+        const { onlySave, saveAsUserTemplate } = options || {}
         loading = true
 
         try {
@@ -194,6 +200,7 @@
                     meta: {
                         ...parameters,
                         ...hiddenParams,
+                        saveAsUserTemplate,
                     },
                     _method: 'PUT',
                     redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
@@ -208,6 +215,7 @@
                     },
                     onFinish: () => {
                         loading = false
+                        reloadCover = true
                     },
                 }
             )
@@ -220,43 +228,6 @@
             })
             loading = false
         }
-    }
-
-    async function saveUserCoverTemplate() {
-        router.post(
-            `/stories/${story.data.id}/cover/template`,
-            {
-                parameters: {
-                    ...parameters,
-                    ...hiddenParams,
-                },
-            },
-            {
-                preserveScroll: true,
-                forceFormData: true,
-                onSuccess: (response) => {
-                    if (response?.message) {
-                        flash({
-                            message: response.message,
-                            type: 'alert-error',
-                            autohide: true,
-                        })
-                    }
-                },
-                onError: (error) => {
-                    console.error(error)
-                    flash({
-                        message: error?.message || 'Failed to update user cover',
-                        type: 'alert-error',
-                        autohide: true,
-                    })
-                    loading = false
-                },
-                onFinish: () => {
-                    loading = false
-                },
-            }
-        )
     }
 </script>
 
@@ -309,7 +280,7 @@
                                                     />
                                                 {:else if field.type === 'font'}
                                                     <FontSelector
-                                                        fonts={fontList.original}
+                                                        {fonts}
                                                         bind:value={parameters[field.key]}
                                                         on:change={(event) => {
                                                             parameters[field.key] = event.detail.value
@@ -406,24 +377,24 @@
                     <BookCoverBuilder
                         bind:this={builder}
                         class="select-none"
-                        {coverFonts}
                         pages={story.data.pages ?? 0}
                         shared={sharedStyles}
                         {parameters}
                         template={template.data}
                         change={() => (changed = true)}
+                        bind:reload={reloadCover}
                     />
                 </div>
             </div>
 
-            <div class="bookCover__buttons">
-                <a href="/stories/{story.data.id}" class="otto-btn-with-arrow-secondary" use:inertia>
+            <div class="bookCover__buttons px-4 md:px-0">
+                <a href="/stories/{story.data.id}" class="otto-btn-with-arrow-secondary !w-full md:!w-fit" use:inertia>
                     <span class="icon">
                         <BtnArrow />
                     </span>
                     <p>Back</p>
                 </a>
-                <div class="flex gap-4">
+                <div class="flex w-full flex-col gap-4 md:flex-row md:justify-end">
                     <a href="/stories/{story.data.id}/covers" use:inertia class="btn btn-primary rounded-full">
                         More Covers
                     </a>
@@ -432,7 +403,16 @@
                             class="btn btn-secondary rounded-full"
                             disabled={loading}
                             type="button"
-                            on:click={() => submit(true)}
+                            on:click={() => submit({ onlySave: true, saveAsUserTemplate: true })}
+                        >
+                            {#if loading}<span class="loading loading-spinner"></span>{/if}
+                            <span>Save As New User cover</span>
+                        </button>
+                        <button
+                            class="btn btn-secondary rounded-full"
+                            disabled={loading}
+                            type="button"
+                            on:click={() => submit({ onlySave: true })}
                         >
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Update</span>
@@ -443,15 +423,6 @@
                             <span class="badge mask badge-neutral mask-circle p-4"><Fa icon={faArrowRight} /></span>
                         </button>
                     {:else}
-                        <button
-                            class="btn btn-secondary rounded-full"
-                            disabled={loading}
-                            type="button"
-                            on:click={saveUserCoverTemplate}
-                        >
-                            {#if loading}<span class="loading loading-spinner"></span>{/if}
-                            <span>Save User cover</span>
-                        </button>
                         <a href="/stories/{story.data.id}/edit" class="btn btn-secondary rounded-full" use:inertia>
                             Continue
                         </a>

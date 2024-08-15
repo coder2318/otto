@@ -73,7 +73,6 @@ declare namespace App {
         progress?: number
         timeline_id: number
         timeline?: Timeline
-        pages?: number
         created_at: Date | string
         updated_at: Date | string
         chapters?: Chapter[]
@@ -94,7 +93,7 @@ declare namespace App {
     interface Chapter {
         id: number
         title: string
-        context: ?string
+        context?: string
         content: string | null
         edit: string | null
         order: number
@@ -147,6 +146,13 @@ declare namespace App {
 
     interface TranscriptionsData {
         [filename: string]: string
+    }
+
+    interface UserCoverTemplate {
+        id: number
+        template: BookCoverTemplate
+        parameters: { [key: string]: any }
+        template_id: number
     }
 
     interface BookCoverTemplate {

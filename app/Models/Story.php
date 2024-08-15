@@ -53,6 +53,11 @@ class Story extends Model implements HasMedia
         );
     }
 
+    public function activeUserCoverTemplate(): BelongsTo
+    {
+        return $this->belongsTo(BookUserCoverTemplate::class, 'book_user_cover_template_id');
+    }
+
     public function chapters(): HasMany
     {
         return $this->hasMany(Chapter::class);

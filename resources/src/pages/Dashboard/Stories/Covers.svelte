@@ -12,6 +12,7 @@
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import { faTrash } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
+    import { BookCoverTemplateTypes } from '@/types/app'
 
     export let story: { data: App.Story }
     export let covers: {
@@ -20,7 +21,7 @@
         meta: App.PaginationMeta
     }
     export let userCovers: {
-        data: any
+        data: App.UserCoverTemplate[]
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
@@ -39,12 +40,15 @@
         return result
     }, {})
 
-    const deleteUserCover = (coverId) => {
+    const deleteUserCover = (coverId: number) => {
         router.delete(`/stories/${story.data.id}/cover/${coverId}`, {
             redirect: 'dashboard.stories.covers',
             preserveScroll: true,
             onSuccess(response) {
                 console.log('response', response)
+            },
+            onError(error) {
+                console.error('Error', error)
             },
         })
     }
@@ -109,13 +113,9 @@
                                 template={cover.template}
                                 pages={200}
                                 shared={cover.parameters ?? {}}
+                                type={BookCoverTemplateTypes.USER}
                             />
                         </figure>
-                        {#if cover?.name}
-                            <div class="card-body items-center px-1 py-2">
-                                <h5 class="card-title">{cover.name}</h5>
-                            </div>
-                        {/if}
                     </a>
                 </div>
             {/each}

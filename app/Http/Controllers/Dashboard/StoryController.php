@@ -32,7 +32,6 @@ use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
@@ -52,7 +51,7 @@ class StoryController extends Controller
     {
         return Inertia::render('Dashboard/Stories/Index', [
             'stories' => fn() => StoryResource::collection(
-                $request->stories($request->user()->stories()->with('cover'))
+                $request->stories($request->user()->stories()->with('cover')->with('userCoverTemplate'))
                     ->paginate(6)
                     ->appends($request->query())
             ),
@@ -106,13 +105,15 @@ class StoryController extends Controller
         $story->update($request->validated());
 
         if ($request->hasFile('cover')) {
+            $meta = $request->validated('meta', []);
+
             /** @var \App\Models\Media|null */
             $oldCover = $story->cover;
 
             $files = [];
             $parameters = [];
 
-            foreach ($request->validated('meta', []) as $key => $value) {
+            foreach ($meta as $key => $value) {
                 $value instanceof UploadedFile
                     ? $files[$key] = $value
                     : $parameters[$key] = $value;
@@ -136,6 +137,23 @@ class StoryController extends Controller
 
             $cover->save();
 
+            $story->load('activeUserCoverTemplate');
+            $userCoverTemplate = $story->activeUserCoverTemplate;
+            $saveAsUserTemplate = $meta['saveAsUserTemplate'] ?? false;
+            $selectedUserTemplateId = $meta['user_template_id'] ?? null;
+            $templateId = $meta['template_id'] ?? 1;
+    
+            if ($saveAsUserTemplate) {
+                $this->createOrUpdateUserTemplate($story, new BookUserCoverTemplate(), $parameters, $templateId);
+            } elseif ($selectedUserTemplateId) {
+                $userTemplate = BookUserCoverTemplate::find($selectedUserTemplateId);
+                $this->createOrUpdateUserTemplate($story, $userTemplate, $parameters, $templateId);
+            } elseif ($userCoverTemplate && $userCoverTemplate->template_id === $templateId) {
+                $this->createOrUpdateUserTemplate($story, $userCoverTemplate, $parameters);
+            } else {
+                $story->update(['book_user_cover_template_id' => null]);
+            }
+
             dispatch(new RegenerateBookCover($story));
         }
 
@@ -151,7 +169,7 @@ class StoryController extends Controller
         return redirect()->route('dashboard.stories.index')->with('message', 'Story deleted successfully!');
     }
 
-    public function cover(Story $story, Request $request, string $type = 'default', ?int $id = null)
+    public function cover(Story $story, string $type = 'default', ?int $id = null)
     {
         $storyResource = StoryResource::make($story->append('pages')->load('cover'));
 
@@ -159,18 +177,13 @@ class StoryController extends Controller
 
         $bookCoverTemplate = BookCoverTemplate::where('id', $templateId)->orderBy('created_at')->first();
         $bookCoverTemplateResource = BookCoverTemplateResource::make($bookCoverTemplate);
-        $bookCoverTemplateResource->story = $storyResource->resource;
+        $bookCoverTemplateResource->resource->story = $storyResource->resource;
 
         $bookUserCoverTemplateResource = [];
+
         if ($type == 'user' && $id) {
             $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('id', $id)->first();
             $bookUserCoverTemplateResource = BookUserCoverTemplateResource::make($bookUserCoverTemplate);
-        }
-
-        try {
-            $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
-        } catch (\Exception) {
-            $coverFonts = null;
         }
 
         return Inertia::render('Dashboard/Stories/Cover', [
@@ -179,8 +192,7 @@ class StoryController extends Controller
             'userTemplate' => fn() => $bookUserCoverTemplateResource,
             'templateType' => $type,
             'templateId' => $id,
-            'coverFonts' =>  $coverFonts,
-            'fontList' => FontController::getFonts()
+            'fonts' => FontController::getFonts()
         ]);
     }
 
@@ -207,24 +219,15 @@ class StoryController extends Controller
         ]);
     }
 
-    public function userCoverTemplate(Story $story, Request $request)
+    private function createOrUpdateUserTemplate(Story $story, BookUserCoverTemplate $userTemplate, array $parameters, ?int $templateId = null)
     {
-        $parameters = request()->parameters;
-
-        $templateId = $parameters['template_id'] ?? 1;
-        foreach (['front', 'front_image', 'back', 'back_image', 'template_id'] as $v) {
-            unset($parameters[$v]);
-        }
-
-        $template = new BookUserCoverTemplate();
-        $template->parameters = $parameters;
-        $template->story_id = $story->id;
-        $template->template_id = $templateId;
-        $template->save();
-
-        $userTemplateId = $template->id;
-
-        return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'User cover saved successfully!');
+        $userTemplate->fill([
+            'parameters' => $parameters,
+            'story_id' => $story->id,
+            'template_id' => $templateId ?? $userTemplate->template_id,
+        ])->save();
+    
+        $story->update(['book_user_cover_template_id' => $userTemplate->id]);
     }
 
     public function coverDelete(Story $story, Request $request, ?int $id = null)
@@ -313,7 +316,7 @@ class StoryController extends Controller
             'timelines' => fn() => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),
-            'fontList' => FontController::getFonts()
+            'fonts' => FontController::getFonts()
         ]);
     }
 

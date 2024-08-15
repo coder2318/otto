@@ -22,7 +22,7 @@
     export let story: { data: App.Story }
     export let chapters: { [timeline_id: number]: { data: App.Chapter[] } }
     export let timelines: { data: App.Timeline[] }
-    export let fontList: { original: App.Font[] }
+    export let fonts: App.Font[]
 
     const form = useForm({
         timelines: timelines.data.map((timeline) => ({
@@ -120,7 +120,7 @@
                         {/if}
                     </div>
                     <FontSelector
-                        fonts={fontList.original}
+                        {fonts}
                         bind:value={$form.font}
                         bind:justValue={$form.font}
                         on:change={(event) => ($form.font = event.detail.value)}

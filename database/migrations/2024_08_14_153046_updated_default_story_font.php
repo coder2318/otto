@@ -13,6 +13,9 @@ return new class extends Migration
     public function up(): void
     {
         DB::update("UPDATE `stories` SET `font` = '" . config("story.default_font") . "' WHERE `font` = 'Baskerville'");
+        Schema::table('stories', function (Blueprint $table) {
+            $table->string('font')->default(config('story.default_font'))->change();
+        });
     }
 
     /**

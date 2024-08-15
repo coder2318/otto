@@ -5,21 +5,26 @@
     import { onMount, afterUpdate } from 'svelte'
     import { page } from '@inertiajs/svelte'
     import isEqual from 'lodash/isEqual'
+    import { BookCoverTemplateTypes } from '@/types/app'
 
     export let template: App.BookCoverTemplate
+    export let type: BookCoverTemplateTypes = BookCoverTemplateTypes.DEFAULT
     export let parameters: any = {}
     export let shared: any = {}
     export let pages: number = 32
     export let preview: boolean = false
+    export let reload: boolean = false
     export let coverFonts: any = ''
     export let change = () => {}
+
     let svg: HTMLElement | SVGElement
     let oldParams = { ...parameters }
 
     $: sizes = getSize(pages)
 
-    let dragHooks = []
-    let isSetPosition = false
+    let isPositionSetted = false
+    const dragHooks = []
+    const isDefaultTemplate = type === BookCoverTemplateTypes.DEFAULT
 
     const keys = {
         titleColor: 'title',
@@ -40,6 +45,7 @@
         if (node.dataset.max && value) {
             value = value.toString().slice(0, parseInt(node.dataset.max))
         }
+
         svgTextWrap(node, value, parseFloat(node.dataset['maxWidth'] || sizes.width + ''))
     }
 
@@ -48,8 +54,6 @@
     }
 
     function updateSvg(params) {
-        if (!svg) return
-
         Object.entries(params).forEach(([key, value], i) => {
             key = key.includes('Position') ? key.replace('Position', '') : key
 
@@ -59,7 +63,7 @@
                         node.classList.add(keys[key])
                     }
 
-                    if (!isSetPosition) {
+                    if (!isPositionSetted || reload) {
                         const className = node.className.baseVal
                         const values = params[`${className}Position`]
 
@@ -70,7 +74,8 @@
                     }
 
                     if (i === Object.entries(params).length - 1) {
-                        isSetPosition = true
+                        isPositionSetted = true
+                        reload = false
                     }
 
                     switch (node.dataset[key]) {
@@ -120,7 +125,19 @@
             })
         }
 
-        Object.entries(shared).forEach(([key, value]) => {
+        let filteredShared = shared
+
+        if (preview && isDefaultTemplate) {
+            const textFields = template.fields.filter((field) => field.type === 'text').map((field) => field.key)
+            filteredShared = Object.keys(shared)
+                .filter((key) => textFields.includes(key))
+                .reduce((obj, key) => {
+                    obj[key] = shared[key]
+                    return obj
+                }, {})
+        }
+
+        Object.entries(filteredShared).forEach(([key, value]) => {
             const keyPos = key.includes('Position') ? key.replace('Position', '') : key
 
             const element = svg.querySelector(`[data-${keyPos.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)

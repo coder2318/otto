@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\File;
 
 class FontController extends Controller
 {
-    static function getFonts(): JsonResponse
+    static function getFonts()
     {
         $fontsDir = config('pdf.custom_font_dir');
         $fonts = [];
@@ -28,7 +27,7 @@ class FontController extends Controller
             });
         }
 
-        return response()->json($fonts);
+        return $fonts;
     }
 
     static function formatFontName(string $fontName): string
