@@ -34,7 +34,6 @@
                     }
                 `
                 document.head.appendChild(style)
-                console.log(font.name, 'loaded')
             } catch (error) {
                 console.error(font, error)
             }
@@ -42,7 +41,7 @@
     }
 </script>
 
-<div class="flex w-full flex-col text-body md:w-fit md:min-w-96">
+<div class="text-body flex w-full flex-col md:w-fit md:min-w-96">
     <span>{labelText}</span>
     <Select
         containerStyles="font-family: '{value}';"

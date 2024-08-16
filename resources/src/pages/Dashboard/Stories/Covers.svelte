@@ -12,7 +12,8 @@
     import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     import { faTrash } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
-    import { BookCoverTemplateTypes } from '@/types/app'
+    import { BOOK_COVER_EXCLUDED_FIELDS } from '@/app.constants'
+    import { pickBy } from 'lodash'
 
     export let story: { data: App.Story }
     export let covers: {
@@ -29,23 +30,25 @@
 
     const coverMeta = story.data?.cover?.meta ?? {}
 
-    const shared = Object.keys(coverMeta).reduce((result, key) => {
-        if (key == 'template_id' || key == 'back' || key == 'back_image' || key == 'front' || key == 'front_image') {
-            return result
-        }
+    const textFields = covers.data.reduce(
+        (acc, cover) => [
+            ...acc,
+            ...(cover.fields || []).filter((field) => field.type === 'text').map((field) => field.key),
+        ],
+        []
+    )
 
-        if (key.indexOf('position') == -1 && key.indexOf('Position') == -1) {
-            result[key] = coverMeta[key]
-        }
-        return result
-    }, {})
+    const shared = pickBy(
+        coverMeta,
+        (value, key) => textFields.includes(key) && !BOOK_COVER_EXCLUDED_FIELDS.includes(key)
+    )
 
     const deleteUserCover = (coverId: number) => {
         router.delete(`/stories/${story.data.id}/cover/${coverId}`, {
             redirect: 'dashboard.stories.covers',
             preserveScroll: true,
             onSuccess(response) {
-                console.log('response', response)
+                console.info('response', response)
             },
             onError(error) {
                 console.error('Error', error)
@@ -113,7 +116,6 @@
                                 template={cover.template}
                                 pages={200}
                                 shared={cover.parameters ?? {}}
-                                type={BookCoverTemplateTypes.USER}
                             />
                         </figure>
                     </a>

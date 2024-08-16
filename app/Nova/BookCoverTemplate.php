@@ -3,6 +3,7 @@
 namespace App\Nova;
 
 use App\BookCoverParams\BookCoverParams;
+use App\Http\Controllers\FontController;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\Code;
 use Laravel\Nova\Fields\ID;
@@ -32,7 +33,8 @@ class BookCoverTemplate extends Resource
      * @var array
      */
     public static $search = [
-        'id', 'name',
+        'id',
+        'name',
     ];
 
     /**
@@ -53,12 +55,12 @@ class BookCoverTemplate extends Resource
 
             Image::make('Front image', null, config('media-library.private_disk_name'))->preview(function ($value, $disk) {
                 return $value
-                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
-                            : null;
+                    ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                    : null;
             })->thumbnail(function ($value, $disk) {
                 return $value
-                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
-                            : null;
+                    ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                    : null;
             }),
 
             Code::make('Front')->language('xml')->height('auto'),
@@ -67,17 +69,17 @@ class BookCoverTemplate extends Resource
 
             Image::make('Back image', null, config('media-library.private_disk_name'))->preview(function ($value, $disk) {
                 return $value
-                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
-                            : null;
+                    ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                    : null;
             })->thumbnail(function ($value, $disk) {
                 return $value
-                            ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
-                            : null;
+                    ? Storage::disk($disk)->temporaryUrl($value, now()->addHour())
+                    : null;
             }),
 
             Code::make('Back')->language('xml')->height('auto'),
 
-            BookCoverParams::make('Fields'),
+            BookCoverParams::make('Fields')->withMeta(['fonts' => FontController::getFonts()]),
         ];
     }
 

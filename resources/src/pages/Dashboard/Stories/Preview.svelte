@@ -104,7 +104,7 @@
                             })
                         })
 
-                        viewer.eventBus.on('pagechanging', async (e) => {
+                        viewer.eventBus.on('pagechanging', async () => {
                             selected = selectItems.findLast((o) => o.value <= viewer.page) ?? selected
                         })
 
@@ -140,7 +140,7 @@
     <Select
         bind:value={selected}
         bind:items={selectItems}
-        on:change={(event) => selectChangeHandle(frame)}
+        on:change={() => selectChangeHandle(frame)}
         placeholder=""
         clearable={false}
         searchable={true}

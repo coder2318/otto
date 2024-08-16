@@ -70,7 +70,7 @@
             .appendChild(button)
     }
 
-    function submit(event: SubmitEvent) {
+    function submit() {
         document.getElementsByClassName('filepond--drop-label')[0].style.visibility = 'hidden'
 
         filepond.setOptions({
@@ -84,7 +84,7 @@
                     },
                     withCredentials: true,
                     onerror: (response) => {
-                        console.log(response)
+                        console.error(response)
                     },
                     ondata: (formData) => {
                         return formData

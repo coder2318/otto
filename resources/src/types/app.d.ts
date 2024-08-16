@@ -171,6 +171,7 @@ declare namespace App {
             name: string
             type: string
             key: string
+            defaultValue: any
         }>
     }
 

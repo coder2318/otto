@@ -22,6 +22,7 @@
     import Range from '@/components/Chapters/Range.svelte'
     import { flash } from '@/components/Toast.svelte'
     import FontSelector from '@/components/FontSelector.svelte'
+    import { BOOK_COVER_EXCLUDED_FIELDS } from '@/app.constants'
 
     export let story: { data: App.Story }
     export let template: { data: App.BookCoverTemplate }
@@ -62,47 +63,45 @@
     let hiddenParams = {} as any
     let loading: boolean = false
 
-    const excludeParameters = ['template_id', 'back', 'back_image', 'front', 'front_image']
-
     let coverMeta = story.data?.cover?.meta ?? {}
 
     let sharedStyles = coverMeta
 
     if (templateId && templateType == 'default') {
-        changed = true
+        const textFields = template.data.fields.filter((field) => field.type === 'text').map((field) => field.key)
 
-        sharedStyles = Object.keys(coverMeta).reduce((result, key) => {
-            if (excludeParameters.includes(key)) {
-                return result
-            }
-            if (key.indexOf('position') == -1 && key.indexOf('Position') == -1) {
-                result[key] = coverMeta[key]
-            }
-            return result
-        }, {})
+        parameters = template.data.fields
+            .filter(({ key }) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
+            .reduce((acc, field) => {
+                const key = field.key
 
-        parameters = Object.keys(coverMeta).reduce((result, key) => {
-            if (excludeParameters.includes(key)) {
-                return result
-            }
-            result[key] = coverMeta[key]
-            return result
-        }, {})
+                if (textFields.includes(key)) {
+                    acc[key] = coverMeta[key]
 
+                    return acc
+                }
+
+                acc[key] = field?.defaultValue
+
+                return acc
+            }, {})
+
+        sharedStyles = parameters
         parameters.template_id = templateId
         parameters.user_template_id = null
+        reloadCover = true
+        changed = true
     }
 
     if (templateId && templateType == 'user') {
         changed = true
 
-        sharedStyles = Object.keys(userTemplate.data.parameters).reduce((result, key) => {
-            if (excludeParameters.includes(key)) {
+        sharedStyles = Object.keys(userTemplate.data.parameters)
+            .filter((key) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
+            .reduce((result, key) => {
+                result[key] = userTemplate.data.parameters[key]
                 return result
-            }
-            result[key] = userTemplate.data.parameters[key]
-            return result
-        }, {})
+            }, {})
         template.data = userTemplate.data.template
         parameters = sharedStyles
         parameters.template_id = template.data.id

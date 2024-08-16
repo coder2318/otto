@@ -5,10 +5,9 @@
     import { onMount, afterUpdate } from 'svelte'
     import { page } from '@inertiajs/svelte'
     import isEqual from 'lodash/isEqual'
-    import { BookCoverTemplateTypes } from '@/types/app'
+    import { BOOK_COVER_EXCLUDED_FIELDS } from '@/app.constants'
 
     export let template: App.BookCoverTemplate
-    export let type: BookCoverTemplateTypes = BookCoverTemplateTypes.DEFAULT
     export let parameters: any = {}
     export let shared: any = {}
     export let pages: number = 32
@@ -24,7 +23,6 @@
 
     let isPositionSetted = false
     const dragHooks = []
-    const isDefaultTemplate = type === BookCoverTemplateTypes.DEFAULT
 
     const keys = {
         titleColor: 'title',
@@ -125,19 +123,25 @@
             })
         }
 
-        let filteredShared = shared
+        const textFields = template.fields.filter((field) => field.type === 'text').map((field) => field.key)
 
-        if (preview && isDefaultTemplate) {
-            const textFields = template.fields.filter((field) => field.type === 'text').map((field) => field.key)
-            filteredShared = Object.keys(shared)
-                .filter((key) => textFields.includes(key))
-                .reduce((obj, key) => {
-                    obj[key] = shared[key]
-                    return obj
-                }, {})
-        }
+        parameters = template.fields
+            .filter(({ key }) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
+            .reduce((acc, field) => {
+                const key = field.key
 
-        Object.entries(filteredShared).forEach(([key, value]) => {
+                if (textFields.includes(key)) {
+                    acc[key] = shared[key]
+
+                    return acc
+                }
+
+                acc[key] = field?.defaultValue
+
+                return acc
+            }, {})
+
+        Object.entries(shared).forEach(([key, value]) => {
             const keyPos = key.includes('Position') ? key.replace('Position', '') : key
 
             const element = svg.querySelector(`[data-${keyPos.replaceAll(/([A-Z])/g, '-$1').toLowerCase()}]`)

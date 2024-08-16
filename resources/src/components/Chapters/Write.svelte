@@ -18,7 +18,6 @@
     export let transcriptions: App.TranscriptionsData | null = null
     export let chapter: { data: App.Chapter }
 
-    let loading: boolean = true
     let modal: HTMLDialogElement
 
     const controller = new AbortController()
@@ -134,7 +133,6 @@
                             })
                         })
                         .finally(() => {
-                            loading = false
                             finish()
                         })
                 },
