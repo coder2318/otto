@@ -119,7 +119,7 @@ export function svgTextInside(node, text?: string) {
     const el = isSvg ? node : node.parentElement
     const x = el.getAttribute('x')
 
-    el.setAttribute('width', `calc(100% - ${x.includes('%') ? x : `${Math.abs(+x)}px`})`)
+    el.setAttribute('width', '100%')
 
     if (typeof text === 'string') {
         node.innerText = text?.trim() || ''
