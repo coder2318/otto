@@ -147,8 +147,10 @@ class StoryController extends Controller
                 $this->createOrUpdateUserTemplate($story, new BookUserCoverTemplate(), $parameters, $templateId);
             } elseif ($selectedUserTemplateId) {
                 $userTemplate = BookUserCoverTemplate::find($selectedUserTemplateId);
-                $this->createOrUpdateUserTemplate($story, $userTemplate, $parameters, $templateId);
-            } elseif ($userCoverTemplate && $userCoverTemplate->template_id === $templateId) {
+                if ($userTemplate) {
+                    $this->createOrUpdateUserTemplate($story, $userTemplate, $parameters, $templateId);
+                }
+            } elseif ($userCoverTemplate && $userCoverTemplate->template_id == $templateId) {
                 $this->createOrUpdateUserTemplate($story, $userCoverTemplate, $parameters);
             } else {
                 $story->update(['book_user_cover_template_id' => null]);
