@@ -70,19 +70,25 @@ export function draggable(node: SVGElement, root: SVGElement, callback: Function
         event.preventDefault()
         callback()
 
-        const pos = getMousePosition(event)
-        const x = (pos.x - offset.x).toString()
-        const y = (pos.y - offset.y).toString()
+        const mousePosition = getMousePosition(event)
 
-        selected.setAttributeNS(null, 'x', x)
-        selected.setAttributeNS(null, 'y', y)
+        const x = mousePosition.x - offset.x
+        const y = mousePosition.y - offset.y
 
-        selected.setAttributeNS(null, 'width', `calc(100% - ${x.includes('%') ? x : `${Math.abs(+x)}px`})`)
+        selected.setAttributeNS(null, 'x', x.toString())
+        selected.setAttributeNS(null, 'y', y.toString())
+
+        const rootWidth = Number(selected.parentElement.getAttributeNS(null, 'width'))
+        const newWidth = Math.max(0, rootWidth - x)
+        selected.setAttribute('width', newWidth.toString())
+        const height = selected?.children?.[0]?.getBoundingClientRect()?.height || 1
+        selected.setAttribute('height', `${(height * 2).toString()}`)
 
         selected.childNodes.forEach((child) => {
             if (child instanceof SVGTSpanElement && child.getAttributeNS(null, 'x')) {
-                child.setAttributeNS(null, 'x', (pos.x - offset.x).toString())
+                child.setAttributeNS(null, 'x', (mousePosition.x - offset.x).toString())
             }
+            console.log(child)
         })
     }
 
