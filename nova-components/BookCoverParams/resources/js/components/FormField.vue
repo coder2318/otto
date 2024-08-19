@@ -40,7 +40,7 @@
                             <td>
                                 <select
                                     :id="`${field.attribute}[${index}][type]`"
-                                    class="form-control-bordered form-input form-control"
+                                    class="w-full block form-control form-select form-select-bordered"
                                     :class="errorClasses"
                                     v-model="element.type"
                                     required
@@ -59,7 +59,7 @@
                                     "
                                     :id="`${field.attribute}[${index}][defaultValue]`"
                                     :type="element.type"
-                                    class="form-input form-input-bordered form-control"
+                                    class="w-full form-input form-input-bordered form-control"
                                     :class="errorClasses"
                                     placeholder="Default Value"
                                     v-model="element.defaultValue"
@@ -67,7 +67,7 @@
                                 <select
                                     v-if="element.type === 'font'"
                                     :id="`${field.attribute}[${index}][defaultValue]`"
-                                    class="form-control-bordered form-input form-control"
+                                    class="w-full block form-control form-select form-select-bordered"
                                     :class="errorClasses"
                                     v-model="element.defaultValue"
                                 >
