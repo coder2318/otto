@@ -22,7 +22,7 @@ class BookCoverTemplateResource extends JsonResource
         $resource = [
             'id' => $data['id'],
             'template_id' => $data['id'],
-            'parameters' => $activeUserCoverTemplate->parameters ?? null,
+            'parameters' => $activeUserCoverTemplate?->parameters ?? null,
         ];
 
         $mediaData = $activeUserCoverTemplate?->media?->mapWithKeys(function ($media) {
