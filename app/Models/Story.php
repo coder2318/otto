@@ -23,6 +23,8 @@ class Story extends Model implements HasMedia
 {
     use HasFactory, InteractsWithMedia, Searchable;
 
+    const DEFAULT_FONT = 'Baskerville 10';
+
     protected $fillable = [
         'title',
         'status',
@@ -33,6 +35,10 @@ class Story extends Model implements HasMedia
         'font'
     ];
 
+    protected $attributes = [
+        'font' => self::DEFAULT_FONT
+    ];
+
     protected $casts = [
         'status' => Status::class,
     ];
@@ -41,7 +47,7 @@ class Story extends Model implements HasMedia
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
-            fn ($query) => $query->where('collection_name', 'cover')
+            fn($query) => $query->where('collection_name', 'cover')
         );
     }
 
@@ -49,7 +55,7 @@ class Story extends Model implements HasMedia
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
-            fn ($query) => $query->where('collection_name', 'shared-cover')
+            fn($query) => $query->where('collection_name', 'shared-cover')
         );
     }
 
@@ -82,7 +88,7 @@ class Story extends Model implements HasMedia
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
-            fn ($query) => $query->where('collection_name', 'book')
+            fn($query) => $query->where('collection_name', 'book')
         );
     }
 
@@ -90,7 +96,7 @@ class Story extends Model implements HasMedia
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
-            fn ($query) => $query->where('collection_name', 'book-preview')
+            fn($query) => $query->where('collection_name', 'book-preview')
         );
     }
 
@@ -98,19 +104,19 @@ class Story extends Model implements HasMedia
     {
         return $this->media()->one()->ofMany(
             ['id' => 'MAX'],
-            fn ($query) => $query->where('collection_name', 'book-cover')
+            fn($query) => $query->where('collection_name', 'book-cover')
         );
     }
 
     protected function pages(): Attribute
     {
-        return Attribute::get(fn () => $this->book?->getCustomProperty('pages') ?? 0); // @phpstan-ignore-line
+        return Attribute::get(fn() => $this->book?->getCustomProperty('pages') ?? 0); // @phpstan-ignore-line
     }
 
     protected function words(): Attribute
     {
-        return Attribute::get(fn () => rescue(
-            fn () => $this->chapters()->where('status', ChapterStatus::PUBLISHED)
+        return Attribute::get(fn() => rescue(
+            fn() => $this->chapters()->where('status', ChapterStatus::PUBLISHED)
                 ->select(DB::raw('SUM(LENGTH(content) - LENGTH(REPLACE(content, " ", "")) + 1) as words'))
                 ->value('words'),
             report: false,

@@ -25,35 +25,13 @@ class UpdateStoryRequestTest extends TestCase
         $actual = $this->subject->rules();
 
         $this->assertValidationRules([
-            'title' => [
-                'sometimes',
-                'required',
-                'string',
-            ],
-            'cover' => [
-                'sometimes',
-                'required_with:meta',
-                'nullable',
-                'image',
-            ],
-            'meta' => [
-                'sometimes',
-                'nullable',
-                'array',
-            ],
-            'book_cover' => [
-                'sometimes',
-                'nullable',
-                'image',
-            ],
-            'status' => [
-                'sometimes',
-                'required',
-            ],
-            'redirect' => [
-                'sometimes',
-                'nullable',
-            ],
+            'title' => ['sometimes', 'required', 'string', 'max:255', 'min:3'],
+            'saveAsNewUserTemplate' => ['sometimes', 'nullable', 'boolean'],
+            'cover' => ['sometimes', 'nullable', 'boolean'],
+            'meta' => ['sometimes', 'nullable', 'array'],
+            'book_cover' => ['sometimes', 'nullable', 'image'],
+            'status' => ['sometimes', 'required'],
+            'redirect' => ['sometimes', 'nullable'],
         ], $actual);
     }
 }
