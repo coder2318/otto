@@ -116,9 +116,12 @@ export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number
 
 export function svgTextInside(node, text?: string) {
     const isSvg = node.parentElement.tagName === 'svg'
-    const el = isSvg ? node : node.parentElement
+    const element = isSvg ? node : node.parentElement
 
-    el.setAttribute('width', '100%')
+    const x = element.getAttributeNS(null, 'x')
+    const rootWidth = Number(element.parentElement.getAttributeNS(null, 'width'))
+    const newWidth = Math.max(0, rootWidth - x)
+    element.setAttribute('width', newWidth.toString())
 
     if (typeof text === 'string') {
         node.innerText = text?.trim() || ''
