@@ -88,7 +88,6 @@ export function draggable(node: SVGElement, root: SVGElement, callback: Function
             if (child instanceof SVGTSpanElement && child.getAttributeNS(null, 'x')) {
                 child.setAttributeNS(null, 'x', (mousePosition.x - offset.x).toString())
             }
-            console.log(child)
         })
     }
 

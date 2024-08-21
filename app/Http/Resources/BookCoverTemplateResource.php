@@ -16,7 +16,15 @@ class BookCoverTemplateResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = parent::toArray($request);
-        $mediaData = $this->story?->cover?->media->mapWithKeys(function ($media) {
+
+        $activeUserCoverTemplate = $this->activeUserCoverTemplate ?? $this->additional['activeUserCoverTemplate'] ?? null;
+
+        $resource = [
+            'id' => $data['id'],
+            'template_id' => $data['id'],
+        ];
+
+        $mediaData = $activeUserCoverTemplate?->media?->mapWithKeys(function ($media) {
             return [
                 "{$media->collection_name}_image_file" => $media->getPath(),
                 "{$media->collection_name}_image" => $media->getUrl(),
@@ -55,8 +63,10 @@ class BookCoverTemplateResource extends JsonResource
             }
         }
 
-        unset($data['story'], $this->additional['story']);
+        unset($data['activeUserCoverTemplate'], $this->additional['activeUserCoverTemplate']);
 
-        return $data;
+        $resource['template'] = $data;
+
+        return $resource;
     }
 }

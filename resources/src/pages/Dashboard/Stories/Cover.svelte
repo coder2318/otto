@@ -23,11 +23,12 @@
     import { flash } from '@/components/Toast.svelte'
     import FontSelector from '@/components/FontSelector.svelte'
     import { BOOK_COVER_EXCLUDED_FIELDS } from '@/app.constants'
+    import { BookCoverTypes } from '@/types/app'
+    import { pickBy } from 'lodash'
 
     export let story: { data: App.Story }
-    export let template: { data: App.BookCoverTemplate }
+    export let templateData: { data: App.BookCoverTemplate }
     export let fonts: App.Font[]
-    export let userTemplate: any
     export let templateType: any
     export let templateId: any
 
@@ -37,6 +38,7 @@
     let crop = { x: 0, y: 0 }
     let zoom = 1
 
+    const defaultTemplateType = templateType === BookCoverTypes.DEFAULT
     const isFontSize = {
         authorSize: 'authorSize',
         titleSize: 'titleSize',
@@ -45,7 +47,7 @@
         spineTextSize: 'spineTextSize',
     }
 
-    $: grouped = Object.entries(groupBy(template.data.fields, 'group')) as [
+    $: grouped = Object.entries(groupBy(templateData.data.template.fields, 'group')) as [
         string,
         Array<{
             name: string
@@ -59,65 +61,51 @@
     let modal: HTMLDialogElement
     let builder: BookCoverBuilder
     let imageKey: string
-    let parameters = createParameters() as any
+    let shared = {}
+    let parameters = createParameters() ?? {}
     let hiddenParams = {} as any
     let loading: boolean = false
 
-    let coverMeta = story.data?.cover?.meta ?? {}
+    function createParameters() {
+        const fields = templateData.data.template.fields.filter(({ key }) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
+        const isDefaultTemplate = templateId && templateType === BookCoverTypes.DEFAULT
+        const textFields = templateData.data.template.fields
+            .filter((field) => field.type === 'text')
+            .map((field) => field.key)
 
-    let sharedStyles = coverMeta
+        const activeParameters = templateData.data.parameters || {}
 
-    if (templateId && templateType == 'default') {
-        const textFields = template.data.fields.filter((field) => field.type === 'text').map((field) => field.key)
+        if (!activeParameters?.user_template_id) {
+            changed = true
+        }
 
-        parameters = template.data.fields
-            .filter(({ key }) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
-            .reduce((acc, field) => {
-                const key = field.key
+        const currentParameters = isDefaultTemplate
+            ? pickBy(activeParameters, (_, key) => textFields.includes(key))
+            : activeParameters
 
-                if (textFields.includes(key)) {
-                    acc[key] = coverMeta[key]
+        const preparedParameters: { [key: string]: any } = {
+            ...currentParameters,
+            ...fields.reduce((acc, field) => {
+                const { key, defaultValue } = field
 
-                    return acc
-                }
-
-                acc[key] = field?.defaultValue
+                acc[key] = currentParameters?.[key] || defaultValue
 
                 return acc
-            }, {})
-
-        sharedStyles = parameters
-        parameters.template_id = templateId
-        parameters.user_template_id = null
-        reloadCover = true
-        changed = true
-    }
-
-    if (templateId && templateType == 'user') {
-        changed = true
-
-        sharedStyles = Object.keys(userTemplate.data.parameters)
-            .filter((key) => !BOOK_COVER_EXCLUDED_FIELDS.includes(key))
-            .reduce((result, key) => {
-                result[key] = userTemplate.data.parameters[key]
-                return result
-            }, {})
-        template.data = userTemplate.data.template
-        parameters = sharedStyles
-        parameters.template_id = template.data.id
-        parameters.user_template_id = templateId
-    }
-
-    function createParameters() {
-        if (story.data?.cover?.meta?.template_id && template.data.id == story.data?.cover?.meta?.template_id) {
-            return story.data?.cover?.meta
+            }, {}),
         }
 
-        changed = true
-
-        return {
-            template_id: template.data.id,
+        if (isDefaultTemplate) {
+            preparedParameters.template_id = templateId
+            preparedParameters.user_template_id = null
+        } else if (templateType === BookCoverTypes.USER) {
+            preparedParameters.template_id = templateData.data.template_id
+            preparedParameters.user_template_id = templateId || currentParameters.user_template_id
         }
+
+        preparedParameters.template_type = templateType
+        shared = preparedParameters
+
+        return preparedParameters
     }
 
     function canvelEdit() {
@@ -157,18 +145,14 @@
         imageKey = key
     }
 
-    async function submit(options?: { onlySave?: boolean; saveAsUserTemplate?: boolean }) {
+    async function submit(options?: { onlySave?: boolean; saveAsNewUserTemplate?: boolean }) {
         if (loading) return
 
-        const { onlySave, saveAsUserTemplate } = options || {}
+        const { onlySave, saveAsNewUserTemplate } = options || {}
         loading = true
 
         try {
-            const { file: blobFile, svg } = await builder.getFile(story)
-
-            const file = new File([blobFile], 'cover.png', {
-                type: 'image/png',
-            })
+            const svg = await builder.getSVG()
 
             svg.querySelectorAll('text').forEach((item) => {
                 const key = item.className.baseVal
@@ -195,11 +179,11 @@
             router.post(
                 `/stories/${story.data.id}`,
                 {
-                    cover: file,
+                    cover: true,
+                    saveAsNewUserTemplate,
                     meta: {
                         ...parameters,
                         ...hiddenParams,
-                        saveAsUserTemplate,
                     },
                     _method: 'PUT',
                     redirect: onlySave ? 'dashboard.stories.cover' : 'dashboard.stories.edit',
@@ -377,9 +361,10 @@
                         bind:this={builder}
                         class="select-none"
                         pages={story.data.pages ?? 0}
-                        shared={sharedStyles}
+                        {fonts}
+                        {shared}
                         {parameters}
-                        template={template.data}
+                        template={templateData.data.template}
                         change={() => (changed = true)}
                         bind:reload={reloadCover}
                     />
@@ -397,25 +382,27 @@
                     <a href="/stories/{story.data.id}/covers" use:inertia class="btn btn-primary rounded-full">
                         More Covers
                     </a>
-                    {#if changed}
+                    {#if changed || templateId}
                         <button
                             class="btn btn-secondary rounded-full"
                             disabled={loading}
                             type="button"
-                            on:click={() => submit({ onlySave: true, saveAsUserTemplate: true })}
+                            on:click={() => submit({ onlySave: true, saveAsNewUserTemplate: true })}
                         >
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Save As New User cover</span>
                         </button>
-                        <button
-                            class="btn btn-secondary rounded-full"
-                            disabled={loading}
-                            type="button"
-                            on:click={() => submit({ onlySave: true })}
-                        >
-                            {#if loading}<span class="loading loading-spinner"></span>{/if}
-                            <span>Update</span>
-                        </button>
+                        {#if !defaultTemplateType}
+                            <button
+                                class="btn btn-secondary rounded-full"
+                                disabled={loading}
+                                type="button"
+                                on:click={() => submit({ onlySave: true })}
+                            >
+                                {#if loading}<span class="loading loading-spinner"></span>{/if}
+                                <span>Update</span>
+                            </button>
+                        {/if}
                         <button class="btn btn-secondary rounded-full pr-0" disabled={loading} type="submit">
                             {#if loading}<span class="loading loading-spinner"></span>{/if}
                             <span>Save & Next</span>

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { loadFonts } from '@/service/helpers'
     import { onMount } from 'svelte'
 
     import Select from 'svelte-select'
@@ -16,29 +17,8 @@
         }))
         value = value || fonts?.[0]?.value || ''
 
-        loadFonts()
+        loadFonts(fonts)
     })
-
-    async function loadFonts() {
-        for (const font of fonts) {
-            const fontFace = new FontFace(font.name, `url('${font.path}')`)
-            try {
-                fontFace.load()
-
-                const style = document.createElement('style')
-
-                style.textContent = `
-                    @font-face {
-                        font-family: '${font.value}';
-                        src: url('${font.path}') format('truetype');
-                    }
-                `
-                document.head.appendChild(style)
-            } catch (error) {
-                console.error(font, error)
-            }
-        }
-    }
 </script>
 
 <div class="text-body flex w-full flex-col md:w-fit md:min-w-96">

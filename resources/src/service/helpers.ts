@@ -117,7 +117,6 @@ export function svgTextWrap(node: SVGTextElement, text: string, maxWidth: number
 export function svgTextInside(node, text?: string) {
     const isSvg = node.parentElement.tagName === 'svg'
     const el = isSvg ? node : node.parentElement
-    const x = el.getAttribute('x')
 
     el.setAttribute('width', '100%')
 
@@ -132,4 +131,25 @@ export function groupBy(array: Array<any>, key: string): any {
         result[currentValue[key]].push(currentValue)
         return result
     }, {})
+}
+
+export const loadFonts = (fonts: App.Font[]) => {
+    for (const font of fonts) {
+        const fontFace = new FontFace(font.name, `url('${font.path}')`)
+        try {
+            fontFace.load()
+
+            const style = document.createElement('style')
+
+            style.textContent = `
+                @font-face {
+                    font-family: '${font.value}';
+                    src: url('${font.path}') format('truetype');
+                }
+            `
+            document.head.appendChild(style)
+        } catch (error) {
+            console.error(font, error)
+        }
+    }
 }

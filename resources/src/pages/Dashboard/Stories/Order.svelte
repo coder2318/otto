@@ -11,13 +11,17 @@
     import Breadcrumbs from '@/components/Stories/Breadcrumbs.svelte'
     import { usd } from '@/service/helpers'
     import { dayjs } from '@/service/dayjs'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
 
     export let price: number | null = null
     export let story: { data: App.Story }
+    export let coverTemplate: { data: App.BookCoverTemplate }
+    export let fonts: App.Font[]
     export let countries = []
     export let states = []
     export let payment = null
 
+    let coverUrl = ''
     let query = qs.parse($page.url.split('?').slice(1).join('?'))
 
     const form = useForm({
@@ -377,10 +381,13 @@
 
                     <div class="bookInfo grid grid-cols-4 items-center justify-center gap-2">
                         <div class="col-span-1">
-                            <img
-                                src={story.data.cover.url}
-                                alt="cover"
-                                class="aspect-[2/3] w-full object-cover object-right"
+                            <BookCoverBuilder
+                                preview={true}
+                                template={coverTemplate.data.template}
+                                {fonts}
+                                pages={200}
+                                parameters={coverTemplate.data.parameters}
+                                shared={coverTemplate.data.parameters ?? {}}
                             />
                         </div>
                         <div class="col-span-3 text-primary">

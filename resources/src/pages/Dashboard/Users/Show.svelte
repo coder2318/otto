@@ -14,9 +14,11 @@
     import Linkedin from '@/components/SVG/socials/linkedin.svg.svelte'
     import Telegram from '@/components/SVG/socials/telegram.svg.svelte'
     import profileIllustration from '@/assets/img/profile-illustration.svg'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
 
     export let user: { data: App.User }
     export let stories: { data: App.Story[] }
+    export let fonts: App.Font[]
 
     $: authId = $page.props?.auth?.user?.data?.id
 
@@ -105,11 +107,24 @@
                 {#each stories.data as story}
                     <div class="book">
                         <div class="book__cover">
-                            <img
-                                src={story?.cover?.url}
-                                class="aspect-[2/3] h-full object-cover object-right"
-                                alt="cover"
-                            />
+                            {#if story.activeUserCoverTemplate}
+                                <BookCoverBuilder
+                                    preview={true}
+                                    template={story.activeUserCoverTemplate.template}
+                                    {fonts}
+                                    pages={200}
+                                    parameters={story.activeUserCoverTemplate.parameters}
+                                    shared={story.activeUserCoverTemplate.parameters ?? {}}
+                                />
+                            {:else}
+                                <img
+                                    src={`https://placehold.co/300x450?${new URLSearchParams({
+                                        text: story.title,
+                                    })}`}
+                                    class="aspect-[2/3] h-full object-cover object-right"
+                                    alt="cover"
+                                />
+                            {/if}
                         </div>
                         <div class="book__wrap">
                             <div class="book__content">

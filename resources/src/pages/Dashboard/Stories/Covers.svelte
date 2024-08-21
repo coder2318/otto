@@ -20,26 +20,28 @@
         data: App.BookCoverTemplate[]
         links: App.PaginationLinks
         meta: App.PaginationMeta
+        parameters: { [key: string]: any }
     }
     export let userCovers: {
-        data: App.UserCoverTemplate[]
+        data: App.BookCoverTemplate[]
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
-    export let coverFonts: any
+    export let activeCoverId: number
+    export let fonts: App.Font[]
 
-    const coverMeta = story.data?.cover?.meta ?? {}
+    const parameters = covers.parameters ?? {}
 
     const textFields = covers.data.reduce(
         (acc, cover) => [
             ...acc,
-            ...(cover.fields || []).filter((field) => field.type === 'text').map((field) => field.key),
+            ...(cover.template.fields || []).filter((field) => field.type === 'text').map((field) => field.key),
         ],
         []
     )
 
     const shared = pickBy(
-        coverMeta,
+        parameters,
         (value, key) => textFields.includes(key) && !BOOK_COVER_EXCLUDED_FIELDS.includes(key)
     )
 
@@ -75,10 +77,16 @@
                 in:blur={{ delay: 250, duration: 250 }}
             >
                 <figure class="p-2">
-                    <BookCoverBuilder {coverFonts} preview={true} template={cover} pages={200} shared={shared ?? {}} />
+                    <BookCoverBuilder
+                        {fonts}
+                        preview={true}
+                        template={cover.template}
+                        pages={200}
+                        shared={shared ?? {}}
+                    />
                 </figure>
                 <div class="card-body items-center px-1 py-2">
-                    <h5 class="card-title">{cover.name}</h5>
+                    <h5 class="card-title">{cover.template.name}</h5>
                 </div>
             </a>
         {/each}
@@ -111,13 +119,19 @@
                     <a href="/stories/{story.data.id}/cover/user/{cover.id}" use:inertia>
                         <figure class="p-2">
                             <BookCoverBuilder
-                                {coverFonts}
+                                {fonts}
                                 preview={true}
                                 template={cover.template}
                                 pages={200}
+                                parameters={cover.parameters}
                                 shared={cover.parameters ?? {}}
                             />
                         </figure>
+                        {#if activeCoverId === cover.id}
+                            <div class="card-body items-center px-1 py-2">
+                                <h5 class="card-title">Active</h5>
+                            </div>
+                        {/if}
                     </a>
                 </div>
             {/each}

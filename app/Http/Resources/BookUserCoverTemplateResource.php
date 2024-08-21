@@ -15,17 +15,9 @@ class BookUserCoverTemplateResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        $data = parent::toArray($request);
+        $template = $this->template->toArray();
 
-        $clearData = [
-            'id' => $data['id'],
-            'template_id' => $data['template_id'] ?? 1,
-            'parameters' => $data['parameters'] ?? [],
-        ];
-
-        $template = $this->template;
-
-        $mediaData = $this->story?->cover?->media->mapWithKeys(function ($media) {
+        $mediaData = $this->media->mapWithKeys(function ($media) {
             return [
                 "{$media->collection_name}_image_file" => $media->getPath(),
                 "{$media->collection_name}_image" => $media->getUrl(),
@@ -54,18 +46,27 @@ class BookUserCoverTemplateResource extends JsonResource
                     $imageTeg = $matches[0];
                     preg_match('@href="([^"]+)"@', $imageTeg, $match);
                     $href = array_pop($match);
+
                     if (! empty($href)) {
                         $imageTeg = str_replace($href, $template["{$name}_image"], $imageTeg);
                     }
 
                     return $imageTeg;
                 }, $template[$name]);
+
                 unset($template["{$name}_image"]);
             }
         }
 
-        $clearData['template'] = $template;
+        $data = array_merge(parent::toArray($request), [
+            'id' => $this->id,
+            'template_id' => $this->template_id ?? 1,
+            'parameters' => array_merge($this->parameters ?? [], ['user_template_id' => $this->id]),
+            'template' => $template,
+        ]);
 
-        return $clearData;
+        unset($data["media"]);
+
+        return $data;
     }
 }

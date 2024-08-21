@@ -14,22 +14,18 @@ class StoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return array_merge(parent::toArray($request), [
-            'cover' => $this->whenLoaded('cover', fn () => [
-                'url' => $this->resource->cover?->getUrl(),
-                'meta' => array_merge(
-                    $this->resource->cover?->custom_properties,
-                    $this->resource->cover?->media
-                        ->mapWithKeys(fn ($media) => [$media->collection_name => $media->getUrl()])
-                        ->all() ?? []
-                ),
-            ]),
-            'book' => $this->whenLoaded('book', fn () => $this->resource->book->getTemporaryUrl(now()->addHour())),
-            'book_preview' => $this->whenLoaded('book_preview', fn () => $this->resource->book_preview->getTemporaryUrl(now()->addHour())),
-            'book_cover' => $this->whenLoaded('book_cover', fn () => $this->resource->book_cover->getTemporaryUrl(now()->addHour())),
-            'pages' => $this->whenAppended('pages', fn () => $this->resource->pages),
-            'words' => $this->whenAppended('words', fn () => $this->resource->words),
-            'progress' => $this->whenAppended('progress', fn () => $this->resource->progress),
+        $data = array_merge(parent::toArray($request), [
+            'activeUserCoverTemplate' => $this->whenLoaded('activeUserCoverTemplate', fn() => $this->activeUserCoverTemplate ? BookUserCoverTemplateResource::make($this->activeUserCoverTemplate) : null),
+            'book' => $this->whenLoaded('book', fn() => $this->resource->book->getTemporaryUrl(now()->addHour())),
+            'book_preview' => $this->whenLoaded('book_preview', fn() => $this->resource->book_preview->getTemporaryUrl(now()->addHour())),
+            'book_cover' => $this->whenLoaded('book_cover', fn() => $this->resource->book_cover->getTemporaryUrl(now()->addHour())),
+            'pages' => $this->whenAppended('pages', fn() => $this->resource->pages),
+            'words' => $this->whenAppended('words', fn() => $this->resource->words),
+            'progress' => $this->whenAppended('progress', fn() => $this->resource->progress),
         ]);
+
+        unset($data['active_user_cover_template']);
+
+        return $data;
     }
 }

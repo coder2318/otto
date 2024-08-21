@@ -15,12 +15,14 @@
     import { faClose, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons'
     import background from '@/assets/img/stories-bg.jpg'
     import { onMount } from 'svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
 
     export let stories: {
         data: Array<App.Story>
         links: App.PaginationLinks
         meta: App.PaginationMeta
     }
+    export let fonts: App.Font[]
 
     let query: { filter?: { [key: string]: string } }
     let filter: Writable<{ [key: string]: string }>
@@ -115,14 +117,24 @@
                 in:fade
             >
                 <figure class="max-h-[300px] bg-base-200">
-                    <img
-                        src={story?.cover?.url ??
-                            `https://placehold.co/300x450?${new URLSearchParams({
+                    {#if story.activeUserCoverTemplate}
+                        <BookCoverBuilder
+                            preview={true}
+                            template={story.activeUserCoverTemplate.template}
+                            {fonts}
+                            pages={200}
+                            parameters={story.activeUserCoverTemplate.parameters}
+                            shared={story.activeUserCoverTemplate.parameters ?? {}}
+                        />
+                    {:else}
+                        <img
+                            src={`https://placehold.co/300x450?${new URLSearchParams({
                                 text: story.title,
                             })}`}
-                        class="aspect-[2/3] h-full object-cover object-right"
-                        alt={story.title}
-                    />
+                            class="aspect-[2/3] h-full object-cover object-right"
+                            alt={story.title}
+                        />
+                    {/if}
                 </figure>
                 <div class="card-body">
                     <h2 class="card-title text-2xl font-normal">

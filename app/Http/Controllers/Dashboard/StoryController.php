@@ -27,14 +27,12 @@ use App\Models\BookUserCoverTemplate;
 use App\Models\Story;
 use App\Models\StoryType;
 use App\Models\User;
-use App\Models\Setting;
 use App\Services\LuluService;
 use Illuminate\Http\Request;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Session;
-use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 use Sokil\IsoCodes\Database\Countries\Country;
 use Sokil\IsoCodes\Database\Subdivisions\Subdivision;
@@ -51,10 +49,11 @@ class StoryController extends Controller
     {
         return Inertia::render('Dashboard/Stories/Index', [
             'stories' => fn() => StoryResource::collection(
-                $request->stories($request->user()->stories()->with('cover')->with('userCoverTemplate'))
+                $request->stories($request->user()->stories()->with('activeUserCoverTemplate'))
                     ->paginate(6)
                     ->appends($request->query())
             ),
+            'fonts' => FontController::getFonts()
         ]);
     }
 
@@ -79,9 +78,10 @@ class StoryController extends Controller
         return Inertia::render('Dashboard/Stories/Show', [
             'story' => fn() => StoryResource::make(
                 $story
-                    ->load('cover')
+                    ->load('activeUserCoverTemplate')
                     ->append(['pages', 'words', 'progress'])
             ),
+            'fonts' => FontController::getFonts()
         ]);
     }
 
@@ -93,22 +93,17 @@ class StoryController extends Controller
             'user_id' => $request->user()->id,
         ]);
 
-        if ($request->hasFile('cover')) {
-            $story->addMediaFromRequest('cover')->toMediaCollection('cover');
-        }
-
         return redirect()->route('dashboard.stories.show', compact('story'))->with('message', 'Story created successfully!');
     }
 
     public function update(UpdateStoryRequest $request, Story $story)
     {
         $story->update($request->validated());
+        $hasCover = $request->validated('cover', false);
 
-        if ($request->hasFile('cover')) {
+        if ($hasCover) {
             $meta = $request->validated('meta', []);
-
-            /** @var \App\Models\Media|null */
-            $oldCover = $story->cover;
+            $saveAsNewUserTemplate = $request->validated('saveAsNewUserTemplate', false);
 
             $files = [];
             $parameters = [];
@@ -119,41 +114,21 @@ class StoryController extends Controller
                     : $parameters[$key] = $value;
             }
 
-            /** @var \App\Models\Media */
-            $cover = $story->addMediaFromRequest('cover')->toMediaCollection('cover');
-            $oldCover?->media()->update([
-                'model_id' => $cover->id,
-            ]);
-            $oldCover?->delete();
-
-            foreach ($files as $key => $value) {
-                $cover->clearMediaCollection($key);
-                $cover->addMedia($value)->toMediaCollection($key);
-            }
-
-            foreach ($parameters as $key => $value) {
-                $cover->setCustomProperty($key, $value);
-            }
-
-            $cover->save();
-
-            $story->load('activeUserCoverTemplate');
-            $userCoverTemplate = $story->activeUserCoverTemplate;
-            $saveAsUserTemplate = $meta['saveAsUserTemplate'] ?? false;
             $selectedUserTemplateId = $meta['user_template_id'] ?? null;
             $templateId = $meta['template_id'] ?? 1;
-    
-            if ($saveAsUserTemplate) {
-                $this->createOrUpdateUserTemplate($story, new BookUserCoverTemplate(), $parameters, $templateId);
-            } elseif ($selectedUserTemplateId) {
-                $userTemplate = BookUserCoverTemplate::find($selectedUserTemplateId);
-                if ($userTemplate) {
-                    $this->createOrUpdateUserTemplate($story, $userTemplate, $parameters, $templateId);
-                }
-            } elseif ($userCoverTemplate && $userCoverTemplate->template_id == $templateId) {
-                $this->createOrUpdateUserTemplate($story, $userCoverTemplate, $parameters);
+            $activeUserCoverTemplate = [];
+
+            if (!$selectedUserTemplateId || $saveAsNewUserTemplate) {
+                $oldUserTemplate = BookUserCoverTemplate::where('id', $selectedUserTemplateId)->first();
+
+                $this->createOrUpdateUserTemplate($story, new BookUserCoverTemplate(), $parameters, $files, $templateId, $oldUserTemplate);
             } else {
-                $story->update(['book_user_cover_template_id' => null]);
+                $userCoverTemplate = BookUserCoverTemplate::where('id', $selectedUserTemplateId)->first();
+                if ($userCoverTemplate) {
+                    $this->createOrUpdateUserTemplate($story, $userCoverTemplate, $parameters, $files, $templateId);
+                } else {
+                    return redirect()->back()->with('error', 'User cover template not found');
+                }
             }
 
             dispatch(new RegenerateBookCover($story));
@@ -173,129 +148,111 @@ class StoryController extends Controller
 
     public function cover(Story $story, string $type = 'default', ?int $id = null)
     {
-        $storyResource = StoryResource::make($story->append('pages')->load('cover'));
+        $storyResource = StoryResource::make($story->append('pages')->load('activeUserCoverTemplate'));
 
-        $templateId = ($type == 'default' && $id) ? $id : ($story->cover?->getCustomProperty('template_id') ?? 1); // @phpstan-ignore-line
+        $template = [];
+        $templateId = ($type == 'default' && $id) ? $id : ($story->activeUserCoverTemplate?->template_id ?? 1); // @phpstan-ignore-line
 
-        $bookCoverTemplate = BookCoverTemplate::where('id', $templateId)->orderBy('created_at')->first();
-        $bookCoverTemplateResource = BookCoverTemplateResource::make($bookCoverTemplate);
-        $bookCoverTemplateResource->resource->story = $storyResource->resource;
-
-        $bookUserCoverTemplateResource = [];
-
-        if ($type == 'user' && $id) {
-            $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('id', $id)->first();
-            $bookUserCoverTemplateResource = BookUserCoverTemplateResource::make($bookUserCoverTemplate);
+        if ($story->activeUserCoverTemplate && !$id) {
+            $template = BookUserCoverTemplateResource::make($story->activeUserCoverTemplate);
+            $type = 'user';
+        } else if ($type === 'user' && $id) {
+            $userCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('id', $id)->first();
+            if ($userCoverTemplate) {
+                $template = BookUserCoverTemplateResource::make($userCoverTemplate);
+            }
+        } else {
+            $bookCoverTemplate = BookCoverTemplate::where('id', $templateId)->first();
+            $template = BookCoverTemplateResource::make($bookCoverTemplate)
+                ->additional(['activeUserCoverTemplate' => $story->activeUserCoverTemplate]);
         }
 
         return Inertia::render('Dashboard/Stories/Cover', [
             'story' => fn() => $storyResource,
-            'template' => fn() => $bookCoverTemplateResource,
-            'userTemplate' => fn() => $bookUserCoverTemplateResource,
+            'templateData' => fn() => $template,
             'templateType' => $type,
             'templateId' => $id,
             'fonts' => FontController::getFonts()
         ]);
     }
 
-    public function covers(Story $story, Request $request)
+    public function covers(Story $story)
     {
-        $storyResource = StoryResource::make($story->append('pages')->load('cover'));
-        $bookCoverTemplate = BookCoverTemplate::paginate(10);
-        $bookCoverTemplate->map(function ($i) use ($storyResource) {
-            $i->story = $storyResource->resource;
+        $storyResource = StoryResource::make($story->append('pages')->load('activeUserCoverTemplate'));
+        $activeUserCoverTemplate = $story->activeUserCoverTemplate;
+        $coverTemplates = BookCoverTemplate::paginate(10);
+        $coverTemplates->map(function ($coverTemplate) use ($activeUserCoverTemplate) {
+            $coverTemplate->activeUserCoverTemplate = $activeUserCoverTemplate;
         });
-        $bookUserCoverTemplate = BookUserCoverTemplate::with(['story', 'template'])->where('story_id', $story->id)->paginate(10, ['*'], 'upage');
-
-        try {
-            $coverFonts = Setting::firstWhere('name', 'book_cover_font')?->value ?? null;
-        } catch (\Exception) {
-            $coverFonts = null;
-        }
+        $userCoverTemplates = BookUserCoverTemplate::with(['template'])->where('story_id', $story->id)->paginate(10, ['*'], 'upage');
 
         return Inertia::render('Dashboard/Stories/Covers', [
             'story' => fn() => $storyResource,
-            'covers' => fn() => BookCoverTemplateResource::collection($bookCoverTemplate),
-            'userCovers' => fn() => BookUserCoverTemplateResource::collection($bookUserCoverTemplate),
-            'coverFonts' =>  $coverFonts,
+            'covers' => fn() => BookCoverTemplateResource::collection($coverTemplates)->additional(['parameters' => $activeUserCoverTemplate?->parameters ?? []]),
+            'userCovers' => fn() => BookUserCoverTemplateResource::collection($userCoverTemplates),
+            'activeCoverId' => fn() => @$activeUserCoverTemplate?->id ?? null,
+            'fonts' =>  FontController::getFonts(),
         ]);
     }
 
-    private function createOrUpdateUserTemplate(Story $story, BookUserCoverTemplate $userTemplate, array $parameters, ?int $templateId = null)
-    {
+    private function createOrUpdateUserTemplate(
+        Story $story,
+        BookUserCoverTemplate $userTemplate,
+        array $parameters,
+        array $files,
+        int $templateId,
+        ?BookUserCoverTemplate $oldUserTemplate = null
+    ) {
         $userTemplate->fill([
             'parameters' => $parameters,
             'story_id' => $story->id,
-            'template_id' => $templateId ?? $userTemplate->template_id,
+            'template_id' => $templateId ?? $userTemplate->template_id
         ])->save();
-    
-        $story->update(['book_user_cover_template_id' => $userTemplate->id]);
+
+        $oldMediaList = $oldUserTemplate?->media ?? $userTemplate?->media ?? $story->activeUserCoverTemplate?->media;
+
+        if ($userTemplate?->media->isEmpty()) {
+            foreach ($oldMediaList as $mediaItem) {
+                $matchingFile = array_filter($files, function ($file) use ($mediaItem) {
+                    return $file->getClientOriginalName() === $mediaItem->file_name;
+                });
+
+                if (empty($matchingFile)) {
+                    try {
+                        $userTemplate->addMediaFromDisk($mediaItem->getPath())
+                            ->preservingOriginal()
+                            ->toMediaCollection($mediaItem->collection_name);
+                    } catch (\Exception $e) {
+                        return redirect()->back()->with('error', $e->getMessage());
+                    }
+                }
+            }
+        }
+
+        foreach ($files as $key => $value) {
+            $userTemplate->clearMediaCollection($key);
+            $userTemplate->addMedia($value)->toMediaCollection($key);
+        }
+
+        $userTemplate->save();
+
+        $story->activeUserCoverTemplate()->associate($userTemplate);
+        $story->save();
     }
 
     public function coverDelete(Story $story, Request $request, ?int $id = null)
     {
         if ($id) {
+            $story->load('activeUserCoverTemplate');
+            if ($story->activeUserCoverTemplate?->id === $id) {
+                $activeTemplate = BookUserCoverTemplate::where('story_id', $story->id)->orderBy('created_at', 'desc')->first();
+                $story->activeUserCoverTemplate()->associate($activeTemplate);
+                $story->save();
+            }
             BookUserCoverTemplate::where('id', $id)?->first()?->delete();
         }
 
         return $this->redirectBackOrRoute($request, compact('story'))->with('message', 'User cover deleted successfully!');
-    }
-
-    public function coversImageBase64(Story $story)
-    {
-        $images = [
-            'front' => null,
-            'back' => null,
-        ];
-        $request = request()->json();
-
-        $front_image = $request->get('front_image');
-        $back_image = $request->get('back_image');
-        $medias = $story?->cover?->media ?? [];
-
-        foreach ($medias as $v) {
-            if ($v->collection_name == 'front' || $v->collection_name == 'back') {
-                $stream = $v->stream();
-                if (is_resource($stream)) {
-                    $file = stream_get_contents($stream);
-                    fclose($stream);
-                    $ext = \Symfony\Component\Mime\MimeTypes::getDefault()->getExtensions($v->mime_type)[0] ?? null;
-                    $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
-                    unset($file);
-
-                    $images["{$v->collection_name}"] = $base64;
-                }
-            }
-        }
-
-        if (empty($images['front']) && ! empty($front_image)) {
-            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($front_image);
-            if (is_resource($stream)) {
-                $file = stream_get_contents($stream);
-                fclose($stream);
-                $parts = explode('.', $front_image);
-                $ext = array_pop($parts);
-                $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
-                unset($file);
-
-                $images['front'] = $base64;
-            }
-        }
-        if (empty($images['back']) && ! empty($back_image)) {
-            $stream = Storage::disk(config('media-library.private_disk_name'))->readStream($back_image);
-            if (is_resource($stream)) {
-                $file = stream_get_contents($stream);
-                fclose($stream);
-                $parts = explode('.', $back_image);
-                $ext = array_pop($parts);
-                $base64 = 'data:application/' . $ext . ';base64,' . base64_encode($file);
-                unset($file);
-
-                $images['back'] = $base64;
-            }
-        }
-
-        return response()->json($images);
     }
 
     public function edit(Story $story)
@@ -394,12 +351,13 @@ class StoryController extends Controller
 
     public function order(Story $story, IsoCodesFactory $iso, OrderCostRequest $request)
     {
-        if (! $story->cover) {
+        if (! $story->activeUserCoverTemplate) {
             return redirect()->route('dashboard.stories.cover', $story)->with('error', trans('Please create cover before ordering!'));
         }
 
         return Inertia::render('Dashboard/Stories/Order', [
-            'story' => fn() => StoryResource::make($story->load('cover')->append('pages')),
+            'story' => fn() => StoryResource::make($story->append('pages')),
+            'coverTemplate' => fn() => BookUserCoverTemplateResource::make($story->activeUserCoverTemplate),
             'countries' => fn() => collect($iso->getCountries())->map(fn(Country $country) => [
                 'name' => $country->getName(),
                 'code' => $country->getAlpha2(),
@@ -410,6 +368,7 @@ class StoryController extends Controller
                     'name' => $subdivision->getName(),
                     'code' => explode('-', $subdivision->getCode())[1],
                 ])->values() : [],
+            'fonts' => FontController::getFonts()
         ]);
     }
 
@@ -437,7 +396,7 @@ class StoryController extends Controller
         }
 
         return Inertia::render('Dashboard/Stories/Order', [
-            'story' => fn() => StoryResource::make($story->load('cover')->append('pages')),
+            'story' => fn() => StoryResource::make($story->load('activeUserCoverTemplate')->append('pages')),
             'price' => fn() => $cost,
         ]);
     }

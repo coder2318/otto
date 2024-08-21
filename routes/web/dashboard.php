@@ -50,7 +50,7 @@ Route::middleware('user-configured')->group(function () {
     });
 
     // Books
-    Route::resource('books', BookController::class)->middleware('features:'.BetaAccess::class)->only('show');
+    Route::resource('books', BookController::class)->middleware('features:' . BetaAccess::class)->only('show');
 
     // Settings
     Route::controller(SettingsController::class)->prefix('settings')->name('settings.')->group(function () {
@@ -75,9 +75,9 @@ Route::middleware('user-configured')->group(function () {
         // Stories
         Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard.index');
         Route::resource('stories', StoryController::class);
+
         Route::controller(StoryController::class)->prefix('stories/{story}')->name('stories.')->group(function () {
             Route::get('/covers', 'covers')->name('covers');
-            Route::post('/covers_image_base64', 'coversImageBase64')->name('covers.image.base64');
             Route::get('/cover', 'cover')->name('cover');
             Route::get('/cover/{type}/{id}', 'cover')->name('cover.type');
             Route::delete('/cover/{id}', 'coverDelete')->name('cover.delete');
@@ -88,8 +88,10 @@ Route::middleware('user-configured')->group(function () {
             Route::post('/order', 'orderPurchase')->name('order.purchase');
             Route::get('/regenerate_status', 'regenerate_status')->name('regenerate_status');
         });
+
         Route::resource('stories.chapters', ChapterController::class)->shallow();
         Route::resource('stories.questions.chapters', ChapterController::class)->shallow()->only('create');
+
         Route::controller(ChapterController::class)->prefix('chapters/{chapter}')->name('chapters.')->group(function () {
             Route::get('/write', 'write')->name('write');
             Route::get('/upload', 'upload')->name('upload');

@@ -1,19 +1,17 @@
 <script lang="ts">
-    import { toBlob } from 'html-to-image'
     import { draggable } from '@/service/svelte'
-    import { svgTextInside, svgTextWrap } from '@/service/helpers'
+    import { loadFonts, svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
-    import { page } from '@inertiajs/svelte'
     import isEqual from 'lodash/isEqual'
     import { BOOK_COVER_EXCLUDED_FIELDS } from '@/app.constants'
 
-    export let template: App.BookCoverTemplate
+    export let template: App.CoverTemplate
+    export let fonts: App.Font[] = []
     export let parameters: any = {}
     export let shared: any = {}
     export let pages: number = 32
     export let preview: boolean = false
     export let reload: boolean = false
-    export let coverFonts: any = ''
     export let change = () => {}
 
     let svg: HTMLElement | SVGElement
@@ -113,9 +111,8 @@
             )
         })
     }
-
     onMount(() => {
-        parameters = {}
+        loadFonts(fonts)
 
         if (!preview) {
             svg.querySelectorAll(`[data-draggable]`).forEach((node: SVGTextElement) => {
@@ -178,45 +175,8 @@
         oldParams = { ...parameters }
     })
 
-    export async function getFile(story) {
-        const response = await fetch(`/stories/${story.data.id}/covers_image_base64`, {
-            method: 'POST',
-            headers: {
-                'X-CSRF-TOKEN': $page?.props?.csrf_token,
-            },
-            body: JSON.stringify({
-                front_image: template?.front_image_file,
-                back_image: template?.back_image_file,
-            }),
-        })
-        const base64 = await response.json()
-
-        svg.querySelectorAll(`[data-front]`).forEach((node: HTMLElement | SVGElement) => {
-            const href = node.getAttribute('href')
-
-            if (href.indexOf('data:') !== 0 && base64?.front) {
-                setHref(node as SVGTextElement, base64?.front as string)
-            }
-        })
-
-        svg.querySelectorAll(`[data-back]`).forEach((node: HTMLElement | SVGElement) => {
-            const href = node.getAttribute('href')
-
-            if (href.indexOf('data:') !== 0 && base64?.back) {
-                setHref(node as SVGTextElement, base64?.back as string)
-            }
-        })
-
-        const file = await toBlob(svg as HTMLElement, {
-            canvasHeight: sizes.totalHeight,
-            canvasWidth: sizes.totalWidth,
-            type: 'image/jpeg',
-            cacheBust: false,
-            preferredFontFormat: 'woff2',
-            fontEmbedCSS: coverFonts,
-        })
-
-        return { file, svg }
+    export async function getSVG() {
+        return svg
     }
 
     function getSpineWidth(pages) {

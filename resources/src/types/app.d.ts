@@ -59,10 +59,7 @@ declare namespace App {
     interface Story {
         id: number
         title: string
-        cover?: {
-            url: string
-            meta: any
-        }
+        activeUserCoverTemplate?: BookCoverTemplate
         status: string
         user_id: number
         user?: User
@@ -148,14 +145,14 @@ declare namespace App {
         [filename: string]: string
     }
 
-    interface UserCoverTemplate {
+    interface BookCoverTemplate {
         id: number
-        template: BookCoverTemplate
+        template: CoverTemplate
         parameters: { [key: string]: any }
         template_id: number
     }
 
-    interface BookCoverTemplate {
+    interface CoverTemplate {
         id: number
         name: string
         back: string

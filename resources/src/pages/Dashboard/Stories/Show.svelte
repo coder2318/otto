@@ -17,7 +17,9 @@
     import smallBannerIllustration from '@/assets/img/profile-illustration.svg'
     import CreateStory from '@/components/Stories/CreateStory.svelte'
     import EditCoverBtn from '@/components/SVG/buttons/edit-cover-btn.svg.svelte'
+    import BookCoverBuilder from '@/components/Stories/BookCoverBuilder.svelte'
     export let story: { data: App.Story }
+    export let fonts: App.Font[]
     export let auth: { user: { data: App.User } }
 </script>
 
@@ -96,16 +98,19 @@
             <div class="wrap">
                 <div class="block">
                     <div class="cover">
-                        {#if !story.data.cover?.url}
+                        {#if story.data.activeUserCoverTemplate}
+                            <BookCoverBuilder
+                                preview={true}
+                                template={story.data.activeUserCoverTemplate.template}
+                                {fonts}
+                                pages={200}
+                                parameters={story.data.activeUserCoverTemplate.parameters}
+                                shared={story.data.activeUserCoverTemplate.parameters ?? {}}
+                            />
+                        {:else}
                             <a href="/stories/{story.data.id}/cover" use:inertia class="cover-add">
                                 <img src={coverAddIcon} alt="plus" />
                             </a>
-                        {:else}
-                            <img
-                                class="aspect-[2/3] h-full object-cover object-right"
-                                src={story.data.cover?.url}
-                                alt="Cover"
-                            />
                         {/if}
                     </div>
                     <div class="flex items-center justify-between gap-4">
@@ -117,7 +122,7 @@
                             <progress class="progress progress-primary" value={story.data?.progress ?? 0} max="100"
                             ></progress>
                         </div>
-                        {#if story.data.cover?.url}
+                        {#if story.data.activeUserCoverTemplate}
                             <a
                                 class="btn btn-circle btn-secondary mask mask-hexagon text-primary md:btn-lg"
                                 href="/stories/{story.data.id}/cover"
@@ -154,8 +159,6 @@
                         </div>
                     </div>
                 </div>
-
-                <!--  -->
             </div>
         </div>
     </div>
@@ -165,12 +168,6 @@
     .yourNarrative {
         position: relative;
         overflow: hidden;
-
-        // .block {
-        //     background-color: #eae4dc;
-        //     border-radius: 24px;
-        //     padding: 50px;
-        // }
 
         .wrap {
             display: flex;
