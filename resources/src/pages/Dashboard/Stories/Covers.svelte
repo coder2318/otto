@@ -102,7 +102,9 @@
         >
             {#each userCovers.data as cover (cover.id)}
                 <div
-                    class="card card-bordered border-neutral bg-neutral transition-transform hover:scale-105"
+                    class={`card card-bordered border-neutral bg-neutral transition-transform hover:scale-105 ${
+                        activeCoverId === cover.id ? 'bg-secondary/30' : ''
+                    }`}
                     out:blur={{ duration: 250 }}
                     in:blur={{ delay: 250, duration: 250 }}
                 >

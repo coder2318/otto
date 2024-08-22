@@ -60,7 +60,7 @@
         .guest-name {
             color: rgba(0, 0, 0, 0.7);
             font-size: 0.9rem;
-            text-align: right;
+            text-align: left;
         }
 
         .avatar {
@@ -81,7 +81,7 @@
         }
 
         td.name-cell {
-            text-align: right;
+            text-align: left;
             vertical-align: middle;
         }
     </style>
@@ -114,13 +114,13 @@
             @if ($chapter->guest)
                 <table class="guest-info">
                     <tr>
-                        <td class="name-cell">
-                            <span class="guest-name">written by {{ $chapter->guest->name }}</span>
-                        </td>
                         <td class="avatar-cell">
                             @if ($chapter->guest->processed_avatar)
                                 <img class="avatar" src="{{ $chapter->guest->processed_avatar }}" />
                             @endif
+                        </td>
+                        <td class="name-cell">
+                            <span class="guest-name">written by {{ $chapter->guest->name }}</span>
                         </td>
                     </tr>
                 </table>

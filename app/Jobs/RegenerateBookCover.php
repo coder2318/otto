@@ -17,20 +17,20 @@ class RegenerateBookCover implements ShouldQueue
 
     public function __construct(
         public Story $story
-    ) {
-    }
+    ) {}
 
     public function handle(): void
     {
-        if (! $cover = $this->story->cover) {
+        if (! $activeUserCoverTemplate = $this->story->activeUserCoverTemplate) {
             return;
         }
 
         $spine = $this->spineWidth($this->story->book->getCustomProperty('pages')) * 25.4; // @phpstan-ignore-line
 
+        // TODO: Generate cover from activeUserCoverTemplate
         $pdf = Pdf::loadView('pdf.book-cover', [
-            'cover' => $cover,
-            'width' => (2 * 178.181 + $spine).'mm',
+            'cover' => $activeUserCoverTemplate,
+            'width' => (2 * 178.181 + $spine) . 'mm',
             'height' => '278mm',
         ]);
         /** @var Mpdf */

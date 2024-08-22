@@ -180,11 +180,22 @@ class StoryController extends Controller
     {
         $storyResource = StoryResource::make($story->append('pages')->load('activeUserCoverTemplate'));
         $activeUserCoverTemplate = $story->activeUserCoverTemplate;
+
+        $userCoverTemplatesQuery = BookUserCoverTemplate::with(['template'])
+            ->where('story_id', $story->id)
+            ->when($activeUserCoverTemplate, function ($query) use ($activeUserCoverTemplate) {
+                return $query->orderByRaw("FIELD(id, {$activeUserCoverTemplate->id}) DESC")
+                    ->orderBy('created_at', 'desc');
+            }, function ($query) {
+                return $query->orderBy('created_at', 'desc');
+            });
+
+        $userCoverTemplates = $userCoverTemplatesQuery->paginate(10, ['*'], 'upage');
+
         $coverTemplates = BookCoverTemplate::paginate(10);
         $coverTemplates->map(function ($coverTemplate) use ($activeUserCoverTemplate) {
             $coverTemplate->activeUserCoverTemplate = $activeUserCoverTemplate;
         });
-        $userCoverTemplates = BookUserCoverTemplate::with(['template'])->where('story_id', $story->id)->paginate(10, ['*'], 'upage');
 
         return Inertia::render('Dashboard/Stories/Covers', [
             'story' => fn() => $storyResource,
@@ -201,21 +212,33 @@ class StoryController extends Controller
         array $parameters,
         array $files,
         int $templateId,
-        ?BookUserCoverTemplate $oldUserTemplate = null
-    ) {
+        ?BookUserCoverTemplate $oldUserTemplate = null,
+        ?bool $setActiveUserCoverTemplate = true
+    ): BookUserCoverTemplate {
+        $oldMediaList = null;
+        $isNew = !@$userTemplate?->id;
+
+        if ($oldUserTemplate) {
+            $oldMediaList = $oldUserTemplate?->media;
+        } else {
+            $oldMediaList = $story->activeUserCoverTemplate?->media;
+        }
+
         $userTemplate->fill([
             'parameters' => $parameters,
             'story_id' => $story->id,
             'template_id' => $templateId ?? $userTemplate->template_id
         ])->save();
 
-        $oldMediaList = $oldUserTemplate?->media ?? $userTemplate?->media ?? $story->activeUserCoverTemplate?->media;
+        if ($isNew) {
+            foreach (($oldMediaList ?? []) as $mediaItem) {
+                $matchingFiles = [];
 
-        if ($userTemplate?->media->isEmpty()) {
-            foreach ($oldMediaList as $mediaItem) {
-                $matchingFile = array_filter($files, function ($file) use ($mediaItem) {
-                    return $file->getClientOriginalName() === $mediaItem->file_name;
-                });
+                foreach ($files as $key => $file) {
+                    if ($key === $mediaItem->collection_name) {
+                        $matchingFiles[] = $file;
+                    }
+                }
 
                 if (empty($matchingFile)) {
                     try {
@@ -236,8 +259,12 @@ class StoryController extends Controller
 
         $userTemplate->save();
 
-        $story->activeUserCoverTemplate()->associate($userTemplate);
-        $story->save();
+        if ($setActiveUserCoverTemplate) {
+            $story->activeUserCoverTemplate()->associate($userTemplate);
+            $story->save();
+        }
+
+        return $userTemplate;
     }
 
     public function coverDelete(Story $story, Request $request, ?int $id = null)
@@ -245,8 +272,11 @@ class StoryController extends Controller
         if ($id) {
             $story->load('activeUserCoverTemplate');
             if ($story->activeUserCoverTemplate?->id === $id) {
-                $activeTemplate = BookUserCoverTemplate::where('story_id', $story->id)->orderBy('created_at', 'desc')->first();
-                $story->activeUserCoverTemplate()->associate($activeTemplate);
+                $activeUserCoverTemplate = BookUserCoverTemplate::where('story_id', $story->id)
+                    ->where('id', '!=', $id)
+                    ->orderBy('created_at', 'desc')
+                    ->first();
+                $story->activeUserCoverTemplate()->associate($activeUserCoverTemplate);
                 $story->save();
             }
             BookUserCoverTemplate::where('id', $id)?->first()?->delete();
