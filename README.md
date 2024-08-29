@@ -70,3 +70,12 @@ vendor/bin/sail restart
   - MINIO_ROOT_PASSWORD: password
 
 -   Mailpit Emails: http://localhost:8025/
+
+## Mobile App
+
+# Installation
+Install NativeScript globally - `npm install -g nativescript`.
+Install **NativeScript Preview** on mobile device.
+
+# Run preview
+Inside `otto-native` run command `ns preview`. Scan QR-code from mobile device.
