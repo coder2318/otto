@@ -110,7 +110,9 @@
 
         const payload = {
           title: text,
-          record: getBase64String(file)
+          record: getBase64String(file),
+          filename: audioFileName,
+          mimetype: `audio/${file.extension.slice(1)}`
         }
 
         uploadAudioAndCreateChapterDraft(
@@ -203,7 +205,7 @@
     color: #000;
     text-align: center;
   }
-  
+
   .text-error {
     color: #f87272;
   }

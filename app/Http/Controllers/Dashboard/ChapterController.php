@@ -45,7 +45,7 @@ class ChapterController extends Controller
 
     public function index(Story $story, ChaptersRequest $request)
     {
-        $questions = fn () => QuestionsChaptersResource::collection(
+        $questions = fn() => QuestionsChaptersResource::collection(
             $request->questions($story)
                 ->simplePaginate(6)
                 ->appends($request->query())
@@ -56,9 +56,9 @@ class ChapterController extends Controller
         }
 
         return Inertia::render('Dashboard/Chapters/Index', [
-            'story' => fn () => StoryResource::make($story->load('cover')->append('pages')),
+            'story' => fn() => StoryResource::make($story->load('cover')->append('pages')),
             'questions' => $questions,
-            'timelines' => fn () => TimelineResource::collection(
+            'timelines' => fn() => TimelineResource::collection(
                 $story->storyType->timelines()->get(['id', 'title'])
             ),
         ]);
@@ -67,17 +67,18 @@ class ChapterController extends Controller
     public function write(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Write', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('images')),
-            'transcriptions' => fn () => session('transcriptions'),
+            'chapter' => fn() => ChapterResource::make($chapter->load('images')),
+            'transcriptions' => fn() => session('transcriptions'),
         ]);
     }
 
-    public function attachments(Chapter $chapter)
+    public function attachments(Chapter $chapter, Request $request)
     {
+        $chapter->onlyUntranscribed = $request->has('onlyUntranscribed');
+
         return Inertia::render('Dashboard/Chapters/Attachments', [
-            'chapter' => fn () => ChapterResource::make(
-                $chapter->load('attachments')
-            ),
+            'chapter' => fn() => ChapterResource::make($chapter->load('attachments')),
+            'onlyUntranscribed' => $request->has('onlyUntranscribed')
         ]);
     }
 
@@ -85,7 +86,7 @@ class ChapterController extends Controller
     {
         $attachments = $request->validated('attachments');
         $media = $chapter->attachments()->whereIn('id', $attachments)->get()
-            ->sortBy(fn (Model $a) => array_search($a->getKey(), $attachments));
+            ->sortBy(fn(Model $a) => array_search($a->getKey(), $attachments));
 
         $transcriptions = null;
 
@@ -99,24 +100,31 @@ class ChapterController extends Controller
         return redirect()->route('dashboard.chapters.write', compact('chapter'))->with('transcriptions', $transcriptions);
     }
 
-    public function deleteAttachments(Chapter $chapter, Media $attachment)
+    public function deleteAttachments(Chapter $chapter, Media $attachment, Request $request, $onlyUntranscribed = null)
     {
         $attachment->delete();
 
-        return redirect()->route('dashboard.chapters.attachments', compact('chapter'))->with('message', 'Attachment deleted successfully!');
+        $queryParams = [];
+
+        if ($onlyUntranscribed === 'onlyUntranscribed') {
+            $queryParams['onlyUntranscribed'] = true;
+        }
+
+        return redirect()->route('dashboard.chapters.attachments', array_merge(compact('chapter'), $queryParams))
+            ->with('message', 'Attachment deleted successfully!');
     }
 
     public function record(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Record', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('question.covers')),
+            'chapter' => fn() => ChapterResource::make($chapter->load('question.covers')),
         ]);
     }
 
     public function upload(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Upload', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn() => ChapterResource::make($chapter),
         ]);
     }
 
@@ -131,14 +139,16 @@ class ChapterController extends Controller
 
             $tone = $request->tone_id ? Prompt::where('id', $request->input('tone_id'))->value('content') : null;
             $perspective = $request->perspective_id ? Prompt::where('id', $request->input('perspective_id'))->value('content') : null;
-            $prompt = collect([$tone, $perspective])->filter()->join(PHP_EOL.PHP_EOL);
+            $prompt = collect([$tone, $perspective])->filter()->join(PHP_EOL . PHP_EOL);
 
-            foreach ($service->chatEditStreamed(
-                $chapter->content,
-                $chapter->title,
-                empty($prompt) ? null : $prompt,
-                Auth::user()->full_name, // @phpstan-ignore-line
-            ) as $chunk) {
+            foreach (
+                $service->chatEditStreamed(
+                    $chapter->content,
+                    $chapter->title,
+                    empty($prompt) ? null : $prompt,
+                    Auth::user()->full_name, // @phpstan-ignore-line
+                ) as $chunk
+            ) {
                 if (connection_aborted()) {
                     return;
                 }
@@ -154,8 +164,8 @@ class ChapterController extends Controller
     public function enhance(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Enhance', [
-            'chapter' => fn () => ChapterResource::make($chapter->load('cover')),
-            'prompts' => fn () => PromptResource::collection(
+            'chapter' => fn() => ChapterResource::make($chapter->load('cover')),
+            'prompts' => fn() => PromptResource::collection(
                 Prompt::all(['id', 'title', 'description', 'icon', 'perspective'])
             ),
         ]);
@@ -172,8 +182,8 @@ class ChapterController extends Controller
         }
 
         return Inertia::render('Dashboard/Chapters/Finish', [
-            'chapter' => fn () => ChapterResource::make($chapter),
-            'questions' => fn () => TimelineQuestionResource::collection((
+            'chapter' => fn() => ChapterResource::make($chapter),
+            'questions' => fn() => TimelineQuestionResource::collection((
                 $chapter?->timeline?->questions()->where('id', '!=', $chapter?->timeline_question_id) ?? // @phpstan-ignore-line
                 TimelineQuestion::query()
             )->inRandomOrder()->limit(3)->get()),
@@ -191,7 +201,7 @@ class ChapterController extends Controller
         }
 
         return Inertia::render('Dashboard/Chapters/Congratulation', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn() => ChapterResource::make($chapter),
         ]);
     }
 
@@ -215,8 +225,8 @@ class ChapterController extends Controller
         }
 
         return Inertia::render('Dashboard/Chapters/Create', [
-            'story' => fn () => StoryResource::make($story),
-            'timelines' => fn () => TimelineResource::collection(
+            'story' => fn() => StoryResource::make($story),
+            'timelines' => fn() => TimelineResource::collection(
                 $story->storyType?->timelines()->get(['id', 'title']) ?? []
             ),
         ]);
@@ -262,14 +272,17 @@ class ChapterController extends Controller
     public function show(Chapter $chapter)
     {
         return Inertia::render('Dashboard/Chapters/Show', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => fn() => ChapterResource::make($chapter),
         ]);
     }
 
     public function edit(Chapter $chapter)
     {
+        $chapter->load('attachments');
+        $chapterResource = ChapterResource::make($chapter);
+
         return Inertia::render('Dashboard/Chapters/Edit', [
-            'chapter' => fn () => ChapterResource::make($chapter),
+            'chapter' => $chapterResource,
         ]);
     }
 

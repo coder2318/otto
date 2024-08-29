@@ -96,6 +96,7 @@ declare namespace App {
         order: number
         cover: string | null
         attachments: Attachment[] | null
+        hasUntranscribedAttachments: boolean | null
         question?: TimelineQuestion | null
         images?: any[] | null
         status: string

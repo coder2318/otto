@@ -16,6 +16,8 @@ export async function uploadAudioAndCreateChapterDraft(
     content: JSON.stringify(content),
   })
     .then((response) => {
+      console.log(response.content);
+
       const json = response.content?.toJSON()
       if (response.statusCode !== 200) {
         console.error('Upload error: ', json)

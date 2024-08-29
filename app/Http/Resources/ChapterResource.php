@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use App\Models\Media;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Log;
 
 class ChapterResource extends JsonResource
 {
@@ -15,9 +16,26 @@ class ChapterResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $mediaTypes = [
+            'video/webm',
+            'audio/webm',
+            'audio/wav',
+            'audio/mpeg',
+            'audio/mpeg3',
+            'audio/x-mpeg-3',
+            'audio/m4a',
+            'audio/mp4',
+            'video/mp4',
+            'audio/flac',
+            'audio/aac',
+            'audio/x-wav',
+            'audio/x-m4a',
+            'audio/mp3',
+        ];
+
         $tempImagesById = [];
-        $tempImages = $this->whenLoaded('images', fn () => $this->resource->images->map(
-            fn (Media $record) => [
+        $tempImages = $this->whenLoaded('images', fn() => $this->resource->images->map(
+            fn(Media $record) => [
                 'id' => $record->id,
                 'url' => $record->getTemporaryUrl(now()->addHour()),
                 'caption' => $record->getCustomProperty('caption'),
@@ -43,37 +61,39 @@ class ChapterResource extends JsonResource
             return $imageTeg;
         }, $this->resource->content);
 
-        return array_merge(parent::toArray($request), [
-            'content' => $this->resource->content,
-            'cover' => $this->whenLoaded('cover', fn () => $this->resource->cover->getUrl('chapters-list')),
-            'attachments' => $this->whenLoaded('attachments', fn () => $this->resource->attachments->map(
-                fn (Media $record) => [
+        $attachments = $this->whenLoaded('attachments', function () use ($mediaTypes) {
+            $attachments = $this->resource->attachments;
+
+            if ($this->resource->onlyUntranscribed) {
+                $attachments = $attachments->filter(fn(Media $record) => !$record->hasCustomProperty('transcript') && in_array($record->getCustomProperty('mime-type', $record->mime_type), $mediaTypes));
+            }
+
+            return $attachments->map(
+                fn(Media $record) => [
                     'id' => $record->id,
                     'url' => $record->getTemporaryUrl(now()->addHour()),
                     'name' => $record->file_name,
                     'size' => $record->size,
                     'transcribed' => $record->hasCustomProperty('transcript'),
-                    'is_media' => in_array($record->getCustomProperty('mime-type', $record->mime_type), [
-                        'video/webm',
-                        'audio/webm',
-                        'audio/wav',
-                        'audio/mpeg',
-                        'audio/mpeg3',
-                        'audio/x-mpeg-3',
-                        'audio/m4a',
-                        'audio/mp4',
-                        'video/mp4',
-                        'audio/flac',
-                        'audio/aac',
-                        'audio/x-wav',
-                        'audio/x-m4a',
-                    ]),
+                    'is_media' => in_array($record->getCustomProperty('mime-type', $record->mime_type), $mediaTypes),
                     'created_at' => $record->created_at,
                 ]
-            )),
+            )->toArray();
+        });
+
+        $hasUntranscribedAttachments = $this->resource->attachments
+            ? $this->resource->attachments->contains(fn(Media $record) => !$record->hasCustomProperty('transcript') && in_array($record->getCustomProperty('mime-type', $record->mime_type), $mediaTypes))
+            : false;
+
+        Log::info(json_encode($attachments));
+        return array_merge(parent::toArray($request), [
+            'content' => $this->resource->content,
+            'cover' => $this->whenLoaded('cover', fn() => $this->resource->cover->getUrl('chapters-list')),
+            'attachments' => $attachments ?? [],
+            'hasUntranscribedAttachments' => $hasUntranscribedAttachments,
             'images' => $tempImages,
-            'guest' => $this->whenLoaded('guest', fn () => GuestResource::make($this->resource->guest)),
-            'question' => $this->whenLoaded('question', fn () => TimelineQuestionResource::make($this->resource->question)),
+            'guest' => $this->whenLoaded('guest', fn() => GuestResource::make($this->resource->guest)),
+            'question' => $this->whenLoaded('question', fn() => TimelineQuestionResource::make($this->resource->question)),
         ]);
     }
 }

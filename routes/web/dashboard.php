@@ -99,6 +99,7 @@ Route::middleware('user-configured')->group(function () {
             Route::get('/files', 'attachments')->name('attachments');
             Route::post('/files', 'transcribe')->name('attachments.transcribe');
             Route::delete('/files/{attachment}', 'deleteAttachments')->name('attachments.destroy');
+            Route::delete('/files/{attachment}/{onlyUntranscribed?}', 'deleteAttachments')->name('attachments.destroy');
             Route::get('/enhance', 'enhance')->name('enhance');
             Route::get('/finish', 'finish')->name('finish');
             Route::get('/congratulation', 'congratulation')->name('congratulation');

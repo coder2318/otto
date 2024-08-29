@@ -14,8 +14,14 @@
     import write from '@/assets/img/chapter-type.jpg'
     import Breadcrumbs from '@/components/Chapters/Breadcrumbs.svelte'
     import { autosize } from '@/service/svelte'
+    import { onMount } from 'svelte'
 
     export let chapter: { data: App.Chapter }
+    let dialog: HTMLDialogElement
+
+    onMount(() => {
+        chapter?.data?.hasUntranscribedAttachments && dialog.showModal()
+    })
 
     const form = useForm({
         title: chapter.data?.title ?? '',
@@ -37,6 +43,22 @@
 </svelte:head>
 
 <Breadcrumbs step={1} />
+
+<dialog bind:this={dialog} class="modal">
+    <form method="dialog" class="modal-box">
+        <h3 class="text-lg font-bold">Would you like to transcribe the previously recorded file or start over?</h3>
+        <div class="modal-action">
+            <a
+                class="btn btn-success btn-sm"
+                href={`/chapters/${chapter.data.id}/files?onlyUntranscribed=true`}
+                use:inertia
+            >
+                Transcribe
+            </a>
+            <button class="btn btn-sm" on:click={() => dialog.close()}>Start Over</button>
+        </div>
+    </form>
+</dialog>
 
 <form on:submit|preventDefault={submit} in:fade>
     <main class="container card m-4 mx-auto rounded-xl bg-base-200 px-4">

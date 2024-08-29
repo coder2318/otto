@@ -22,6 +22,7 @@
     import TranscribeBtn from '@/components/SVG/buttons/transcribe-btn.svg.svelte'
 
     export let chapter: { data: App.Chapter }
+    export let onlyUntranscribed: boolean
 
     const form = useForm({
         attachments: [],
@@ -44,7 +45,7 @@
     }
 
     function confirmDelete() {
-        $form.delete(`/chapters/${chapter.data.id}/files/${deleting}`)
+        $form.delete(`/chapters/${chapter.data.id}/files/${deleting}${onlyUntranscribed ? '/onlyUntranscribed' : ''}`)
         dialog.close()
     }
 
