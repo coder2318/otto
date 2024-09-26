@@ -78,4 +78,28 @@ class Claude3Service extends AiService
             }
         }
     }
+
+    public function translateTextStreamed(string $text, string $target)
+    {
+        $prompt = "[RULE] translate the following text to {$target} language. Make sure not to alter the meaning of the content.";
+
+        foreach ($this->segmentate ? self::segmentate($text) : [$text] as $segment) {
+            $messages = [
+                ['role' => 'user', 'content' => $segment],
+            ];
+
+            $stream = $this->anthropic->chat()->createStreamed([
+                'model' => 'claude-3-opus-20240229',
+                'system' => $prompt,
+                'temperature' => 1,
+                'messages' => $messages,
+                'max_tokens' => 4096,
+            ]);
+
+            foreach ($stream as $response) {
+                $translatedText = $response->choices[0]->delta->content;
+                yield $translatedText;
+            }
+        }
+    }
 }
