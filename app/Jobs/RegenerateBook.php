@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Redis;
 use Illuminate\Support\Facades\Storage;
 use Mccarlosen\LaravelMpdf\Facades\LaravelMpdf as Pdf;
 use Mpdf\Mpdf;
+use Illuminate\Support\Facades\Log;
 
 class RegenerateBook implements ShouldQueue
 {
@@ -69,16 +70,20 @@ class RegenerateBook implements ShouldQueue
 
         $chaptersWithGuestAvatars = [];
 
-        foreach ($chapters as $chapter) {
+        foreach ($chapters as $ind=>$chapter) {
             $chapterImagesById = [];
+            $chapterId = $chapter->id;
+            $timelineId = $chapter->timeline_id;
 
-            preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$chapterImagesById) {
+            preg_replace_callback('/<img[^>]+>/im', function ($matches) use (&$chapterImagesById, &$chapterId, &$timelineId) {
                 $imageTag = $matches[0];
 
                 preg_match('@id="([^"]+)"@', $imageTag, $match);
                 $id = array_pop($match);
 
                 $chapterImagesById[$id] = $id;
+
+                Log::info("RegenerateBook Job(img deriving): chapter: $chapterId, parsedContentImageId: $id, Timeline ID: $timelineId");
 
                 return $imageTag;
             }, $chapter->content);
@@ -92,17 +97,20 @@ class RegenerateBook implements ShouldQueue
                     continue;
                 }
 
-                $exists = Storage::disk($image->disk)->exists($image->getPath()); // @phpstan-ignore-line
+                $imgPath = $image->getPath();
+                $exists = Storage::disk($image->disk)->exists($imgPath); // @phpstan-ignore-line
 
                 if (!$exists) {
                     $url = url("/chapters/{$chapter->id}/write");
                     $imageErrors[] = $url;
+                    Log::info("RegenerateBook Job(img linking): NOT FOUND! chapter: $chapter->id, imageId: $imageId, Timeline ID: $chapter->timeline_id, path: $imgPath");
                 } else {
                     $imagesById[$imageId] = [
                         'id' => $imageId,
                         'url' => $image->getTemporaryUrl(now()->addHour(), $this->mediaQuality),
                         'caption' => $image->getCustomProperty('caption'),
                     ];
+                    Log::info("RegenerateBook Job(img linking): chapter: $chapter->id, imageId: $imageId, Timeline ID: $chapter->timeline_id, path: $imgPath");
                 }
             }
 
