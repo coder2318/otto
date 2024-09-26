@@ -50,6 +50,8 @@ services:
             test: ["CMD", "mysqladmin", "ping", "-p${DB_PASSWORD}"]
             retries: 3
             timeout: 5s
+        command:
+            - --sort_buffer_size=1073741824
     dragonfly:
         image: 'docker.dragonflydb.io/dragonflydb/dragonfly'
         command: --requirepass=${REDIS_PASSWORD}

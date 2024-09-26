@@ -104,6 +104,10 @@
     @endif
 
     @foreach ($chapters as $chapter)
+        @php
+            \Log::info("Template(book): Processing chapter ID: {$chapter->id}, Timeline ID: {$chapter->timeline_id}");
+        @endphp
+
         @if (!$loop->first)
             <pagebreak />
         @endif
@@ -129,75 +133,99 @@
                 $isHTML = str_contains($chapter->content, '<p>') || str_contains($chapter->content, '<img>');
 
                 if (!$isHTML) {
+                    \Log::warning("Template(book): Html not found in Chapter ID: {$chapter->id}");
+
                     $content = collect(preg_split('/\n\n/', $chapter->content, -1, PREG_SPLIT_NO_EMPTY))->map(
                         fn(string $p) => preg_replace('/\s+/', ' ', $p),
                     );
                 } else {
                     $chapter->content = preg_replace_callback(
-                        '/<img[^>]+>/im',
-                        function ($matches) use (&$imagesById) {
-                            $imageAttr = $matches[0];
+                        '/<img[^>]*>/im',
+                        function ($matches) use (&$imagesById, &$chapter) {
+                            try {
+                                $imageAttr = $matches[0];
 
-                            preg_match('@id="([^"]+)"@', $imageAttr, $match);
-                            $id = array_pop($match);
-                            preg_match('@style="([^"]+)"@', $imageAttr, $match);
-                            $style = array_pop($match);
+                                // Extract id attribute
+                                $idMatch = [];
+                                if (preg_match('@id="([^"]+)"@', $imageAttr, $idMatch)) {
+                                    $id = $idMatch[1];
+                                } else {
+                                    // ID not found, skip this image
+                                    \Log::warning("Template(book): Image tag without ID found in chapter.");
+                                    return '';
+                                }
 
-                            preg_match('/[^-]width[: ]+([0-9]+)/', $style, $width);
-                            $width = $width[1] ?? null;
+                                \Log::info("Template(book): Processing Image with ID: {$id}, Chapter ID: {$chapter->id}");
 
-                            preg_match('/[^-]height[: ]+([0-9]+)/', $style, $height);
-                            $height = $height[1] ?? null;
+                                // Extract style attribute
+                                $styleMatch = [];
+                                if (preg_match('@style="([^"]+)"@', $imageAttr, $styleMatch)) {
+                                    $style = $styleMatch[1];
+                                } else {
+                                    $style = '';
+                                }
 
-                            $newStyle = '';
-                            if ($width) {
-                                $newStyle .= "width:{$width}px;";
+                                // Proceed to extract width and height
+                                $width = null;
+                                if (preg_match('/[^-]width[: ]+([0-9]+)/', $style, $widthMatch)) {
+                                    $width = $widthMatch[1];
+                                }
+
+                                $height = null;
+                                if (preg_match('/[^-]height[: ]+([0-9]+)/', $style, $heightMatch)) {
+                                    $height = $heightMatch[1];
+                                }
+
+                                $newStyle = '';
+                                if ($width) {
+                                    $newStyle .= "width:{$width}px;";
+                                }
+                                if ($height) {
+                                    $newStyle .= "height:{$height}px;";
+                                }
+
+                                if (strpos($style, 'margin-right: 0px; margin-left: auto;') !== false) {
+                                    $newStyle .= 'margin-right: 0px; margin-left: auto;';
+                                } elseif (strpos($style, 'margin-right: auto; margin-left: auto;') !== false) {
+                                    $newStyle .= 'margin-right: auto; margin-left: auto;';
+                                }
+
+                                if (isset($imagesById[$id])) {
+                                    $html = '
+                                        <table style="page-break-inside:avoid; border:0; text-align:center; max-height: 600px; ' . $newStyle . '">
+                                            <tr>
+                                                <td style="border:0; padding-top:10px; padding-left:10px; padding-right:10px;">
+                                                    <img src="' . $imagesById[$id]['url'] . '" style="' . $newStyle . '">
+                                                    <div style="font-size:0.8rem; font-style:italic">' . htmlspecialchars($imagesById[$id]['caption'], ENT_QUOTES) . '</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    ';
+
+                                    return $html;
+                                } else {
+                                    \Log::warning("Template(book): Image ID {$id} not found in imagesById array.");
+                                }
+
+                                return '';
+                            } catch (\Exception $e) {
+                                \Log::error("Template(book): Error processing image in chapter: " . $e->getMessage());
+                                return '';
                             }
-                            if ($height) {
-                                $newStyle .= "height:{$height}px;";
-                            }
-
-                            if (strpos($style, 'margin-right: 0px; margin-left: auto;')) {
-                                $newStyle .= 'margin-right: 0px; margin-left: auto;';
-                            } elseif (strpos($style, 'margin-right: auto; margin-left: auto;')) {
-                                $newStyle .= 'margin-right: auto; margin-left: auto;';
-                            }
-
-                            if (isset($imagesById[$id])) {
-                                $html =
-                                    '
-                                    <table style="page-break-inside:avoid; border:0; text-align:center;max-height: 600px; ' .
-                                    $newStyle .
-                                    '">
-                                        <tr>
-                                            <td style="border:0;padding-top:10px;padding-left:10px;padding-right:10px;">
-                                                <img src="' .
-                                    $imagesById[$id]['url'] .
-                                    '" style="' .
-                                    $newStyle .
-                                    '">
-                                                <div style="font-size:0.8rem;font-style:italic">' .
-                                    $imagesById[$id]['caption'] .
-                                    '</div>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                ';
-
-                                return $html;
-                            }
-
-                            return '';
                         },
-
-                        $chapter->content,
+                        $chapter->content
                     );
+
+                    // Unwrap the content from <html> and <body> tags
+                    $chapter->content = preg_replace('/<\/?(html|body)>/i', '', $chapter->content);
 
                     $chapter->content = str_replace(
                         ['<h1>'],
                         ['<h1 style="page-break-inside:avoid;">'],
                         $chapter->content,
                     );
+
+                    \Log::info("Template(book): Chapter ID: {$chapter->id}, Content: {$chapter->content}");
                 }
             @endphp
             <section>
