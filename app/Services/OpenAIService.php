@@ -42,7 +42,7 @@ class OpenAIService extends AiService
             $chat = OpenAI::chat()->create([
                 'model' => $this->modelName,
                 'messages' => $messages,
-                'temperature' => 0.2,
+                'temperature' => 0.8,
             ]);
 
             $result .= ' '.$chat['choices'][0]['message']['content'];
@@ -69,6 +69,8 @@ class OpenAIService extends AiService
         if (is_null($prompt)) {
             $prompt = Prompt::where('title', 'The Default')->value('content') ?? $this->defaultPrompt;
         }
+
+        $prompt = $this->cleanPrompt($prompt);
 
         $strings = [
             'name' => "What's your name?",
@@ -114,7 +116,12 @@ class OpenAIService extends AiService
 
             $messages[] = [
                 'role' => 'system',
-                'content' => "[Rule] Use HTML instead of a markdown in the output.",
+                'content' => "[RULE] Use HTML instead of a markdown in the output.",
+            ];
+
+            $messages[] = [
+                'role' => 'system',
+                'content' => '[RULE] Please completely rephrase the following text using different words and sentence structures. Ensure that no phrases or chunks from the original text are repeated unless absolutely necessary for clarity. Maintain the original meaning and key points.',
             ];
 
             $messages[] = [
@@ -150,7 +157,7 @@ class OpenAIService extends AiService
         $response = OpenAI::chat()->create([
             'model' => $this->modelName,
             'messages' => $messages,
-            'temperature' => 0.2,
+            'temperature' => 0.8,
         ]);
 
         return $response['choices'][0]['message']['content'] ?? '';
@@ -185,13 +192,21 @@ class OpenAIService extends AiService
         return true;
     }
 
+    protected function cleanPrompt(string $prompt) {
+        // Remove new lines (both \r\n and \n)
+        $text = preg_replace('/\s+/', ' ', $prompt);
+
+        // Trim any leading or trailing spaces
+        return trim($text);
+    }
+
     protected function chatCreateStreamed(array $messages)
     {
         $answer = '';
         $stream = OpenAI::chat()->createStreamed([
             'model' => $this->modelName,
             'messages' => $messages,
-            'temperature' => 0.2,
+            'temperature' => 0.8,
         ]);
 
         foreach ($stream as $response) {

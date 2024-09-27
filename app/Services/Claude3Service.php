@@ -30,6 +30,12 @@ class Claude3Service extends AiService
         if (is_null($prompt)) {
             $prompt = Prompt::where('title', 'The Default')->value('content') ?? $this->defaultPrompt;
         }
+
+        $prompt .= "[RULE] Now assistant using only {$language} language";
+        $prompt .= "[RULE] dont damage the HTML markup.";
+        $prompt .= "[RULE] You cant change links and links params in the text.";
+        $prompt .= "[RULE] Use HTML instead of a markdown in the output.";
+        $prompt .= "[RULE] Please completely rephrase the following text using different words and sentence structures. Ensure that no phrases or chunks from the original text are repeated unless absolutely necessary for clarity. Maintain the original meaning and key points.";
         $prompt = $this->getPrompt($prompt, $language);
 
         $strings = [
@@ -67,7 +73,7 @@ class Claude3Service extends AiService
             $stream = $this->anthropic->chat()->createStreamed([
                 'model' => 'claude-3-opus-20240229',
                 'system' => $prompt,
-                'temperature' => 1,
+                'temperature' => 0.8,
                 'messages' => $messages,
                 'max_tokens' => 4096,
             ]);
@@ -91,7 +97,7 @@ class Claude3Service extends AiService
             $stream = $this->anthropic->chat()->createStreamed([
                 'model' => 'claude-3-opus-20240229',
                 'system' => $prompt,
-                'temperature' => 1,
+                'temperature' => 0.8,
                 'messages' => $messages,
                 'max_tokens' => 4096,
             ]);
