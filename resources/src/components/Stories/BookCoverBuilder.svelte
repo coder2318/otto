@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { toBlob } from 'html-to-image'
     import { draggable } from '@/service/svelte'
     import { loadFonts, svgTextInside, svgTextWrap } from '@/service/helpers'
     import { onMount, afterUpdate } from 'svelte'
@@ -111,6 +112,18 @@
             )
         })
     }
+
+    export async function getFile() {
+        const file = await toBlob(svg as HTMLElement, {
+            canvasHeight: sizes.totalHeight,
+            canvasWidth: sizes.totalWidth,
+            type: 'image/jpeg',
+            cacheBust: true,
+        })
+
+        return { file, svg }
+    }
+
     onMount(() => {
         loadFonts(fonts)
 

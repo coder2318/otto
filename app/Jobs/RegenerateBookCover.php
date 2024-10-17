@@ -21,7 +21,7 @@ class RegenerateBookCover implements ShouldQueue
 
     public function handle(): void
     {
-        if (! $activeUserCoverTemplate = $this->story->activeUserCoverTemplate) {
+        if (!$activeUserCoverTemplate = $this->story->cover) {
             return;
         }
 
