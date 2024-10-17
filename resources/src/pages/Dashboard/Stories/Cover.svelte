@@ -176,10 +176,12 @@
                 }
             })
 
+            const { file } = await builder.getFile()
+
             router.post(
                 `/stories/${story.data.id}`,
                 {
-                    cover: true,
+                    cover: file,
                     saveAsNewUserTemplate,
                     meta: {
                         ...parameters,
