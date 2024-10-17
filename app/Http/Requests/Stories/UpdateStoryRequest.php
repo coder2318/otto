@@ -13,7 +13,7 @@ class UpdateStoryRequest extends FormRequest
         return [
             'title' => ['sometimes', 'required', 'string', 'max:255', 'min:3'],
             'saveAsNewUserTemplate' => ['sometimes', 'nullable', 'boolean'],
-            'cover' => ['sometimes', 'nullable', 'boolean'],
+            'cover' => ['sometimes', 'nullable'],
             'meta' => ['sometimes', 'nullable', 'array'],
             'book_cover' => ['sometimes', 'nullable', 'image'],
             'status' => ['sometimes', 'required', new Enum(Status::class)],

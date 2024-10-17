@@ -102,6 +102,8 @@ class StoryController extends Controller
         $hasCover = $request->validated('cover', false);
 
         if ($hasCover) {
+            /** @var \App\Models\Media|null */
+            $oldCover = $story->cover;
             $meta = $request->validated('meta', []);
             $saveAsNewUserTemplate = $request->validated('saveAsNewUserTemplate', false);
 
@@ -113,6 +115,32 @@ class StoryController extends Controller
                     ? $files[$key] = $value
                     : $parameters[$key] = $value;
             }
+
+            /** @var \App\Models\Media */
+            $cover = $story->addMediaFromRequest('cover')
+                ->setName('book-cover-image')
+                ->setFileName('book-cover-image'. $story->id . '.' . $request->file('cover')->extension())
+                ->toMediaCollection('cover');
+
+            $oldCover?->media()->update([
+                'model_id' => $cover->id,
+            ]);
+            $oldCover?->delete();
+
+            foreach ($files as $key => $value) {
+                $cover->clearMediaCollection($key);
+                $cover->addMedia($value)->toMediaCollection($key);
+            }
+
+            foreach ($parameters as $key => $value) {
+                $cover->setCustomProperty($key, $value);
+            }
+
+            $cover->save();
+
+            $story->load('activeUserCoverTemplate');
+            $userCoverTemplate = $story->activeUserCoverTemplate;
+            $saveAsUserTemplate = $meta['saveAsUserTemplate'] ?? false;
 
             $selectedUserTemplateId = $meta['user_template_id'] ?? null;
             $templateId = $meta['template_id'] ?? 1;
