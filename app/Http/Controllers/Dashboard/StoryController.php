@@ -469,7 +469,7 @@ class StoryController extends Controller
             return redirect()->back()->with('error', trans('Your book has no cover or it is being processed. Please wait!'));
         }
 
-        abort_unless(Session::has("print-cost-{$story->id}"), 403);
+//        abort_unless(Session::has("print-cost-{$story->id}"), 403);
 
         $cost = Session::get("print-cost-{$story->id}");
 
